@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nome da ferramenta</title>
+<!--
+  MODELO DE FERRAMENTA — MGF no Plural
+  =====================================
+  1. Preenche a ficha (bloco "mgf-ficha") com os dados da tua ferramenta.
+  2. Escreve a ferramenta DENTRO de <main class="mgf-ferramenta" id="ferramenta"> … </main>.
+  3. Usa as classes já prontas (mgf-cartao, mgf-opcao, mgf-resultado, mgf-interp, mgf-tabela,
+     mgf-botao…). Estão explicadas no GUIA-DESIGN.md e no exemplo abaixo.
+  4. Estilos só desta ferramenta: no bloco <style data-mgf="ferramenta">.
+     Código JavaScript: no bloco <script data-mgf="ferramenta">.
+  5. NÃO alteres o bloco <style data-mgf="base">: tem as cores e as letras do site.
+  6. Regras: um único ficheiro, sem nada carregado da internet, sem guardar dados de doentes,
+     português de Portugal, bibliografia completa na ficha.
+  7. Envia o ficheiro para mgfplural@gmail.com.
+-->
+
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "nome-da-ferramenta",
+  "titulo": "Nome da ferramenta",
+  "descricao": "Uma frase sobre o que a ferramenta faz e quando usar.",
+  "area": "recursos-medicos",
+  "grupo": "escalas-e-calculadoras",
+  "autor": "O teu nome",
+  "versao": "1.0",
+  "revisto": "AAAA-MM-DD",
+  "layout": "normal",
+  "palavras": ["sinónimos", "siglas", "termos que alguém escreveria na pesquisa"],
+  "bibliografia": [
+    "Autor A, et al. Título do artigo. Revista. Ano;Volume(Número):páginas.",
+    "Norma DGS n.º 000/AAAA. Título da norma."
+  ]
+}
+</script>
+
+<style data-mgf="base">
+/* {{BASE}} */
+</style>
+
+<style data-mgf="ferramenta">
+/* Estilos só desta ferramenta (se precisares). Usa sempre as variáveis var(--cor-…). */
+</style>
+</head>
+<body style="margin:0;background:var(--cor-papel);padding:24px 16px">
+<main class="mgf-ferramenta" id="ferramenta" style="max-width:900px;margin:0 auto">
+
+  <!-- EXEMPLO: apaga e substitui pela tua ferramenta. -->
+  <div class="mgf-titulo-escala">
+    <h2>Exemplo de escala</h2>
+    <p>Assinala os critérios presentes. A pontuação atualiza-se sozinha.</p>
+  </div>
+
+  <fieldset class="mgf-cartao">
+    <legend class="mgf-so-leitor">Critérios</legend>
+    <div class="mgf-cartao-titulo" aria-hidden="true">Critérios</div>
+    <div class="mgf-cartao-corpo">
+      <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Critério A</span><span class="mgf-opcao-pontos">+1</span></label>
+      <label class="mgf-opcao"><input type="checkbox" data-pontos="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Critério B</span><span class="mgf-opcao-pontos">+2</span></label>
+    </div>
+  </fieldset>
+
+  <div class="mgf-resultado">
+    <div class="mgf-resultado-topo">
+      <h3>Resultado</h3>
+      <div class="mgf-pontuacao" id="pontuacao" aria-live="polite">0<small>pts</small></div>
+    </div>
+    <div class="mgf-resultado-corpo">
+      <div class="mgf-interp" id="interp" hidden></div>
+      <p class="mgf-nota"><strong>Nota.</strong> Os níveis usam sempre as mesmas cores clínicas: normal, atenção, alerta e info. Escreve sempre o nível em texto.</p>
+    </div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  var raiz = document.getElementById("ferramenta");
+  raiz.addEventListener("change", function () {
+    var s = 0;
+    raiz.querySelectorAll('input[type="checkbox"]').forEach(function (c) {
+      c.closest(".mgf-opcao").classList.toggle("marcada", c.checked);
+      if (c.checked) s += parseFloat(c.dataset.pontos);
+    });
+    document.getElementById("pontuacao").innerHTML = s + "<small>pts</small>";
+    var interp = document.getElementById("interp");
+    interp.hidden = false;
+    if (s === 0) { interp.dataset.nivel = "normal"; interp.innerHTML = "<strong>Normal</strong> (0 pts)"; }
+    else if (s < 3) { interp.dataset.nivel = "atencao"; interp.innerHTML = "<strong>Atenção</strong> (" + s + " pts)"; }
+    else { interp.dataset.nivel = "alerta"; interp.innerHTML = "<strong>Alerta</strong> (" + s + " pts)"; }
+  });
+})();
+</script>
+</body>
+</html>

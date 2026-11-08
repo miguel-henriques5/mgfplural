@@ -1,0 +1,57 @@
+{
+  "site": {
+    "nome": "MGF no Plural",
+    "url": "https://miguel-henriques5.github.io/mgfplural/",
+    "repositorio": "https://github.com/miguel-henriques5/mgfplural",
+    "zip": "https://github.com/miguel-henriques5/mgfplural/archive/refs/heads/main.zip",
+    "email": "mgfplural@gmail.com",
+    "contacto_nome": "Miguel Cachinho Henriques",
+    "contacto_funcao": "Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra",
+    "versao": "0.1"
+  },
+  "areas": [
+    {
+      "id": "recursos-medicos",
+      "nome": "Recursos médicos",
+      "icone": "medico",
+      "descricao": "Escalas, prescrição, exames, programas de saúde e atalhos para a consulta.",
+      "grupos": [
+        { "id": "escalas-e-calculadoras", "nome": "Escalas e calculadoras", "icone": "escala", "tom": "menta" },
+        { "id": "ferramentas-de-prescricao", "nome": "Ferramentas de prescrição", "icone": "comprimidos", "tom": "ambar" },
+        { "id": "interpretar-exames", "nome": "Interpretar exames", "icone": "analises", "tom": "papel" },
+        { "id": "programas-e-valencias", "nome": "Programas e valências", "icone": "programas", "tom": "areia" },
+        { "id": "cabulas", "nome": "Cábulas", "icone": "folheto", "tom": "menta" },
+        { "id": "canivete", "nome": "Canivete", "icone": "checklist", "tom": "ambar" },
+        { "id": "registo-e-vigilancia", "nome": "Registo e vigilância", "icone": "nota-soap", "tom": "areia", "atalhos_inicio": true }
+      ]
+    },
+    {
+      "id": "recursos-de-enfermagem",
+      "nome": "Recursos de enfermagem",
+      "icone": "enfermagem",
+      "descricao": "Programa Nacional de Vacinação e apoio à consulta de enfermagem.",
+      "grupos": [ { "id": "geral", "nome": "Recursos de enfermagem", "icone": "vacina", "tom": "menta" } ]
+    },
+    {
+      "id": "documentacao",
+      "nome": "Documentação",
+      "icone": "pasta",
+      "descricao": "Modelos de consentimento informado, manual de procedimentos e ata, para adaptares à tua unidade.",
+      "grupos": [ { "id": "modelos", "nome": "Modelos", "icone": "pasta", "tom": "papel" } ]
+    },
+    {
+      "id": "mapa-de-recursos",
+      "nome": "Mapa de recursos",
+      "icone": "mapa",
+      "descricao": "Recursos comunitários num mapa. Escolhe a tua zona.",
+      "grupos": [ { "id": "zonas", "nome": "Zonas", "icone": "mapa", "tom": "menta" } ]
+    },
+    {
+      "id": "plataforma-de-indicadores",
+      "nome": "Plataforma de indicadores",
+      "icone": "indicadores",
+      "descricao": "Acompanhamento dos indicadores da USF.",
+      "grupos": [ { "id": "geral", "nome": "Plataforma de indicadores", "icone": "indicadores", "tom": "papel" } ]
+    }
+  ]
+}

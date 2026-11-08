@@ -1,0 +1,191 @@
+/* =====================================================================
+   MGF no Plural — componentes das ferramentas
+   Tudo dentro de .mgf-ferramenta. Usar estas classes antes de criar novas.
+   Requer tokens.css. Ver GUIA-DESIGN.md.
+   ===================================================================== */
+
+.mgf-ferramenta {
+  font-family: var(--letra-texto);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--cor-tinta);
+}
+.mgf-ferramenta *, .mgf-ferramenta *::before, .mgf-ferramenta *::after { box-sizing: border-box; }
+.mgf-ferramenta h2, .mgf-ferramenta h3, .mgf-ferramenta h4 {
+  font-family: var(--letra-titulo);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--cor-tinta);
+}
+.mgf-ferramenta p { margin: 0; }
+.mgf-ferramenta a { color: var(--cor-verde); }
+.mgf-ferramenta a:hover { color: var(--cor-verde-fundo); }
+.mgf-ferramenta :focus-visible { outline: 3px solid var(--cor-ambar); outline-offset: 2px; }
+.mgf-ferramenta .mgf-so-leitor {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Separadores (tabs) ---------- */
+.mgf-separadores {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 0 0 20px;
+}
+.mgf-separador {
+  font-family: var(--letra-texto); font-size: 15px; font-weight: 700;
+  background: var(--cor-branco); color: var(--cor-tinta);
+  border: 1.5px solid var(--cor-linha); border-radius: var(--raio-p);
+  padding: 9px 16px; min-height: 44px; cursor: pointer;
+  transition: border-color .2s, background .2s, transform .25s var(--mola);
+}
+.mgf-separador:hover { border-color: var(--cor-verde); transform: translateY(-1px); }
+.mgf-separador[aria-selected="true"] {
+  background: var(--cor-tinta); border-color: var(--cor-tinta); color: var(--cor-papel);
+}
+.mgf-painel[hidden] { display: none; }
+
+/* ---------- Título de cada escala ---------- */
+.mgf-titulo-escala { margin: 0 0 16px; display: flex; flex-direction: column; gap: 4px; }
+.mgf-titulo-escala h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.025em; }
+.mgf-titulo-escala p { color: var(--cor-texto-2); font-size: 16px; }
+
+/* ---------- Cartões ---------- */
+.mgf-cartao {
+  background: var(--cor-branco); border: 1px solid var(--cor-linha-suave);
+  border-radius: var(--raio); margin: 0 0 12px; overflow: hidden;
+}
+.mgf-cartao-titulo {
+  font-family: var(--letra-texto); font-weight: 700; font-size: 15px;
+  padding: 11px 18px; background: var(--cor-menta-clara); color: var(--cor-verde-fundo);
+  border-bottom: 1px solid var(--cor-linha-suave);
+}
+.mgf-cartao-corpo { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+
+/* ---------- Opções (caixas e botões de opção) ---------- */
+.mgf-opcao {
+  position: relative; display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 12px; border-radius: var(--raio-p); cursor: pointer;
+  border: 1.5px solid transparent; user-select: none;
+  transition: background .15s, border-color .15s;
+}
+.mgf-opcao:hover { background: var(--cor-papel); border-color: var(--cor-linha); }
+.mgf-opcao input {
+  position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none;
+}
+.mgf-opcao-marca {
+  flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px;
+  border: 2px solid var(--cor-campo); border-radius: 6px; background: var(--cor-branco);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s, transform .25s var(--mola);
+}
+.mgf-opcao input[type="radio"] + .mgf-opcao-marca { border-radius: 50%; }
+.mgf-opcao input:focus-visible + .mgf-opcao-marca { outline: 3px solid var(--cor-ambar); outline-offset: 2px; }
+.mgf-opcao input:checked + .mgf-opcao-marca { background: var(--cor-verde); border-color: var(--cor-verde); transform: scale(1.08); }
+.mgf-opcao input[type="checkbox"]:checked + .mgf-opcao-marca::after {
+  content: ""; width: 6px; height: 11px; margin-top: -2px;
+  border: solid var(--cor-branco); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+}
+.mgf-opcao input[type="radio"]:checked + .mgf-opcao-marca::after {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cor-branco);
+}
+.mgf-opcao.marcada { background: var(--cor-menta-clara); border-color: var(--cor-menta); }
+.mgf-opcao-texto { flex: 1; font-size: 16px; line-height: 1.45; }
+.mgf-opcao-pontos {
+  flex: 0 0 auto; font-family: var(--letra-mono); font-size: 13px; font-weight: 500;
+  color: var(--cor-verde); padding-top: 2px;
+}
+.mgf-opcao-negativa .mgf-opcao-pontos { color: var(--clin-alerta); }
+.mgf-opcao-negativa { border-color: var(--cor-linha); }
+.mgf-separacao { height: 6px; }
+
+/* ---------- Resultado ---------- */
+.mgf-resultado {
+  background: var(--cor-branco); border: 1px solid var(--cor-linha-suave);
+  border-radius: var(--raio); margin-top: 8px; overflow: hidden;
+}
+.mgf-resultado-topo {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px 20px; background: var(--cor-tinta); color: var(--cor-papel);
+}
+.mgf-resultado-topo h3 { color: var(--cor-papel); font-size: 19px; font-weight: 800; }
+.mgf-pontuacao { font-family: var(--letra-mono); font-size: 40px; font-weight: 500; line-height: 1; color: var(--cor-papel); }
+.mgf-pontuacao small { font-size: 18px; color: var(--cor-menta); margin-left: 4px; }
+.mgf-resultado-corpo { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.mgf-barra { height: 8px; background: var(--cor-linha-suave); border-radius: 99px; overflow: hidden; }
+.mgf-barra > span { display: block; height: 100%; width: 0; background: var(--cor-verde-medio); border-radius: 99px; transition: width .4s var(--mola); }
+
+/* Interpretação: data-nivel = normal | atencao | alerta | info */
+.mgf-interp {
+  border-radius: var(--raio-p); padding: 12px 14px; font-size: 16px; line-height: 1.45;
+  border-left: 5px solid;
+}
+.mgf-interp[hidden] { display: none; }
+.mgf-interp[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal);  border-color: var(--clin-normal-borda); }
+.mgf-interp[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+.mgf-interp[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta);  border-color: var(--clin-alerta-borda); }
+.mgf-interp[data-nivel="info"]    { background: var(--clin-info-fundo);    color: var(--clin-info);    border-color: var(--clin-info-borda); }
+
+/* ---------- Tabelas ---------- */
+.mgf-tabela-caixa { overflow-x: auto; }
+.mgf-tabela { width: 100%; border-collapse: collapse; font-size: 15px; }
+.mgf-tabela th {
+  text-align: left; font-weight: 700; padding: 8px 12px;
+  background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha);
+}
+.mgf-tabela td { padding: 8px 12px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; }
+.mgf-tabela tr:last-child td { border-bottom: 0; }
+.mgf-nivel-normal  { color: var(--clin-normal);  font-weight: 700; }
+.mgf-nivel-atencao { color: var(--clin-atencao); font-weight: 700; }
+.mgf-nivel-alerta  { color: var(--clin-alerta);  font-weight: 700; }
+
+/* ---------- Nota ---------- */
+.mgf-nota {
+  background: var(--cor-papel); border-radius: var(--raio-p); padding: 12px 14px;
+  font-size: 15px; line-height: 1.5; color: var(--cor-texto-2);
+}
+.mgf-nota strong:first-child { color: var(--cor-tinta); }
+
+/* ---------- Referências dentro de uma escala ---------- */
+.mgf-refs { font-size: 13px; color: var(--cor-texto-3); line-height: 1.5; }
+.mgf-refs h4 { font-family: var(--letra-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
+.mgf-refs ol { margin: 0; padding-left: 18px; }
+
+/* ---------- Botões ---------- */
+.mgf-botoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+.mgf-botao {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  font-family: var(--letra-texto); font-size: 15px; font-weight: 700;
+  padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer;
+  background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta);
+  transition: transform .25s var(--mola), background .2s;
+}
+.mgf-botao:hover { transform: translateY(-2px); background: var(--cor-papel); }
+.mgf-botao-principal { background: var(--cor-verde); color: var(--cor-branco); border-color: var(--cor-verde); }
+.mgf-botao-principal:hover { background: var(--cor-verde-fundo); }
+.mgf-botao svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.mgf-botao.copiado { background: var(--clin-normal-fundo); border-color: var(--clin-normal); color: var(--clin-normal); }
+
+@media (max-width: 520px) {
+  .mgf-pontuacao { font-size: 32px; }
+  .mgf-titulo-escala h2 { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgf-ferramenta *, .mgf-ferramenta *::before, .mgf-ferramenta *::after { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .mgf-separadores, .mgf-botoes { display: none !important; }
+  .mgf-painel[hidden] { display: none !important; }
+  .mgf-cartao, .mgf-resultado { break-inside: avoid; }
+  .mgf-opcao:not(.marcada) { color: var(--cor-texto-3); }
+  .mgf-ferramenta * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Cartões que são grupos de perguntas (fieldset + legend) */
+.mgf-ferramenta fieldset.mgf-cartao { padding: 0; min-width: 0; border-width: 1px; border-style: solid; }
+.mgf-ferramenta legend.mgf-cartao-titulo { float: left; width: 100%; margin: 0; }
+.mgf-ferramenta legend.mgf-cartao-titulo + .mgf-cartao-corpo,
+.mgf-ferramenta legend + .mgf-cartao-titulo + .mgf-cartao-corpo { clear: both; }
+.mgf-ferramenta legend.mgf-so-leitor { float: left; }
