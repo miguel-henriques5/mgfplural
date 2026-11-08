@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espirometria</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "espirometria",
+  "titulo": "Espirometria",
+  "descricao": "Interpretação da espirometria (padrão obstrutivo, restritivo ou misto, prova de broncodilatação, gravidade GOLD), referência rápida e qualidade da prova.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 3,
+  "palavras": [
+    "espirometria",
+    "FEV1",
+    "VEMS",
+    "FVC",
+    "Tiffeneau",
+    "obstrução",
+    "restrição",
+    "broncodilatação",
+    "DPOC",
+    "asma",
+    "GOLD",
+    "provas funcionais respiratórias"
+  ],
+  "bibliografia": [
+    "Cardoso AP, Costa RP, Ferreira JMR (2015)",
+    "DGS Orientação 005/2016",
+    "ATS/ERS Standardisation of Spirometry (2005)"
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 800px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.07); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #0F6E64; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 5px; }
+#ferramenta label { font-size: 13px; font-weight: 600; color: #2C3A38; display: flex; align-items: center; gap: 4px; }
+#ferramenta .unit-badge { font-size: 13px; background: #D7EDE7; color: #0F6E64; border-radius: 4px; padding: 1px 5px; font-weight: 600; }
+#ferramenta input[type="number"], #ferramenta input[type="text"], #ferramenta select { border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 12px; font-size: 15px; color: #13423D; background: #D7EDE7; width: 100%; transition: border-color 0.2s; appearance: auto; -webkit-appearance: auto; }
+#ferramenta input:focus, #ferramenta select:focus { outline: none; border-color: #0F6E64; background: #FFFFFF; }
+#ferramenta .field-hint { font-size: 13px; color: #2C3A38; font-style: italic; }
+#ferramenta .divider { height: 1px; background: #D7EDE7; margin: 18px 0; }
+#ferramenta .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+#ferramenta .btn-primary { background: #0F6E64; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 22px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+#ferramenta .btn-primary:hover { background: #0F6E64; }
+#ferramenta .btn-secondary { background: #D7EDE7; color: #0F6E64; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+#ferramenta .btn-secondary:hover { background: #D7EDE7; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-left: auto; }
+#ferramenta .btn-print:hover { background: #D7EDE7; }
+#ferramenta #result-area { display: none; }
+#ferramenta #result-area.visible { display: block; }
+#ferramenta .result-banner { border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 14px; }
+#ferramenta .result-banner.normal { background: #E8F5EC; border-left: 5px solid #1B6B35; }
+#ferramenta .result-banner.obstrucao { background: #F8E7C4; border-left: 5px solid #E07A1F; }
+#ferramenta .result-banner.restricao { background: #FDECEA; border-left: 5px solid #D2483C; }
+#ferramenta .result-banner.misto { background: #EAF1FA; border-left: 5px solid #4B5B58; }
+#ferramenta .result-banner .banner-icon { font-size: 28px; line-height: 1; }
+#ferramenta .result-banner .banner-label { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+#ferramenta .result-banner.normal .banner-label { color: #1B6B35; }
+#ferramenta .result-banner.obstrucao .banner-label { color: #8F3A00; }
+#ferramenta .result-banner.restricao .banner-label { color: #9E2318; }
+#ferramenta .result-banner.misto .banner-label { color: #4B5B58; }
+#ferramenta .result-banner .banner-title { font-size: 18px; font-weight: 700; color: #13423D; margin-bottom: 4px; }
+#ferramenta .result-banner .banner-desc { font-size: 14px; color: #2C3A38; }
+#ferramenta .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
+#ferramenta .metric-box { background: #D7EDE7; border-radius: 10px; padding: 12px 14px; border: 1.5px solid #D7EDE7; }
+#ferramenta .metric-box.alert { border-color: #E07A1F; background: #F8E7C4; }
+#ferramenta .metric-box.normal { border-color: #1B6B35; background: #E8F5EC; }
+#ferramenta .metric-box.danger { border-color: #D2483C; background: #FDECEA; }
+#ferramenta .metric-lbl { font-size: 13px; font-weight: 600; color: #2C3A38; margin-bottom: 2px; }
+#ferramenta .metric-val { font-size: 20px; font-weight: 700; color: #13423D; }
+#ferramenta .metric-sub { font-size: 13px; color: #2C3A38; margin-top: 1px; }
+#ferramenta .severity-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+#ferramenta .sev-badge { border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: 700; border: 2px solid transparent; }
+#ferramenta .sev-badge.gold1 { background: #E8F5EC; color: #1B6B35; border-color: #1B6B35; }
+#ferramenta .sev-badge.gold2 { background: #F8E7C4; color: #8F3A00; border-color: #E07A1F; }
+#ferramenta .sev-badge.gold3 { background: #FDECEA; color: #9E2318; border-color: #D2483C; }
+#ferramenta .sev-badge.gold4 { background: #13201E; color: #FFFFFF; border-color: #9E2318; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.blue { background: #D7EDE7; border-left: 4px solid #0F6E64; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; color: #0F6E64; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .bronco-result { border-radius: 10px; padding: 14px 16px; margin-top: 10px; }
+#ferramenta .bronco-result.pos { background: #E8F5EC; border: 1.5px solid #1B6B35; }
+#ferramenta .bronco-result.neg { background: #D7EDE7; border: 1.5px solid #D7EDE7; }
+#ferramenta .bronco-result .br-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+#ferramenta .bronco-result.pos .br-title { color: #1B6B35; }
+#ferramenta .bronco-result.neg .br-title { color: #2C3A38; }
+#ferramenta .bronco-result p { font-size: 14px; color: #13423D; }
+#ferramenta .flow-container { overflow-x: auto; margin-bottom: 14px; }
+#ferramenta .flow-box { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 240px; }
+#ferramenta .flow-node { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; text-align: center; width: 100%; max-width: 280px; }
+#ferramenta .flow-node.q { background: #0F6E64; color: #FFFFFF; }
+#ferramenta .flow-node.yes { background: #E8F5EC; color: #1B6B35; border: 1.5px solid #1B6B35; }
+#ferramenta .flow-node.no { background: #FDECEA; color: #9E2318; border: 1.5px solid #D2483C; }
+#ferramenta .flow-node.end { background: #0F6E64; color: #FFFFFF; }
+#ferramenta .flow-arrow { font-size: 18px; color: #2C3A38; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #0F6E64; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #0F6E64; }
+#ferramenta .gold-table { width: 100%; border-collapse: collapse; }
+#ferramenta .gold-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 8px 12px; text-align: left; }
+#ferramenta .gold-table td { padding: 8px 12px; font-size: 14px; color: #13423D; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .gold-table tr:last-child td { border-bottom: none; }
+#ferramenta .gold-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .gold-badge { border-radius: 5px; padding: 2px 8px; font-size: 13px; font-weight: 700; }
+#ferramenta .gold-badge.g1 { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .gold-badge.g2 { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .gold-badge.g3 { background: #FDECEA; color: #9E2318; }
+#ferramenta .gold-badge.g4 { background: #13201E; color: #D2483C; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #0F6E64; border: 2px solid transparent; border-radius: 8px; padding: 7px 14px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #0F6E64; color: #FFFFFF; border-color: #0F6E64; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #D7EDE7; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Ferramenta clínica de apoio à interpretação e marcha diagnóstica.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-interpretacao" aria-controls="tab-interpretacao" aria-selected="true">Interpretação</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-referencia" aria-controls="tab-referencia" aria-selected="false">Referência Rápida</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-marcha" aria-controls="tab-marcha" aria-selected="false">Marcha Diagnóstica</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-qualidade" aria-controls="tab-qualidade" aria-selected="false">Qualidade da Prova</button>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-interpretacao" role="tabpanel" aria-labelledby="sep-interpretacao">
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Valores da Espirometria Basal (Pré-broncodilatação)</div>
+      <div class="input-grid">
+        <div class="field-group">
+          <label>FEV₁ <span class="unit-badge">% previsto</span></label>
+          <input type="number" id="fev1" placeholder="ex: 72" min="0" max="200" step="0.1">
+          <span class="field-hint">Volume expiratório forçado no 1º segundo</span>
+        </div>
+        <div class="field-group">
+          <label>FVC <span class="unit-badge">% previsto</span></label>
+          <input type="number" id="fvc" placeholder="ex: 85" min="0" max="200" step="0.1">
+          <span class="field-hint">Capacidade vital forçada</span>
+        </div>
+        <div class="field-group">
+          <label>FEV₁/FVC <span class="unit-badge">%</span></label>
+          <input type="number" id="ratio" placeholder="ex: 65" min="0" max="100" step="0.1">
+          <span class="field-hint">Índice de Tiffeneau (observado)</span>
+        </div>
+        <div class="field-group">
+          <label>MMEF 75/25 <span class="unit-badge">% previsto</span></label>
+          <input type="number" id="mmef" placeholder="ex: 45" min="0" max="200" step="0.1">
+          <span class="field-hint">Débito expiratório forçado médio (opcional)</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="card-title" style="margin-bottom: 14px;"><span class="icon" aria-hidden="true"></span> Pós-broncodilatação (se disponível)</div>
+      <div class="input-grid">
+        <div class="field-group">
+          <label>FEV₁ pós-BD <span class="unit-badge">% previsto</span></label>
+          <input type="number" id="fev1_post" placeholder="ex: 80" min="0" max="200" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>FVC pós-BD <span class="unit-badge">% previsto</span></label>
+          <input type="number" id="fvc_post" placeholder="ex: 90" min="0" max="200" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>FEV₁/FVC pós-BD <span class="unit-badge">%</span></label>
+          <input type="number" id="ratio_post" placeholder="ex: 70" min="0" max="100" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>Variação FEV₁ <span class="unit-badge">%</span></label>
+          <input type="number" id="delta_fev1" placeholder="ex: 15" min="0" max="200" step="0.1">
+          <span class="field-hint">% de variação (Obs2-Obs1)/Obs1 × 100</span>
+        </div>
+      </div>
+      <div class="input-grid" style="margin-top: 10px;">
+        <div class="field-group">
+          <label>Variação absoluta FEV₁ <span class="unit-badge">mL</span></label>
+          <input type="number" id="delta_fev1_ml" placeholder="ex: 210" min="0" max="2000" step="1">
+          <span class="field-hint">Aumento em mL (valor absoluto)</span>
+        </div>
+        <div class="field-group">
+          <label>Variação absoluta FVC <span class="unit-badge">mL</span></label>
+          <input type="number" id="delta_fvc_ml" placeholder="ex: 180" min="0" max="2000" step="1">
+          <span class="field-hint">Aumento FVC em mL (opcional)</span>
+        </div>
+        <div class="field-group">
+          <label>Doente</label>
+          <select id="patient_age">
+            <option value="adult">Adulto (≥18 anos)</option>
+            <option value="child">Criança (&lt;18 anos)</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top: 18px;">
+        <button type="button" class="btn-primary" onclick="interpret()">Interpretar</button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">↺ Limpar</button>
+        <button type="button" class="btn-print no-print" onclick="printResult()">Imprimir</button>
+      </div>
+    </div>
+    <div id="result-area">
+      <div id="result-banner" class="result-banner"></div>
+      <div class="card">
+        <div class="card-title"><span class="icon" aria-hidden="true"></span> Valores Avaliados</div>
+        <div class="metrics-grid" id="metrics-grid"></div>
+      </div>
+      <div class="card" id="severity-card" style="display:none;">
+        <div class="card-title"><span class="icon" aria-hidden="true"></span> Gravidade da Obstrução (GOLD)</div>
+        <div id="severity-content"></div>
+      </div>
+      <div class="card" id="bronco-card" style="display:none;">
+        <div class="card-title"><span class="icon" aria-hidden="true"></span> Prova de Broncodilatação</div>
+        <div id="bronco-content"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="icon" aria-hidden="true"></span> Significado Clínico e Orientação</div>
+        <div id="clinical-content"></div>
+      </div>
+      <div class="card" id="small-airways-card" style="display:none;">
+        <div class="card-title"><span class="icon" aria-hidden="true"></span> Pequenas Vias Aéreas</div>
+        <div id="small-airways-content"></div>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-referencia" role="tabpanel" aria-labelledby="sep-referencia" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Padrões Espirométricos</div>
+      <div style="overflow-x:auto;">
+        <table class="gold-table">
+          <thead>
+            <tr>
+              <th>Padrão</th>
+              <th>FEV₁/FVC</th>
+              <th>FVC</th>
+              <th>FEV₁</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Normal</strong></td>
+              <td>≥ 70%</td>
+              <td>≥ 80% previsto</td>
+              <td>≥ 80% previsto</td>
+            </tr>
+            <tr>
+              <td><strong>Obstrutivo</strong></td>
+              <td>&lt; 70%</td>
+              <td>Normal ou </td>
+              <td>&lt; 80%</td>
+            </tr>
+            <tr>
+              <td><strong>Restritivo</strong></td>
+              <td>Normal ou </td>
+              <td>&lt; 80%</td>
+              <td>Normal ou </td>
+            </tr>
+            <tr>
+              <td><strong>Misto</strong></td>
+              <td>&lt; 70%</td>
+              <td>&lt; 80%</td>
+              <td>&lt; 80%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Gravidade da Obstrução — Classificação GOLD</div>
+      <table class="gold-table">
+        <thead>
+          <tr><th>Grau</th><th>Severidade</th><th>FEV₁ pós-BD (% previsto)</th><th>Orientação clínica</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="gold-badge g1">GOLD 1</span></td>
+            <td>Ligeira</td>
+            <td>FEV₁ ≥ 80%</td>
+            <td>Cessação tabágica, vacinação, SABA SOS</td>
+          </tr>
+          <tr>
+            <td><span class="gold-badge g2">GOLD 2</span></td>
+            <td>Moderada</td>
+            <td>50% ≤ FEV₁ &lt; 80%</td>
+            <td>LAMA ou LABA, reabilitação respiratória</td>
+          </tr>
+          <tr>
+            <td><span class="gold-badge g3">GOLD 3</span></td>
+            <td>Grave</td>
+            <td>30% ≤ FEV₁ &lt; 50%</td>
+            <td>LAMA + LABA ± ICS, avaliação exacerbações</td>
+          </tr>
+          <tr>
+            <td><span class="gold-badge g4">GOLD 4</span></td>
+            <td>Muito grave</td>
+            <td>FEV₁ &lt; 30%</td>
+            <td>Referenciação pneumologia, O₂ domiciliário?</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Critérios de Positividade da Prova de Broncodilatação</div>
+      <div class="info-block green">
+        <div class="ib-title">Adulto</div>
+        <p>FEV₁ aumenta <strong>pelo menos 12% E 200 mL</strong> em relação ao valor basal.<br>
+        Também positivo se FVC aumentar pelo menos <strong>12% E 200 mL</strong>.</p>
+      </div>
+      <div class="info-block blue">
+        <div class="ib-title">Criança (&lt;18 anos)</div>
+        <p>FEV₁ aumenta <strong>pelo menos 12%</strong> (sem critério de volume absoluto).</p>
+      </div>
+      <div class="info-block orange">
+        <div class="ib-title">Nota sobre o protocolo</div>
+        <p><strong>Salbutamol</strong> 400µg (4 puffs de 100µg) → 2ª avaliação após <strong>15 minutos</strong>.<br>
+        <strong>Brometo de Ipratrópio</strong> 160µg (8 puffs de 20µg) → 2ª avaliação após <strong>30–35 minutos</strong>.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Índices Espirométricos — Definições</div>
+      <div class="input-grid" style="gap: 10px;">
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">FEV₁</div>
+          <p>Volume expirado no 1º segundo após inspiração máxima. Avalia a <strong>limitação do débito aéreo</strong>.</p>
+        </div>
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">FVC</div>
+          <p>Volume total expirado numa manobra forçada. Reduzida na <strong>restrição e obstrução grave</strong>.</p>
+        </div>
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">FEV₁/FVC</div>
+          <p>Índice de Tiffeneau. &lt;70% indica <strong>obstrução ao débito aéreo</strong>.</p>
+        </div>
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">PEF</div>
+          <p>Débito expiratório de pico. Útil para monitorização da asma.</p>
+        </div>
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">MMEF 75/25</div>
+          <p>Débito médio entre 25–75% FVC. &lt;60% → <strong>obstrução das pequenas vias aéreas</strong>.</p>
+        </div>
+        <div class="info-block blue" style="margin-bottom:0;">
+          <div class="ib-title">LLN</div>
+          <p>Limite inferior da normalidade. Alternativa ao limiar fixo de 70% (mais rigoroso em idosos).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-marcha" role="tabpanel" aria-labelledby="sep-marcha" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Algoritmo de Interpretação (5 passos)</div>
+      <ul class="steps-list">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Qualidade das curvas</strong> — verificar mínimo de 3 curvas aceitáveis e reprodutíveis. Identificar artefactos: tosse no 1º segundo, término abrupto, manobra submáxima, início lento.</div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>FEV₁/FVC antes e após broncodilatação</strong> — &lt;70% indica obstrução. Avaliar reversibilidade com prova de broncodilatação (obrigatória em todos os casos).</div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>FVC antes e após broncodilatação</strong> — se &lt;80% do previsto, considerar restrição. Se FEV₁/FVC &lt;70% e FVC &lt;80%: padrão misto.</div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Variação do FEV₁ com broncodilatador</strong> — adulto: ≥12% E ≥200mL = positivo. Criança: ≥12% = positivo. Calcular também variação da FVC.</div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>FEV₁ pós-broncodilatação para gravidade</strong> — classificar segundo GOLD: Ligeira (≥80%), Moderada (50–79%), Grave (30–49%), Muito grave (&lt;30%).</div>
+        </li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Diagnósticos Diferenciais por Padrão</div>
+      <div class="info-block orange">
+        <div class="ib-title">Padrão Obstrutivo</div>
+        <p><strong>DPOC</strong> (ex-fumadores, FEV₁/FVC pós-BD &lt;70%)<br>
+        <strong>Asma brônquica</strong> (prova BD positiva, variabilidade)<br>
+        <strong>Bronquiectasias</strong><br>
+        <strong>Bronquiolite obliterante</strong><br>
+        <strong>Traqueomalácia</strong> (padrão variável)</p>
+      </div>
+      <div class="info-block red">
+        <div class="ib-title">Padrão Restritivo</div>
+        <p><strong>Fibrose pulmonar</strong> (IPF, fibrose intersticial)<br>
+        <strong>Doenças pulmonares intersticiais</strong><br>
+        <strong>Doenças da caixa torácica</strong> (escoliose, obesidade grave)<br>
+        <strong>Doenças neuromusculares</strong> (ELA, miastenia gravis)<br>
+        <strong>Sarcoidose</strong><br>
+        <em>Confirmar com volumes pulmonares por pletismografia</em></p>
+      </div>
+      <div class="info-block purple">
+        <div class="ib-title">Padrão Misto</div>
+        <p><strong>DPOC + fibrose</strong> (síndrome combinada)<br>
+        <strong>Asma + obesidade</strong><br>
+        <strong>Bronquiectasias com fibrose</strong><br>
+        <em>Distinção entre verdadeiramente misto vs obstrução com insuflação (↑VR) requer pletismografia</em></p>
+      </div>
+      <div class="info-block green">
+        <div class="ib-title">Espirometria Normal</div>
+        <p>Não exclui patologia respiratória. Considerar:<br>
+        • Doença das pequenas vias aéreas (avaliar MMEF 75/25)<br>
+        • Hipertensão pulmonar<br>
+        • Patologia vascular<br>
+        • Disfunção das pregas vocais</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Orientação Pós-espirometria</div>
+      <div class="info-block blue">
+        <div class="ib-title">Quando referenciar à Pneumologia</div>
+        <p>
+        • GOLD 3 ou 4 (obstrução grave ou muito grave)<br>
+        • Padrão restritivo ou misto (necessidade de pletismografia)<br>
+        • Dúvida diagnóstica ou discordância clínico-funcional<br>
+        • Avaliação pré-cirúrgica de risco<br>
+        • Investigação de doença intersticial<br>
+        • Asma grave ou de difícil controlo
+        </p>
+      </div>
+      <div class="info-block green">
+        <div class="ib-title">Exames complementares a considerar</div>
+        <p>
+        • <strong>Pletismografia</strong> — volumes pulmonares (confirmar restrição vs insuflação)<br>
+        • <strong>DLCO</strong> — capacidade de difusão (fibrose, enfisema, hipertensão pulmonar)<br>
+        • <strong>Prova de esforço cardiopulmonar</strong> — dispneia de causa indeterminada<br>
+        • <strong>TC tórax HR</strong> — padrão intersticial ou bronquiectasias<br>
+        • <strong>Teste de provocação brônquica</strong> — suspeita de asma com espirometria normal
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-qualidade" role="tabpanel" aria-labelledby="sep-qualidade" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Critérios de Aceitabilidade (ATS/ERS)</div>
+      <ul class="steps-list">
+        <li>
+          <div class="step-num">✓</div>
+          <div class="step-text"><strong>Início explosivo</strong> — volume extrapolado &lt;5% FVC ou &lt;150 mL</div>
+        </li>
+        <li>
+          <div class="step-num">✓</div>
+          <div class="step-text"><strong>Duração mínima</strong> — expiração ≥6 segundos (≥3 segundos em crianças)</div>
+        </li>
+        <li>
+          <div class="step-num">✓</div>
+          <div class="step-text"><strong>Plateau</strong> — sem alteração de volume &gt;25 mL nos últimos 2 segundos</div>
+        </li>
+        <li>
+          <div class="step-num">✓</div>
+          <div class="step-text"><strong>Sem artefactos</strong> — ausência de tosse nos primeiros 2 segundos, encerramento glótico, ou término prematuro</div>
+        </li>
+        <li>
+          <div class="step-num">✓</div>
+          <div class="step-text"><strong>Reprodutibilidade</strong> — diferença entre os 2 maiores FEV₁ e FVC &lt;150 mL (mínimo 3 curvas aceitáveis)</div>
+        </li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Principais Erros e Artefactos</div>
+      <div class="input-grid" style="gap: 10px;">
+        <div class="info-block orange" style="margin-bottom:0;">
+          <div class="ib-title">Tosse no 1º segundo</div>
+          <p>Invalida o FEV₁. Curva interrompida precocemente com artefacto no traçado.</p>
+        </div>
+        <div class="info-block orange" style="margin-bottom:0;">
+          <div class="ib-title">Término abrupto</div>
+          <p>FVC subestimada. O doente para a expiração prematuramente sem atingir plateau.</p>
+        </div>
+        <div class="info-block orange" style="margin-bottom:0;">
+          <div class="ib-title">Manobra submáxima</div>
+          <p>Início lento ou pouco esforço. FEV₁ e FVC subestimados. Curva com forma achatada.</p>
+        </div>
+        <div class="info-block orange" style="margin-bottom:0;">
+          <div class="ib-title">Sopro pouco rápido</div>
+          <p>Débito pico (PEF) reduzido. Sugere falta de colaboração ou obstrução das vias aéreas superiores.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Contra-indicações à Espirometria</div>
+      <div class="info-block red">
+        <div class="ib-title">Absolutas</div>
+        <p>
+        • Pneumotórax recente<br>
+        • Cirurgia torácica, abdominal ou ocular recente (≤1 mês)<br>
+        • Hemoptise ativa<br>
+        • Instabilidade hemodinâmica aguda<br>
+        • Aneurisma da aorta ou cerebral conhecido
+        </p>
+      </div>
+      <div class="info-block orange">
+        <div class="ib-title">Relativas (avaliar risco/benefício)</div>
+        <p>
+        • Crianças &lt;5 anos (sem colaboração)<br>
+        • Estados confusionais, demência avançada<br>
+        • Infecções respiratórias ativas (risco de transmissão)<br>
+        • Alterações anatómicas da face ou boca (impossível vedação)<br>
+        • Náuseas ou vómitos ativos
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Preparação do Doente</div>
+      <div class="info-block green">
+        <p>
+        • <strong>Sem broncodilatadores</strong> de curta ação nas 4h anteriores (SABA), de longa ação nas 12–24h anteriores<br>
+        • <strong>Sem tabaco</strong> nas 4h anteriores<br>
+        • <strong>Sem refeição pesada</strong> nas 2h anteriores<br>
+        • <strong>Roupa confortável</strong>, sem constrição abdominal<br>
+        • <strong>Clipe nasal</strong> e verificação da vedação do bucal<br>
+        • Repouso de 5 minutos antes da prova<br>
+        • <strong>Posição sentada</strong>, postura ereta, cabeça levemente inclinada para cima
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="tool-footer">
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico.</em>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+// Print date
+
+  // Tab switching
+  function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  function resetForm() {
+    ['fev1','fvc','ratio','mmef','fev1_post','fvc_post','ratio_post','delta_fev1','delta_fev1_ml','delta_fvc_ml'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    const ra = document.getElementById('result-area');
+    ra.classList.remove('visible');
+  }
+
+  function val(id) {
+    const v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? null : v;
+  }
+
+  function interpret() {
+    const fev1 = val('fev1');
+    const fvc = val('fvc');
+    const ratio = val('ratio');
+    const mmef = val('mmef');
+    const fev1_post = val('fev1_post');
+    const fvc_post = val('fvc_post');
+    const ratio_post = val('ratio_post');
+    const delta_fev1 = val('delta_fev1');
+    const delta_fev1_ml = val('delta_fev1_ml');
+    const delta_fvc_ml = val('delta_fvc_ml');
+    const isChild = document.getElementById('patient_age').value === 'child';
+
+    if (fev1 === null || fvc === null || ratio === null) {
+      mkAviso('Por favor introduza FEV₁ (%), FVC (%) e FEV₁/FVC.');
+      return;
+    }
+
+    // PATTERN DETECTION
+    const hasObstrucao = ratio < 70;
+    const hasRestricao = fvc < 80;
+    let pattern = 'normal';
+    if (hasObstrucao && hasRestricao) pattern = 'misto';
+    else if (hasObstrucao) pattern = 'obstrucao';
+    else if (hasRestricao) pattern = 'restricao';
+
+    // SEVERITY (GOLD) based on post-BD FEV1, fallback to pre
+    const fev1ForSeverity = fev1_post !== null ? fev1_post : fev1;
+    let gold = null, goldLabel = '', goldClass = '';
+    if (hasObstrucao || pattern === 'misto') {
+      if (fev1ForSeverity >= 80) { gold = 1; goldLabel = 'GOLD 1 — Ligeira'; goldClass = 'gold1'; }
+      else if (fev1ForSeverity >= 50) { gold = 2; goldLabel = 'GOLD 2 — Moderada'; goldClass = 'gold2'; }
+      else if (fev1ForSeverity >= 30) { gold = 3; goldLabel = 'GOLD 3 — Grave'; goldClass = 'gold3'; }
+      else { gold = 4; goldLabel = 'GOLD 4 — Muito grave'; goldClass = 'gold4'; }
+    }
+
+    // BRONCODILATATION
+    let broncoPositive = null;
+    if (delta_fev1 !== null || delta_fev1_ml !== null || delta_fvc_ml !== null) {
+      if (isChild) {
+        broncoPositive = delta_fev1 !== null && delta_fev1 >= 12;
+      } else {
+        const fev1Pos = delta_fev1 !== null && delta_fev1_ml !== null && delta_fev1 >= 12 && delta_fev1_ml >= 200;
+        const fvcPos = delta_fvc_ml !== null && fvc_post !== null && fvc_post >= 80 &&
+                       ((fvc_post - fvc) / fvc * 100 >= 12) && delta_fvc_ml >= 200;
+        broncoPositive = fev1Pos || fvcPos;
+        // also check if only % given
+        if (!fev1Pos && delta_fev1 !== null && delta_fev1 >= 12 && delta_fev1_ml === null) broncoPositive = null; // insufficient data
+      }
+    }
+
+    // BANNER
+    const bannerConfig = {
+      normal: { cls: 'normal', icon: '', label: 'Normal', title: 'Espirometria Normal', desc: 'Os parâmetros espirométricos estão dentro dos limites de referência.' },
+      obstrucao: { cls: 'obstrucao', icon: '', label: 'Obstrutivo', title: 'Padrão Obstrutivo', desc: 'FEV₁/FVC reduzido indica limitação ao débito aéreo.' },
+      restricao: { cls: 'restricao', icon: '', label: 'Restritivo', title: 'Padrão Restritivo (provável)', desc: 'FVC reduzida com FEV₁/FVC normal. Confirmar com pletismografia.' },
+      misto: { cls: 'misto', icon: '', label: 'Misto', title: 'Padrão Misto', desc: 'FEV₁/FVC reduzido e FVC reduzida. Distinguir de obstrução com insuflação (pletismografia).' }
+    };
+    const bc = bannerConfig[pattern];
+    document.getElementById('result-banner').className = 'result-banner ' + bc.cls;
+    document.getElementById('result-banner').innerHTML = `
+      <div class="banner-icon">${bc.icon}</div>
+      <div>
+        <div class="banner-label">${bc.label}</div>
+        <div class="banner-title">${bc.title}</div>
+        <div class="banner-desc">${bc.desc}</div>
+      </div>`;
+
+    // METRICS
+    function metricClass(name, v) {
+      if (name === 'ratio') return v < 70 ? 'danger' : 'normal';
+      if (name === 'fev1' || name === 'fvc') return v < 80 ? (v < 50 ? 'danger' : 'alert') : 'normal';
+      if (name === 'mmef') return v < 60 ? 'alert' : 'normal';
+      return '';
+    }
+    let metricsHtml = `
+      <div class="metric-box ${metricClass('fev1', fev1)}">
+        <div class="metric-lbl">FEV₁</div>
+        <div class="metric-val">${fev1}%</div>
+        <div class="metric-sub">${fev1 >= 80 ? 'Normal' : fev1 >= 50 ? 'Reduzido' : 'Muito reduzido'}</div>
+      </div>
+      <div class="metric-box ${metricClass('fvc', fvc)}">
+        <div class="metric-lbl">FVC</div>
+        <div class="metric-val">${fvc}%</div>
+        <div class="metric-sub">${fvc >= 80 ? 'Normal' : 'Reduzida'}</div>
+      </div>
+      <div class="metric-box ${metricClass('ratio', ratio)}">
+        <div class="metric-lbl">FEV₁/FVC</div>
+        <div class="metric-val">${ratio}%</div>
+        <div class="metric-sub">${ratio >= 70 ? 'Normal' : 'Obstrução'}</div>
+      </div>`;
+    if (mmef !== null) {
+      metricsHtml += `
+      <div class="metric-box ${metricClass('mmef', mmef)}">
+        <div class="metric-lbl">MMEF 75/25</div>
+        <div class="metric-val">${mmef}%</div>
+        <div class="metric-sub">${mmef >= 60 ? 'Normal' : 'Pequenas vias'}</div>
+      </div>`;
+    }
+    if (fev1_post !== null) {
+      metricsHtml += `
+      <div class="metric-box">
+        <div class="metric-lbl">FEV₁ pós-BD</div>
+        <div class="metric-val">${fev1_post}%</div>
+        <div class="metric-sub">Após broncodilatação</div>
+      </div>`;
+    }
+    document.getElementById('metrics-grid').innerHTML = metricsHtml;
+
+    // SEVERITY CARD
+    const sevCard = document.getElementById('severity-card');
+    if (gold !== null) {
+      sevCard.style.display = 'block';
+      const sevMap = {
+        1: { desc: 'Obstrução ligeira. Doente geralmente com poucos sintomas.', mgmt: 'Cessação tabágica, vacinação (gripe, pneumocócica), SABA em SOS, educação do doente.' },
+        2: { desc: 'Obstrução moderada. Pode haver dispneia de esforço e exacerbações.', mgmt: 'Adicionar LAMA e/ou LABA. Considerar reabilitação respiratória. Avaliar comorbilidades.' },
+        3: { desc: 'Obstrução grave. Dispneia frequente, risco elevado de exacerbações.', mgmt: 'LAMA + LABA. Considerar ICS se exacerbações frequentes ou eosinófilos elevados. Referenciação a Pneumologia.' },
+        4: { desc: 'Obstrução muito grave. Risco de insuficiência respiratória.', mgmt: 'LAMA + LABA + ICS. Avaliar O₂ domiciliário, ventilação, transplante pulmonar. Referenciação urgente.' }
+      };
+      const sm = sevMap[gold];
+      document.getElementById('severity-content').innerHTML = `
+        <div class="severity-row">
+          <span class="sev-badge ${goldClass}">${goldLabel}</span>
+          <span style="font-size:13px;color:#2C3A38;">FEV₁ ${fev1_post ? 'pós-BD' : 'pré-BD'}: ${fev1ForSeverity}%</span>
+        </div>
+        <div class="info-block orange">
+          <div class="ib-title">Avaliação</div>
+          <p>${sm.desc}</p>
+        </div>
+        <div class="info-block green">
+          <div class="ib-title">Orientação terapêutica</div>
+          <p>${sm.mgmt}</p>
+        </div>`;
+    } else {
+      sevCard.style.display = 'none';
+    }
+
+    // BRONCO CARD
+    const broncoCard = document.getElementById('bronco-card');
+    if (broncoPositive !== null) {
+      broncoCard.style.display = 'block';
+      if (broncoPositive) {
+        document.getElementById('bronco-content').innerHTML = `
+          <div class="bronco-result pos">
+            <div class="br-title">Prova de Broncodilatação POSITIVA</div>
+            <p>Sugere componente reversível da obstrução. Compatível com <strong>asma brônquica</strong> ou DPOC com componente reversível.<br>
+            <em>A prova positiva não exclui DPOC nem confirma asma — deve ser interpretada no contexto clínico.</em></p>
+          </div>`;
+      } else {
+        document.getElementById('bronco-content').innerHTML = `
+          <div class="bronco-result neg">
+            <div class="br-title">Prova de Broncodilatação NEGATIVA</div>
+            <p>Sem reversibilidade significativa da obstrução. Mais compatível com <strong>DPOC</strong> ou obstrução fixa.<br>
+            <em>Não exclui asma (variabilidade circadiana) — considerar teste de provocação brônquica se suspeita clínica.</em></p>
+          </div>`;
+      }
+    } else if (delta_fev1 !== null) {
+      broncoCard.style.display = 'block';
+      document.getElementById('bronco-content').innerHTML = `
+        <div class="bronco-result neg">
+          <div class="br-title">Dados insuficientes para classificação completa</div>
+          <p>Para classificar a prova de broncodilatação em adultos são necessários tanto a variação percentual (≥12%) <strong>como</strong> a variação absoluta em mL (≥200 mL). Introduza ambos os valores.</p>
+        </div>`;
+    } else {
+      broncoCard.style.display = 'none';
+    }
+
+    // CLINICAL CONTENT
+    const clinicalMap = {
+      normal: `
+        <div class="info-block green">
+          <div class="ib-title">Espirometria Normal</div>
+          <p>Os parâmetros estão dentro dos limites de referência. <strong>Uma espirometria normal não exclui patologia respiratória.</strong></p>
+        </div>
+        <div class="info-block blue">
+          <div class="ib-title">Considerar ainda</div>
+          <p>
+          • Doença das pequenas vias aéreas (MMEF 75/25 &lt;60%)<br>
+          • Hipertensão pulmonar (necessita ecocardiografia)<br>
+          • Patologia vascular pulmonar<br>
+          • Disfunção das pregas vocais (curva inspiratória alterada)<br>
+          • Prova de provocação brônquica se suspeita de asma com espirometria normal
+          </p>
+        </div>`,
+      obstrucao: `
+        <div class="info-block orange">
+          <div class="ib-title">Diagnóstico diferencial</div>
+          <p><strong>DPOC</strong> — tabagismo ou exposição ocupacional, prova BD negativa, FEV₁/FVC pós-BD &lt;70%.<br>
+          <strong>Asma brônquica</strong> — história atópica, variabilidade, prova BD positiva, reversibilidade.<br>
+          <strong>Bronquiectasias</strong> — tosse produtiva crónica, TC confirma.<br>
+          <strong>Bronquiolite obliterante</strong> — pós-transplante, pós-infecção.</p>
+        </div>
+        <div class="info-block blue">
+          <div class="ib-title">Próximos passos</div>
+          <p>
+          • Realizar <strong>prova de broncodilatação</strong> (se ainda não feita)<br>
+          • Classificar gravidade GOLD com FEV₁ pós-BD<br>
+          • Avaliar sintomas, exacerbações e comorbilidades (questionário CAT, mMRC)<br>
+          • Considerar TC tórax para excluir enfisema ou bronquiectasias<br>
+          • GOLD 3–4: referenciar Pneumologia
+          </p>
+        </div>`,
+      restricao: `
+        <div class="info-block red">
+          <div class="ib-title">Padrão Restritivo — atenção</div>
+          <p>A espirometria <strong>sugere mas não confirma restrição</strong>. A FVC pode estar reduzida por obstrução grave com insuflação (↑VR) sem restrição verdadeira.<br>
+          <strong>Pletismografia obrigatória</strong> para confirmar o diagnóstico.</p>
+        </div>
+        <div class="info-block orange">
+          <div class="ib-title">Diagnóstico diferencial</div>
+          <p>Fibrose pulmonar idiopática (IPF) · Pneumonites de hipersensibilidade · Sarcoidose · Doenças neuromusculares (ELA, miastenia) · Obesidade grave · Escoliose grave · Doença pleural · Pós-pneumonia/atelectasia</p>
+        </div>
+        <div class="info-block blue">
+          <div class="ib-title">Próximos passos</div>
+          <p>
+          • <strong>Pletismografia</strong> — volumes pulmonares (CPT, VR, CRF)<br>
+          • <strong>DLCO</strong> — reduzido em fibrose e doenças vasculares<br>
+          • <strong>TC tórax HR</strong> — padrão intersticial<br>
+          • Referenciação a Pneumologia para investigação
+          </p>
+        </div>`,
+      misto: `
+        <div class="info-block purple">
+          <div class="ib-title">Padrão Misto — interpretação cuidadosa</div>
+          <p>Presença simultânea de <strong>FEV₁/FVC &lt;70%</strong> (obstrução) e <strong>FVC &lt;80%</strong> (restrição aparente).<br>
+          Pode representar <strong>obstrução com insuflação</strong> (↑VR com FVC reduzida) — <strong>pletismografia é essencial</strong> para distinguir.</p>
+        </div>
+        <div class="info-block orange">
+          <div class="ib-title">Diagnósticos possíveis</div>
+          <p>DPOC + fibrose pulmonar · DPOC com insuflação grave · Asma + obesidade · Bronquiectasias + fibrose · DPOC + fraqueza muscular respiratória</p>
+        </div>
+        <div class="info-block blue">
+          <div class="ib-title">Próximos passos</div>
+          <p>
+          • <strong>Pletismografia</strong> — distinguir insuflação (↑VR) de restrição verdadeira (CPT reduzida)<br>
+          • <strong>DLCO</strong><br>
+          • <strong>TC tórax HR</strong><br>
+          • Referenciação Pneumologia (padrão misto é sempre indicação)
+          </p>
+        </div>`
+    };
+    document.getElementById('clinical-content').innerHTML = clinicalMap[pattern];
+
+    // SMALL AIRWAYS CARD
+    const sawCard = document.getElementById('small-airways-card');
+    if (mmef !== null) {
+      sawCard.style.display = 'block';
+      if (mmef < 60) {
+        document.getElementById('small-airways-content').innerHTML = `
+          <div class="info-block orange">
+            <div class="ib-title">Obstrução das pequenas vias aéreas (MMEF 75/25 = ${mmef}%)</div>
+            <p>MMEF 75/25 &lt;60% indica comprometimento das vias aéreas distais (&lt;2mm de diâmetro).<br>
+            Pode ser a <strong>alteração mais precoce</strong> em fumadores, asma e DPOC inicial, antes de surgir alteração do FEV₁/FVC.<br>
+            A morfologia da curva débito-volume pode mostrar concavidade dirigida para cima na fase expiratória.</p>
+          </div>
+          <div class="info-block blue">
+            <div class="ib-title">Significado clínico</div>
+            <p>Associado a maior risco de progressão para DPOC · Útil para monitorização em fumadores · Pode indicar asma com resposta preferencial às pequenas vias · Considerar dispositivos inalatórios de partícula fina</p>
+          </div>`;
+      } else {
+        document.getElementById('small-airways-content').innerHTML = `
+          <div class="info-block green">
+            <div class="ib-title">Pequenas vias aéreas sem compromisso significativo</div>
+            <p>MMEF 75/25 de ${mmef}% (≥60%) — sem evidência de obstrução das pequenas vias aéreas.</p>
+          </div>`;
+      }
+    } else {
+      sawCard.style.display = 'none';
+    }
+
+    // SHOW RESULT
+    const ra = document.getElementById('result-area');
+    ra.classList.add('visible');
+    ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function printResult() {
+    window.print();
+  }
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecocardiograma</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "ecocardiograma",
+  "titulo": "Ecocardiograma",
+  "descricao": "Parâmetros do ecocardiograma transtorácico, valores de referência e significado clínico: estrutura, função sistólica e diastólica, válvulas, pressões e outros.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 5,
+  "palavras": [
+    "ecocardiograma",
+    "eco",
+    "ETT",
+    "FEVE",
+    "fração de ejeção",
+    "hipertrofia ventricular",
+    "massa do VE",
+    "função diastólica",
+    "E/A",
+    "E/e'",
+    "PSAP",
+    "hipertensão pulmonar",
+    "estenose aórtica",
+    "insuficiência mitral",
+    "TAPSE",
+    "derrame pericárdico"
+  ],
+  "bibliografia": [
+    "Lang RM, et al. Recommendations for cardiac chamber quantification by echocardiography in adults: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2015;28(1):1–39.",
+    "Nagueh SF, et al. Recommendations for the evaluation of left ventricular diastolic function by echocardiography: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2016;29(4):277–314.",
+    "Baumgartner H, et al. Recommendations on the echocardiographic assessment of aortic valve stenosis (EACVI/ASE). J Am Soc Echocardiogr. 2017;30(4):372–392.",
+    "Zoghbi WA, et al. Recommendations for noninvasive evaluation of native valvular regurgitation (ASE/SCMR). J Am Soc Echocardiogr. 2017;30(4):303–371.",
+    "Rudski LG, et al. Guidelines for the echocardiographic assessment of the right heart in adults (ASE). J Am Soc Echocardiogr. 2010;23(7):685–713."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Ecocardiograma: passou a fundo claro, com as cores da marca */
+.eco-visao-grelha { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 0 0 16px; }
+.eco-visao { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.eco-visao::before { content: ""; width: 22px; height: 22px; border-radius: var(--raio-forma); background: var(--cor-menta); }
+.eco-visao:nth-child(3n+2)::before { background: var(--cor-ambar); }
+.eco-visao:nth-child(3n)::before { background: var(--cor-mostarda); }
+.eco-visao h3 { font-size: 18px; font-weight: 800; }
+.eco-visao p { font-size: 15px; color: var(--cor-texto-2); }
+.eco-modos { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 16px; }
+.eco-modos-titulo { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-ambar-texto); margin-bottom: 10px; }
+.eco-modos-grelha { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 15px; }
+.eco-modo { color: var(--cor-verde); }
+.eco-legenda { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.eco-param { font-family: var(--letra-mono); font-weight: 500; flex: 0 0 auto; }
+.eco-tabela { margin: 0; }
+.eco-tabela th { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.eco-formula { background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 10px 14px; font-family: var(--letra-mono); font-size: 14px; color: var(--cor-verde-fundo); }
+.eco-formula-rotulo { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
+.eco-forte { color: var(--cor-tinta); }
+.eco-pequeno { font-size: 14px; color: var(--cor-texto-2); }
+@media print { .mgf-dobra-corpo[hidden] { display: flex !important; } }
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Parâmetros avaliados, valores de referência e significado clínico — guia estruturado para uso clínico diário.</p>
+<div class="mgf-separadores" role="tablist" aria-label="Secções do ecocardiograma">
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-overview" aria-controls="eco-overview" aria-selected="true">Visão Geral</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-estrutura" aria-controls="eco-estrutura" aria-selected="false">Estrutura</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-sistolica" aria-controls="eco-sistolica" aria-selected="false">Função Sistólica</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-diastolica" aria-controls="eco-diastolica" aria-selected="false">Função Diastólica</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-valvulas" aria-controls="eco-valvulas" aria-selected="false">Válvulas</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-pressoes" aria-controls="eco-pressoes" aria-selected="false">Pressões</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-eco-outros" aria-controls="eco-outros" aria-selected="false">Outros</button>
+  </div>
+<div class="mgf-painel" id="eco-overview" role="tabpanel" aria-labelledby="sep-eco-overview">
+  <div class="mgf-titulo-escala">
+    <h2>O que avalia um Ecocardiograma Formal?</h2>
+    <p>O eco transtorácico (ETT) 2D/Doppler é o pilar da avaliação cardíaca não invasiva. Combina imagem morfológica com hemodinâmica funcional.</p>
+  </div>
+  <div class="eco-visao-grelha">
+    <div class="eco-visao">
+      <h3>Estrutura e Dimensões</h3>
+      <p>Tamanho das cavidades, espessura das paredes, geometria ventricular e pericárdio.</p>
+    </div>
+    <div class="eco-visao">
+      <h3>Função Sistólica</h3>
+      <p>FEVE, encurtamento fraccional, contractilidade regional (cinética segmentar).</p>
+    </div>
+    <div class="eco-visao">
+      <h3>Função Diastólica</h3>
+      <p>E/A, E/e', volume auricular, TDE — grau de disfunção diastólica.</p>
+    </div>
+    <div class="eco-visao">
+      <h3>Válvulas</h3>
+      <p>Gradientes, áreas valvulares, severidade de estenose e regurgitação.</p>
+    </div>
+    <div class="eco-visao">
+      <h3>Pressões</h3>
+      <p>Estimativa de PSAP, PAD e pressões de enchimento.</p>
+    </div>
+    <div class="eco-visao">
+      <h3>Outros</h3>
+      <p>Aorta, pericárdio, VD, veia cava inferior, função auricular.</p>
+    </div>
+  </div>
+  <div class="eco-modos">
+    <div class="eco-modos-titulo">Modos de aquisição</div>
+    <div class="eco-modos-grelha">
+      <div><strong class="eco-modo">2D</strong> — morfologia, dimensões, cinética</div>
+      <div><strong class="eco-modo">M-Mode</strong> — medições temporais precisas</div>
+      <div><strong class="eco-modo">Doppler PW</strong> — fluxos de baixa velocidade (E/A, TSVD)</div>
+      <div><strong class="eco-modo">Doppler CW</strong> — gradientes altos (estenoses, IT)</div>
+      <div><strong class="eco-modo">Doppler Cor</strong> — detecção de regurgitações, shunts</div>
+      <div><strong class="eco-modo">TDI</strong> — velocidades miocárdicas (e')</div>
+    </div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-estrutura" role="tabpanel" aria-labelledby="sep-eco-estrutura" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Dimensões e Estrutura</h2>
+    <p>Avaliação morfológica das câmaras cardíacas e paredes — base para diagnóstico de hipertrofia, dilatação e remodelagem.</p>
+  </div>
+  <p class="eco-legenda"><span class="mgf-etiqueta" data-nivel="normal">Normal</span> <span class="mgf-etiqueta" data-nivel="atencao">Borderline</span> <span class="mgf-etiqueta" data-nivel="alerta">Anormal</span></p>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-1"><span class="mgf-rotulo eco-param" data-tom="ambar">DVIVE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Diâmetro do VE em diástole</span><span class="mgf-dobra-sub">Dimensão interna do VE no final da diástole (M-Mode / 2D)</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-1" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Classificação</th></tr>
+          <tr><td>≤ 58 mm (♂) / ≤ 52 mm (♀)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>59–63 mm (♂) / 53–57 mm (♀)</td><td><span class="mgf-etiqueta" data-nivel="atencao">Levemente aumentado</span></td></tr>
+          <tr><td>&gt; 63 mm (♂) / &gt; 57 mm (♀)</td><td><span class="mgf-etiqueta" data-nivel="alerta">Dilatação</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> Dilatação do VE sugere sobrecarga de volume (regurgitações valvulares crónicas, shunts) ou cardiomiopatia dilatada. Um VE progressivamente maior com FEVE preservada pode ser sinal precoce de doença. Indexar à superfície corporal melhora a comparação entre doentes.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-2"><span class="mgf-rotulo eco-param" data-tom="ambar">SIV / PP</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Espessura do septo e parede posterior</span><span class="mgf-dobra-sub">M-Mode em telediastole</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-2" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Classificação</th></tr>
+          <tr><td>6–9 mm</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>10–12 mm</td><td><span class="mgf-etiqueta" data-nivel="atencao">Hipertrofia ligeira</span></td></tr>
+          <tr><td>13–15 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">Hipertrofia moderada</span></td></tr>
+          <tr><td>≥ 16 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">Hipertrofia severa</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> Espessura aumentada indica hipertrofia do VE — causa mais comum é HTA. Hipertrofia assimétrica do septo (SIV:PP > 1.3) sugere <strong>cardiomiopatia hipertrófica (CMH)</strong>. Espessura ≥ 15 mm com padrão granular e história familiar obriga a excluir CMH ou amiloidose cardíaca. Avaliar sempre em conjunto com IMVE e geometria.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-3"><span class="mgf-rotulo eco-param" data-tom="ambar">IMVE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Índice de Massa do VE</span><span class="mgf-dobra-sub">Massa / superfície corporal — determina HVE</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-3" hidden>
+<div class="eco-formula">
+          <div class="eco-formula-rotulo">Fórmula de Devereux</div>
+          Massa VE = 0.8 × [1.04 × (DVIVE + SIV + PP)³ − DVIVE³] + 0.6 g
+        </div>
+        <div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Classificação</th></tr>
+          <tr><td>≤ 115 g/m² (♂) / ≤ 95 g/m² (♀)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>&gt; 115/95 g/m²</td><td><span class="mgf-etiqueta" data-nivel="alerta">HVE</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> HVE é factor de risco cardiovascular independente. Combinar IMVE com espessura relativa das paredes (ERP = 2×PP/DVIVE) permite classificar a geometria: <strong>hipertrofia concêntrica</strong> (IMVE↑ + ERP > 0.42 — pior prognóstico), <strong>hipertrofia excêntrica</strong> (IMVE↑ + ERP normal), <strong>remodelagem concêntrica</strong> (IMVE normal + ERP↑).
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-4"><span class="mgf-rotulo eco-param" data-tom="menta">AE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Volume da Aurícula Esquerda (VAE)</span><span class="mgf-dobra-sub">Indexado à SC — biomarcador de carga diastólica crónica</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-4" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor (indexado)</th><th>Classificação</th></tr>
+          <tr><td>≤ 34 mL/m²</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>35–41 mL/m²</td><td><span class="mgf-etiqueta" data-nivel="atencao">Levemente aumentado</span></td></tr>
+          <tr><td>42–48 mL/m²</td><td><span class="mgf-etiqueta" data-nivel="alerta">Moderadamente aumentado</span></td></tr>
+          <tr><td>&gt; 48 mL/m²</td><td><span class="mgf-etiqueta" data-nivel="alerta">Severamente aumentado</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> A AE é o "barômetro" da disfunção diastólica crónica — reflecte pressões de enchimento elevadas ao longo do tempo. VAE aumentado associa-se a FA, eventos tromboembólicos e pior prognóstico em IC. É um dos 4 parâmetros da classificação de disfunção diastólica da ASE 2016. Sempre medir por método biplanar (Simpson) e indexar.
+        </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-sistolica" role="tabpanel" aria-labelledby="sep-eco-sistolica" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Função Sistólica do VE</h2>
+    <p>Avalia a capacidade de ejecção do ventrículo esquerdo — a FEVE é o parâmetro central, mas não é o único.</p>
+  </div>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-5"><span class="mgf-rotulo eco-param" data-tom="areia">FEVE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Fracção de Ejecção do VE</span><span class="mgf-dobra-sub">Método de Simpson biplanar (recomendado) — % de sangue ejectado</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-5" hidden>
+<div class="eco-formula">
+          <div class="eco-formula-rotulo">Cálculo</div>
+          FEVE = (VTD − VTS) / VTD × 100
+        </div>
+        <div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Classificação</th></tr>
+          <tr><td>≥ 55%</td><td><span class="mgf-etiqueta" data-nivel="normal">Preservada (HFpEF)</span></td></tr>
+          <tr><td>41–54%</td><td><span class="mgf-etiqueta" data-nivel="atencao">Ligeiramente reduzida (HFmrEF)</span></td></tr>
+          <tr><td>≤ 40%</td><td><span class="mgf-etiqueta" data-nivel="alerta">Reduzida (HFrEF)</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> A FEVE define o fenótipo de IC (HFpEF / HFmrEF / HFrEF) e guia toda a terapêutica. FEVE < 35% é critério para CDI/CRT. Importante: FEVE pode ser "normal" mesmo com disfunção sistólica sub-clínica — daí a importância do GLS.
+        </div>
+        <div class="mgf-aviso"><strong>Atenção:</strong> FEVE < 35% em contexto de IC com terapêutica optimizada ≥ 3 meses → avaliar indicação para CDI/CRT (ESC 2021).</div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-6"><span class="mgf-rotulo eco-param" data-tom="areia">GLS</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Strain Longitudinal Global</span><span class="mgf-dobra-sub">Speckle tracking — detecção precoce de disfunção</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-6" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Classificação</th></tr>
+          <tr><td>≤ −20% (mais negativo)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>−16% a −19%</td><td><span class="mgf-etiqueta" data-nivel="atencao">Borderline</span></td></tr>
+          <tr><td>&gt; −16% (menos negativo)</td><td><span class="mgf-etiqueta" data-nivel="alerta">Reduzido</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> O GLS é mais sensível que a FEVE para detectar disfunção sistólica sub-clínica (ex: cardiotoxicidade por quimioterapia, cardiopatia hipertensiva precoce). Uma queda > 15% do valor basal durante quimio é sinal de alerta. Alterações regionais do GLS (padrão em "borboleta" apical) sugerem <strong>amiloidose cardíaca</strong>.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-7"><span class="mgf-rotulo eco-param" data-tom="areia">ITV-TSVD</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Integral Velocidade-Tempo na TSVD</span><span class="mgf-dobra-sub">Doppler PW — surrogate do débito cardíaco</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-7" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Valor</th><th>Interpretação</th></tr>
+          <tr><td>≥ 18–20 cm</td><td><span class="mgf-etiqueta" data-nivel="normal">Débito adequado</span></td></tr>
+          <tr><td>&lt; 18 cm</td><td><span class="mgf-etiqueta" data-nivel="alerta">Débito baixo</span></td></tr>
+        </table></div>
+        <div class="eco-formula">
+          <div class="eco-formula-rotulo">Débito Cardíaco</div>
+          DC = ITV-TSVD × área TSVD × FC
+        </div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> ITV-TSVD < 18 cm com FEVE aparentemente preservada pode indicar <strong>baixo débito oculto</strong> (low-flow low-gradient). Útil na avaliação da estenose aórtica de baixo fluxo e na monitorização hemodinâmica em unidades de cuidados intensivos. Reprodutível e facilmente seriável.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-8"><span class="mgf-rotulo eco-param" data-tom="areia">Cinética Segmentar</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Wall Motion Score Index (WMSI)</span><span class="mgf-dobra-sub">Avaliação regional da contractilidade (17 segmentos AHA)</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-8" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Score</th><th>Descrição</th></tr>
+          <tr><td>1</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>2</td><td><span class="mgf-etiqueta" data-nivel="atencao">Hipocinesia</span></td></tr>
+          <tr><td>3</td><td><span class="mgf-etiqueta" data-nivel="alerta">Acinesia</span></td></tr>
+          <tr><td>4</td><td><span class="mgf-etiqueta" data-nivel="alerta">Discinesia</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> A distribuição dos segmentos afectados permite inferir o território coronário responsável. Acinesia apical extensa sugere envolvimento da DAE proximal. Discinesia da parede inferior aponta para CD ou CX. WMSI > 1.7 associa-se a pior prognóstico pós-EAM. Essencial no contexto de dor torácica aguda e avaliação de viabilidade.
+        </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-diastolica" role="tabpanel" aria-labelledby="sep-eco-diastolica" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Função Diastólica</h2>
+    <p>Avalia o relaxamento e a rigidez do VE. Parâmetros obtidos por Doppler transmitral (PW) e Doppler tecidular (TDI). Classificação pela ASE/EACVI 2016.</p>
+  </div>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-9"><span class="mgf-rotulo eco-param">E / A</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Rácio E/A transmitral</span><span class="mgf-dobra-sub">Doppler PW na válvula mitral — reflecte enchimento ventricular</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-9" hidden>
+<div class="eco-pequeno">
+          <strong class="eco-forte">E</strong> = velocidade de enchimento precoce (passivo, gradiente AE→VE) &nbsp;|&nbsp; <strong class="eco-forte">A</strong> = contracção auricular (activo)
+        </div>
+        <div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>E/A</th><th>Padrão</th><th>Grau</th></tr>
+          <tr><td>0.8–1.5 (com outros parâmetros normais)</td><td>Normal</td><td><span class="mgf-etiqueta" data-nivel="normal">Grau 0</span></td></tr>
+          <tr><td>&lt; 0.8</td><td>Relaxamento alterado</td><td><span class="mgf-etiqueta" data-nivel="atencao">Grau I</span></td></tr>
+          <tr><td>0.8–1.5 (indeterminado)</td><td>Pseudonormal</td><td><span class="mgf-etiqueta" data-nivel="atencao">Grau II</span></td></tr>
+          <tr><td>&gt; 2</td><td>Restritivo</td><td><span class="mgf-etiqueta" data-nivel="alerta">Grau III</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> O E/A isolado é insuficiente para classificar disfunção diastólica — o padrão pseudonormal (E/A 0.8–1.5) pode ser confundido com normal. Para distinguir, usa-se a manobra de Valsalva (E/A cai > 0.5 → pseudonormal) ou os outros parâmetros diastólicos (e', E/e', VAE). Padrão restritivo (III) é o de pior prognóstico e associa-se a pressões de enchimento muito elevadas.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-10"><span class="mgf-rotulo eco-param">E/e'</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Rácio E/e' (E sobre e-prime)</span><span class="mgf-dobra-sub">Estimativa não invasiva das pressões de enchimento do VE</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-10" hidden>
+<div class="eco-pequeno">
+          <strong class="eco-forte">e'</strong> = velocidade diastólica precoce do anel mitral por TDI (septal e/ou lateral)
+        </div>
+        <div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>E/e' médio</th><th>Interpretação</th></tr>
+          <tr><td>≤ 8</td><td><span class="mgf-etiqueta" data-nivel="normal">Pressões normais</span></td></tr>
+          <tr><td>9–13</td><td><span class="mgf-etiqueta" data-nivel="atencao">Zona cinzenta</span></td></tr>
+          <tr><td>≥ 14</td><td><span class="mgf-etiqueta" data-nivel="alerta">Pressões de enchimento ↑</span></td></tr>
+        </table></div>
+        <div class="eco-formula">
+          <div class="eco-formula-rotulo">Referência por localização</div>
+          e' septal: normal ≥ 7 cm/s &nbsp;|&nbsp; e' lateral: normal ≥ 10 cm/s<br>
+          E/e' médio = E / [(e' sep + e' lat) / 2]
+        </div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> É o parâmetro mais robusto para estimar a PDFVE (pressão diastólica final do VE). E/e' ≥ 14 equivale aproximadamente a PDFVE > 15 mmHg. Central no diagnóstico de <strong>HFpEF</strong> (algoritmo HFA-PEFF). Pode sobrestimar pressões em doentes com fibrose anular extensa, e subestimar em jovens atletas. Usar sempre em conjunto com VAE e velocidade de IT.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-11"><span class="mgf-rotulo eco-param">e'</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Velocidade e' do anel mitral (TDI)</span><span class="mgf-dobra-sub">Relaxamento miocárdico activo — menos dependente da pré-carga</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-11" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Localização</th><th>Normal</th><th>Anormal</th></tr>
+          <tr><td>Septal</td><td><span class="mgf-etiqueta" data-nivel="normal">≥ 7 cm/s</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">&lt; 7 cm/s</span></td></tr>
+          <tr><td>Lateral</td><td><span class="mgf-etiqueta" data-nivel="normal">≥ 10 cm/s</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">&lt; 10 cm/s</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> e' reduzido reflecte <strong>relaxamento miocárdico lentificado</strong> — a anomalia diastólica mais precoce. Ao contrário de E, e' é relativamente independente da pré-carga, o que o torna ideal para distinguir disfunção diastólica verdadeira de estados de alto débito (ex: anemia, exercício). Declina com a idade — valores de referência ajustados por idade são recomendados.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-12"><span class="mgf-rotulo eco-param">TDE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Tempo de Desaceleração da onda E</span><span class="mgf-dobra-sub">Reflecte a rigidez do VE durante o enchimento rápido</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-12" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>TDE</th><th>Interpretação</th></tr>
+          <tr><td>160–240 ms</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>&gt; 240 ms</td><td><span class="mgf-etiqueta" data-nivel="atencao">Relaxamento alterado (Grau I)</span></td></tr>
+          <tr><td>&lt; 160 ms</td><td><span class="mgf-etiqueta" data-nivel="alerta">Restritivo (Grau III)</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> TDE prolongado → câmara rígida que desacelera o fluxo lentamente (relaxamento alterado). TDE curto (< 160 ms) → padrão restritivo com câmara muito rígida e pressões muito elevadas — enchimento rápido mas abruptamente limitado. TDE < 160 ms no contexto de EAM anterior extenso é marcador de mau prognóstico.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-13"><span class="mgf-rotulo eco-param">TRIV</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Tempo de Relaxamento Isovolumétrico</span><span class="mgf-dobra-sub">Intervalo entre fecho da Ao e abertura da mitral</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-13" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>TRIV</th><th>Interpretação</th></tr>
+          <tr><td>70–90 ms</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td></tr>
+          <tr><td>&gt; 90 ms</td><td><span class="mgf-etiqueta" data-nivel="atencao">Relaxamento lentificado</span></td></tr>
+          <tr><td>&lt; 60 ms</td><td><span class="mgf-etiqueta" data-nivel="alerta">Pressões de enchimento ↑</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> TRIV prolongado → relaxamento lento (Grau I). TRIV curto → a mitral abre quase imediatamente porque a pressão da AE supera rapidamente a queda de pressão do VE — sinal de pressões muito elevadas (padrão restritivo). Complementar ao E/A e TDE na caracterização do grau de disfunção diastólica.
+        </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-valvulas" role="tabpanel" aria-labelledby="sep-eco-valvulas" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Doença Valvular</h2>
+    <p>Avaliação das quatro válvulas — gradientes por Doppler CW, áreas por equação de continuidade/PHT, e quantificação de regurgitações por Doppler cor e volumetria.</p>
+  </div>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-14"><span class="mgf-rotulo eco-param" data-tom="ambar">EA — Estenose</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Estenose Aórtica</span><span class="mgf-dobra-sub">Gradiente médio, Vmáx e Área Valvular Aórtica (AVA)</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-14" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Parâmetro</th><th>Ligeira</th><th>Moderada</th><th>Severa</th></tr>
+          <tr><td>Vmáx (m/s)</td><td>2.0–2.9</td><td>3.0–3.9</td><td>≥ 4.0</td></tr>
+          <tr><td>Gradiente médio</td><td>&lt; 20 mmHg</td><td>20–39 mmHg</td><td>≥ 40 mmHg</td></tr>
+          <tr><td>AVA (cm²)</td><td>&gt; 1.5</td><td>1.0–1.5</td><td><strong>&lt; 1.0</strong></td></tr>
+        </table></div>
+        <div class="eco-formula">
+          <div class="eco-formula-rotulo">Equação de Continuidade (AVA)</div>
+          AVA = (ITV-TSVD × área TSVD) / ITV-AO
+        </div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> EA severa sintomática (síncope, angina, dispneia) tem mortalidade > 50% a 2 anos sem intervenção → indicação para TAVI ou SAVR. <strong>EA de baixo fluxo/baixo gradiente:</strong> AVA < 1.0 com gradiente < 40 mmHg — importante distinguir EA severa verdadeira de pseudo-severa (eco de stress com dobutamina). Calcificação valvular avaliada por score de Agatston em TAC complementar.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-15"><span class="mgf-rotulo eco-param" data-tom="ambar">IA — Regurgitação</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Insuficiência Aórtica</span><span class="mgf-dobra-sub">PHT, PISA, vena contracta — severidade da regurgitação</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-15" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Parâmetro</th><th>Ligeira</th><th>Moderada</th><th>Severa</th></tr>
+          <tr><td>Vena contracta (mm)</td><td>&lt; 3</td><td>3–6</td><td>&gt; 6</td></tr>
+          <tr><td>PHT (ms)</td><td>&gt; 500</td><td>200–500</td><td><strong>&lt; 200</strong></td></tr>
+          <tr><td>ERO (cm²)</td><td>&lt; 0.10</td><td>0.10–0.29</td><td>≥ 0.30</td></tr>
+          <tr><td>Vol. regurg. (mL)</td><td>&lt; 30</td><td>30–59</td><td>≥ 60</td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> IA crónica severa → sobrecarga de volume → dilatação progressiva do VE. Critérios de cirurgia: DVIVE > 50 mm ou FEVE < 50%. PHT curto indica regurgitação severa com equiparação rápida das pressões AO-VE. IA aguda (endocardite, dissecção) é emergência — PHT muito curto, FEVE pode estar "normal" mas DC cai precipitosamente.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-16"><span class="mgf-rotulo eco-param" data-tom="menta">EM — Estenose</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Estenose Mitral</span><span class="mgf-dobra-sub">PHT mitral, área valvular mitral (AVM), gradiente médio</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-16" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Parâmetro</th><th>Ligeira</th><th>Moderada</th><th>Severa</th></tr>
+          <tr><td>AVM (cm²)</td><td>&gt; 1.5</td><td>1.0–1.5</td><td>&lt; 1.0</td></tr>
+          <tr><td>Grad. médio (mmHg)</td><td>&lt; 5</td><td>5–10</td><td>≥ 10</td></tr>
+          <tr><td>PSAP (mmHg)</td><td>&lt; 30</td><td>30–50</td><td>&gt; 50</td></tr>
+        </table></div>
+        <div class="eco-formula">
+          <div class="eco-formula-rotulo">PHT — Pressure Half-Time</div>
+          AVM = 220 / PHT
+        </div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> Sequela clássica de febre reumática. AVM < 1.5 cm² com sintomas → PTBM (valvuloplastia por balão) se score de Wilkins ≤ 8. Hipertensão pulmonar secundária é complicação frequente. PHT subestima AVM em estados de alta pré-carga ou após PTBM imediata — usar planimetria 3D quando disponível.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-17"><span class="mgf-rotulo eco-param" data-tom="menta">IM — Regurgitação</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Insuficiência Mitral</span><span class="mgf-dobra-sub">PISA, ERO, volume regurgitante, vena contracta</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-17" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Parâmetro</th><th>Ligeira</th><th>Moderada</th><th>Severa</th></tr>
+          <tr><td>Vena contracta (mm)</td><td>&lt; 3</td><td>3–6.9</td><td>≥ 7</td></tr>
+          <tr><td>ERO (cm²)</td><td>&lt; 0.20</td><td>0.20–0.39</td><td>≥ 0.40</td></tr>
+          <tr><td>Vol. regurg. (mL)</td><td>&lt; 30</td><td>30–59</td><td>≥ 60</td></tr>
+          <tr><td>Fr. regurg. (%)</td><td>&lt; 30</td><td>30–49</td><td>≥ 50</td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> IM primária (prolapso, rotura de cordas) vs. secundária (isquémica/funcional) têm mecanismos e tratamentos diferentes. IM severa primária sintomática → cirurgia. IM secundária: optimização médica e CRT se indicado; cirurgia/MitraClip em casos seleccionados. Rotura aguda do músculo papilar (EAM) → edema pulmonar fulminante — emergência cirúrgica.
+        </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-pressoes" role="tabpanel" aria-labelledby="sep-eco-pressoes" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Estimativa de Pressões</h2>
+    <p>O eco-Doppler permite estimar de forma não invasiva as pressões pulmonares e de enchimento — fundamentais na avaliação de IC e hipertensão pulmonar.</p>
+  </div>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-18"><span class="mgf-rotulo eco-param">PSAP</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Pressão Sistólica da Artéria Pulmonar</span><span class="mgf-dobra-sub">Via velocidade de IT + PAD estimada pela VCI</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-18" hidden>
+<div class="eco-formula">
+          <div class="eco-formula-rotulo">Equação de Bernoulli modificada</div>
+          PSAP = 4 × V²(IT) + PAD estimada<br><br>
+          <span class="eco-pequeno">PAD estimada por VCI: VCI &lt; 21 mm + colapso &gt; 50% → PAD 3 mmHg | VCI &gt; 21 mm sem colapso → PAD 15 mmHg</span>
+        </div>
+        <div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>PSAP</th><th>Classificação</th></tr>
+          <tr><td>&lt; 36 mmHg</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal / Improvável HTP</span></td></tr>
+          <tr><td>36–50 mmHg</td><td><span class="mgf-etiqueta" data-nivel="atencao">Possível HTP</span></td></tr>
+          <tr><td>&gt; 50 mmHg</td><td><span class="mgf-etiqueta" data-nivel="alerta">HTP provável</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> PSAP > 35 mmHg em repouso define hipertensão pulmonar ecocardiográfica (confirmação por cateterismo direito: PAP média ≥ 20 mmHg). Causas: HTP de grupo 1 (arterial), grupo 2 (cardíaca esquerda — a mais comum), grupo 3 (pulmonar), etc. PSAP muito elevada (> 70 mmHg) com VD severamente dilatado → HTP pré-capilar severa → investigação urgente.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-19"><span class="mgf-rotulo eco-param">VCI</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Veia Cava Inferior</span><span class="mgf-dobra-sub">Diâmetro e colapso inspiratório — estima a PAD</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-19" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>VCI</th><th>Colapso</th><th>PAD estimada</th></tr>
+          <tr><td>≤ 21 mm</td><td>&gt; 50%</td><td><span class="mgf-etiqueta" data-nivel="normal">3 mmHg (0–5)</span></td></tr>
+          <tr><td>≤ 21 mm</td><td>&lt; 50%</td><td><span class="mgf-etiqueta" data-nivel="atencao">8 mmHg (5–10)</span></td></tr>
+          <tr><td>&gt; 21 mm</td><td>&gt; 50%</td><td><span class="mgf-etiqueta" data-nivel="atencao">8 mmHg (5–10)</span></td></tr>
+          <tr><td>&gt; 21 mm</td><td>&lt; 50%</td><td><span class="mgf-etiqueta" data-nivel="alerta">15 mmHg (10–20)</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> VCI dilatada sem colapso → congestão venosa sistémica → IC direita, pericardite constritiva, tamponamento. Importante: atletas de resistência podem ter VCI dilatada fisiologicamente. Em ventilados, a interpretação é diferente (pressão positiva). A VCI é também usada para guiar fluidoterapia em contexto de UCI.
+        </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="mgf-painel" id="eco-outros" role="tabpanel" aria-labelledby="sep-eco-outros" hidden>
+  <div class="mgf-titulo-escala">
+    <h2>Outros Parâmetros Relevantes</h2>
+    <p>Avaliação do ventrículo direito, aorta, pericárdio e parâmetros adicionais de rotina.</p>
+  </div>
+  <div class="mgf-grelha">
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-20"><span class="mgf-rotulo eco-param" data-tom="menta">TAPSE</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Tricuspid Annular Plane Systolic Excursion</span><span class="mgf-dobra-sub">Função sistólica do VD — excursão do anel tricúspide em M-Mode</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-20" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>TAPSE</th><th>Interpretação</th></tr>
+          <tr><td>≥ 17 mm</td><td><span class="mgf-etiqueta" data-nivel="normal">Função VD normal</span></td></tr>
+          <tr><td>&lt; 17 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">Disfunção sistólica VD</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> TAPSE < 17 mm associa-se a pior prognóstico na IC, HTP, TEP e cardiopatias congénitas. É simples e reprodutível mas avalia apenas o movimento longitudinal (subestima a função circunferencial). Complementar com S' TDI do anel tricúspide (normal ≥ 9.5 cm/s) e FAC do VD (normal ≥ 35%).
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-21"><span class="mgf-rotulo eco-param" data-tom="menta">VD</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Dimensões e Morfologia do VD</span><span class="mgf-dobra-sub">Dilatação e hipertrofia do ventrículo direito</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-21" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Parâmetro</th><th>Normal</th><th>Anormal</th></tr>
+          <tr><td>Diâmetro basal VD</td><td>≤ 41 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">> 41 mm</span></td></tr>
+          <tr><td>Espessura parede VD</td><td>≤ 5 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">> 5 mm (HVD)</span></td></tr>
+          <tr><td>Rácio VD/VE (área)</td><td>&lt; 0.6</td><td><span class="mgf-etiqueta" data-nivel="alerta">≥ 1 = dilatação severa</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> VD dilatado com septo interventricular achatado ("D-sign") em sístole → sobrecarga de pressão (HTP, TEP). Achatamento em diástole → sobrecarga de volume (CIA). HVD (parede > 5 mm) sugere HTP crónica. Em TEP maciço agudo, a dilatação do VD com disfunção (TAPSE baixo) tem implicações terapêuticas imediatas (trombólise, embolectomia).
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-22"><span class="mgf-rotulo eco-param" data-tom="areia">Aorta</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Dimensões da Aorta</span><span class="mgf-dobra-sub">Raiz aórtica e aorta ascendente — rastreio de aneurismas</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-22" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Nível</th><th>Normal</th><th>Alerta</th></tr>
+          <tr><td>Anel aórtico</td><td>&lt; 25 mm (♀) / &lt; 27 mm (♂)</td><td>—</td></tr>
+          <tr><td>Seios de Valsalva</td><td>≤ 38 mm (♀) / ≤ 40 mm (♂)</td><td><span class="mgf-etiqueta" data-nivel="alerta">> 45 mm</span></td></tr>
+          <tr><td>Aorta ascendente</td><td>≤ 35 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">> 45 mm</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Significado clínico:</strong> Aorta ≥ 45 mm → vigilância semestral e restrição de esforços intensos. Aorta ≥ 50–55 mm (conforme contexto e etiologia) → cirurgia electiva. Dilatação da raiz em adulto jovem → excluir Marfan (critérios de Ghent), válvula aórtica bicúspide (VAB — a anomalia congénita mais frequente). VAB acelera a dilatação aórtica — monitorização regular obrigatória.
+        </div>
+  </div>
+</div>
+    <div class="mgf-dobra">
+  <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="eco-23"><span class="mgf-rotulo eco-param" data-tom="areia">Pericárdio</span><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Derrame Pericárdico e Tamponamento</span><span class="mgf-dobra-sub">Quantificação e sinais hemodinâmicos de compromisso</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+  <div class="mgf-dobra-corpo" id="eco-23" hidden>
+<div class="mgf-tabela-caixa"><table class="mgf-tabela eco-tabela">
+          <tr><th>Dimensão</th><th>Classificação</th></tr>
+          <tr><td>&lt; 10 mm</td><td><span class="mgf-etiqueta" data-nivel="normal">Ligeiro</span></td></tr>
+          <tr><td>10–20 mm</td><td><span class="mgf-etiqueta" data-nivel="atencao">Moderado</span></td></tr>
+          <tr><td>&gt; 20 mm</td><td><span class="mgf-etiqueta" data-nivel="alerta">Grave</span></td></tr>
+        </table></div>
+        <div class="mgf-nota" data-tom="menta">
+          <strong>Sinais de tamponamento:</strong> Colapso diastólico da AD/VD, variação respiratória > 25% dos fluxos transmitral/tricúspide (pulso paradoxal eco), VCI dilatada sem colapso. O tamponamento é diagnóstico clínico + eco — não esperar por todos os critérios. Pericardiocentese guiada por eco de urgência.
+        </div>
+        <div class="mgf-aviso"><strong>Atenção:</strong> Colapso diastólico do VD = tamponamento até prova em contrário → pericardiocentese imediata.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  var raiz = document.getElementById("ferramenta");
+  MGF.separadores(raiz);
+  MGF.dobras(raiz);
+})();
+</script>
+</body>
+</html>

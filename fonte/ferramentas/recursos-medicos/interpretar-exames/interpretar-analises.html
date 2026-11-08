@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análises clínicas</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "interpretar-analises",
+  "titulo": "Análises clínicas",
+  "descricao": "Valores de referência e significado clínico de hemograma, bioquímica, ionograma, coagulação, urina, anemia, eletroforese e serologias.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 1,
+  "palavras": [
+    "análises",
+    "hemograma",
+    "bioquímica",
+    "ionograma",
+    "coagulação",
+    "INR",
+    "urina",
+    "sedimento",
+    "anemia",
+    "ferritina",
+    "eletroforese",
+    "proteinograma",
+    "serologias",
+    "hepatite",
+    "VIH",
+    "sífilis",
+    "valores de referência"
+  ],
+  "bibliografia": [
+    "StatPearls / NCBI Bookshelf. Normal and Abnormal Complete Blood Count With Differential. https://www.ncbi.nlm.nih.gov/books/NBK604207/",
+    "MedlinePlus. Comprehensive Metabolic Panel e Basic Metabolic Panel. https://medlineplus.gov/ency/article/003468.htm",
+    "Cleveland Clinic. Basic / Comprehensive Metabolic Panel. https://my.clevelandclinic.org/health/diagnostics/22020-basic-metabolic-panel-bmp",
+    "Merck Manual Professional. Evaluation of Anemia. https://www.merckmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia",
+    "UCSF Hospital Handbook. Approach to Anemia e Urinalysis Interpretation. https://hospitalhandbook.ucsf.edu/02-approach-anemia/02-approach-anemia",
+    "Siemens Healthineers. Clinical Significance of Anemia Tests. https://www.siemens-healthineers.com/laboratory-diagnostics/assays-by-diseases-conditions/anemia/clinical-significance-of-anemia-tests",
+    "StatPearls / NCBI. Interpretation of Blood Clotting Studies (PT, PTT, aPTT, INR, D-Dimer). https://www.ncbi.nlm.nih.gov/books/NBK604215/",
+    "American Family Physician (AFP). Understanding and Interpreting Serum Protein Electrophoresis. https://www.aafp.org/pubs/afp/issues/2005/0101/p105.html",
+    "ClinLab Navigator. Serum Protein Electrophoresis e Urinalysis. https://www.clinlabnavigator.com/test-interpretations/test-interpretations-1/protein-electrophoresis-serum.html",
+    "CDC. Clinical Testing and Diagnosis for Hepatitis B e tabela de interpretação serológica. https://www.cdc.gov/hepatitis-b/hcp/diagnosis-testing/index.html",
+    "WHO. HBV serological markers (training module). https://cdn.who.int/media/docs/default-source/searo/hiv-hepatitis/training-modules/08-hbv-serological-markers.pdf",
+    "Medscape eMedicine. Urinalysis, Hepatitis B Test, Iron Deficiency Anemia Workup, Serum Protein Electrophoresis. https://emedicine.medscape.com/article/2074001-overview",
+    "Merck Manual. Urinalysis and Urine Culture. https://www.merckmanuals.com/home/kidney-and-urinary-tract-disorders/diagnosis-of-kidney-and-urinary-tract-disorders/urinalysis-and-urine-culture"
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 900px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #0F6E64; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #0F6E64; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #0F6E64; border: 2px solid transparent; border-radius: 8px; padding: 8px 14px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #0F6E64; color: #FFFFFF; border-color: #13423D; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .search-box { width: 100%; border: 1.5px solid #8FCFC0; border-radius: 10px; padding: 11px 16px; font-size: 15px; color: #13423D; background: #FFFFFF; margin-bottom: 16px; }
+#ferramenta .search-box:focus { outline: none; border-color: #0F6E64; }
+#ferramenta .an-card { background: #FFFFFF; border-radius: 10px; box-shadow: 0 1px 6px rgba(19,32,30,0.05); overflow: hidden; margin-bottom: 10px; border: 1px solid #8FCFC0; }
+#ferramenta .an-head { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .an-head:hover { background: #D7EDE7; }
+#ferramenta .an-left { display: flex; flex-direction: column; gap: 2px; }
+#ferramenta .an-name { font-size: 15.5px; font-weight: 700; color: #13423D; }
+#ferramenta .an-range { font-size: 13px; color: #2C3A38; }
+#ferramenta .an-range b { color: #0F6E64; font-weight: 600; }
+#ferramenta .an-toggle { font-size: 17px; color: #0F6E64; transition: transform 0.2s; flex-shrink:0; }
+#ferramenta .an-card.open .an-toggle { transform: rotate(180deg); }
+#ferramenta .an-body { display: none; padding: 4px 16px 16px; }
+#ferramenta .an-card.open .an-body { display: block; }
+#ferramenta .hl-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+#ferramenta .hl-box { flex: 1 1 240px; border-radius: 9px; padding: 11px 13px; }
+#ferramenta .hl-box.high { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .hl-box.low { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .hl-lbl { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px; }
+#ferramenta .hl-box.high .hl-lbl { color: #9E2318; }
+#ferramenta .hl-box.low .hl-lbl { color: #1C4A80; }
+#ferramenta .hl-box p { font-size: 13.5px; color: #13423D; line-height: 1.55; }
+#ferramenta .an-note { font-size: 13px; color: #2C3A38; line-height: 1.55; margin-top: 10px; padding: 9px 12px; background: #D7EDE7; border-radius: 8px; font-style: italic; }
+#ferramenta .an-note strong { color: #0F6E64; font-style: normal; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #13423D; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 11px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 11px; font-size: 13.5px; color: #13423D; border-bottom: 1px solid #8FCFC0; vertical-align: top; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .data-table .term { font-weight: 700; color: #0F6E64; }
+#ferramenta .data-table .pos { color: #9E2318; font-weight: 700; }
+#ferramenta .data-table .neg { color: #2C3A38; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.teal { background: #D7EDE7; border-left: 4px solid #0F6E64; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #D7EDE7; border-left: 4px solid #0F6E64; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #13423D; line-height: 1.65; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.teal .ib-title { color: #0F6E64; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #0F6E64; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #0F6E64; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #0F6E64; }
+#ferramenta .spep-graph { width: 100%; background: #D7EDE7; border: 1px solid #8FCFC0; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+#ferramenta .spep-graph svg { width: 100%; height: auto; display: block; }
+#ferramenta .subgroup-lbl { font-size: 13px; font-weight: 700; color: #0F6E64; text-transform: uppercase; letter-spacing: 0.8px; margin: 18px 4px 10px; padding-bottom: 6px; border-bottom: 2px solid #D7EDE7; }
+#ferramenta .section-intro { font-size: 14px; color: #2C3A38; line-height: 1.6; margin-bottom: 14px; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #2C3A38; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #D7EDE7; color: #0F6E64; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #8FCFC0; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #8FCFC0; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Valores de referência e significado clínico — hemograma, bioquímica, coagulação, urina e mais.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-hemograma" aria-controls="tab-hemograma" aria-selected="true">Hemograma</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-bioquimica" aria-controls="tab-bioquimica" aria-selected="false">Bioquímica</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-ionograma" aria-controls="tab-ionograma" aria-selected="false">Ionograma</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-coagulacao" aria-controls="tab-coagulacao" aria-selected="false">Coagulação</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-urina" aria-controls="tab-urina" aria-selected="false">Urina</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-anemia" aria-controls="tab-anemia" aria-selected="false">Anemia</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-proteinas" aria-controls="tab-proteinas" aria-selected="false">Eletroforese</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-serologias" aria-controls="tab-serologias" aria-selected="false">Serologias</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os intervalos de referência são <strong>orientativos</strong> e variam consoante o laboratório, o método, a idade, o sexo e o estado fisiológico (ex: gravidez). <strong>Use sempre os intervalos do laboratório que emitiu o resultado</strong> e interprete no contexto clínico. As unidades apresentadas são as mais comuns em Portugal/Europa (SI), com equivalências quando útil.</p>
+  <div class="mgf-painel mk-painel" id="tab-hemograma" role="tabpanel" aria-labelledby="sep-hemograma"></div>
+  <div class="mgf-painel mk-painel" id="tab-bioquimica" role="tabpanel" aria-labelledby="sep-bioquimica" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-ionograma" role="tabpanel" aria-labelledby="sep-ionograma" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-coagulacao" role="tabpanel" aria-labelledby="sep-coagulacao" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-urina" role="tabpanel" aria-labelledby="sep-urina" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-anemia" role="tabpanel" aria-labelledby="sep-anemia" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-proteinas" role="tabpanel" aria-labelledby="sep-proteinas" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-serologias" role="tabpanel" aria-labelledby="sep-serologias" hidden></div>
+  
+  <div class="tool-footer">
+    Intervalos de referência orientativos; confirmar sempre com os valores do laboratório emissor.<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico.</em>
+    <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  // ===== analyte accordion renderer =====
+  // item: {name, range, unit, high, low, note}
+  function analyteCard(it){
+    var rangeHtml = it.range ? ('<span class="an-range">Ref: <b>'+it.range+'</b>'+(it.unit?(' '+it.unit):'')+'</span>') : '';
+    var html = '<div class="an-card" data-keys="'+(it.name+' '+(it.keys||'')).toLowerCase()+'">'
+      + '<button type="button" class="an-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+      + '<span class="an-left"><span class="an-name">'+it.name+'</span>'+rangeHtml+'</span>'
+      + '<svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>'
+      + '<div class="an-body"><div class="hl-row">';
+    if(it.high) html += '<div class="hl-box high"><div class="hl-lbl">&#9650; Elevado</div><p>'+it.high+'</p></div>';
+    if(it.low) html += '<div class="hl-box low"><div class="hl-lbl">&#9660; Diminuído</div><p>'+it.low+'</p></div>';
+    html += '</div>';
+    if(it.note) html += '<div class="an-note"><strong>Nota:</strong> '+it.note+'</div>';
+    html += '</div></div>';
+    return html;
+  }
+  function renderAnalytes(arr){
+    var html=''; var lastG=null;
+    arr.forEach(function(it){
+      if(it.grp && it.grp!==lastG){ html+='<div class="subgroup-lbl">'+it.grp+'</div>'; lastG=it.grp; }
+      html += analyteCard(it);
+    });
+    return html;
+  }
+
+
+  // =====================================================================
+  //  HEMOGRAMA
+  // =====================================================================
+  const HEMOGRAMA = [
+    { grp:'Série vermelha', name:'Hemoglobina (Hb)', range:'H 13–17 · M 12–16', unit:'g/dL', keys:'hemoglobina hb anemia',
+      high:'Poliglobulia: desidratação (relativa), policitemia vera, hipoxia crónica (DPOC, tabagismo, apneia do sono, altitude), tumores produtores de EPO, doping.',
+      low:'Anemia. Caracterizar pelo VGM (micro/normo/macrocítica) e reticulócitos. Causas: ferropénia, doença crónica, hemorragia, hemólise, défice de B12/folato, doença renal.',
+      note:'A Hb (ou o hematócrito) é o parâmetro de referência para a oxigenação, mais fiável que a contagem de eritrócitos. Definição de anemia (OMS): Hb &lt;13 g/dL no homem e &lt;12 g/dL na mulher.' },
+    { grp:'Série vermelha', name:'Hematócrito (Hct)', range:'H 40–54 · M 36–48', unit:'%', keys:'hematocrito hct',
+      high:'Desidratação, policitemia, hipoxia crónica, tabagismo.',
+      low:'Anemia; sobrecarga de volume (hemodiluição).',
+      note:'Acompanha a Hb (Hct ≈ 3 × Hb). Pode estar falsamente baixo com diluição por soros IV.' },
+    { grp:'Série vermelha', name:'VGM (volume globular médio)', range:'80–100', unit:'fL', keys:'vgm mcv volume globular medio microcitica macrocitica',
+      high:'Macrocitose: défice de B12 ou folato, alcoolismo, doença hepática, hipotiroidismo, fármacos (hidroxiureia, antifolatos), reticulocitose (hemólise/hemorragia recente), síndromes mielodisplásicos.',
+      low:'Microcitose: ferropénia (a mais comum), talassémia, anemia de doença crónica (por vezes), intoxicação por chumbo, sideroblástica.',
+      note:'É o primeiro classificador da anemia. Um RDW elevado favorece ferropénia; um RDW normal numa microcitose favorece talassémia.' },
+    { grp:'Série vermelha', name:'HGM / CHGM', range:'HGM 27–33 pg · CHGM 32–36 g/dL', unit:'', keys:'hgm chgm hipocromia mch mchc',
+      high:'CHGM elevada: esferocitose hereditária, hemólise.',
+      low:'Hipocromia: ferropénia, talassémia (paralelo à microcitose).',
+      note:'Refletem o conteúdo/concentração de hemoglobina por eritrócito; acompanham geralmente o VGM.' },
+    { grp:'Série vermelha', name:'RDW (amplitude de distribuição)', range:'11,5–14,5', unit:'%', keys:'rdw anisocitose',
+      high:'Anisocitose (eritrócitos de tamanhos muito diferentes): ferropénia, défice de B12/folato, anemias mistas, após transfusão ou tratamento.',
+      low:'Geralmente sem relevância patológica.',
+      note:'Útil para distinguir ferropénia (RDW alto) de talassémia (RDW tipicamente normal) numa anemia microcítica.' },
+    { grp:'Série vermelha', name:'Reticulócitos', range:'0,5–1,5 (25–85 ×10⁹/L)', unit:'%', keys:'reticulocitos regenerativa',
+      high:'Resposta medular adequada: hemólise, hemorragia aguda, resposta a tratamento (ferro, B12, folato). Anemia "regenerativa".',
+      low:'Resposta medular insuficiente ("hipoproliferativa"/arregenerativa): ferropénia, doença renal (défice de EPO), aplasia, infiltração medular, défices não tratados.',
+      note:'Diferencia anemia regenerativa (reticulócitos altos) de hipoproliferativa (baixos). Deve ser corrigido para o grau de anemia.' },
+    { grp:'Série branca', name:'Leucócitos (total)', range:'4,0–11,0', unit:'×10⁹/L', keys:'leucocitos wbc leucocitose leucopenia',
+      high:'Leucocitose: infeção, inflamação, stress, corticoides, tabagismo, neoplasias hematológicas (leucemias). Interpretar com a fórmula leucocitária.',
+      low:'Leucopenia: infeções virais, sépsis grave, fármacos (quimioterapia, alguns antibióticos), doenças medulares, hiperesplenismo, autoimunidade.',
+      note:'As contagens absolutas de cada subtipo são mais informativas do que as percentagens.' },
+    { grp:'Série branca', name:'Neutrófilos', range:'2,0–7,5 (40–75%)', unit:'×10⁹/L', keys:'neutrofilos neutrofilia neutropenia',
+      high:'Neutrofilia: infeção bacteriana, inflamação, stress/exercício, corticoides, tabaco, necrose tecidular.',
+      low:'Neutropenia: infeções virais, fármacos (quimioterapia, alguns antibióticos/antitiroideus), autoimune, doença medular. &lt;0,5 ×10⁹/L = risco infeccioso grave.',
+      note:'Desvio à esquerda (formas jovens) sugere infeção/inflamação aguda.' },
+    { grp:'Série branca', name:'Linfócitos', range:'1,0–4,0 (20–45%)', unit:'×10⁹/L', keys:'linfocitos linfocitose linfopenia',
+      high:'Linfocitose: infeções virais (mononucleose, etc.), tosse convulsa, leucemia linfocítica crónica.',
+      low:'Linfopenia: infeções virais (incl. VIH), corticoides, imunossupressão, sépsis, doenças autoimunes.',
+      note:'' },
+    { grp:'Série branca', name:'Eosinófilos', range:'0,0–0,5 (1–6%)', unit:'×10⁹/L', keys:'eosinofilos eosinofilia',
+      high:'Eosinofilia: alergia/atopia, parasitoses, fármacos, doenças autoimunes, neoplasias, insuficiência suprarrenal.',
+      low:'Pouca relevância clínica (stress, corticoides).',
+      note:'' },
+    { grp:'Série branca', name:'Monócitos / Basófilos', range:'Mono 0,2–1,0 · Baso &lt;0,1', unit:'×10⁹/L', keys:'monocitos basofilos',
+      high:'Monocitose: infeções crónicas (tuberculose), inflamação, recuperação medular, neoplasias mieloides. Basofilia: síndromes mieloproliferativos, alergia.',
+      low:'Pouco relevante isoladamente.',
+      note:'' },
+    { grp:'Plaquetas', name:'Plaquetas', range:'150–400', unit:'×10⁹/L', keys:'plaquetas trombocitopenia trombocitose',
+      high:'Trombocitose: reativa (infeção, inflamação, ferropénia, pós-esplenectomia, neoplasia) ou primária (síndromes mieloproliferativos).',
+      low:'Trombocitopenia: pseudotrombocitopenia (artefacto EDTA), PTI, fármacos, hiperesplenismo, doença hepática, CID, doença medular, microangiopatias. Risco hemorrágico relevante &lt;50; espontâneo &lt;20.',
+      note:'Confirmar trombocitopenia inesperada com esfregaço (excluir agregados/pseudotrombocitopenia).' },
+    { grp:'Plaquetas', name:'VPM (volume plaquetar médio)', range:'7,5–11,5', unit:'fL', keys:'vpm mpv',
+      high:'Plaquetas jovens (destruição periférica, ex: PTI), síndromes mieloproliferativos.',
+      low:'Produção diminuída (aplasia, alguns fármacos).',
+      note:'' }
+  ];
+
+  // =====================================================================
+  //  BIOQUÍMICA (excl. iões — secção própria)
+  // =====================================================================
+  const BIOQUIMICA = [
+    { grp:'Função renal', name:'Creatinina', range:'H 0,7–1,3 · M 0,6–1,1', unit:'mg/dL', keys:'creatinina renal tfg',
+      high:'Lesão renal (aguda ou crónica), desidratação, obstrução urinária, fármacos nefrotóxicos, rabdomiólise. Depende da massa muscular.',
+      low:'Baixa massa muscular, caquexia, gravidez.',
+      note:'Interpretar pela TFG estimada (eGFR), não isoladamente. TFG &lt;60 mantida ≥3 meses define doença renal crónica.' },
+    { grp:'Função renal', name:'Ureia', range:'17–43 (BUN 7–20)', unit:'mg/dL', keys:'ureia bun azoto',
+      high:'Lesão renal, desidratação, dieta hiperproteica, hemorragia digestiva, catabolismo, corticoides. Razão ureia/creatinina alta sugere causa pré-renal.',
+      low:'Doença hepática grave, dieta hipoproteica, sobre-hidratação, gravidez.',
+      note:'Menos específica que a creatinina; sobe na desidratação antes da creatinina.' },
+    { grp:'Função renal', name:'TFG estimada (eGFR)', range:'&gt; 90', unit:'mL/min/1,73m²', keys:'tfg egfr filtracao glomerular drc',
+      high:'—',
+      low:'Redução da função renal. 60–89 ligeira; 30–59 moderada (DRC 3); 15–29 grave (DRC 4); &lt;15 falência (DRC 5).',
+      note:'Estimada por fórmulas (ex: CKD-EPI). Menos fiável em extremos de massa muscular e na lesão renal aguda.' },
+    { grp:'Função hepática', name:'ALT (TGP)', range:'&lt; 41 (H) · &lt; 33 (M)', unit:'U/L', keys:'alt tgp transaminases figado hepatocelular',
+      high:'Lesão hepatocelular: hepatites virais, esteato-hepatite, álcool, fármacos/tóxicos, isquémia. Mais específica do fígado que a AST.',
+      low:'Sem significado clínico relevante.',
+      note:'Padrão "hepatocelular": predomínio de ALT/AST. ALT&gt;AST sugere causa não alcoólica; AST&gt;ALT (rácio &gt;2) sugere álcool ou cirrose.' },
+    { grp:'Função hepática', name:'AST (TGO)', range:'&lt; 40', unit:'U/L', keys:'ast tgo transaminases',
+      high:'Lesão hepática, mas também muscular (enfarte, rabdomiólise, exercício) e hemólise. Menos específica do fígado.',
+      low:'Sem relevância.',
+      note:'Presente também no músculo e eritrócitos — correlacionar.' },
+    { grp:'Função hepática', name:'Fosfatase alcalina (FA)', range:'40–130', unit:'U/L', keys:'fosfatase alcalina fa colestase osso',
+      high:'Padrão colestático (com GGT alta): obstrução biliar, colestase, lesões hepáticas focais. Origem óssea (com GGT normal): doença de Paget, metástases, crescimento.',
+      low:'Hipotiroidismo, desnutrição, hipofosfatasia (raro).',
+      note:'Usar a GGT para distinguir origem hepática de óssea.' },
+    { grp:'Função hepática', name:'GGT', range:'H &lt; 60 · M &lt; 40', unit:'U/L', keys:'ggt gama colestase alcool',
+      high:'Colestase, álcool, fármacos indutores enzimáticos, esteatose hepática.',
+      low:'Sem relevância.',
+      note:'Confirma origem hepática de uma FA elevada. Sensível mas pouco específica.' },
+    { grp:'Função hepática', name:'Bilirrubina total / direta', range:'Total &lt; 1,2 · Direta &lt; 0,3', unit:'mg/dL', keys:'bilirrubina icterícia hemolise gilbert',
+      high:'Indireta (não conjugada) alta: hemólise, síndrome de Gilbert, eritropoiese ineficaz. Direta (conjugada) alta: colestase, obstrução biliar, lesão hepatocelular.',
+      low:'Sem relevância.',
+      note:'A fração predominante orienta a causa: indireta → pré-hepática/hemólise; direta → hepática/pós-hepática.' },
+    { grp:'Função hepática', name:'Albumina', range:'3,5–5,2', unit:'g/dL', keys:'albumina sintese hepatica nutricao',
+      high:'Desidratação (relativa).',
+      low:'Doença hepática crónica (síntese diminuída), síndrome nefrótico (perda), desnutrição, inflamação (proteína de fase negativa), enteropatia perdedora.',
+      note:'Marcador de função de síntese hepática e do estado nutricional/inflamatório.' },
+    { grp:'Metabólico', name:'Glicose (jejum)', range:'70–99', unit:'mg/dL', keys:'glicose glucose diabetes hipoglicemia jejum',
+      high:'100–125: pré-diabetes (anomalia da glicemia em jejum). ≥126 (em 2 ocasiões): diabetes. Stress, corticoides, infeção podem elevar.',
+      low:'&lt;70: hipoglicemia — fármacos (insulina, sulfonilureias), jejum, insuficiência suprarrenal/hepática, álcool, insulinoma.',
+      note:'A HbA1c reflete o controlo glicémico médio de ~3 meses (≥6,5% = diabetes).' },
+    { grp:'Metabólico', name:'HbA1c', range:'&lt; 5,7', unit:'%', keys:'hba1c hemoglobina glicada diabetes controlo',
+      high:'5,7–6,4%: pré-diabetes. ≥6,5%: diabetes. Reflete a glicemia média dos últimos 2–3 meses.',
+      low:'Pode ser falsamente baixa em hemólise, hemorragia recente, gravidez.',
+      note:'Falseada por hemoglobinopatias e por situações que alteram a sobrevida eritrocitária.' },
+    { grp:'Metabólico', name:'Ácido úrico', range:'H 3,4–7,0 · M 2,4–6,0', unit:'mg/dL', keys:'acido urico gota uricemia',
+      high:'Gota, síndrome metabólico, doença renal, fármacos (diuréticos), lise tumoral, dieta rica em purinas/álcool.',
+      low:'Fármacos uricosúricos, doença hepática grave, SIADH.',
+      note:'Hiperuricemia assintomática nem sempre requer tratamento; correlacionar com clínica.' },
+    { grp:'Metabólico', name:'PCR (proteína C reativa)', range:'&lt; 5 (0,5 mg/dL)', unit:'mg/L', keys:'pcr proteina c reativa inflamacao infecao',
+      high:'Inflamação/infeção (sobe rápido, bacteriana em geral mais que viral), trauma, necrose, neoplasia, doenças autoimunes.',
+      low:'Normal.',
+      note:'Proteína de fase aguda; inespecífica. Útil para seguir a evolução. A VS é mais lenta a subir e descer.' },
+    { grp:'Metabólico', name:'TSH', range:'0,4–4,0', unit:'mUI/L', keys:'tsh tiroide hipotiroidismo hipertiroidismo',
+      high:'Hipotiroidismo primário (T4 livre baixa) ou subclínico (T4 livre normal). Recuperação de doença não tiroideia.',
+      low:'Hipertiroidismo (T4/T3 livres altas) ou subclínico. Hipotiroidismo central (raro, com T4 baixa).',
+      note:'Primeiro teste da função tiroideia; confirmar com T4 livre quando alterado.' },
+    { grp:'Lípidos', name:'Colesterol total / LDL / HDL / TG', range:'LDL alvo individualizado · HDL H&gt;40 M&gt;50 · TG &lt;150', unit:'mg/dL', keys:'colesterol ldl hdl trigliceridos lipidos dislipidemia',
+      high:'LDL e TG elevados aumentam o risco cardiovascular. TG &gt;500 aumenta risco de pancreatite. HDL alto é protetor.',
+      low:'HDL baixo é fator de risco. Colesterol muito baixo pode ocorrer em doença grave/desnutrição.',
+      note:'O alvo de LDL depende do risco cardiovascular global do doente. TG devem ser doseados em jejum se muito elevados.' }
+  ];
+
+  // =====================================================================
+  //  IONOGRAMA (extenso)
+  // =====================================================================
+  const IONOGRAMA = [
+    { grp:'Sódio', name:'Sódio (Na⁺)', range:'135–145', unit:'mmol/L', keys:'sodio na hiponatremia hipernatremia',
+      high:'<strong>Hipernatremia</strong> (quase sempre défice de água livre): desidratação, perdas hipotónicas (diarreia, febre, sudorese), diabetes insípida, ingestão insuficiente de água (idosos, acamados), excesso de sal/soros hipertónicos, hiperaldosteronismo.',
+      low:'<strong>Hiponatremia</strong> (avaliar pela osmolalidade e volémia): pseudo-hiponatremia (hiperlipidemia, paraproteínas); hipertónica (hiperglicemia). Hipotónica — hipovolémica (vómitos, diarreia, diuréticos), euvolémica (SIADH, hipotiroidismo, insuf. suprarrenal, polidipsia), hipervolémica (IC, cirrose, síndrome nefrótico, DRC).',
+      note:'A correção deve ser <strong>lenta</strong> (risco de mielinólise pontina na hiponatremia crónica corrigida rápido; edema cerebral na hipernatremia). Avaliar sempre osmolalidade e estado de volémia.' },
+    { grp:'Potássio', name:'Potássio (K⁺)', range:'3,5–5,1', unit:'mmol/L', keys:'potassio k hipocalemia hipercalemia hipocaliemia',
+      high:'<strong>Hipercaliemia</strong>: pseudo-hipercaliemia (hemólise da amostra, garrote, trombocitose) — confirmar! Real: lesão renal, fármacos (IECA/ARA, espironolactona, AINEs, trimetoprim), acidose, hipoaldosteronismo, insuf. suprarrenal, lise celular (rabdomiólise, lise tumoral). Risco de arritmia fatal.',
+      low:'<strong>Hipocaliemia</strong>: perdas digestivas (vómitos, diarreia), diuréticos (ansa/tiazidas), hiperaldosteronismo, hipomagnesiemia, desvio intracelular (insulina, beta-agonistas, alcalose), corticoides.',
+      note:'Alterações marcadas exigem ECG urgente. Hemólise da amostra é a causa mais comum de hipercaliemia "falsa" — repetir se inesperado. Corrigir a hipomagnesiemia para tratar a hipocaliemia refratária.' },
+    { grp:'Cloro', name:'Cloro (Cl⁻)', range:'98–107', unit:'mmol/L', keys:'cloro cl hipercloremia',
+      high:'Acidose metabólica hiperclorémica (diarreia, acidose tubular renal), desidratação, soros ricos em cloro, hiperventilação.',
+      low:'Vómitos, aspiração gástrica, alcalose metabólica, diuréticos, SIADH.',
+      note:'Acompanha frequentemente o sódio. Útil no cálculo do hiato aniónico e na avaliação ácido-base.' },
+    { grp:'Bicarbonato', name:'Bicarbonato (HCO₃⁻ / CO₂ total)', range:'22–29', unit:'mmol/L', keys:'bicarbonato hco3 co2 acidose alcalose',
+      high:'<strong>Alcalose metabólica</strong> (vómitos, diuréticos, hipocaliemia, excesso de mineralocorticoides) ou compensação de acidose respiratória crónica.',
+      low:'<strong>Acidose metabólica</strong>: hiato aniónico aumentado (cetoacidose, acidose láctica, urémia, tóxicos) ou normal (diarreia, acidose tubular renal). Ou compensação de alcalose respiratória.',
+      note:'Interpretar com a gasometria. Calcular o <strong>hiato aniónico</strong> = Na − (Cl + HCO₃) (normal ~8–12) para abordar a acidose metabólica.' },
+    { grp:'Cálcio', name:'Cálcio total / iónico', range:'Total 8,5–10,2 · Iónico 4,6–5,3', unit:'mg/dL', keys:'calcio hipercalcemia hipocalcemia',
+      high:'<strong>Hipercalcemia</strong>: hiperparatiroidismo primário e neoplasia explicam a maioria; também sarcoidose, excesso de vitamina D, imobilização, tiazidas, hipertiroidismo.',
+      low:'<strong>Hipocalcemia</strong>: hipoparatiroidismo, défice de vitamina D, doença renal crónica, hipomagnesiemia, pancreatite, hipoalbuminemia (corrigir para a albumina).',
+      note:'Corrigir o cálcio total para a albumina, ou medir o cálcio iónico. Hipercalcemia sintomática grave é emergência ("stones, bones, groans, psychiatric moans").' },
+    { grp:'Magnésio / Fósforo', name:'Magnésio (Mg²⁺)', range:'1,7–2,2', unit:'mg/dL', keys:'magnesio mg hipomagnesiemia',
+      high:'Insuficiência renal, excesso de suplementos/antiácidos com magnésio.',
+      low:'Perdas digestivas (diarreia), diuréticos, álcool, malnutrição, inibidores da bomba de protões. Causa hipocaliemia e hipocalcemia refratárias.',
+      note:'Frequentemente esquecido. Corrigir o magnésio é essencial para tratar hipocaliemia/hipocalcemia que não respondem.' },
+    { grp:'Magnésio / Fósforo', name:'Fósforo (PO₄)', range:'2,5–4,5', unit:'mg/dL', keys:'fosforo fosfato hipofosfatemia',
+      high:'Doença renal crónica, hipoparatiroidismo, lise celular (rabdomiólise, lise tumoral).',
+      low:'Realimentação (refeeding), alcoolismo, hiperparatiroidismo, antiácidos, défice de vitamina D, alcalose respiratória.',
+      note:'A hipofosfatemia grave (realimentação) pode causar fraqueza muscular e insuficiência respiratória.' }
+  ];
+
+  // =====================================================================
+  //  COAGULAÇÃO
+  // =====================================================================
+  const COAGULACAO = [
+    { grp:'Tempos de coagulação', name:'TP / INR', range:'TP 11–13 s · INR 0,8–1,2', unit:'', keys:'tp inr protrombina extrinseca varfarina',
+      high:'<strong>TP/INR prolongado</strong>: avalia a via extrínseca e comum. Causas: varfarina, défice de vitamina K, doença hepática, CID, défice de fatores (II, V, VII, X), anticoagulantes orais.',
+      low:'INR baixo: sem relevância clínica (tendência protrombótica não se avalia assim).',
+      note:'O INR padroniza o TP e é usado para monitorizar a varfarina (alvo habitual 2–3). O fígado e a vitamina K afetam preferencialmente o TP.' },
+    { grp:'Tempos de coagulação', name:'aPTT / TTPa', range:'25–35', unit:'s', keys:'aptt ttpa intrinseca heparina hemofilia',
+      high:'<strong>aPTT prolongado</strong>: avalia a via intrínseca e comum. Causas: heparina não fracionada, hemofilia (défice VIII/IX), doença de von Willebrand, anticoagulante lúpico, défice de fatores XI/XII, doença hepática, CID.',
+      low:'Pouco relevante (pode associar-se a estado pró-trombótico/fator VIII alto).',
+      note:'Usado para monitorizar heparina não fracionada. O estudo de mistura ("mixing study") distingue défice de fator (corrige) de inibidor (não corrige).' },
+    { grp:'Outros', name:'Fibrinogénio', range:'200–400', unit:'mg/dL', keys:'fibrinogenio cid consumo',
+      high:'Proteína de fase aguda: inflamação, infeção, gravidez, neoplasia.',
+      low:'<strong>Consumo</strong> (CID), fibrinólise, doença hepática grave, hipofibrinogenemia congénita, hemorragia maciça.',
+      note:'Fibrinogénio baixo + TP/aPTT prolongados + plaquetas baixas + D-dímeros altos = padrão de CID.' },
+    { grp:'Outros', name:'D-dímeros', range:'&lt; 500', unit:'ng/mL (FEU)', keys:'d-dimero dimeros tep tvp embolia trombose',
+      high:'Produtos de degradação da fibrina: tromboembolismo (TVP/TEP), CID, gravidez, idade avançada, inflamação, pós-operatório, neoplasia.',
+      low:'Valor normal tem elevado <strong>valor preditivo negativo</strong> para excluir TVP/TEP em doentes de baixa/intermédia probabilidade.',
+      note:'Teste sensível mas pouco específico. Útil sobretudo para EXCLUIR tromboembolismo (não para confirmar). Considerar limiar ajustado à idade.' },
+    { grp:'Outros', name:'Plaquetas (na hemostase)', range:'150–400', unit:'×10⁹/L', keys:'plaquetas hemostase primaria',
+      high:'Ver secção Hemograma. Trombocitose pode ser reativa ou primária.',
+      low:'Componente da avaliação hemorrágica. Risco aumenta &lt;50 (cirurgia) e &lt;20 (espontâneo).',
+      note:'A hemostase primária depende do número E função das plaquetas (afetada por antiagregantes, urémia, von Willebrand).' }
+  ];
+
+  // =====================================================================
+  //  URINA
+  // =====================================================================
+  const URINA = [
+    { grp:'Físico-químico (tira/dipstick)', name:'Densidade', range:'1,005–1,030', unit:'', keys:'densidade specific gravity concentracao',
+      high:'Urina concentrada: desidratação, restrição hídrica, SIADH, glicosúria, contraste.',
+      low:'Urina diluída: sobre-hidratação, diabetes insípida, doença renal com perda de capacidade de concentração.',
+      note:'Reflete a capacidade de concentração renal e o estado de hidratação.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'pH', range:'4,5–8,0', unit:'', keys:'ph acida alcalina',
+      high:'Urina alcalina: infeção por bactérias produtoras de urease (Proteus, Klebsiella), dieta vegetariana, alcalose, acidose tubular renal. Favorece cálculos de fosfato.',
+      low:'Urina ácida: dieta hiperproteica, acidose, diarreia. Favorece cálculos de ácido úrico/cistina.',
+      note:'Urina alcalina persistente num contexto de ITU sugere germe produtor de urease.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Proteínas', range:'Negativo / vestígios', unit:'', keys:'proteinuria albumina nefrotico',
+      high:'<strong>Proteinúria</strong>: doença renal (glomerular ou tubular), diabetes, HTA, infeção, insuficiência cardíaca. Pode ser transitória (febre, exercício, ortostática).',
+      low:'—',
+      note:'Proteinúria persistente deve ser quantificada (rácio albumina/creatinina ou proteína/creatinina). A tira deteta sobretudo albumina e pode falhar microalbuminúria.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Glicose', range:'Negativo', unit:'', keys:'glicosuria glucose diabetes',
+      high:'<strong>Glicosúria</strong>: hiperglicemia (diabetes) quando ultrapassa o limiar renal (~180 mg/dL); glicosúria renal (limiar baixo), gravidez, fármacos (inibidores SGLT2).',
+      low:'—',
+      note:'A glicosúria sem hiperglicemia sugere defeito tubular renal ou uso de inibidores SGLT2.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Corpos cetónicos', range:'Negativo', unit:'', keys:'cetonas cetonuria cetoacidose jejum',
+      high:'<strong>Cetonúria</strong>: jejum prolongado, dieta cetogénica, cetoacidose diabética, cetoacidose alcoólica, vómitos.',
+      low:'—',
+      note:'A tira deteta sobretudo acetoacetato e pode subestimar a cetose por β-hidroxibutirato (predominante na CAD).' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Sangue (hemoglobina)', range:'Negativo', unit:'', keys:'hematuria sangue hemoglobina mioglobina',
+      high:'<strong>Hematúria</strong>: ITU, litíase, neoplasia urológica, glomerulonefrite, trauma. Também positivo com hemoglobinúria (hemólise) ou mioglobinúria (rabdomiólise) sem eritrócitos.',
+      low:'—',
+      note:'Confirmar com a microscopia: tira positiva sem eritrócitos sugere hemoglobina/mioglobina. Hematúria deve ser correlacionada e investigada.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Esterase leucocitária', range:'Negativo', unit:'', keys:'esterase leucocitos piuria itu infecao',
+      high:'<strong>Piúria</strong> (leucócitos): infeção urinária, nefrite intersticial, inflamação. Falsos positivos com contaminação vaginal.',
+      low:'—',
+      note:'Falsos negativos com densidade alta, glicosúria, proteinúria elevada ou alguns antibióticos. Correlacionar com microscopia.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Nitritos', range:'Negativo', unit:'', keys:'nitritos itu bacterias gram negativas',
+      high:'<strong>Bacteriúria</strong> por bactérias que convertem nitratos em nitritos (Gram-negativas, ex: E. coli).',
+      low:'Negativo não exclui ITU: germes que não produzem nitritos (Enterococcus, S. saprophyticus) ou tempo de incubação curto na bexiga (&lt;4h).',
+      note:'Nitritos + esterase leucocitária positivos reforçam muito o diagnóstico de ITU.' },
+    { grp:'Físico-químico (tira/dipstick)', name:'Bilirrubina / Urobilinogénio', range:'Bilirrubina neg · Urobilinogénio normal-baixo', unit:'', keys:'bilirrubina urobilinogenio icterícia colestase',
+      high:'Bilirrubina (conjugada) na urina: doença hepatobiliar/colestase. Urobilinogénio alto: hemólise, doença hepática.',
+      low:'Urobilinogénio ausente: obstrução biliar completa.',
+      note:'A bilirrubina na urina pode ser uma pista precoce de doença hepática.' },
+    { grp:'Sedimento (microscopia)', name:'Eritrócitos / Leucócitos', range:'Eritrócitos &lt;3 · Leucócitos &lt;5', unit:'/campo', keys:'sedimento eritrocitos leucocitos cilindros microscopia',
+      high:'Leucócitos altos: ITU, inflamação. Eritrócitos altos: hematúria (ver causas acima). Eritrócitos dismórficos sugerem origem glomerular.',
+      low:'—',
+      note:'A combinação dos achados é mais informativa que cada um isolado.' },
+    { grp:'Sedimento (microscopia)', name:'Cilindros / Cristais / Células', range:'Variável', unit:'', keys:'cilindros cristais celulas epiteliais bacterias',
+      high:'Cilindros hemáticos: glomerulonefrite. Cilindros leucocitários: pielonefrite/nefrite intersticial. Cilindros granulosos: necrose tubular. Cristais: litíase (depende do pH). Muitas células epiteliais escamosas: contaminação.',
+      low:'—',
+      note:'Cilindros hemáticos ou leucocitários têm grande valor localizador (doença renal parenquimatosa).' }
+  ];
+
+  // render the analyte-based tabs
+  document.getElementById('tab-hemograma').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Hemograma — séries vermelha, branca e plaquetas</div>'
+    + '<p class="section-intro">Os três valores-chave são a <strong>hemoglobina</strong>, os <strong>leucócitos</strong> e as <strong>plaquetas</strong>. Os índices eritrocitários (VGM, RDW) e a fórmula leucocitária orientam a causa. Toque em cada parâmetro para ver a interpretação.</p>'
+    + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'hemo-list\')" placeholder="Pesquisar parâmetro...">'
+    + '<div id="hemo-list">'+renderAnalytes(HEMOGRAMA)+'</div></div>';
+
+  document.getElementById('tab-bioquimica').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Bioquímica — função renal, hepática e metabólica</div>'
+    + '<p class="section-intro">Os iões têm um separador próprio (Ionograma). Toque em cada parâmetro para ver as causas de elevação e diminuição.</p>'
+    + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'bioq-list\')" placeholder="Pesquisar parâmetro...">'
+    + '<div id="bioq-list">'+renderAnalytes(BIOQUIMICA)+'</div></div>';
+
+  document.getElementById('tab-ionograma').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Ionograma — interpretação dos eletrólitos</div>'
+    + '<div class="info-block teal"><p>Os distúrbios eletrolíticos avaliam-se sempre no <strong>contexto clínico, da volémia e do equilíbrio ácido-base</strong>. Confirme alterações inesperadas (ex: hemólise da amostra falseia o potássio) e corrija os distúrbios graves de forma controlada.</p></div>'
+    + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'ion-list\')" placeholder="Pesquisar ião...">'
+    + '<div id="ion-list">'+renderAnalytes(IONOGRAMA)+'</div></div>'
+    + '<div class="card"><div class="card-title"><span class="icon">+</span> Ferramentas de apoio</div>'
+    + '<div class="info-block blue"><div class="ib-title">Hiato aniónico</div><p>Hiato aniónico = Na⁺ − (Cl⁻ + HCO₃⁻). Normal ≈ 8–12 mmol/L. <strong>Elevado</strong> na acidose por cetoacidose, acidose láctica, urémia e tóxicos (mnemónica MUDPILES/GOLD MARK). <strong>Normal</strong> (hiperclorémica) na diarreia e acidose tubular renal.</p></div>'
+    + '<div class="info-block orange"><div class="ib-title">Sódio corrigido na hiperglicemia</div><p>Na hiperglicemia, o sódio medido está falsamente baixo. Somar ~1,6–2,4 mmol/L ao sódio por cada 100 mg/dL de glicose acima de 100, para estimar o sódio "real".</p></div>'
+    + '<div class="info-block purple" style="margin-bottom:0;"><div class="ib-title">Abordagem da hiponatremia</div><p>1) Excluir pseudo/hipertónica (osmolalidade, glicose). 2) Avaliar a volémia: hipovolémica (perdas) · euvolémica (SIADH, hipotiroidismo, suprarrenal) · hipervolémica (IC, cirrose, nefrótico, DRC). 3) Corrigir <strong>lentamente</strong>.</p></div></div>';
+
+  document.getElementById('tab-coagulacao').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Coagulação</div>'
+    + '<div class="info-block teal"><p>O <strong>TP/INR</strong> avalia a via extrínseca (sensível à varfarina e à vitamina K/fígado); o <strong>aPTT</strong> avalia a via intrínseca (sensível à heparina e à hemofilia). Interprete o padrão em conjunto.</p></div>'
+    + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'coag-list\')" placeholder="Pesquisar teste...">'
+    + '<div id="coag-list">'+renderAnalytes(COAGULACAO)+'</div></div>'
+    + '<div class="card"><div class="card-title"><span class="icon">+</span> Padrões úteis</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Padrão</th><th>Interpretação</th></tr></thead><tbody>'
+    + '<tr><td><span class="term">TP/INR ↑ isolado</span></td><td>Varfarina, défice de vitamina K, doença hepática precoce (fator VII tem semivida curta).</td></tr>'
+    + '<tr><td><span class="term">aPTT ↑ isolado</span></td><td>Heparina, hemofilia A/B, von Willebrand, anticoagulante lúpico, défice de fatores via intrínseca.</td></tr>'
+    + '<tr><td><span class="term">TP e aPTT ↑</span></td><td>Doença hepática avançada, CID, défice de vitamina K marcado, anticoagulação, défice da via comum.</td></tr>'
+    + '<tr><td><span class="term">CID</span></td><td>TP e aPTT ↑, fibrinogénio ↓, plaquetas ↓, D-dímeros ↑↑. Procurar causa (sépsis, neoplasia, obstétrica, trauma).</td></tr>'
+    + '</tbody></table></div></div>';
+
+  document.getElementById('tab-urina').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Análise sumária de urina (Tipo II)</div>'
+    + '<div class="info-block teal"><p>O valor está na <strong>combinação</strong> dos achados. Nitritos + esterase leucocitária + bactérias = ITU. Proteinúria + cilindros hemáticos = doença glomerular. Confirmar sempre a tira com a microscopia do sedimento.</p></div>'
+    + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'urina-list\')" placeholder="Pesquisar parâmetro...">'
+    + '<div id="urina-list">'+renderAnalytes(URINA)+'</div></div>';
+
+  // ===== filter for analyte lists =====
+  function filterAn(input, listId){
+    var q=input.value.toLowerCase().trim(); var list=document.getElementById(listId);
+    list.querySelectorAll('.an-card').forEach(function(c){ c.style.display=(q===''||c.getAttribute('data-keys').indexOf(q)!==-1)?'block':'none'; });
+    list.querySelectorAll('.subgroup-lbl').forEach(function(lbl){ var sib=lbl.nextElementSibling,v=false; while(sib&&sib.classList.contains('an-card')){ if(sib.style.display!=='none'){v=true;break;} sib=sib.nextElementSibling; } lbl.style.display=v?'block':'none'; });
+  }
+
+
+  // =====================================================================
+  //  ANEMIA TAB
+  // =====================================================================
+  function spepBars(){return '';}
+  var anemiaHtml =
+    '<div class="card"><div class="card-title"><span class="icon">1</span> Abordagem da anemia em 3 passos</div>'
+    + '<ul class="steps-list">'
+    + '<li><div class="step-num">1</div><div class="step-text"><strong>Confirmar e classificar pelo VGM</strong> — microcítica (&lt;80), normocítica (80–100) ou macrocítica (&gt;100).</div></li>'
+    + '<li><div class="step-num">2</div><div class="step-text"><strong>Reticulócitos</strong> — distinguir anemia regenerativa (reticulócitos altos: hemólise, hemorragia) de hipoproliferativa (baixos: défices, doença renal, medular).</div></li>'
+    + '<li><div class="step-num">3</div><div class="step-text"><strong>Testes dirigidos</strong> — conforme o VGM: estudo do ferro, B12/folato, função renal/tiroideia, esfregaço, hemólise, eletroforese.</div></li>'
+    + '</ul></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">2</span> Classificação pelo VGM</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>VGM</th><th>Tipo</th><th>Causas principais</th></tr></thead><tbody>'
+    + '<tr><td>&lt; 80 fL</td><td><span class="term">Microcítica</span></td><td>Ferropénia (a mais comum), talassémia, anemia de doença crónica, sideroblástica, intoxicação por chumbo.</td></tr>'
+    + '<tr><td>80–100 fL</td><td><span class="term">Normocítica</span></td><td>Doença crónica/inflamação, doença renal, hemorragia aguda, hemólise, fases iniciais de défices, doença medular.</td></tr>'
+    + '<tr><td>&gt; 100 fL</td><td><span class="term">Macrocítica</span></td><td>Défice de B12 ou folato (megaloblástica), álcool, doença hepática, hipotiroidismo, fármacos, mielodisplasia, reticulocitose.</td></tr>'
+    + '</tbody></table></div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">3</span> Estudo do ferro — padrões</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Parâmetro</th><th>Ferropénia</th><th>Doença crónica</th><th>Talassémia</th></tr></thead><tbody>'
+    + '<tr><td><span class="term">Ferritina</span></td><td class="pos">Baixa ↓↓</td><td>Normal/alta ↑</td><td>Normal</td></tr>'
+    + '<tr><td><span class="term">Ferro sérico</span></td><td>Baixo ↓</td><td>Baixo ↓</td><td>Normal</td></tr>'
+    + '<tr><td><span class="term">Transferrina/TIBC</span></td><td>Alta ↑</td><td>Baixa/normal ↓</td><td>Normal</td></tr>'
+    + '<tr><td><span class="term">Sat. transferrina</span></td><td>Baixa ↓</td><td>Baixa/normal</td><td>Normal/alta</td></tr>'
+    + '<tr><td><span class="term">RDW</span></td><td>Alto ↑</td><td>Normal</td><td>Normal</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="an-note"><strong>Nota:</strong> a <strong>ferritina é o teste mais útil</strong> e a sua diminuição é praticamente diagnóstica de ferropénia. Mas é uma proteína de fase aguda: na inflamação pode estar falsamente normal/elevada. Nesse contexto, uma <strong>saturação de transferrina &lt;10%</strong> apoia ferropénia. Ferritina e ferro têm variação diurna.</div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">4</span> Estudo do ferro — interpretação detalhada</div>'
+    + renderAnalytes([
+        {grp:'', name:'Ferritina', range:'H 30–300 · M 15–200', unit:'ng/mL', keys:'ferritina ferro reservas',
+         high:'Inflamação/infeção (fase aguda), doença hepática, sobrecarga de ferro (hemocromatose), síndrome metabólico, neoplasia. Pode mascarar ferropénia.',
+         low:'<strong>Praticamente diagnóstica de ferropénia.</strong> Reflete reservas de ferro esgotadas (perdas, défice de aporte, má absorção).',
+         note:'Ferritina &lt;30 ng/mL indica ferropénia mesmo sem anemia. No adulto, investigar a causa da perda (sobretudo digestiva).'},
+        {grp:'', name:'Ferro sérico', range:'H 65–175 · M 50–170', unit:'µg/dL', keys:'ferro serico sideremia',
+         high:'Sobrecarga de ferro, hemólise, doença hepática, suplementação, transfusões.',
+         low:'Ferropénia, doença crónica, infeção aguda.',
+         note:'Muito variável (variação diurna, refeições, suplementos). Pouco fiável isoladamente.'},
+        {grp:'', name:'Transferrina / TIBC', range:'Transferrina 200–360 · TIBC 250–450', unit:'mg/dL', keys:'transferrina tibc capacidade fixacao',
+         high:'Ferropénia (o corpo "abre" mais lugares de transporte), gravidez, estrogénios.',
+         low:'Doença crónica/inflamação, desnutrição, doença hepática, síndrome nefrótico.',
+         note:'A saturação da transferrina = (ferro/TIBC) × 100. &lt;16% sugere ferropénia; &lt;10% é muito específico mesmo na inflamação.'}
+      ])
+    + '</div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">5</span> Anemia macrocítica — B12, folato e homocisteína</div>'
+    + renderAnalytes([
+        {grp:'', name:'Vitamina B12 (cobalamina)', range:'200–900', unit:'pg/mL', keys:'b12 cobalamina megaloblastica',
+         high:'Doença hepática, síndromes mieloproliferativos, suplementação. Raramente relevante.',
+         low:'Défice: anemia perniciosa (autoimune), má absorção, vegetarianismo estrito, metformina/IBP, doença ileal. Pode dar <strong>sintomas neurológicos</strong> mesmo sem anemia.',
+         note:'Valores limítrofes confirmam-se com <strong>ácido metilmalónico</strong> e <strong>homocisteína</strong> elevados. O défice de B12 eleva ambos; o de folato eleva só a homocisteína.'},
+        {grp:'', name:'Ácido fólico (folato)', range:'&gt; 4 (sérico)', unit:'ng/mL', keys:'folato acido folico folatos',
+         high:'Suplementação, hemólise.',
+         low:'Défice: aporte insuficiente, álcool, má absorção, gravidez/lactação, fármacos (metotrexato, antiepiléticos). Causa anemia megaloblástica.',
+         note:'Folato sérico &lt;2 ng/mL é diagnóstico; &gt;4 exclui défice. <strong>Corrigir sempre a B12 antes do folato</strong> para não mascarar lesão neurológica.'},
+        {grp:'', name:'Homocisteína', range:'5–15', unit:'µmol/L', keys:'homocisteina hiperhomocisteinemia',
+         high:'Défice de B12 e/ou folato, défice de B6, doença renal, hipotiroidismo, fatores genéticos (MTHFR). Marcador de risco vascular.',
+         low:'Sem relevância.',
+         note:'Elevada no défice de B12 e de folato. Combinada com o ácido metilmalónico (alto só na B12), ajuda a distinguir os dois défices.'}
+      ])
+    + '</div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">6</span> Hemólise e eletroforese de hemoglobinas</div>'
+    + '<div class="info-block orange"><div class="ib-title">Marcadores de hemólise</div><p><strong>LDH ↑</strong>, <strong>bilirrubina indireta ↑</strong>, <strong>haptoglobina ↓</strong> e <strong>reticulócitos ↑</strong>. O teste de Coombs (antiglobulina direto) distingue hemólise imune (positivo) de não imune.</p></div>'
+    + '<div class="info-block purple"><div class="ib-title">Eletroforese de hemoglobinas</div><p>Avalia as frações de hemoglobina para diagnosticar <strong>hemoglobinopatias</strong>. Adulto normal: HbA (~97%), HbA2 (&lt;3,5%), HbF (&lt;1%). <strong>HbA2 elevada</strong> → traço de β-talassémia. Presença de <strong>HbS</strong> → drepanocitose (anemia falciforme) ou traço falciforme. HbF elevada em algumas talassémias e persistência hereditária.</p></div>'
+    + '<div class="an-note"><strong>Quando pedir:</strong> anemia microcítica com estudo do ferro normal, história familiar, origem em zonas endémicas, ou microcitose desproporcionada para o grau de anemia com RDW normal (sugere talassémia).</div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">7</span> Quando investigar a causa / referenciar</div>'
+    + '<div class="info-block red" style="margin-bottom:0;"><p>'
+    + '• <strong>Ferropénia no homem ou na mulher pós-menopausa</strong> → investigar perda digestiva (endoscopia)<br>'
+    + '• Anemia com perda ponderal, sintomas de alarme ou sangue nas fezes<br>'
+    + '• Anemia grave, sintomática ou de instalação rápida<br>'
+    + '• Pancitopenia, blastos no esfregaço ou suspeita de doença medular<br>'
+    + '• Défice de B12 com sintomas neurológicos<br>'
+    + '• Hemoglobinopatia ou hemólise por esclarecer'
+    + '</p></div></div>';
+  document.getElementById('tab-anemia').innerHTML = anemiaHtml;
+
+
+  // =====================================================================
+  //  ELETROFORESE DE PROTEÍNAS (com gráfico SVG próprio)
+  // =====================================================================
+  function spepSVG(type){
+    // viewBox 0 0 460 200 ; baseline y=170 ; fractions: albumin, a1, a2, beta, gamma
+    var W=460,H=200,base=170;
+    function curve(points,color,fill){
+      var d='M '+points.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
+      var area = fill? (' L '+points[points.length-1][0]+' '+base+' L '+points[0][0]+' '+base+' Z'):'';
+      return '<path d="'+d+area+'" fill="'+(fill||'none')+'" stroke="'+color+'" stroke-width="2"/>';
+    }
+    // gaussian helper
+    function g(x,mu,sig,amp){ return amp*Math.exp(-Math.pow((x-mu)/sig,2)); }
+    var pts=[];
+    // define peaks per type: albumin big at x~70, a1 ~150, a2 ~210, beta ~280, gamma ~370
+    var alb=80,a1=10,a2=22,bet=26,gam=30, gammaSig=42, spike=0, spikeX=370;
+    if(type==='normal'){ }
+    else if(type==='acute'){ a1=20; a2=40; alb=70; gam=30; }      // acute inflammation: a1,a2 up, alb down
+    else if(type==='chronic'){ alb=64; gam=58; gammaSig=55; }      // chronic inflam: polyclonal gamma up, alb down
+    else if(type==='cirrhosis'){ alb=50; gam=60; gammaSig=60; bet=40; } // beta-gamma bridging
+    else if(type==='nephrotic'){ alb=34; a2=55; gam=16; }          // alb down, a2 up
+    else if(type==='monoclonal'){ alb=70; gam=14; spike=70; }       // M-spike in gamma
+    for(var x=20;x<=440;x+=3){
+      var y = g(x,70,26,alb) + g(x,150,16,a1) + g(x,210,18,a2) + g(x,280,20,bet) + g(x,370,gammaSig,gam);
+      if(spike) y += g(x,spikeX,7,spike);
+      if(type==='cirrhosis') y += g(x,325,40,18); // fill the valley between beta and gamma
+      pts.push([x, base - y]);
+    }
+    var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#D7EDE7"/>';
+    // zone separators + labels
+    var zones=[['Albumina',70],['α1',150],['α2',210],['β',280],['γ',378]];
+    zones.forEach(function(z){ s+='<text x="'+z[1]+'" y="190" font-size="11" fill="#4B5B58" text-anchor="middle" font-weight="600">'+z[0]+'</text>'; });
+    s+='<line x1="20" y1="'+base+'" x2="440" y2="'+base+'" stroke="#8FCFC0" stroke-width="1"/>';
+    s+=curve(pts,'#0F6E64','#D7EDE7');
+    // direction marker
+    s+='<text x="26" y="20" font-size="9" fill="#B9C6C2">(+) →→→ migração →→→ (−)</text>';
+    s+='</svg>';
+    return s;
+  }
+  function spepCard(title,type,desc,cond){
+    return '<div class="card"><div class="card-title"><span class="icon">＝</span> '+title+'</div>'
+      + '<div class="spep-graph">'+spepSVG(type)+'</div>'
+      + '<p style="font-size:13px;color:#13423D;line-height:1.6;">'+desc+'</p>'
+      + (cond?('<div class="an-note"><strong>Associa-se a:</strong> '+cond+'</div>'):'')
+      + '</div>';
+  }
+  var protHtml =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Eletroforese de proteínas séricas (EFP)</div>'
+    + '<div class="info-block teal"><p>Separa as proteínas do soro em <strong>5 frações</strong>: albumina, α1, α2, β e γ-globulinas. A interpretação foca-se sobretudo na <strong>zona gama</strong> (imunoglobulinas). O achado mais importante é o <strong>pico monoclonal (banda M)</strong>.</p></div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Fração</th><th>Principais proteínas</th><th>Sobe em</th><th>Desce em</th></tr></thead><tbody>'
+    + '<tr><td class="term">Albumina</td><td>Albumina</td><td>Desidratação</td><td>Doença hepática, nefrótico, desnutrição, inflamação</td></tr>'
+    + '<tr><td class="term">α1</td><td>α1-antitripsina</td><td>Inflamação aguda</td><td>Défice de α1-antitripsina</td></tr>'
+    + '<tr><td class="term">α2</td><td>Haptoglobina, ceruloplasmina</td><td>Inflamação, nefrótico</td><td>Hemólise (haptoglobina consumida)</td></tr>'
+    + '<tr><td class="term">β</td><td>Transferrina, C3</td><td>Ferropénia (transferrina)</td><td>Desnutrição</td></tr>'
+    + '<tr><td class="term">γ</td><td>Imunoglobulinas</td><td>Infeção/inflamação (policlonal), gamapatia monoclonal</td><td>Imunodeficiência, doença de cadeias leves</td></tr>'
+    + '</tbody></table></div></div>'
+
+    + spepCard('Padrão normal','normal',
+        'Albumina forma o maior pico (mais próximo do polo positivo). As globulinas formam picos menores e a zona gama é difusa e de baixa amplitude.',
+        '')
+    + spepCard('Inflamação aguda','acute',
+        'Aumento das frações <strong>α1 e α2</strong> (proteínas de fase aguda: α1-antitripsina, haptoglobina) com <strong>albumina diminuída</strong>.',
+        'Infeção aguda, trauma, enfarte, queimaduras, cirurgia recente.')
+    + spepCard('Inflamação crónica','chronic',
+        'Elevação <strong>policlonal</strong> (em cúpula, de base larga) da zona <strong>gama</strong>, com albumina por vezes diminuída.',
+        'Infeções crónicas, doenças autoimunes (LES, AR), doença hepática crónica.')
+    + spepCard('Cirrose / doença hepática crónica','cirrhosis',
+        '<strong>Albumina baixa</strong> e elevação policlonal da gama, com preenchimento do vale entre as zonas β e γ — a chamada <strong>"ponte beta-gama"</strong> (beta-gamma bridging).',
+        'Cirrose, hepatite crónica ativa.')
+    + spepCard('Síndrome nefrótico','nephrotic',
+        '<strong>Albumina muito baixa</strong> (perda urinária) com <strong>α2 proeminente</strong> e gama frequentemente diminuída.',
+        'Síndrome nefrótico (perda seletiva de proteínas de menor peso).')
+    + spepCard('Gamapatia monoclonal (banda M)','monoclonal',
+        '<strong>Pico estreito, alto e simétrico ("em torre")</strong>, geralmente na zona gama — a <strong>banda M</strong>. Traduz a proliferação de um clone único de plasmócitos.',
+        'Mieloma múltiplo, macroglobulinemia de Waldenström, amiloidose, e a frequente e geralmente benigna <strong>GMSI (gamapatia monoclonal de significado indeterminado)</strong>.')
+
+    + '<div class="card"><div class="card-title"><span class="icon">!</span> Monoclonal vs policlonal — porque importa</div>'
+    + '<div class="info-block red"><div class="ib-title">Pico monoclonal (banda M)</div><p>Pico estreito e pontiagudo. Processo <strong>clonal</strong>, potencialmente maligno. Confirmar e caracterizar com <strong>imunofixação</strong>, cadeias leves livres, e investigar mieloma (cálcio, função renal, anemia, lesões ósseas). Um IgG ou IgA monoclonal &gt;3 g/dL sugere mieloma.</p></div>'
+    + '<div class="info-block green" style="margin-bottom:0;"><div class="ib-title">Elevação policlonal</div><p>Aumento difuso e de base larga. Reflete uma <strong>resposta imune reativa</strong> (infeção, inflamação, doença hepática, autoimunidade) e <strong>não é</strong> um processo maligno.</p></div></div>';
+  document.getElementById('tab-proteinas').innerHTML = protHtml;
+
+
+  // =====================================================================
+  //  SEROLOGIAS
+  // =====================================================================
+  var seroHtml =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Serologias — princípios</div>'
+    + '<div class="info-block teal"><p>Em geral, os <strong>antigénios</strong> (Ag) indicam presença do agente; os <strong>anticorpos IgM</strong> sugerem infeção recente/aguda; os <strong>IgG</strong> indicam infeção passada ou imunidade. A interpretação faz-se pela <strong>combinação de marcadores</strong> e pelo contexto clínico.</p></div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">B</span> Hepatite B — marcadores</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Marcador</th><th>Significa</th></tr></thead><tbody>'
+    + '<tr><td class="term">HBsAg</td><td>Antigénio de superfície. <span class="pos">Positivo</span> = infeção atual (aguda ou crónica).</td></tr>'
+    + '<tr><td class="term">Anti-HBs</td><td>Anticorpo de superfície. Positivo = imunidade (vacinação ou infeção resolvida).</td></tr>'
+    + '<tr><td class="term">Anti-HBc total</td><td>Anticorpo do core. Positivo = contacto com o vírus (infeção passada ou atual). <strong>Não aparece com a vacina.</strong></td></tr>'
+    + '<tr><td class="term">Anti-HBc IgM</td><td>Positivo = infeção <strong>aguda</strong> (recente, ≤6 meses) ou reativação.</td></tr>'
+    + '<tr><td class="term">HBeAg</td><td>Indica <strong>replicação viral ativa</strong> e maior infecciosidade.</td></tr>'
+    + '<tr><td class="term">Anti-HBe</td><td>Em geral, menor replicação/infecciosidade (seroconversão).</td></tr>'
+    + '<tr><td class="term">HBV DNA</td><td>Carga viral; quantifica a replicação e orienta o tratamento.</td></tr>'
+    + '</tbody></table></div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">B</span> Hepatite B — padrões de interpretação</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>HBsAg</th><th>Anti-HBc</th><th>Anti-HBs</th><th>Interpretação</th></tr></thead><tbody>'
+    + '<tr><td class="neg">Neg</td><td class="neg">Neg</td><td class="neg">Neg</td><td><strong>Suscetível</strong> (nunca infetado, não imune). Candidato a vacinação.</td></tr>'
+    + '<tr><td class="neg">Neg</td><td class="neg">Neg</td><td class="pos">Pos</td><td><strong>Imune por vacinação</strong> (só anti-HBs positivo).</td></tr>'
+    + '<tr><td class="neg">Neg</td><td class="pos">Pos</td><td class="pos">Pos</td><td><strong>Imune por infeção natural</strong> resolvida.</td></tr>'
+    + '<tr><td class="pos">Pos</td><td class="pos">Pos (IgM +)</td><td class="neg">Neg</td><td><strong>Infeção aguda.</strong></td></tr>'
+    + '<tr><td class="pos">Pos</td><td class="pos">Pos (IgM −)</td><td class="neg">Neg</td><td><strong>Infeção crónica.</strong></td></tr>'
+    + '<tr><td class="neg">Neg</td><td class="pos">Pos</td><td class="neg">Neg</td><td><strong>Anti-HBc isolado</strong>: infeção passada com anti-HBs indetetável, período de janela, ou falso positivo. Investigar.</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="an-note"><strong>Janela imunológica:</strong> período após HBsAg desaparecer e antes de anti-HBs surgir, em que o anti-HBc IgM pode ser o único marcador positivo.</div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">C</span> Hepatite C</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Teste</th><th>Interpretação</th></tr></thead><tbody>'
+    + '<tr><td class="term">Anti-VHC (anticorpo)</td><td>Teste de <strong>rastreio</strong>. Positivo = contacto com o vírus (não distingue infeção ativa de resolvida; persiste após cura).</td></tr>'
+    + '<tr><td class="term">HCV RNA (carga viral)</td><td><strong>Confirma infeção ativa.</strong> Positivo = infeção atual; negativo com anti-VHC positivo = infeção passada/resolvida ou tratada.</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="an-note"><strong>Algoritmo:</strong> anti-VHC positivo → confirmar sempre com <strong>HCV RNA</strong>. A hepatite C tem tratamento curativo (antivirais de ação direta) — referenciar os casos com RNA positivo.</div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">A</span> Hepatite A</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Teste</th><th>Interpretação</th></tr></thead><tbody>'
+    + '<tr><td class="term">Anti-VHA IgM</td><td>Infeção <strong>aguda</strong> recente.</td></tr>'
+    + '<tr><td class="term">Anti-VHA IgG (total)</td><td>Infeção passada ou imunidade (incluindo pós-vacinal).</td></tr>'
+    + '</tbody></table></div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">S</span> Sífilis</div>'
+    + '<div class="info-block teal"><p>O diagnóstico combina testes <strong>treponémicos</strong> (específicos, positivam cedo e ficam positivos para a vida) e <strong>não treponémicos</strong> (tituláveis, úteis para atividade e seguimento).</p></div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Teste</th><th>Tipo</th><th>Interpretação</th></tr></thead><tbody>'
+    + '<tr><td class="term">VDRL / RPR</td><td>Não treponémico</td><td>Titulável. Sobe na doença ativa e <strong>desce com o tratamento</strong> (monitorização). Pode dar falsos positivos (gravidez, autoimunidade, infeções).</td></tr>'
+    + '<tr><td class="term">TPHA / TPPA / FTA-ABS</td><td>Treponémico</td><td>Específico do treponema. Confirma a exposição; <strong>mantém-se positivo para a vida</strong>, mesmo após cura.</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="an-note"><strong>Leitura conjunta:</strong> treponémico + não treponémico positivos com título alto → sífilis ativa/recente. Treponémico positivo com não treponémico negativo → sífilis tratada/antiga (ou muito precoce). A descida do título (VDRL/RPR) ≥4× indica resposta ao tratamento.</div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">+</span> VIH e outras serologias frequentes</div>'
+    + '<div class="info-block blue"><div class="ib-title">VIH</div><p>Teste combinado de <strong>4.ª geração (Ag p24 + anticorpos)</strong> reduz a janela para ~2–4 semanas. Um rastreio positivo é sempre <strong>confirmado</strong> por teste suplementar. Considerar a janela imunológica num resultado negativo com exposição recente.</p></div>'
+    + '<div class="info-block purple" style="margin-bottom:0;"><div class="ib-title">Padrão geral IgM vs IgG</div><p>Para muitos agentes (CMV, EBV, toxoplasma, rubéola), <strong>IgM positivo</strong> sugere infeção recente e <strong>IgG positivo</strong> indica imunidade/infeção passada. A interpretação e os testes de avidez devem considerar o contexto (ex: gravidez).</p></div></div>';
+  document.getElementById('tab-serologias').innerHTML = seroHtml;
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>

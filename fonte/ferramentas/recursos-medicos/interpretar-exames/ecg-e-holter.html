@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECG e Holter</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "ecg-e-holter",
+  "titulo": "ECG e Holter",
+  "descricao": "Atlas de alterações do ECG com traçados esquemáticos, valores normais, interpretação do Holter e marcha diagnóstica.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 2,
+  "palavras": [
+    "ECG",
+    "eletrocardiograma",
+    "Holter",
+    "arritmia",
+    "fibrilhação auricular",
+    "bloqueio",
+    "QT",
+    "QTc",
+    "PR",
+    "QRS",
+    "extrassístoles",
+    "taquicardia",
+    "bradicardia",
+    "hipertrofia ventricular"
+  ],
+  "bibliografia": [
+    "Merck Manual Professional Edition. Electrocardiography e Atrioventricular Block. https://www.merckmanuals.com/professional/cardiovascular-disorders/cardiovascular-tests-and-procedures/electrocardiography",
+    "ECG Waves. Reference (normal) values for ECG. https://ecgwaves.com/docs/reference-values-for-adult-ecg/",
+    "University of Utah ECG Learning Center. Characteristics of the Normal ECG. https://ecg.utah.edu/lesson/3",
+    "Life in the Fast Lane (LITFL). AV Block — Mobitz I / Mobitz II. https://litfl.com/av-block-2nd-degree-mobitz-i-wenckebach-phenomenon/",
+    "StatPearls / NCBI Bookshelf. Atrioventricular Block e Second-Degree AV Block. https://www.ncbi.nlm.nih.gov/books/NBK459147/",
+    "Geeky Medics. Common ECG Findings. https://geekymedics.com/common-ecg-findings-in-osces/",
+    "Conquering the ECG — Cardiology Explained (NCBI Bookshelf). https://www.ncbi.nlm.nih.gov/books/NBK2214/",
+    "Pulse Today. Ten top tips — 24 hour ECGs. https://www.pulsetoday.co.uk/clinical-feature/clinical-areas/cardiovascular/ten-top-tips-24-hour-ecgs/",
+    "Journal of the American Heart Association. Intermediate Pause and Cardiovascular Risk. https://www.ahajournals.org/doi/10.1161/jaha.118.009034",
+    "Significância de pausas ventriculares ≥3 s em Holter de 24h (PubMed). https://pubmed.ncbi.nlm.nih.gov/3984858/",
+    "Impacto da carga de ESV na função ventricular esquerda — Holter de 7 dias (PMC). https://pmc.ncbi.nlm.nih.gov/articles/PMC4662208/",
+    "Mayo Clinic / Heart Rhythm. LVH, QT prolongation and mortality (PubMed). https://pubmed.ncbi.nlm.nih.gov/24956189/",
+    "Critérios ECG de HVE (Sokolow-Lyon / Cornell) — PMC. https://pmc.ncbi.nlm.nih.gov/articles/PMC5245847/"
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 860px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #0F6E64; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #0F6E64; border: 2px solid transparent; border-radius: 8px; padding: 8px 15px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #2E9C8C; color: #FFFFFF; border-color: #0F6E64; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .search-box { width: 100%; border: 1.5px solid #D7EDE7; border-radius: 10px; padding: 11px 16px; font-size: 15px; color: #13423D; background: #FFFFFF; margin-bottom: 16px; }
+#ferramenta .search-box:focus { outline: none; border-color: #2E9C8C; }
+#ferramenta .ecg-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); overflow: hidden; margin-bottom: 16px; border: 1px solid #D7EDE7; }
+#ferramenta .ecg-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .ecg-head:hover { background: #D7EDE7; }
+#ferramenta .ecg-name { font-size: 15px; font-weight: 700; color: #13423D; }
+#ferramenta .ecg-tag { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+#ferramenta .ecg-tag.benigno { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .ecg-tag.atencao { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .ecg-tag.urgente { background: #FDECEA; color: #9E2318; }
+#ferramenta .ecg-toggle { font-size: 18px; color: #0F6E64; transition: transform 0.2s; }
+#ferramenta .ecg-card.open .ecg-toggle { transform: rotate(180deg); }
+#ferramenta .ecg-body { display: none; padding: 0 18px 18px; }
+#ferramenta .ecg-card.open .ecg-body { display: block; }
+#ferramenta .ecg-trace { width: 100%; background: #F8E7C4; border: 1px solid #D7EDE7; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+#ferramenta .ecg-trace svg { width: 100%; height: auto; display: block; }
+#ferramenta .ecg-section { margin-bottom: 12px; }
+#ferramenta .ecg-section .es-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+#ferramenta .ecg-section.criteria .es-label { color: #1C4A80; }
+#ferramenta .ecg-section.signif .es-label { color: #0F6E64; }
+#ferramenta .ecg-section.conduta .es-label { color: #1B6B35; }
+#ferramenta .ecg-section p { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .ecg-section strong { font-weight: 700; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 12px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 12px; font-size: 14px; color: #13423D; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .data-table .tcenter { text-align: center; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #13423D; line-height: 1.65; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 5px; }
+#ferramenta label { font-size: 13px; font-weight: 600; color: #2C3A38; }
+#ferramenta input[type="number"], #ferramenta select { border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 12px; font-size: 15px; color: #13423D; background: #FDECEA; width: 100%; appearance: auto; -webkit-appearance: auto; }
+#ferramenta input:focus, #ferramenta select:focus { outline: none; border-color: #2E9C8C; background: #FFFFFF; }
+#ferramenta .field-hint { font-size: 13px; color: #2C3A38; font-style: italic; }
+#ferramenta .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+#ferramenta .btn-primary { background: #2E9C8C; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 22px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-primary:hover { background: #0F6E64; }
+#ferramenta .btn-secondary { background: #D7EDE7; color: #0F6E64; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta #holter-result { display: none; margin-top: 18px; }
+#ferramenta #holter-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 9px; margin-bottom: 9px; }
+#ferramenta .result-row.ok { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .result-row.warn { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .result-row.alert { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .result-row .rr-icon { font-size: 18px; line-height: 1.2; }
+#ferramenta .result-row .rr-title { font-size: 14px; font-weight: 700; color: #13423D; margin-bottom: 2px; }
+#ferramenta .result-row .rr-text { font-size: 13.5px; color: #13423D; line-height: 1.5; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #2E9C8C; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #0F6E64; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #2C3A38; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #D7EDE7; color: #0F6E64; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #D7EDE7; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Atlas de alterações, valores de referência e apoio à marcha diagnóstica.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-ecg" aria-controls="tab-ecg" aria-selected="true">Alterações no ECG</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-valores" aria-controls="tab-valores" aria-selected="false">Valores Normais</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-holter" aria-controls="tab-holter" aria-selected="false">Holter</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-marcha" aria-controls="tab-marcha" aria-selected="false">Marcha Diagnóstica</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os traçados apresentados são <strong>esquemáticos</strong> (ilustrativos da morfologia típica) e não substituem a leitura do ECG real nem o julgamento clínico. Os valores de referência podem variar com a idade, sexo e contexto clínico.</p>
+  <div class="mgf-painel mk-painel" id="tab-ecg" role="tabpanel" aria-labelledby="sep-ecg">
+    <input type="text" class="search-box no-print" id="ecg-search" placeholder="Pesquisar alteração (ex: fibrilhação, bloqueio, ST, extrassístole)..." oninput="filterECG()">
+    <div id="ecg-container"></div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-valores" role="tabpanel" aria-labelledby="sep-valores" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Valores de Referência do ECG (adulto)</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Parâmetro</th><th>Valor normal</th><th>Significado da alteração</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Frequência cardíaca</strong></td><td>50–100 bpm (sinusal)</td><td>&lt;50 bradicardia · &gt;100 taquicardia</td></tr>
+            <tr><td><strong>Onda P</strong></td><td>&lt;0,12 s; ≤2,5 mm; positiva em DII</td><td>P alta/apiculada: HAD · P larga/bífida: HAE</td></tr>
+            <tr><td><strong>Intervalo PR</strong></td><td>0,12–0,20 s (120–200 ms)</td><td>&gt;0,20 s: BAV 1º grau · &lt;0,12 s: pré-excitação</td></tr>
+            <tr><td><strong>Complexo QRS</strong></td><td>0,06–0,10 s (&lt;120 ms)</td><td>≥0,12 s: bloqueio de ramo / origem ventricular</td></tr>
+            <tr><td><strong>Eixo do QRS</strong></td><td>−30° a +90°</td><td>Desvio esquerdo ou direito (HVE, HVD, hemibloqueios)</td></tr>
+            <tr><td><strong>QTc (Bazett)</strong></td><td>≤0,44 s (H) / ≤0,46 s (M)</td><td>&gt;0,50 s: risco elevado de arritmia ventricular</td></tr>
+            <tr><td><strong>Onda Q</strong></td><td>&lt;0,04 s e &lt;25% da onda R</td><td>Q patológica: enfarte prévio</td></tr>
+            <tr><td><strong>Segmento ST</strong></td><td>Isoelétrico (±1 mm)</td><td>Supra: lesão/STEMI · Infra: isquemia</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block blue" style="margin-top:14px;margin-bottom:0;">
+        <div class="ib-title">Regra prática do QT</div>
+        <p>Para FC ≈ 70 bpm, o QT deve ser ≤ 0,40 s. Por cada 10 bpm acima de 70, subtrair 0,02 s; por cada 10 bpm abaixo, somar 0,02 s. O QTc (corrigido para a FC) é o valor a interpretar.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Características do Ritmo Sinusal</div>
+      <div class="info-block green" style="margin-bottom:0;">
+        <p>
+        ① FC entre 50–100 bpm &nbsp;·&nbsp; ② cada QRS precedido de onda P &nbsp;·&nbsp; ③ onda P positiva em DII &nbsp;·&nbsp; ④ intervalo PR constante.<br>
+        <strong>Se a onda P não for positiva em DII, o ritmo não é sinusal.</strong></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Critérios de Hipertrofia Ventricular Esquerda (HVE)</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Critério</th><th>Fórmula</th><th>Limiar</th></tr></thead>
+          <tbody>
+            <tr><td>Sokolow-Lyon (voltagem)</td><td>S em V1 + R em V5 ou V6</td><td>≥ 35 mm (3,5 mV)</td></tr>
+            <tr><td>Cornell (voltagem)</td><td>R em aVL + S em V3</td><td>≥ 28 mm (H) / ≥ 20 mm (M)</td></tr>
+            <tr><td>Produto de Cornell</td><td>(R aVL + S V3) × duração QRS</td><td>≥ 2440 mm·ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block orange" style="margin-top:12px;margin-bottom:0;">
+        <p>O <strong>padrão de sobrecarga (strain)</strong> — infradesnivelamento do ST e inversão assimétrica da T em V5–V6 — reforça a HVE. A associação de HVE com QTc ≥ 500 ms marca risco acrescido de mortalidade.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-holter" role="tabpanel" aria-labelledby="sep-holter" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Holter de 24h</div>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:16px;line-height:1.5;">Introduza os valores do relatório. A ferramenta calcula a carga de extrassístoles e sinaliza achados que requerem atenção.</p>
+      <div class="input-grid">
+        <div class="field-group">
+          <label>FC média (bpm)</label>
+          <input type="number" id="h_avg" placeholder="ex: 72" min="20" max="220">
+        </div>
+        <div class="field-group">
+          <label>FC mínima (bpm)</label>
+          <input type="number" id="h_min" placeholder="ex: 48" min="20" max="220">
+          <span class="field-hint">Geralmente durante o sono</span>
+        </div>
+        <div class="field-group">
+          <label>FC máxima (bpm)</label>
+          <input type="number" id="h_max" placeholder="ex: 142" min="20" max="240">
+          <span class="field-hint">Geralmente em esforço</span>
+        </div>
+        <div class="field-group">
+          <label>Total de batimentos (24h)</label>
+          <input type="number" id="h_total" placeholder="ex: 100000" min="1000" max="200000">
+        </div>
+        <div class="field-group">
+          <label>Nº de ESV / PVC (24h)</label>
+          <input type="number" id="h_pvc" placeholder="ex: 350" min="0" max="100000">
+          <span class="field-hint">Extrassístoles ventriculares</span>
+        </div>
+        <div class="field-group">
+          <label>Nº de ESSV / PAC (24h)</label>
+          <input type="number" id="h_pac" placeholder="ex: 120" min="0" max="100000">
+          <span class="field-hint">Extrassístoles supraventriculares</span>
+        </div>
+        <div class="field-group">
+          <label>Pausa mais longa (s)</label>
+          <input type="number" id="h_pause" placeholder="ex: 1.8" min="0" max="15" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>TVNS (≥3 batimentos)</label>
+          <select id="h_nsvt"><option value="no">Não</option><option value="yes">Sim</option></select>
+          <span class="field-hint">Taquicardia ventricular não sustentada</span>
+        </div>
+        <div class="field-group">
+          <label>Sintomas durante achados</label>
+          <select id="h_sympt"><option value="no">Assintomático</option><option value="yes">Sintomático (síncope/tonturas)</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-primary" onclick="interpretHolter()">Interpretar</button>
+        <button type="button" class="btn-secondary" onclick="resetHolter()">↺ Limpar</button>
+        <button type="button" class="btn-print no-print" onclick="window.print()" style="margin-left:auto;">Imprimir</button>
+      </div>
+      <div id="holter-result"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Valores de Referência do Holter</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Parâmetro</th><th>Normal / benigno</th><th>Atenção</th><th>Significativo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>FC média 24h</strong></td><td>60–90 bpm</td><td>50–60 ou 90–100</td><td>&lt;50 ou &gt;100 (mantida)</td></tr>
+            <tr><td><strong>FC mínima (sono)</strong></td><td>40–50 bpm (até 30 em atletas)</td><td>35–40</td><td>&lt;40 em vigília</td></tr>
+            <tr><td><strong>FC máxima (esforço)</strong></td><td>até ~190 (jovem)</td><td>—</td><td>Picos de taquiarritmia</td></tr>
+            <tr><td><strong>Carga de ESV</strong></td><td>&lt;1% (&lt;2000/24h)</td><td>1–10% (2000–10000)</td><td>&gt;10% (&gt;10000/24h)</td></tr>
+            <tr><td><strong>Carga de ESSV</strong></td><td>&lt;200/24h</td><td>Frequentes (centenas)</td><td>&gt;500/24h (risco de FA)</td></tr>
+            <tr><td><strong>Pausas</strong></td><td>&lt;2 s</td><td>2–3 s (sono/atletas)</td><td>≥3 s (sobretudo em vigília)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Como Interpretar o Relatório de Holter</div>
+      <div class="info-block blue">
+        <div class="ib-title">Frequência cardíaca</div>
+        <p>O relatório indica FC <strong>mínima, média e máxima</strong>. Bradicardia noturna de 30–40 bpm e taquicardia de esforço próxima de 190 bpm em jovens são variações fisiológicas normais. Uma FC mínima &lt;40 bpm em vigília pode indicar disfunção do nó sinusal.</p>
+      </div>
+      <div class="info-block orange">
+        <div class="ib-title">Extrassístoles ventriculares (ESV/PVC)</div>
+        <p>Carga &lt;2000/24h (&lt;1%): habitualmente <strong>benigna</strong>, risco ~0% de doença estrutural. 2000–10000/24h: risco intermédio (~3%). &gt;10000/24h ou &gt;10%: risco elevado (até 30% de doença estrutural) e de <strong>miocardiopatia induzida por ESV</strong> — ecocardiograma e referenciação. Há grande variabilidade dia-a-dia.</p>
+      </div>
+      <div class="info-block purple">
+        <div class="ib-title">Extrassístoles supraventriculares (ESSV/PAC)</div>
+        <p>ESSV isoladas são geralmente benignas. ESSV frequentes (&gt;500/24h) associam-se a maior risco de desenvolver <strong>fibrilhação auricular</strong> — considerar vigilância e rastreio de FA.</p>
+      </div>
+      <div class="info-block red">
+        <div class="ib-title">Pausas e bloqueios</div>
+        <p>Pausas &lt;2 s são comuns; 2–3 s durante o sono ou em atletas são geralmente fisiológicas. Pausas <strong>≥3 s, sobretudo em vigília ou com sintomas</strong>, são significativas. Síncope com pausas espontâneas &gt;3 s é indicação de pacing (Classe I).</p>
+      </div>
+      <div class="info-block green">
+        <div class="ib-title">Diário de sintomas</div>
+        <p>Peça sempre ao doente um <strong>diário datado de sintomas</strong>. A correlação entre o sintoma e o ritmo registado nesse momento é o achado mais valioso do Holter.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-marcha" role="tabpanel" aria-labelledby="sep-marcha" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Leitura Sistemática do ECG (passo-a-passo)</div>
+      <ul class="steps-list">
+        <li><div class="step-num">1</div><div class="step-text"><strong>Frequência</strong> — 300 ÷ nº de quadrados grandes entre R-R (ou 1500 ÷ quadrados pequenos). Normal 60–100 bpm.</div></li>
+        <li><div class="step-num">2</div><div class="step-text"><strong>Ritmo</strong> — regular ou irregular? Há onda P antes de cada QRS? P positiva em DII = sinusal.</div></li>
+        <li><div class="step-num">3</div><div class="step-text"><strong>Eixo</strong> — olhar DI e aVF. Desvio esquerdo ou direito orienta para hemibloqueios, HVE/HVD.</div></li>
+        <li><div class="step-num">4</div><div class="step-text"><strong>Intervalos</strong> — PR (BAV?), QRS (bloqueio de ramo se ≥0,12 s?), QT/QTc (prolongado?).</div></li>
+        <li><div class="step-num">5</div><div class="step-text"><strong>Morfologia</strong> — onda P (sobrecargas auriculares), Q patológicas, segmento ST (supra/infra), onda T (inversões), onda U.</div></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Achados que Exigem Ação Urgente</div>
+      <div class="info-block red">
+        <div class="ib-title">Referenciar de imediato / urgência</div>
+        <p>
+        • <strong>Supradesnivelamento do ST</strong> (STEMI) → ativação da via verde coronária / PCI primária<br>
+        • <strong>BRE de novo</strong> com dor torácica → equiparar a STEMI<br>
+        • <strong>Taquicardia de complexos largos</strong> (TV) → emergência<br>
+        • <strong>BAV 2º grau Mobitz II ou BAV completo</strong> → risco de assistolia, pacing<br>
+        • <strong>Pausas ≥3 s com síncope</strong><br>
+        • <strong>QTc &gt;500 ms</strong> → risco de Torsades de Pointes<br>
+        • FA com resposta ventricular rápida e instabilidade
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Quando Pedir um Holter</div>
+      <div class="info-block blue">
+        <p>
+        • <strong>Palpitações</strong> recorrentes sem documentação no ECG de repouso<br>
+        • <strong>Síncope ou pré-síncope</strong> de provável origem arrítmica<br>
+        • Suspeita de <strong>disfunção do nó sinusal</strong> ou bloqueios intermitentes<br>
+        • Avaliar <strong>controlo de frequência na FA</strong><br>
+        • Quantificar <strong>carga de extrassístoles</strong><br>
+        • Rastreio de <strong>FA paroxística</strong> (ex: pós-AVC criptogénico)
+        </p>
+      </div>
+      <div class="info-block orange" style="margin-bottom:0;">
+        <div class="ib-title">Limitação importante</div>
+        <p>O Holter de 24h só é útil se os sintomas forem <strong>suficientemente frequentes</strong> para ocorrerem no período de registo. Para sintomas raros (semanais/mensais), considerar registo de eventos prolongado ou Holter de 7 dias / registador de ansa implantável.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Quando Referenciar à Cardiologia</div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <p>
+        • Novo bloqueio de ramo esquerdo, BAV de alto grau ou bloqueio bifascicular<br>
+        • Carga de ESV &gt;10% ou TVNS documentada<br>
+        • Suspeita de canalopatia (QT longo, Brugada) ou pré-excitação (WPW)<br>
+        • FA de novo para estratégia de controlo de ritmo/frequência e anticoagulação<br>
+        • Sinais de HVE com strain, isquemia ou enfarte prévio<br>
+        • Pausas significativas, bradicardia sintomática ou síncope inexplicada
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tool-footer">
+    Os traçados são representações esquemáticas para fins educativos.<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico nem a avaliação especializada.</em>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+// ---- print date ----
+
+  // ---- tabs ----
+  function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  // =========================================================
+  //  ECG SCHEMATIC TRACING GENERATOR (own SVG, no copyright)
+  //  Coordinate system: baseline y=75, viewBox height 130
+  // =========================================================
+  const BASE = 75;
+  function pAdd(pts, x, y){ pts.push([Math.round(x*10)/10, Math.round(y*10)/10]); }
+
+  // Smooth raised-cosine bump (for rounded waves like P and T).
+  // baseline interpolates linearly from y0 to y1 (handles ST offset); dir: -1 up, +1 down.
+  function smoothBump(pts, x0, width, amp, y0, y1, dir){
+    dir = dir||-1;
+    var N = 16;
+    for(var i=0;i<=N;i++){
+      var t = i/N;
+      var bl = y0 + (y1-y0)*t;
+      var y  = bl + dir*amp*(0.5 - 0.5*Math.cos(2*Math.PI*t));
+      pAdd(pts, x0 + t*width, y);
+    }
+    return x0 + width;
+  }
+
+  function segP(pts, x, amp){ // P wave (smooth, rounded), returns new x
+    amp = amp==null?9:amp;
+    pAdd(pts,x,BASE);
+    smoothBump(pts, x+2, 15, amp, BASE, BASE, -1);
+    pAdd(pts, x+19, BASE);
+    return x+19;
+  }
+  function segFlat(pts, x, len){ pAdd(pts,x,BASE); pAdd(pts,x+len,BASE); return x+len; }
+  function segQRS(pts, x, o){
+    o=o||{}; var r=o.r!=null?o.r:50, s=o.s!=null?o.s:16, st=o.st!=null?o.st:0;
+    if(o.wide){
+      pAdd(pts,x,BASE); pAdd(pts,x+5,BASE+7); pAdd(pts,x+16,BASE-r);
+      pAdd(pts,x+24,BASE-r+13); pAdd(pts,x+35,BASE+s); pAdd(pts,x+43,BASE-st);
+      return x+43;
+    }
+    pAdd(pts,x,BASE); pAdd(pts,x+3,BASE+ (o.q!=null?o.q:6));
+    pAdd(pts,x+7,BASE-r); pAdd(pts,x+11,BASE+s); pAdd(pts,x+15,BASE-st);
+    return x+15;
+  }
+  function segST(pts, x, len, st){ st=st||0; pAdd(pts,x,BASE-st); pAdd(pts,x+len,BASE-st); return x+len; }
+  function segT(pts, x, o){ // T wave (smooth, rounded)
+    o=o||{}; var amp=o.amp!=null?o.amp:14, st=o.st||0, d=o.inv?1:-1;
+    smoothBump(pts, x, 26, amp, BASE-st, BASE, d);
+    return x+26;
+  }
+  // a full normal-style beat
+  function beat(pts, x, o){
+    o=o||{};
+    if(o.noP){ x=segFlat(pts,x,o.preGap!=null?o.preGap:6); }
+    else { x=segFlat(pts,x,6); x=segP(pts,x,o.pAmp); x=segFlat(pts,x,o.pr!=null?o.pr:9); }
+    x=segQRS(pts,x,o);
+    x=segST(pts,x,o.stLen!=null?o.stLen:7, o.st||0);
+    x=segT(pts,x,{amp:o.tAmp,inv:o.tInv,st:o.st||0});
+    x=segFlat(pts,x,o.tp!=null?o.tp:30);
+    return x;
+  }
+
+  function ptsToPoly(pts){ return pts.map(p=>p[0]+','+p[1]).join(' '); }
+
+  function svgWrap(pts, extra){
+    var maxX = 10; pts.forEach(p=>{ if(p[0]>maxX) maxX=p[0]; });
+    if(extra) extra.forEach(arr=>arr.forEach(p=>{ if(p[0]>maxX) maxX=p[0]; }));
+    var W = Math.ceil(maxX+10);
+    var grid = '<defs><pattern id="g'+W+'" width="10" height="10" patternUnits="userSpaceOnUse">'
+      + '<path d="M10 0 L0 0 0 10" fill="none" stroke="#FDECEA" stroke-width="0.5"/></pattern>'
+      + '<pattern id="G'+W+'" width="50" height="50" patternUnits="userSpaceOnUse">'
+      + '<rect width="50" height="50" fill="url(#g'+W+')"/><path d="M50 0 L0 0 0 50" fill="none" stroke="#FDECEA" stroke-width="1"/></pattern></defs>';
+    var bg = '<rect x="0" y="0" width="'+W+'" height="130" fill="url(#G'+W+')"/>';
+    var poly = '<polyline fill="none" stroke="#2E9C8C" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" points="'+ptsToPoly(pts)+'"/>';
+    var ex = '';
+    if(extra) extra.forEach(function(arr){ ex += '<polyline fill="none" stroke="#1C4A80" stroke-width="1.5" stroke-dasharray="2 2" vector-effect="non-scaling-stroke" points="'+ptsToPoly(arr)+'"/>'; });
+    return '<svg viewBox="0 0 '+W+' 130" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'+grid+bg+poly+ex+'</svg>';
+  }
+
+  // ---- build each tracing ----
+  function traceNormal(){ var p=[],x=2; for(var i=0;i<4;i++) x=beat(p,x,{}); return svgWrap(p); }
+  function traceBrady(){ var p=[],x=2; for(var i=0;i<3;i++) x=beat(p,x,{tp:75}); return svgWrap(p); }
+  function traceTachy(){ var p=[],x=2; for(var i=0;i<6;i++) x=beat(p,x,{tp:8,pr:6}); return svgWrap(p); }
+  function traceAFib(){
+    var p=[],x=2; var rr=[60,48,72,52,66,44];
+    pAdd(p,x,BASE);
+    for(var i=0;i<rr.length;i++){
+      // irregular fibrillatory baseline
+      for(var j=0;j<rr[i]-15;j+=6){ pAdd(p,x+j,BASE-(Math.sin(j)*2.5)-1); }
+      x+=Math.max(rr[i]-15,6);
+      x=segQRS(p,x,{r:46,s:14}); x=segFlat(p,x,2);
+    }
+    return svgWrap(p);
+  }
+  function traceAFlutter(){
+    var p=[],x=2; pAdd(p,x,BASE);
+    function saw(n){ for(var k=0;k<n;k++){ pAdd(p,x+1,BASE-12); pAdd(p,x+11,BASE+2); x+=12; } }
+    for(var i=0;i<3;i++){ saw(2); x=segQRS(p,x,{r:46,s:14}); }
+    saw(2);
+    return svgWrap(p);
+  }
+  function traceAVB1(){ var p=[],x=2; for(var i=0;i<4;i++) x=beat(p,x,{pr:30}); return svgWrap(p); }
+  function traceMobitz1(){
+    var p=[],x=2; var prs=[12,22,34];
+    for(var i=0;i<prs.length;i++){ x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,prs[i]); x=segQRS(p,x,{}); x=segST(p,x,7); x=segT(p,x,{}); x=segFlat(p,x,20); }
+    // dropped P (no QRS)
+    x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,30);
+    // reset
+    x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,12); x=segQRS(p,x,{}); x=segST(p,x,7); x=segT(p,x,{}); x=segFlat(p,x,20);
+    return svgWrap(p);
+  }
+  function traceMobitz2(){
+    var p=[],x=2;
+    for(var i=0;i<2;i++) x=beat(p,x,{pr:12,tp:18});
+    // dropped beat: P with no QRS
+    x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,40);
+    for(var k=0;k<2;k++) x=beat(p,x,{pr:12,tp:18});
+    return svgWrap(p);
+  }
+  function traceAVB3(){
+    // independent P (blue dashed) and slow wide QRS (red)
+    var p=[],x=2; pAdd(p,x,BASE);
+    // red line: slow ventricular escape (wide QRS) sparse
+    var qpos=[40,150,260];
+    var cur=2; pAdd(p,cur,BASE);
+    for(var i=0;i<qpos.length;i++){ pAdd(p,qpos[i]-5,BASE); cur=segQRS(p,qpos[i],{wide:true,r:44}); pAdd(p,cur,BASE); }
+    pAdd(p,310,BASE);
+    // blue line: regular P waves marching
+    var pl=[]; var px=2; var ppos=[10,48,86,124,162,200,238,276];
+    pAdd(pl,2,BASE);
+    ppos.forEach(function(pp){ pAdd(pl,pp,BASE); smoothBump(pl, pp+2, 13, 9, BASE, BASE, -1); pAdd(pl,pp+15,BASE); });
+    pAdd(pl,310,BASE);
+    return svgWrap(p,[pl]);
+  }
+  function traceRBBB(){
+    // wide QRS with rSR' in V1-like: terminal R'
+    var p=[],x=2;
+    for(var i=0;i<3;i++){
+      x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,9);
+      pAdd(p,x,BASE); pAdd(p,x+3,BASE-22); pAdd(p,x+7,BASE+10); pAdd(p,x+14,BASE-40); pAdd(p,x+22,BASE+6); pAdd(p,x+30,BASE);
+      x+=30; x=segST(p,x,6); x=segT(p,x,{inv:true,amp:10}); x=segFlat(p,x,26);
+    }
+    return svgWrap(p);
+  }
+  function traceLBBB(){
+    var p=[],x=2;
+    for(var i=0;i<3;i++){
+      x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,9);
+      pAdd(p,x,BASE); pAdd(p,x+8,BASE-44); pAdd(p,x+20,BASE-38); pAdd(p,x+34,BASE+4);
+      x+=34; x=segST(p,x,6); x=segT(p,x,{inv:true,amp:12}); x=segFlat(p,x,26);
+    }
+    return svgWrap(p);
+  }
+  function tracePVC(){
+    var p=[],x=2;
+    x=beat(p,x,{tp:24}); x=beat(p,x,{tp:14});
+    // premature wide bizarre, no P
+    pAdd(p,x,BASE); pAdd(p,x+8,BASE-48); pAdd(p,x+22,BASE+34); pAdd(p,x+34,BASE);
+    x+=34; x=segFlat(p,x,46); // compensatory pause
+    x=beat(p,x,{tp:24}); x=beat(p,x,{});
+    return svgWrap(p);
+  }
+  function tracePAC(){
+    var p=[],x=2;
+    x=beat(p,x,{tp:24}); x=beat(p,x,{tp:10});
+    // premature P (different) + narrow QRS, then short pause
+    x=segP(p,x,11); x=segFlat(p,x,8); x=segQRS(p,x,{}); x=segST(p,x,7); x=segT(p,x,{}); x=segFlat(p,x,38);
+    x=beat(p,x,{tp:24}); x=beat(p,x,{});
+    return svgWrap(p);
+  }
+  function traceSTEMI(){ var p=[],x=2; for(var i=0;i<3;i++) x=beat(p,x,{st:20,stLen:10,tAmp:16}); return svgWrap(p); }
+  function traceIschemia(){ var p=[],x=2; for(var i=0;i<3;i++) x=beat(p,x,{st:-12,stLen:8,tInv:true,tAmp:14}); return svgWrap(p); }
+  function traceLVH(){ var p=[],x=2; for(var i=0;i<3;i++) x=beat(p,x,{r:70,s:38,st:-8,tInv:true,tAmp:12}); return svgWrap(p); }
+  function traceLongQT(){ var p=[],x=2; for(var i=0;i<3;i++) x=beat(p,x,{stLen:30,tAmp:14,tp:24}); return svgWrap(p); }
+  function traceVT(){
+    var p=[],x=2; pAdd(p,x,BASE);
+    for(var i=0;i<6;i++){ pAdd(p,x,BASE); pAdd(p,x+9,BASE-42); pAdd(p,x+24,BASE+38); pAdd(p,x+33,BASE); x+=33; pAdd(p,x+8,BASE); x+=8; }
+    return svgWrap(p);
+  }
+  function traceWPW(){
+    var p=[],x=2;
+    for(var i=0;i<3;i++){
+      x=segFlat(p,x,6); x=segP(p,x); x=segFlat(p,x,3); // short PR
+      // delta wave: slurred upstroke
+      pAdd(p,x,BASE); pAdd(p,x+10,BASE-18); pAdd(p,x+16,BASE-48); pAdd(p,x+22,BASE+12); pAdd(p,x+28,BASE);
+      x+=28; x=segST(p,x,6); x=segT(p,x,{}); x=segFlat(p,x,26);
+    }
+    return svgWrap(p);
+  }
+
+  // ---- ECG dataset ----
+  const ECG_DATA = [
+    { id:'normal', name:'Ritmo sinusal normal', tag:'benigno', tagL:'Normal', keys:'normal sinusal',
+      svg:traceNormal,
+      crit:'FC 60–100 bpm, onda P positiva em DII antes de cada QRS, PR constante (0,12–0,20 s), QRS estreito (&lt;0,12 s).',
+      sig:'Ritmo de referência. Origem no nó sinusal com condução AV e intraventricular normais.',
+      cond:'Sem ação. Serve de comparação para identificar desvios.' },
+
+    { id:'brady', name:'Bradicardia sinusal', tag:'benigno', tagL:'Ger. benigno', keys:'bradicardia lenta frequencia baixa',
+      svg:traceBrady,
+      crit:'Ritmo sinusal com FC &lt;50 bpm. Onda P normal antes de cada QRS, complexos espaçados.',
+      sig:'Frequente em atletas, jovens com tónus vagal elevado e durante o sono. Pode ser causada por fármacos (β-bloqueantes, digoxina), hipotiroidismo ou disfunção do nó sinusal.',
+      cond:'Avaliar sintomas (tonturas, síncope, intolerância ao esforço) e fármacos. Assintomática e com resposta cronotrópica ao esforço: habitualmente benigna. Sintomática: investigar.' },
+
+    { id:'tachy', name:'Taquicardia sinusal', tag:'atencao', tagL:'Contexto', keys:'taquicardia rapida frequencia alta',
+      svg:traceTachy,
+      crit:'Ritmo sinusal com FC &gt;100 bpm. Onda P normal precede cada QRS estreito.',
+      sig:'Geralmente uma resposta fisiológica/secundária: febre, dor, ansiedade, anemia, hipovolémia, hipertiroidismo, embolia pulmonar, insuficiência cardíaca, estimulantes.',
+      cond:'Procurar e tratar a causa subjacente em vez da frequência em si. Taquicardia inexplicada e persistente merece investigação.' },
+
+    { id:'afib', name:'Fibrilhação auricular', tag:'atencao', tagL:'Atenção', keys:'fibrilhacao auricular fa arritmia irregular',
+      svg:traceAFib,
+      crit:'<strong>Ausência de ondas P</strong>, linha de base com ondulações fibrilhatórias e intervalos R-R <strong>irregularmente irregulares</strong>. QRS habitualmente estreito.',
+      sig:'Arritmia sustentada mais comum. Aumenta o risco tromboembólico (AVC) e pode causar/agravar insuficiência cardíaca. Associada a HTA, idade, valvulopatia, hipertiroidismo, álcool.',
+      cond:'Avaliar risco de AVC (CHA₂DS₂-VASc) e ponderar anticoagulação. Definir estratégia de controlo de frequência vs ritmo. FA de novo: referenciar.' },
+
+    { id:'aflutter', name:'Flutter auricular', tag:'atencao', tagL:'Atenção', keys:'flutter auricular ondas serra dente',
+      svg:traceAFlutter,
+      crit:'Ondas auriculares em <strong>"dentes de serra"</strong> (ondas F), tipicamente a ~300/min, com condução AV fixa (2:1, 3:1) ou variável.',
+      sig:'Macro-reentrada auricular. Risco tromboembólico semelhante ao da FA. Condução 2:1 dá frequência ventricular regular ~150 bpm (suspeitar sempre que FC ≈ 150).',
+      cond:'Anticoagulação segundo o risco. Referenciar — a ablação do istmo cavotricúspide é muito eficaz.' },
+
+    { id:'avb1', name:'BAV de 1º grau', tag:'benigno', tagL:'Ger. benigno', keys:'bloqueio av primeiro grau pr longo',
+      svg:traceAVB1,
+      crit:'Intervalo <strong>PR &gt;0,20 s</strong>, constante, com relação 1:1 entre P e QRS (nenhum batimento "cai").',
+      sig:'Atraso de condução no nó AV. Frequentemente benigno; pode dever-se a tónus vagal elevado, fármacos ou doença degenerativa do sistema de condução.',
+      cond:'Habitualmente não requer tratamento. Rever fármacos bradicardizantes. Vigiar em idosos pela possibilidade de progressão.' },
+
+    { id:'mobitz1', name:'BAV 2º grau — Mobitz I (Wenckebach)', tag:'atencao', tagL:'Atenção', keys:'bloqueio av segundo grau mobitz wenckebach',
+      svg:traceMobitz1,
+      crit:'<strong>Prolongamento progressivo do PR</strong> até um P ser bloqueado (QRS "cai"), reiniciando o ciclo. Padrões 3:2, 4:3.',
+      sig:'Bloqueio habitualmente ao nível do nó AV. Em geral benigno, comum com tónus vagal elevado, isquemia inferior ou fármacos. Baixo risco de progressão.',
+      cond:'Assintomático: vigilância e revisão de fármacos. Sintomático (bradicardia): investigar. Raramente necessita de pacing.' },
+
+    { id:'mobitz2', name:'BAV 2º grau — Mobitz II', tag:'urgente', tagL:'Urgente', keys:'bloqueio av segundo grau mobitz dois',
+      svg:traceMobitz2,
+      crit:'PR <strong>constante</strong> com P intermitentemente <strong>não conduzidos</strong> (QRS subitamente ausente), sem prolongamento prévio do PR.',
+      sig:'Bloqueio infranodal (His-Purkinje), associado a doença estrutural. <strong>Risco de progressão súbita para BAV completo</strong> e assistolia.',
+      cond:'Referenciar com urgência. Geralmente indicação de <strong>pacemaker</strong>, mesmo se assintomático.' },
+
+    { id:'avb3', name:'BAV de 3º grau (completo)', tag:'urgente', tagL:'Urgente', keys:'bloqueio av terceiro grau completo dissociacao',
+      svg:traceAVB3,
+      crit:'<strong>Dissociação AV completa</strong>: ondas P (azul) e complexos QRS sem qualquer relação. Frequência auricular &gt; ventricular; ritmo de escape lento.',
+      sig:'Ausência total de condução AV. Pode causar síncope, insuficiência cardíaca e morte súbita. O escape ventricular largo é instável.',
+      cond:'Emergência. Referenciação imediata. Indicação de <strong>pacing</strong> (provisório e depois definitivo), salvo causa transitória reversível.' },
+
+    { id:'rbbb', name:'Bloqueio completo de ramo direito (BRD)', tag:'atencao', tagL:'Contexto', keys:'bloqueio ramo direito brd rsr',
+      svg:traceRBBB,
+      crit:'QRS <strong>≥0,12 s</strong>, padrão <strong>rSR′</strong> ("orelhas de coelho") em V1, onda S alargada em DI e V6, inversão da T em V1–V3.',
+      sig:'Pode ser um achado normal/isolado. Quando novo, considerar embolia pulmonar, isquemia, cardiopatia ou doença do sistema de condução.',
+      cond:'BRD isolado e assintomático: geralmente sem significado patológico major. Novo BRD com sintomas: investigar a causa.' },
+
+    { id:'lbbb', name:'Bloqueio completo de ramo esquerdo (BRE)', tag:'urgente', tagL:'Avaliar', keys:'bloqueio ramo esquerdo bre',
+      svg:traceLBBB,
+      crit:'QRS <strong>≥0,12 s</strong>, R larga e entalhada em DI/V6, ausência de Q septais, alterações secundárias da repolarização (ST-T discordantes).',
+      sig:'Quase sempre indica doença cardíaca subjacente (cardiopatia isquémica, HVE, miocardiopatia). <strong>BRE de novo com dor torácica equipara-se a STEMI.</strong> Dificulta a leitura de isquemia.',
+      cond:'BRE de novo + sintomas isquémicos: ativar via coronária urgente. BRE isolado: referenciar para avaliação de cardiopatia.' },
+
+    { id:'pvc', name:'Extrassístole ventricular (ESV / PVC)', tag:'atencao', tagL:'Contexto', keys:'extrassistole ventricular esv pvc batimento ectopico',
+      svg:tracePVC,
+      crit:'Complexo <strong>largo e bizarro, prematuro</strong>, não precedido de onda P, com pausa compensadora. Onda T em sentido oposto ao QRS.',
+      sig:'Muito comuns e frequentemente benignas em corações estruturalmente normais. Carga elevada (&gt;10% no Holter) associa-se a risco de miocardiopatia induzida por ESV.',
+      cond:'Isoladas e assintomáticas: tranquilizar. Frequentes/sintomáticas ou em padrões repetitivos: quantificar no Holter, ecocardiograma e referenciar se carga elevada ou TVNS.' },
+
+    { id:'pac', name:'Extrassístole supraventricular (ESSV / PAC)', tag:'benigno', tagL:'Ger. benigno', keys:'extrassistole supraventricular essv pac auricular ectopico',
+      svg:tracePAC,
+      crit:'Batimento <strong>prematuro</strong> com onda P de morfologia diferente, seguido de QRS habitualmente <strong>estreito</strong> e pausa (não compensadora).',
+      sig:'Geralmente benignas. ESSV frequentes associam-se a maior probabilidade de desenvolver fibrilhação auricular.',
+      cond:'Isoladas: tranquilizar, reduzir cafeína/álcool/stress. Muito frequentes: considerar vigilância e rastreio de FA.' },
+
+    { id:'stemi', name:'Supradesnivelamento do ST (STEMI)', tag:'urgente', tagL:'Emergência', keys:'st supra elevacao enfarte stemi isquemia aguda',
+      svg:traceSTEMI,
+      crit:'<strong>Elevação do segmento ST</strong> (&gt;1 mm nas derivações dos membros ou &gt;2 mm nas precordiais) em ≥2 derivações contíguas, frequentemente com T altas e, mais tarde, ondas Q.',
+      sig:'Lesão miocárdica transmural por oclusão coronária aguda. <strong>Emergência médica</strong> — tempo é músculo.',
+      cond:'Ativar de imediato a via verde coronária / <strong>PCI primária</strong>. MONA-B/antiagregação conforme protocolo. Contactar laboratório de hemodinâmica.' },
+
+    { id:'ischemia', name:'Infradesnivelamento do ST / inversão da T (isquemia)', tag:'urgente', tagL:'Avaliar', keys:'st infra depressao isquemia inversao t onda',
+      svg:traceIschemia,
+      crit:'<strong>Infradesnivelamento do ST</strong> (plano ou descendente, &gt;0,5–1 mm) e/ou inversão simétrica da onda T em derivações contíguas.',
+      sig:'Sugere isquemia subendocárdica / síndrome coronária sem supra (NSTEMI/angina instável) quando associado a sintomas. Pode também refletir HVE com strain, fármacos ou distúrbios eletrolíticos.',
+      cond:'Com dor torácica: avaliar como SCA — troponinas seriadas, monitorização, referenciação. Sem sintomas: correlacionar com clínica e ECG prévio.' },
+
+    { id:'lvh', name:'Hipertrofia ventricular esquerda (HVE)', tag:'atencao', tagL:'Contexto', keys:'hipertrofia ventricular esquerda hve sokolow cornell',
+      svg:traceLVH,
+      crit:'Critérios de voltagem (ex.: <strong>Sokolow-Lyon S V1 + R V5/V6 ≥35 mm</strong>; Cornell), por vezes com padrão de sobrecarga (strain: infra-ST e T invertida em V5–V6) e HAE.',
+      sig:'Associada a HTA crónica, estenose aórtica e miocardiopatia hipertrófica. Marcador de risco cardiovascular acrescido; HVE com strain e QTc longo aumenta a mortalidade.',
+      cond:'Confirmar com ecocardiograma. Otimizar controlo tensional e fatores de risco. Referenciar se valvulopatia ou suspeita de miocardiopatia.' },
+
+    { id:'longqt', name:'Prolongamento do QT (QT longo)', tag:'urgente', tagL:'Avaliar', keys:'qt longo qtc prolongado torsades',
+      svg:traceLongQT,
+      crit:'<strong>QTc prolongado</strong> (&gt;0,44 s no homem / &gt;0,46 s na mulher; risco elevado se &gt;0,50 s), com segmento ST/T alongado.',
+      sig:'Predispõe a <strong>Torsades de Pointes</strong> e morte súbita. Causas: fármacos (muitos!), hipocaliémia, hipomagnesiémia, hipocalcémia, síndrome de QT longo congénito.',
+      cond:'Rever e suspender fármacos prolongadores do QT, corrigir eletrólitos. QTc &gt;500 ms ou história familiar de morte súbita: referenciação.' },
+
+    { id:'vt', name:'Taquicardia ventricular (TV)', tag:'urgente', tagL:'Emergência', keys:'taquicardia ventricular tv complexos largos',
+      svg:traceVT,
+      crit:'Sequência <strong>regular e rápida de complexos largos</strong> (≥3 batimentos a &gt;100 bpm). Sustentada se &gt;30 s ou com instabilidade.',
+      sig:'Taquicardia de complexos largos é TV até prova em contrário. Pode degenerar em fibrilhação ventricular. Risco de paragem cardíaca.',
+      cond:'Emergência. Avaliar estabilidade — instável: cardioversão. Suporte avançado de vida e referenciação imediata.' },
+
+    { id:'wpw', name:'Pré-excitação (Wolff-Parkinson-White)', tag:'atencao', tagL:'Avaliar', keys:'wpw wolff parkinson white pre-excitacao delta pr curto',
+      svg:traceWPW,
+      crit:'<strong>PR curto (&lt;0,12 s)</strong>, <strong>onda delta</strong> (empastamento inicial do QRS) e QRS alargado, por via acessória.',
+      sig:'A via acessória pode permitir taquicardias por reentrada (AVRT) e, na FA pré-excitada, condução muito rápida com risco de morte súbita.',
+      cond:'Referenciar a cardiologia/eletrofisiologia. A ablação da via acessória é curativa em casos sintomáticos ou de alto risco.' }
+  ];
+
+  // ---- render ECG cards ----
+  function renderECG(){
+    var c = document.getElementById('ecg-container'); var html='';
+    ECG_DATA.forEach(function(d){
+      html += '<div class="ecg-card" data-keys="'+(d.name+' '+d.keys).toLowerCase()+'">'
+        + '<button type="button" class="ecg-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+        + '<span class="ecg-name">'+d.name+'</span>'
+        + '<span style="display:flex;align-items:center;gap:10px;">'
+        + '<span class="ecg-tag '+d.tag+'">'+d.tagL+'</span><svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></button>'
+        + '<div class="ecg-body">'
+        + '<div class="ecg-trace">'+d.svg()+'</div>'
+        + '<div class="ecg-section criteria"><div class="es-label">Critérios no ECG</div><p>'+d.crit+'</p></div>'
+        + '<div class="ecg-section signif"><div class="es-label">Significado clínico</div><p>'+d.sig+'</p></div>'
+        + '<div class="ecg-section conduta"><div class="es-label">Conduta em MGF</div><p>'+d.cond+'</p></div>'
+        + '</div></div>';
+    });
+    c.innerHTML = html;
+    // open first by default
+    var first = c.querySelector('.ecg-card'); if(first) first.classList.add('open');
+  }
+
+  function filterECG(){
+    var q = document.getElementById('ecg-search').value.toLowerCase().trim();
+    document.querySelectorAll('#ferramenta .ecg-card').forEach(function(card){
+      var match = card.getAttribute('data-keys').indexOf(q) !== -1;
+      card.style.display = (q==='' || match) ? 'block' : 'none';
+    });
+  }
+
+  renderECG();
+
+  // =========================================================
+  //  HOLTER INTERPRETER
+  // =========================================================
+  function hv(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+
+  function interpretHolter(){
+    var avg=hv('h_avg'), min=hv('h_min'), max=hv('h_max'), total=hv('h_total');
+    var pvc=hv('h_pvc'), pac=hv('h_pac'), pause=hv('h_pause');
+    var nsvt=document.getElementById('h_nsvt').value==='yes';
+    var sympt=document.getElementById('h_sympt').value==='yes';
+    var rows=[];
+
+    function row(level,icon,title,text){ rows.push({level:level,icon:icon,title:title,text:text}); }
+
+    // FC média
+    if(avg!=null){
+      if(avg<50) row('warn','','FC média baixa ('+avg+' bpm)','Bradicardia média. Rever fármacos e função do nó sinusal; correlacionar com sintomas.');
+      else if(avg>100) row('warn','','FC média elevada ('+avg+' bpm)','Taquicardia média mantida. Procurar causa (febre, anemia, tiroide, IC, ansiedade).');
+      else row('ok','','FC média normal ('+avg+' bpm)','Dentro do intervalo de referência (60–90 bpm).');
+    }
+    // FC mínima
+    if(min!=null){
+      if(min<40) row('alert','','FC mínima muito baixa ('+min+' bpm)','Se ocorrer em vigília, sugere disfunção do nó sinusal — investigar. Em atletas/jovens durante o sono pode ser fisiológica.');
+      else if(min<=50) row('ok','','FC mínima '+min+' bpm','Compatível com bradicardia de sono / tónus vagal, habitualmente fisiológica.');
+      else row('ok','','FC mínima '+min+' bpm','Sem bradicardia significativa.');
+    }
+    // FC máxima
+    if(max!=null){
+      if(max>200) row('warn','','FC máxima '+max+' bpm','Pico muito elevado — verificar se corresponde a esforço ou a episódio de taquiarritmia (rever traçado).');
+      else row('ok','','FC máxima '+max+' bpm','Resposta cronotrópica registada; correlacionar com atividade/diário.');
+    }
+    // ESV burden
+    if(pvc!=null){
+      var pctV = (total!=null && total>0) ? (pvc/total*100) : null;
+      var pctTxt = pctV!=null ? (' ('+pctV.toFixed(1)+'% dos batimentos)') : '';
+      if(pvc<2000 && (pctV==null || pctV<1)){
+        row('ok','','ESV: '+pvc+'/24h'+pctTxt,'Carga baixa (&lt;1% / &lt;2000). Risco de doença estrutural ~0%. Habitualmente benigna.');
+      } else if(pvc<=10000 && (pctV==null || pctV<=10)){
+        row('warn','','ESV: '+pvc+'/24h'+pctTxt,'Carga intermédia (2000–10000 / 1–10%). Risco ~3% de doença estrutural. Ponderar ecocardiograma.');
+      } else {
+        row('alert','','ESV: '+pvc+'/24h'+pctTxt,'Carga elevada (&gt;10000 ou &gt;10%). Risco até ~30% de doença estrutural e de miocardiopatia induzida por ESV. Ecocardiograma + referenciar.');
+      }
+    }
+    // ESSV burden
+    if(pac!=null){
+      if(pac<200) row('ok','','ESSV: '+pac+'/24h','Carga baixa. Geralmente benigna.');
+      else if(pac<=500) row('warn','','ESSV: '+pac+'/24h','Frequentes. Vigiar — associam-se a maior risco de fibrilhação auricular.');
+      else row('alert','','ESSV: '+pac+'/24h','Muito frequentes (&gt;500/24h). Risco aumentado de FA — considerar rastreio.');
+    }
+    // Pause
+    if(pause!=null){
+      if(pause<2) row('ok','','Pausa máxima '+pause+' s','Sem pausas significativas (&lt;2 s).');
+      else if(pause<3) row('warn','','Pausa máxima '+pause+' s','Pausa intermédia (2–3 s). Em sono/atletas pode ser fisiológica; correlacionar com sintomas e hora.');
+      else row('alert','','Pausa máxima '+pause+' s','Pausa ≥3 s — significativa, sobretudo em vigília ou com sintomas. Investigar; com síncope é indicação de pacing.');
+    }
+    // NSVT
+    if(nsvt) row('alert','','TVNS documentada','Taquicardia ventricular não sustentada. Ecocardiograma e referenciação a cardiologia para estratificação de risco.');
+    // Symptoms correlation
+    if(sympt) row('alert','','Sintomas durante os achados','A correlação sintoma–ritmo é diagnóstica. Documentar no diário e valorizar na referenciação.');
+
+    if(rows.length===0){ mkAviso('Introduza pelo menos um valor para interpretar.'); return; }
+
+    // overall flag
+    var hasAlert = rows.some(r=>r.level==='alert');
+    var hasWarn = rows.some(r=>r.level==='warn');
+    var banner;
+    if(hasAlert) banner = {cls:'alert', icon:'', t:'Achados que requerem investigação / referenciação'};
+    else if(hasWarn) banner = {cls:'warn', icon:'', t:'Achados a correlacionar com a clínica'};
+    else banner = {cls:'ok', icon:'', t:'Sem achados de alarme — correlacionar com diário de sintomas'};
+
+    var html = '<div class="result-row '+banner.cls+'"><span class="rr-icon">'+banner.icon+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
+    rows.forEach(function(r){
+      html += '<div class="result-row '+r.level+'"><span class="rr-icon">'+r.icon+'</span><div><div class="rr-title">'+r.title+'</div><div class="rr-text">'+r.text+'</div></div></div>';
+    });
+    html += '<div class="info-block blue" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Nota:</strong> a carga de extrassístoles varia de dia para dia; um único registo de 24h pode subestimar a carga real. A decisão clínica deve integrar sintomas, ecocardiograma e contexto.</p></div>';
+
+    var res = document.getElementById('holter-result');
+    res.innerHTML = html; res.classList.add('visible');
+    res.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function resetHolter(){
+    ['h_avg','h_min','h_max','h_total','h_pvc','h_pac','h_pause'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('h_nsvt').value='no'; document.getElementById('h_sympt').value='no';
+    document.getElementById('holter-result').classList.remove('visible');
+  }
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>
