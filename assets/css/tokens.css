@@ -1,0 +1,60 @@
+/* =====================================================================
+   MGF no Plural — variáveis da marca (cores, letras, medidas)
+   Fonte única para o site e para todas as ferramentas.
+   Ver GUIA-DESIGN.md. Não usar cores fora desta lista.
+   ===================================================================== */
+
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/bricolage-grotesque-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/bricolage-grotesque-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 800; font-display: swap; src: url("../fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: italic; font-weight: 400; font-display: swap; src: url("../fonts/atkinson-hyperlegible-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: italic; font-weight: 700; font-display: swap; src: url("../fonts/atkinson-hyperlegible-latin-700-italic.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+
+:root {
+  /* Marca */
+  --cor-verde: #0F6E64;          /* Verde Consulta: botões, links, destaque */
+  --cor-verde-fundo: #13423D;    /* Verde Fundo: hover, estados ativos */
+  --cor-verde-medio: #2E9C8C;    /* linhas, realces */
+  --cor-menta: #8FCFC0;          /* etiquetas, ilustração */
+  --cor-menta-clara: #D7EDE7;    /* fundos suaves */
+  --cor-ambar: #DE9B2C;          /* miolo do símbolo, superfícies (nunca texto) */
+  --cor-ambar-texto: #845406;    /* único âmbar legível como texto */
+  --cor-ambar-claro: #F8E7C4;    /* fundos quentes */
+  --cor-mostarda: #E8B547;
+  --cor-areia: #E9E4D8;
+
+  /* Neutros */
+  --cor-tinta: #13201E;          /* texto principal, fundos escuros */
+  --cor-texto-2: #2C3A38;        /* texto secundário */
+  --cor-texto-3: #4B5B58;        /* etiquetas, metadados */
+  --cor-papel: #F6F7F4;          /* fundo geral */
+  --cor-branco: #FFFFFF;         /* cartões */
+  --cor-linha: #DCE3E0;          /* bordas */
+  --cor-linha-suave: #E3E9E6;
+  --cor-campo: #B9C6C2;          /* borda de campos de formulário */
+
+  /* Cores clínicas: iguais em todas as ferramentas. NÃO são cores da marca.
+     A cor nunca é o único sinal: o texto diz sempre o nível. */
+  --clin-normal: #1B6B35;  --clin-normal-fundo: #E8F5EC;  --clin-normal-borda: #3E9A5C;
+  --clin-atencao: #7A4A00; --clin-atencao-fundo: #FFF4D6; --clin-atencao-borda: #D99A00;
+  --clin-alerta: #9E2318;  --clin-alerta-fundo: #FDECEA;  --clin-alerta-borda: #D2483C;
+  --clin-info: #1C4A80;    --clin-info-fundo: #EAF1FA;    --clin-info-borda: #4A80BF;
+
+  /* Letras */
+  --letra-titulo: "Bricolage Grotesque", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --letra-texto: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --letra-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Medidas */
+  --raio-p: 8px;
+  --raio: 14px;
+  --raio-g: 20px;
+  --raio-forma: 46% 54% 52% 48% / 55% 43% 57% 45%;  /* mancha orgânica */
+  --sombra: 0 1px 2px rgba(19, 32, 30, .06);
+  --sombra-alta: 0 18px 32px -20px rgba(19, 32, 30, .5);
+  --mola: cubic-bezier(.3, 1.5, .5, 1);               /* animação com ressalto */
+}
