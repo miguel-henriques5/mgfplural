@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Planificação da vigilância da gravidez · MGF no Plural</title>
+<meta name="description" content="Datas das consultas, análises, ecografias, rastreios e vacinas numa gravidez de baixo risco, a partir da DUM, da ecografia ou da idade gestacional.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+.plano { min-width: 560px; }
+.plano td { vertical-align: middle; }
+.plano td:first-child { display: flex; align-items: center; gap: 10px; }
+.plano td:first-child span.texto { display: flex; flex-direction: column; }
+.plano small, .plano .datas span { font-size: 13px; color: var(--cor-texto-3); }
+.plano .datas { display: flex; flex-direction: column; gap: 1px; }
+.plano tr[data-estado="past"] td { color: var(--cor-texto-3); }
+.plano tr[data-estado="current"] { background: var(--clin-atencao-fundo); }
+.ponto { display: inline-block; flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; }
+.ponto[data-estado="current"] { background: var(--clin-atencao-borda); }
+.ponto[data-estado="future"] { background: var(--clin-normal-borda); }
+.ponto[data-estado="past"] { background: var(--cor-campo); }
+.semana { display: inline-block; font-family: var(--letra-mono); font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.semana[data-t="1t"] { background: var(--cor-menta-clara); }
+.semana[data-t="2t"] { background: var(--cor-ambar-claro); }
+.semana[data-t="3t"] { background: var(--cor-areia); }
+.semana[data-t="vac"] { background: var(--clin-info-fundo); color: var(--clin-info); }
+.semana[data-t="str"] { background: var(--cor-papel); border: 1px solid var(--cor-linha); }
+.plano-alertas { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.plano-legenda { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; color: var(--cor-texto-2); margin: 0 0 12px; }
+.plano-legenda > span { display: inline-flex; align-items: center; gap: 6px; }
+.plano-seccao h3.mgf-cartao-titulo { font-size: 15px; margin: 0; }
+.so-imprimir { display: none; }
+@media print {
+  #dados { display: none !important; }
+  .so-imprimir { display: flex; }
+  .plano-impressao { justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--cor-linha); border-radius: 8px; font-size: 13px; }
+  .plano { min-width: 0; font-size: 12px; }
+  .plano-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .plano-grelha .mgf-cartao { margin: 0; }
+  .plano-alertas .mgf-interp { padding: 6px 10px; font-size: 12px; }
+}
+</style>
+</head>
+<body data-ferramenta="planificacao-vigilancia-gravidez" data-titulo="Planificação da vigilância da gravidez">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-layout">
+<nav class="ferramenta-lateral" aria-label="Escalas e calculadoras">
+<a href="../index.html">← Recursos médicos</a>
+<span class="ferramenta-lateral-grupo"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</span>
+<a href="planificacao-vigilancia-gravidez.html" aria-current="page">Planificação da vigilância da gravidez</a><a href="escalas-cardiovasculares.html">Escalas cardiovasculares</a><a href="escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a href="escalas-saude-mental.html">Escalas de saúde mental</a><a href="escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a>
+</nav>
+<div class="ferramenta-principal" id="conteudo">
+<ol class="migalhas" aria-label="Estás aqui">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><a href="../index.html#escalas-e-calculadoras">Escalas e calculadoras</a></li>
+<li aria-current="page">Planificação da vigilância da gravidez</li>
+</ol>
+<div class="ficha">
+<div class="ficha-linha">
+<div class="ficha-titulo">
+<h1>Planificação da vigilância da gravidez</h1>
+<div class="ficha-meta">
+<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
+<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+</div>
+</div>
+<div class="ficha-acoes">
+<a class="botao botao-principal" href="../../../descarregar/planificacao-vigilancia-gravidez.html" download="planificacao-vigilancia-gravidez.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+</div>
+</div>
+<div class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt=""><span>Apoia, não substitui, o juízo clínico. O que escreves aqui fica só neste computador: não escrevas dados que identifiquem doentes.</span></div>
+</div>
+<div class="area-ferramenta">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <form class="mgf-cartao" id="dados" novalidate>
+    <div class="mgf-cartao-titulo">Dados da grávida</div>
+    <div class="mgf-cartao-corpo" style="gap:16px">
+      <label class="mgf-campo">Nome da grávida (opcional, só para imprimir)<input type="text" id="nome" autocomplete="off"><small>Não fica guardado.</small></label>
+      <div class="mgf-campo" role="group" aria-labelledby="base-rotulo">
+        <span id="base-rotulo">Base de cálculo</span>
+        <div class="mgf-filtros" id="modos">
+          <button type="button" data-modo="dum" aria-pressed="true">DUM — último período menstrual</button>
+          <button type="button" data-modo="eco" aria-pressed="false">Ecografia do 1.º trimestre</button>
+          <button type="button" data-modo="ig" aria-pressed="false">Idade gestacional atual</button>
+        </div>
+      </div>
+      <div class="mgf-campos">
+        <label class="mgf-campo" data-modo-campo="dum">1.º dia do último período menstrual (DUM)<input type="date" id="dum"><small>A data provável do parto é a DUM + 280 dias (40 semanas).</small></label>
+        <label class="mgf-campo" data-modo-campo="eco" hidden>Data da ecografia do 1.º trimestre<input type="date" id="eco-data"></label>
+        <div class="mgf-campo" data-modo-campo="eco" hidden><span>Idade gestacional na ecografia</span>
+          <div style="display:flex;gap:8px">
+            <input type="number" id="eco-semanas" aria-label="Semanas" placeholder="Semanas" min="8" max="14" style="width:50%">
+            <input type="number" id="eco-dias" aria-label="Dias" placeholder="Dias" min="0" max="6" style="width:50%">
+          </div><small>11–13 semanas + 6 dias (ecografia do 1.º trimestre)</small></div>
+        <label class="mgf-campo" data-modo-campo="ig" hidden>Idade gestacional atual — semanas<input type="number" id="ig-semanas" placeholder="Ex.: 16" min="4" max="42"></label>
+        <label class="mgf-campo" data-modo-campo="ig" hidden>Idade gestacional atual — dias<input type="number" id="ig-dias" placeholder="Ex.: 3" min="0" max="6"><small>Data de referência: hoje (<span id="hoje"></span>)</small></label>
+        <label class="mgf-campo">Grupo Rh<select id="rh"><option value="">Não especificado</option><option value="pos">Rh positivo</option><option value="neg">Rh negativo — necessita imunoglobulina anti-D</option></select></label>
+      </div>
+      <p class="mgf-mensagem" id="mensagem" role="alert"></p>
+      <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular plano de vigilância</button></div>
+    </div>
+  </form>
+
+  <div id="plano" hidden>
+    <p class="so-imprimir plano-impressao"><strong id="imprimir-nome"></strong><span id="imprimir-data"></span></p>
+    <div class="mgf-resumo" id="resumo">
+      <div><span class="mgf-resumo-rotulo">DPP</span><span class="mgf-resumo-valor" id="res-dpp">—</span><span class="mgf-resumo-sub">Data provável do parto</span></div>
+      <div><span class="mgf-resumo-rotulo">Idade gestacional hoje</span><span class="mgf-resumo-valor" id="res-ig">—</span><span class="mgf-resumo-sub">semanas + dias</span></div>
+      <div><span class="mgf-resumo-rotulo">Trimestre</span><span class="mgf-resumo-valor" id="res-trim">—</span><span class="mgf-resumo-sub" id="res-trim-rotulo">—</span></div>
+    </div>
+    <div class="plano-alertas">
+      <p class="mgf-interp" data-nivel="alerta" id="alerta-rh" hidden><strong>Rh negativo</strong> — Imunoglobulina anti-D programada para as 28 semanas (<span id="alerta-rh-data"></span>)</p>
+      <p class="mgf-interp" data-nivel="info" id="alerta-tdpa"><strong>Vacina Tdpa</strong> — Entre as 20 e 36 semanas (idealmente às 32 semanas). Data ideal: <span id="alerta-tdpa-data"></span></p>
+      <p class="mgf-interp" data-nivel="atencao" id="alerta-termo"><strong>Consultas semanais na Maternidade</strong> — A partir das 38 semanas (<span id="alerta-termo-data"></span>)</p>
+    </div>
+    <p class="plano-legenda"><span><span class="ponto" data-estado="current"></span> Em curso</span><span><span class="ponto" data-estado="future"></span> Pendente</span><span><span class="ponto" data-estado="past"></span> Realizado</span></p>
+    <div class="plano-grelha">
+    <section class="mgf-cartao plano-seccao" id="sec-consultas">
+      <h3 class="mgf-cartao-titulo">Consultas de vigilância — centro de saúde</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Consulta</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-consultas-linhas"></tbody>
+        </table>
+      </div>
+      <p class="mgf-nota" style="margin:0 14px 14px">Nas grávidas seguidas em protocolo partilhado CSP/Maternidade, a 5.ª e a 6.ª consultas (30–33 semanas) podem ser da responsabilidade dos cuidados primários.</p>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-analises">
+      <h3 class="mgf-cartao-titulo">Análises de sangue</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Análises</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-analises-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-ecografias">
+      <h3 class="mgf-cartao-titulo">Ecografias</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Ecografia</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-ecografias-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-rastreios">
+      <h3 class="mgf-cartao-titulo">Rastreios bioquímicos</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Rastreio</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-rastreios-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-vacinas">
+      <h3 class="mgf-cartao-titulo">Vacinas e procedimentos especiais</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Procedimento</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-vacinas-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-maternidade">
+      <h3 class="mgf-cartao-titulo">Consultas na Maternidade / consultório</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Consulta</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-maternidade-linhas"></tbody>
+        </table>
+      </div>
+      <p class="mgf-nota" style="margin:0 14px 14px">A partir das 38 semanas, consultas semanais de vigilância na Maternidade.</p>
+    </section>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" id="recalcular"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Recalcular</button>
+      <button type="button" class="mgf-botao" id="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir plano</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" id="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resumo</button>
+    </div>
+  </div>
+
+</main>
+</div>
+<div class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>DGS. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: Direção-Geral da Saúde; 2015.</li><li>DGS. Normas de Orientação Clínica — Vigilância da Gravidez de Baixo Risco.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</div>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="escalas-cardiovasculares.html"><span>Seguinte →</span><strong>Escalas cardiovasculares</strong></a></nav>
+</div>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+(function () {
+  "use strict";
+  /* Cálculos de datas iguais à versão original (UTC, para evitar erros com a hora de verão). */
+  var agora = new Date();
+  var hoje = new Date(Date.UTC(agora.getFullYear(), agora.getMonth(), agora.getDate()));
+  function $(id) { return document.getElementById(id); }
+  function fmtData(d) {
+    if (!d || isNaN(d)) return "—";
+    return String(d.getUTCDate()).padStart(2, "0") + "/" + String(d.getUTCMonth() + 1).padStart(2, "0") + "/" + d.getUTCFullYear();
+  }
+  function somarDias(d, n) { return new Date(d.getTime() + n * 86400000); }
+  function igDaDum(dum) {
+    var dias = Math.round((hoje.getTime() - dum.getTime()) / 86400000);
+    return { semanas: Math.floor(dias / 7), dias: dias % 7 };
+  }
+  function dumDaIg(semanas, dias) { return new Date(hoje.getTime() - (semanas * 7 + parseInt(dias || 0, 10)) * 86400000); }
+  function dataNaSemana(dum, s, d) { return somarDias(dum, s * 7 + (d || 0)); }
+  function estado(dum, s1, d1, s2, d2) {
+    var i = dataNaSemana(dum, s1, d1), f = dataNaSemana(dum, s2, d2);
+    if (hoje > f) return "past";
+    if (hoje >= i && hoje <= f) return "current";
+    return "future";
+  }
+  var ROTULO = { past: "Realizado", current: "Em curso", future: "Pendente" };
+  $("hoje").textContent = fmtData(hoje);
+
+  /* Modo de cálculo */
+  var modo = "dum";
+  $("modos").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    modo = b.dataset.modo;
+    $("modos").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    document.querySelectorAll("[data-modo-campo]").forEach(function (c) { c.hidden = c.dataset.modoCampo !== modo; });
+  });
+
+  function linha(dum, rotulo, s1, d1, s2, d2, t, sIdeal, dIdeal) {
+    var est = estado(dum, s1, d1, s2, d2);
+    var ideal = sIdeal !== undefined ? "<span>(ideal: " + fmtData(dataNaSemana(dum, sIdeal, dIdeal || 0)) + ")</span>" : "";
+    return '<tr data-estado="' + est + '">' +
+      '<td><span class="ponto" data-estado="' + est + '"></span><span class="texto"><strong>' + rotulo + "</strong><small>" + ROTULO[est] + "</small></span></td>" +
+      '<td><span class="semana" data-t="' + t + '">' + s1 + "s" + (d1 ? "+" + d1 + "d" : "") + " – " + s2 + "s" + (d2 ? "+" + d2 + "d" : "") + "</span></td>" +
+      '<td class="datas"><span>De: ' + fmtData(dataNaSemana(dum, s1, d1)) + "</span><span>Até: " + fmtData(dataNaSemana(dum, s2, d2)) + "</span>" + ideal + "</td></tr>";
+  }
+  function dataDoCampo(v) { var p = v.split("-").map(Number); return new Date(Date.UTC(p[0], p[1] - 1, p[2])); }
+
+  function calcular() {
+    var dum, msg = $("mensagem");
+    if (modo === "dum") {
+      var v = $("dum").value;
+      if (!v) { msg.textContent = "Introduza a data da DUM."; return; }
+      dum = dataDoCampo(v);
+    } else if (modo === "eco") {
+      var ed = $("eco-data").value, es = parseInt($("eco-semanas").value, 10), edias = parseInt($("eco-dias").value, 10) || 0;
+      if (!ed || isNaN(es)) { msg.textContent = "Introduza a data e a IG da ecografia."; return; }
+      dum = somarDias(dataDoCampo(ed), -(es * 7 + edias));
+    } else {
+      var is = parseInt($("ig-semanas").value, 10), idias = parseInt($("ig-dias").value, 10) || 0;
+      if (isNaN(is)) { msg.textContent = "Introduza a idade gestacional atual."; return; }
+      dum = dumDaIg(is, idias);
+    }
+    msg.textContent = "";
+    var dpp = somarDias(dum, 280), ig = igDaDum(dum), rh = $("rh").value, nome = $("nome").value.trim();
+    $("res-dpp").textContent = fmtData(dpp);
+    $("res-ig").textContent = ig.semanas + "s + " + ig.dias + "d";
+    var trim = ig.semanas < 14 ? "1º" : ig.semanas < 28 ? "2º" : "3º";
+    $("res-trim").textContent = trim;
+    $("res-trim-rotulo").textContent = trim + " Trimestre";
+    $("imprimir-nome").textContent = nome || "Grávida";
+    $("imprimir-data").textContent = "Plano gerado a " + fmtData(hoje);
+    var rhNeg = rh === "neg";
+    $("alerta-rh-data").textContent = fmtData(dataNaSemana(dum, 28));
+    $("alerta-rh").hidden = !rhNeg;
+    $("alerta-tdpa-data").textContent = fmtData(dataNaSemana(dum, 32));
+    $("alerta-termo-data").textContent = fmtData(dataNaSemana(dum, 38));
+
+    $("sec-consultas-linhas").innerHTML =
+      linha(dum, "1ª Consulta", 0, 0, 11, 6, "1t") + linha(dum, "2ª Consulta", 12, 0, 18, 6, "1t") +
+      linha(dum, "3ª Consulta", 19, 0, 24, 6, "2t") + linha(dum, "4ª Consulta", 25, 0, 30, 6, "2t") +
+      linha(dum, "5ª Consulta", 31, 0, 33, 6, "3t") + linha(dum, "6ª Consulta", 34, 0, 36, 6, "3t") +
+      linha(dum, "7ª Consulta", 37, 0, 38, 6, "3t");
+    $("sec-analises-linhas").innerHTML =
+      linha(dum, "Análises 1º Trimestre", 0, 0, 12, 6, "1t") +
+      linha(dum, "Análises 2º Trim. — Rubéola / Urocult.", 18, 0, 20, 6, "2t") +
+      linha(dum, "Análises 2º Trim. — PTGO / Hgrama / Coombs", 24, 0, 28, 6, "2t") +
+      linha(dum, "Análises 3º Trimestre", 32, 0, 34, 6, "3t");
+    $("sec-ecografias-linhas").innerHTML =
+      linha(dum, "Ecografia 1º Trimestre", 11, 0, 13, 6, "1t") +
+      linha(dum, "Ecografia Morfológica 2º Trim.", 20, 0, 22, 6, "2t") +
+      linha(dum, "Ecografia 3º Trimestre", 30, 0, 32, 6, "3t");
+    $("sec-rastreios-linhas").innerHTML =
+      linha(dum, "Rastreio Combinado 1º Trim.", 11, 0, 13, 6, "1t", 12, 0) +
+      linha(dum, "Rastreio Bioquímico 2º Trim.", 15, 0, 20, 6, "2t", 16, 0);
+    var vac = linha(dum, "Tdpa (tosse convulsa)", 20, 0, 36, 6, "vac", 32, 0);
+    if (rhNeg) vac += linha(dum, "Imunoglobulina anti-D", 27, 0, 28, 6, "vac", 28, 0);
+    vac += linha(dum, "Colheita Streptococcus β hem. (SGB)", 35, 0, 37, 6, "str");
+    $("sec-vacinas-linhas").innerHTML = vac;
+    $("sec-maternidade-linhas").innerHTML =
+      linha(dum, "Consulta de Obstetrícia (1ª ref.)", 0, 0, 11, 6, "1t") +
+      linha(dum, "Consultas semanais (≥ 38 semanas)", 38, 0, 41, 6, "3t");
+    $("plano").hidden = false;
+    $("resumo").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("dados").addEventListener("submit", function (e) { e.preventDefault(); calcular(); });
+  $("recalcular").addEventListener("click", function () { $("plano").hidden = true; window.scrollTo({ top: 0, behavior: "smooth" }); });
+  $("imprimir").addEventListener("click", function () { window.print(); });
+  $("copiar").addEventListener("click", function () {
+    var nome = $("nome").value.trim();
+    var l = ["PLANO DE VIGILÂNCIA DA GRAVIDEZ"];
+    if (nome) l.push("Grávida: " + nome);
+    l.push("Data do plano: " + fmtData(hoje));
+    l.push("IG atual: " + $("res-ig").textContent + " (" + $("res-trim").textContent + " trimestre)");
+    l.push("DPP: " + $("res-dpp").textContent);
+    l.push("");
+    function seccao(id) {
+      var out = [];
+      document.querySelectorAll("#" + id + "-linhas tr").forEach(function (tr) {
+        var c = tr.querySelectorAll("td");
+        var datas = Array.prototype.map.call(c[2].querySelectorAll("span"), function (s) { return s.textContent; }).join(" | ");
+        out.push("  · " + c[0].querySelector("strong").textContent + " [" + c[1].textContent + "] — " + datas);
+      });
+      return out;
+    }
+    [["CONSULTAS (Centro de Saúde):", "sec-consultas"], ["ANÁLISES:", "sec-analises"], ["ECOGRAFIAS:", "sec-ecografias"],
+     ["RASTREIOS BIOQUÍMICOS:", "sec-rastreios"], ["VACINAS E PROCEDIMENTOS:", "sec-vacinas"]].forEach(function (s, i) {
+      if (i) l.push("");
+      l.push(s[0]); l = l.concat(seccao(s[1]));
+    });
+    MGF.copiar(l.join("\n"), this);
+  });
+})();
+</script>
+</body>
+</html>
