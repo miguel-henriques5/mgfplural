@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Ecografia renal e vesical e urofluxometria · MGF no Plural</title>
+<meta name="description" content="Atlas de achados na ecografia renal e vesical, classificação de Bosniak dos quistos, hidronefrose, cálculos e interpretação da urofluxometria.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #845406; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #F8E7C4; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #845406; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #F8E7C4; color: #845406; border: 2px solid transparent; border-radius: 8px; padding: 8px 14px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #845406; color: #FFFFFF; border-color: #845406; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .search-box { width: 100%; border: 1.5px solid #F8E7C4; border-radius: 10px; padding: 11px 16px; font-size: 15px; color: #845406; background: #FFFFFF; margin-bottom: 16px; }
+#ferramenta .search-box:focus { outline: none; border-color: #845406; }
+#ferramenta .pat-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); overflow: hidden; margin-bottom: 16px; border: 1px solid #F8E7C4; }
+#ferramenta .pat-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #F8E7C4; }
+#ferramenta .pat-head:hover { background: #F8E7C4; }
+#ferramenta .pat-name { font-size: 15px; font-weight: 700; color: #845406; }
+#ferramenta .pat-tag { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+#ferramenta .pat-tag.benigno { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .pat-tag.seguir { background: #EAF1FA; color: #1C4A80; }
+#ferramenta .pat-tag.atencao { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .pat-tag.urgente { background: #FDECEA; color: #9E2318; }
+#ferramenta .pat-toggle { font-size: 18px; color: #845406; transition: transform 0.2s; }
+#ferramenta .pat-card.open .pat-toggle { transform: rotate(180deg); }
+#ferramenta .pat-body { display: none; padding: 0 18px 18px; }
+#ferramenta .pat-card.open .pat-body { display: block; }
+#ferramenta .pat-graph { width: 100%; background: #13201E; border-radius: 8px; margin-bottom: 14px; overflow: hidden; display: flex; justify-content: center; padding: 8px; }
+#ferramenta .pat-graph svg { width: 100%; max-width: 300px; height: auto; display: block; }
+#ferramenta .pat-section { margin-bottom: 12px; }
+#ferramenta .pat-section .ps-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+#ferramenta .pat-section.descr .ps-label { color: #845406; }
+#ferramenta .pat-section.signif .ps-label { color: #4B5B58; }
+#ferramenta .pat-section.conduta .ps-label { color: #1B6B35; }
+#ferramenta .pat-section p { font-size: 14px; color: #845406; line-height: 1.6; }
+#ferramenta .pat-section strong { font-weight: 700; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #845406; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 11px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 11px; font-size: 13.5px; color: #845406; border-bottom: 1px solid #F8E7C4; vertical-align: top; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #F8E7C4; }
+#ferramenta .data-table .term { font-weight: 700; color: #845406; }
+#ferramenta .badge { border-radius: 5px; padding: 2px 8px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+#ferramenta .b-green { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .b-blue { background: #EAF1FA; color: #1C4A80; }
+#ferramenta .b-orange { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .b-red { background: #FDECEA; color: #9E2318; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.gold { background: #F8E7C4; border-left: 4px solid #845406; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #845406; line-height: 1.65; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.gold .ib-title { color: #845406; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #F8E7C4; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #845406; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #845406; line-height: 1.5; }
+#ferramenta .step-text strong { color: #845406; }
+#ferramenta .subgroup-lbl { font-size: 13px; font-weight: 700; color: #845406; text-transform: uppercase; letter-spacing: 0.8px; margin: 18px 4px 10px; padding-bottom: 6px; border-bottom: 2px solid #F8E7C4; }
+#ferramenta .section-intro { font-size: 14px; color: #2C3A38; line-height: 1.6; margin-bottom: 14px; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 5px; }
+#ferramenta label { font-size: 13px; font-weight: 600; color: #2C3A38; }
+#ferramenta input[type="number"], #ferramenta select { border: 1.5px solid #F8E7C4; border-radius: 8px; padding: 8px 12px; font-size: 15px; color: #845406; background: #F8E7C4; width: 100%; appearance: auto; -webkit-appearance: auto; }
+#ferramenta input:focus, #ferramenta select:focus { outline: none; border-color: #845406; background: #FFFFFF; }
+#ferramenta .field-hint { font-size: 13px; color: #2C3A38; font-style: italic; }
+#ferramenta .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+#ferramenta .btn-primary { background: #845406; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 22px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-primary:hover { background: #845406; }
+#ferramenta .btn-secondary { background: #F8E7C4; color: #845406; border: 1.5px solid #F8E7C4; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .calc-result { display: none; margin-top: 18px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 9px; margin-bottom: 9px; }
+#ferramenta .result-row.ok { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .result-row.warn { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .result-row.alert { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .result-row.info { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .result-row .rr-icon { font-size: 16px; line-height: 1.3; font-weight: 700; }
+#ferramenta .result-row .rr-title { font-size: 14px; font-weight: 700; color: #845406; margin-bottom: 2px; }
+#ferramenta .result-row .rr-text { font-size: 13.5px; color: #845406; line-height: 1.5; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #2C3A38; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #F8E7C4; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #F8E7C4; color: #845406; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #F8E7C4; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #F8E7C4; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+#ferramenta .pat-graph { background: #0d0f14; }
+</style>
+</head>
+<body data-ferramenta="ecografia-renal-vesical-urofluxometria" data-titulo="Ecografia renal e vesical e urofluxometria">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-layout">
+<nav class="ferramenta-lateral" aria-label="Interpretar exames">
+<a href="../index.html">← Recursos médicos</a>
+<span class="ferramenta-lateral-grupo"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</span>
+<a href="interpretar-analises.html">Análises clínicas</a><a href="ecg-e-holter.html">ECG e Holter</a><a href="espirometria.html">Espirometria</a><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a href="ecocardiograma.html">Ecocardiograma</a><a href="ecografia-renal-vesical-urofluxometria.html" aria-current="page">Ecografia renal e vesical e urofluxometria</a><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a>
+</nav>
+<div class="ferramenta-principal" id="conteudo">
+<ol class="migalhas" aria-label="Estás aqui">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><a href="../index.html#interpretar-exames">Interpretar exames</a></li>
+<li aria-current="page">Ecografia renal e vesical e urofluxometria</li>
+</ol>
+<div class="ficha">
+<div class="ficha-linha">
+<div class="ficha-titulo">
+<h1>Ecografia renal e vesical e urofluxometria</h1>
+<div class="ficha-meta">
+<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
+<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+</div>
+</div>
+<div class="ficha-acoes">
+<a class="botao botao-principal" href="../../../descarregar/ecografia-renal-vesical-urofluxometria.html" download="ecografia-renal-vesical-urofluxometria.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecografia%20renal%20e%20vesical%20e%20urofluxometria%20%28v1.0%29&body=Ferramenta%3A%20Ecografia%20renal%20e%20vesical%20e%20urofluxometria%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+</div>
+</div>
+<div class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt=""><span>Apoia, não substitui, o juízo clínico. O que escreves aqui fica só neste computador: não escrevas dados que identifiquem doentes.</span></div>
+</div>
+<div class="area-ferramenta">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Atlas de achados, classificação de Bosniak e orientações clínicas.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-renal" aria-controls="tab-renal" aria-selected="true">Ecografia Renal</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-bosniak" aria-controls="tab-bosniak" aria-selected="false">Quistos (Bosniak)</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-hidro" aria-controls="tab-hidro" aria-selected="false">Hidronefrose</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-calculo" aria-controls="tab-calculo" aria-selected="false">Cálculos</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-vesical" aria-controls="tab-vesical" aria-selected="false">Ecografia Vesical</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-urofluxo" aria-controls="tab-urofluxo" aria-selected="false">Urofluxometria</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> As imagens são <strong>esquemáticas</strong> (ilustram a morfologia típica do achado) e não substituem a leitura do exame real nem o relatório do médico que realiza a ecografia. A ecografia é operador-dependente; a classificação de Bosniak foi validada sobretudo para <strong>TC/RM</strong> (a ecografia, mesmo com contraste, tem limitações). Interprete sempre no contexto clínico.</p>
+  <div class="mgf-painel mk-painel" id="tab-renal" role="tabpanel" aria-labelledby="sep-renal"></div>
+  <div class="mgf-painel mk-painel" id="tab-bosniak" role="tabpanel" aria-labelledby="sep-bosniak" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-hidro" role="tabpanel" aria-labelledby="sep-hidro" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-calculo" role="tabpanel" aria-labelledby="sep-calculo" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-vesical" role="tabpanel" aria-labelledby="sep-vesical" hidden></div>
+  <div class="mgf-painel mk-painel" id="tab-urofluxo" role="tabpanel" aria-labelledby="sep-urofluxo" hidden></div>
+  
+  <div class="tool-footer">
+    As imagens são representações esquemáticas para fins educativos.<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o relatório do radiologista/ecografista nem o julgamento do médico.</em>
+    <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
+  </div>
+
+</main>
+</div>
+<div class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>The Radiology Assistant. Bosniak Classification 2019. https://radiologyassistant.nl/abdomen/kidney/bozniak-2019</li><li>Silverman SG, et al. Bosniak Classification of Cystic Renal Masses, Version 2019. Radiology 2019. https://pubs.rsna.org/doi/full/10.1148/radiol.2019182646</li><li>McGrath TA, et al. Proportion of malignancy in Bosniak v2019 classes: systematic review and meta-analysis. Eur Radiol 2023. https://pubmed.ncbi.nlm.nih.gov/35999371/</li><li>StatPearls / NCBI. Simple Renal Cyst. https://www.ncbi.nlm.nih.gov/books/NBK499900/</li><li>AUA. Surgical Management of Kidney and Ureteral Stones: Guideline (2025). https://www.auanet.org/guidelines-and-quality/guidelines/surgical-management-of-kidney-and-ureteral-stones</li><li>EAU. Guidelines on Urolithiasis (2025). https://uroweb.org/guidelines/urolithiasis</li><li>emDocs. Urolithiasis: ED Presentations, Evaluation, Management. https://www.emdocs.net/urolithiasis-ed-presentations-evaluation-management-and-disposition/</li><li>Leo MM, et al. Ultrasound vs CT for severity of hydronephrosis in renal colic. West J Emerg Med 2017. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5468059/</li><li>ACEP EM Ultrasound. POCUS for Bladder Assessment and Volume. https://www.acep.org/emultrasound/newsroom/may-2022/pocus-for-bladder-assessment-and-volume-technique-tips-and-role-in-system-wide-use</li><li>European Urology. Non-invasive diagnosis of bladder outlet obstruction (DWT, uroflowmetry) 2007. https://urology.med.ubc.ca/files/2008/09/diagnosis-boo.pdf</li><li>JMIR / PMC. Uroflowmetry curve types (bell, plateau, tower, staccato, interrupted). https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10618888/</li><li>Radiology Key / ScienceDirect. Simple and complex renal cysts: classification. https://www.sciencedirect.com/science/article/pii/S2211568417302498</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecografia%20renal%20e%20vesical%20e%20urofluxometria%20%28v1.0%29&body=Ferramenta%3A%20Ecografia%20renal%20e%20vesical%20e%20urofluxometria%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</div>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="ecocardiograma.html"><span>← Anterior</span><strong>Ecocardiograma</strong></a><a class="seguinte" href="tc-cerebral-e-coluna.html"><span>Seguinte →</span><strong>TC cerebral e da coluna</strong></a></nav>
+</div>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+
+  // =====================================================================
+  //  SVG SCHEMATIC GENERATORS (own ultrasound-style graphics)
+  //  Dark background like a US screen. viewBox 0 0 240 200
+  // =====================================================================
+  var US_BG='#0d0f14', CORTEX='#5a5e6e', SINUS='#cfcab8', ANEC='#11141c', WALL='#e6e2d2', STONE='#ffffff', SHADOW='#05060a', BLADDER='#13161f', BWALL='#8d8f9c';
+
+  function renalBase(extra, opts){
+    opts=opts||{};
+    var s='<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="200" fill="'+US_BG+'"/>';
+    // kidney bean shape (cortex)
+    var cortex = opts.cortex!=null?opts.cortex:CORTEX;
+    s+='<path d="M70 30 Q150 18 168 70 Q178 100 168 130 Q150 182 70 170 Q40 150 42 100 Q40 50 70 30 Z" fill="'+cortex+'"/>';
+    // central sinus (echogenic, bright) unless overridden
+    if(!opts.noSinus){
+      s+='<path d="M86 60 Q140 55 146 100 Q140 145 86 140 Q70 100 86 60 Z" fill="'+(opts.sinus||SINUS)+'"/>';
+    }
+    if(extra) s+=extra;
+    s+='</svg>';
+    return s;
+  }
+
+  // ---- RENAL findings ----
+  function rNormal(){ return renalBase(''); }
+  function rSimpleCyst(){
+    var c='<ellipse cx="120" cy="78" rx="26" ry="24" fill="'+ANEC+'" stroke="'+WALL+'" stroke-width="1.2"/>'
+      + '<rect x="100" y="104" width="40" height="36" fill="#1b2030" opacity="0.55"/>'; // posterior enhancement
+    return renalBase(c);
+  }
+  function rComplexCyst(){
+    var c='<ellipse cx="118" cy="80" rx="28" ry="25" fill="'+ANEC+'" stroke="'+WALL+'" stroke-width="1.6"/>'
+      + '<line x1="92" y1="80" x2="146" y2="78" stroke="'+WALL+'" stroke-width="1.8"/>'   // septum
+      + '<line x1="118" y1="56" x2="120" y2="104" stroke="'+WALL+'" stroke-width="1.4"/>'  // septum
+      + '<ellipse cx="106" cy="92" rx="5" ry="4" fill="'+SINUS+'"/>';                       // mural nodule
+    return renalBase(c);
+  }
+  function rStone(){
+    var st='<ellipse cx="116" cy="98" rx="9" ry="7" fill="'+STONE+'"/>'
+      + '<rect x="108" y="104" width="16" height="70" fill="'+SHADOW+'"/>';  // posterior acoustic shadow
+    return renalBase(st);
+  }
+  function rHydro(){
+    // dilated pelvis/calyces = anechoic branching in sinus
+    var h='<path d="M96 80 Q120 70 138 86 Q150 100 138 116 Q120 130 96 120 Q86 100 96 80 Z" fill="'+ANEC+'"/>'
+      + '<ellipse cx="104" cy="74" rx="7" ry="6" fill="'+ANEC+'"/><ellipse cx="104" cy="126" rx="7" ry="6" fill="'+ANEC+'"/>';
+    return renalBase(h);
+  }
+  function rAML(){
+    // angiomyolipoma: small bright (hyperechoic) well-defined lesion
+    var l='<ellipse cx="118" cy="74" rx="13" ry="11" fill="#efe9d2"/>';
+    return renalBase(l);
+  }
+  function rTumour(){
+    // solid mass: heterogeneous, distorts contour
+    var m='<ellipse cx="150" cy="78" rx="26" ry="23" fill="#7d6f55"/>'
+      + '<ellipse cx="150" cy="78" rx="14" ry="12" fill="#5d5240"/>';
+    return renalBase(m, {});
+  }
+  function rChronic(){
+    // small kidney, thin cortex, increased echogenicity
+    var s='<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="200" fill="'+US_BG+'"/>';
+    s+='<path d="M86 50 Q140 42 152 84 Q158 100 152 116 Q140 158 86 150 Q66 130 68 100 Q66 70 86 50 Z" fill="#8a8470"/>'; // bright thin cortex
+    s+='<path d="M98 68 Q132 64 138 100 Q132 136 98 132 Q86 100 98 68 Z" fill="'+SINUS+'"/>';
+    return s+'</svg>';
+  }
+  function rPCKD(){
+    // polycystic: multiple cysts replacing parenchyma
+    var c='';
+    var pos=[[100,62,14,12],[136,80,15,13],[108,108,16,14],[140,124,12,11],[88,92,11,10],[128,52,10,9]];
+    pos.forEach(function(p){ c+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="'+p[2]+'" ry="'+p[3]+'" fill="'+ANEC+'" stroke="'+WALL+'" stroke-width="1"/>'; });
+    return renalBase(c,{noSinus:true});
+  }
+
+  // ---- BOSNIAK schematic (cyst with increasing complexity) ----
+  function bosniak(type){
+    var s='<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="200" height="160" fill="'+US_BG+'"/>';
+    s+='<ellipse cx="100" cy="80" rx="66" ry="56" fill="'+ANEC+'" stroke="'+WALL+'" stroke-width="'+(type==='I'?1:(type==='IV'?4:2.2))+'"/>';
+    if(type==='II'){ s+='<line x1="34" y1="80" x2="166" y2="76" stroke="'+WALL+'" stroke-width="1.3"/>'; s+='<circle cx="120" cy="58" r="3" fill="#dfe2ea"/>'; }
+    if(type==='IIF'){ s+='<line x1="34" y1="82" x2="166" y2="78" stroke="'+WALL+'" stroke-width="2.2"/>'; s+='<line x1="100" y1="26" x2="102" y2="134" stroke="'+WALL+'" stroke-width="2"/>'; s+='<path d="M70 110 q4 -8 0 -14" stroke="#cfc6a6" stroke-width="3" fill="none"/>'; }
+    if(type==='III'){ s+='<line x1="34" y1="82" x2="166" y2="78" stroke="'+WALL+'" stroke-width="4"/>'; s+='<line x1="100" y1="26" x2="98" y2="134" stroke="'+WALL+'" stroke-width="3.5"/>'; s+='<rect x="58" y="96" width="20" height="10" fill="'+WALL+'"/>'; }
+    if(type==='IV'){ s+='<line x1="40" y1="84" x2="160" y2="80" stroke="'+WALL+'" stroke-width="3"/>'; s+='<ellipse cx="120" cy="100" rx="16" ry="13" fill="#cfc6a6"/>'; s+='<ellipse cx="74" cy="60" rx="10" ry="9" fill="#cfc6a6"/>'; }
+    s+='</svg>';
+    return s;
+  }
+
+  // ---- HYDRONEPHROSIS grades ----
+  function hydroGrade(g){
+    var s='<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="200" height="170" fill="'+US_BG+'"/>';
+    var cortexThin = g>=4;
+    s+='<path d="M58 28 Q130 18 146 64 Q156 88 146 110 Q130 156 58 146 Q30 124 32 86 Q30 50 58 28 Z" fill="'+(cortexThin?'#42454f':CORTEX)+'"/>';
+    if(g===0){ s+='<path d="M74 56 Q120 52 126 86 Q120 120 74 116 Q60 86 74 56 Z" fill="'+SINUS+'"/>'; }
+    if(g===1){ s+='<path d="M74 56 Q120 52 126 86 Q120 120 74 116 Q60 86 74 56 Z" fill="'+SINUS+'"/>'; s+='<ellipse cx="96" cy="86" rx="16" ry="11" fill="'+ANEC+'"/>'; }
+    if(g===2){ s+='<path d="M74 56 Q122 52 128 86 Q122 120 74 116 Q60 86 74 56 Z" fill="'+SINUS+'"/>'; s+='<ellipse cx="98" cy="86" rx="24" ry="15" fill="'+ANEC+'"/>'; s+='<ellipse cx="80" cy="66" rx="7" ry="6" fill="'+ANEC+'"/><ellipse cx="80" cy="106" rx="7" ry="6" fill="'+ANEC+'"/>'; }
+    if(g===3){ s+='<ellipse cx="98" cy="86" rx="40" ry="30" fill="'+ANEC+'"/>'; s+='<ellipse cx="70" cy="60" rx="11" ry="9" fill="'+ANEC+'"/><ellipse cx="70" cy="112" rx="11" ry="9" fill="'+ANEC+'"/><ellipse cx="124" cy="86" rx="11" ry="10" fill="'+ANEC+'"/>'; }
+    if(g===4){ s+='<ellipse cx="96" cy="86" rx="50" ry="40" fill="'+ANEC+'"/>'; }
+    s+='</svg>';
+    return s;
+  }
+
+  // ---- BLADDER findings ----
+  function bladderBase(extra, opts){
+    opts=opts||{};
+    var s='<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="180" fill="'+US_BG+'"/>';
+    var wt = opts.wall||4;
+    // bladder = anechoic rounded square with wall
+    s+='<rect x="50" y="40" width="140" height="110" rx="22" fill="'+BLADDER+'" stroke="'+BWALL+'" stroke-width="'+wt+'"/>';
+    if(extra) s+=extra;
+    s+='</svg>';
+    return s;
+  }
+  function bNormal(){ return bladderBase(''); }
+  function bThick(){ // trabeculated thick wall
+    var e='<rect x="56" y="46" width="128" height="98" rx="16" fill="none" stroke="'+BWALL+'" stroke-width="2" stroke-dasharray="6 4"/>';
+    return bladderBase(e,{wall:9});
+  }
+  function bStone(){
+    var e='<ellipse cx="120" cy="132" rx="13" ry="9" fill="'+STONE+'"/><rect x="110" y="138" width="20" height="20" fill="'+SHADOW+'"/>';
+    return bladderBase(e);
+  }
+  function bTumour(){
+    var e='<path d="M150 150 q4 -34 22 -30 q14 4 8 30 z" fill="#8d8f9c"/>'; // sessile mass from wall
+    return bladderBase(e);
+  }
+  function bResidual(){
+    // partly filled after voiding
+    var e='<rect x="58" y="96" width="124" height="50" rx="10" fill="#0a1828" opacity="0.8"/>'
+      + '<text x="120" y="126" font-size="13" fill="#6fa6d6" text-anchor="middle" font-weight="700">resíduo</text>';
+    return bladderBase(e);
+  }
+  function bProstate(){
+    // prostate indenting bladder base (IPP)
+    var e='<path d="M96 150 q24 -30 48 0 z" fill="#7d7f8c"/>';
+    return bladderBase(e);
+  }
+
+  // ---- UROFLOW curves ----
+  function uroflow(type){
+    var W=240,H=150,base=120,x0=20,x1=220;
+    function pathFrom(fn){
+      var pts=[];
+      for(var i=0;i<=60;i++){ var t=i/60; var v=fn(t); pts.push([x0+t*(x1-x0), base - v]); }
+      return 'M '+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
+    }
+    var fn;
+    if(type==='bell') fn=function(t){ return 80*Math.exp(-Math.pow((t-0.4)/0.26,2)); };
+    else if(type==='plateau') fn=function(t){ if(t<0.12) return t/0.12*38; if(t>0.88) return (1-t)/0.12*38; return 38 + 5*Math.sin(t*12); };
+    else if(type==='tower') fn=function(t){ return 95*Math.exp(-Math.pow((t-0.22)/0.12,2)); };
+    else if(type==='staccato') fn=function(t){ var b=70*Math.exp(-Math.pow((t-0.45)/0.32,2)); return Math.max(0, b*(0.6+0.4*Math.sin(t*30))); };
+    else if(type==='interrupted') fn=function(t){ var seg=Math.sin(t*Math.PI*4); return seg>0? 55*seg*Math.exp(-Math.pow((t-0.5)/0.4,2)) : 0; };
+    else fn=function(t){return 0;};
+    var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#faf5ec"/>';
+    s+='<line x1="'+x0+'" y1="'+base+'" x2="'+x1+'" y2="'+base+'" stroke="#d8c7a8" stroke-width="1.2"/>';
+    s+='<line x1="'+x0+'" y1="30" x2="'+x0+'" y2="'+base+'" stroke="#d8c7a8" stroke-width="1.2"/>';
+    s+='<text x="'+x0+'" y="22" font-size="9" fill="#9a8a6a">Fluxo (mL/s)</text>';
+    s+='<text x="'+(x1-6)+'" y="'+(base+14)+'" font-size="9" fill="#9a8a6a" text-anchor="end">tempo</text>';
+    s+='<path d="'+pathFrom(fn)+'" fill="none" stroke="#9a6a2f" stroke-width="2.4" stroke-linejoin="round"/>';
+    s+='</svg>';
+    return s;
+  }
+
+  // =====================================================================
+  //  PATTERN RENDERER (accordion with subgroups)
+  // =====================================================================
+  function renderPatterns(data, containerId){
+    var c=document.getElementById(containerId); var html=''; var lastG=null;
+    data.forEach(function(d){
+      if(d.grp && d.grp!==lastG){ html+='<div class="subgroup-lbl">'+d.grp+'</div>'; lastG=d.grp; }
+      html += '<div class="pat-card" data-keys="'+(d.name+' '+(d.keys||'')+' '+(d.grp||'')).toLowerCase()+'">'
+        + '<button type="button" class="pat-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+        + '<span class="pat-name">'+d.name+'</span>'
+        + '<span style="display:flex;align-items:center;gap:10px;">'
+        + '<span class="pat-tag '+d.tag+'">'+d.tagL+'</span><svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></button>'
+        + '<div class="pat-body">'
+        + (d.graph?('<div class="pat-graph">'+d.graph()+'</div>'):'')
+        + '<div class="pat-section descr"><div class="ps-label">Descrição ecográfica</div><p>'+d.descr+'</p></div>'
+        + '<div class="pat-section signif"><div class="ps-label">Significado clínico</div><p>'+d.sig+'</p></div>'
+        + '<div class="pat-section conduta"><div class="ps-label">Conduta / orientação</div><p>'+d.cond+'</p></div>'
+        + '</div></div>';
+    });
+    c.innerHTML=html;
+    var first=c.querySelector('.pat-card'); if(first) first.classList.add('open');
+  }
+  function filterPat(which){
+    var q=document.getElementById(which+'-search').value.toLowerCase().trim();
+    var cont=document.getElementById(which+'-container');
+    cont.querySelectorAll('.pat-card').forEach(function(card){ card.style.display=(q===''||card.getAttribute('data-keys').indexOf(q)!==-1)?'block':'none'; });
+    cont.querySelectorAll('.subgroup-lbl').forEach(function(lbl){ var sib=lbl.nextElementSibling,v=false; while(sib&&sib.classList.contains('pat-card')){ if(sib.style.display!=='none'){v=true;break;} sib=sib.nextElementSibling; } lbl.style.display=v?'block':'none'; });
+  }
+
+
+  // =====================================================================
+  //  ECOGRAFIA RENAL — dataset
+  // =====================================================================
+  var RENAL = [
+    { grp:'Normal e variantes', name:'Rim normal', tag:'benigno', tagL:'Normal', keys:'normal tamanho cortex seio',
+      graph:rNormal,
+      descr:'Comprimento ~9–12 cm. Córtex de ecogenicidade inferior ao seio renal (que é central e hiperecogénico, por gordura). Espessura do parênquima preservada, contornos regulares, sem dilatação.',
+      sig:'Estrutura e diferenciação cortico-medular normais. A ecogenicidade do córtex deve ser inferior à do fígado/baço.',
+      cond:'Sem achados. Pequenas assimetrias de tamanho (&lt;1,5 cm) e quistos simples isolados são frequentemente irrelevantes.' },
+
+    { grp:'Lesões quísticas', name:'Quisto simples', tag:'benigno', tagL:'Benigno', keys:'quisto simples anecogenico bosniak i reforço posterior',
+      graph:rSimpleCyst,
+      descr:'Lesão <strong>anecogénica</strong>, redonda/oval, de <strong>parede fina imperceptível</strong>, sem septos nem conteúdo, com <strong>reforço acústico posterior</strong> e margens bem definidas.',
+      sig:'Achado muito comum e benigno (Bosniak I), aumenta com a idade. Quando cumpre todos os critérios, a fiabilidade da ecografia aproxima-se de 100%.',
+      cond:'Não requer seguimento se cumprir todos os critérios de quisto simples. O crescimento isolado de um quisto simples não indica malignidade.' },
+
+    { grp:'Lesões quísticas', name:'Quisto complexo', tag:'atencao', tagL:'Caracterizar', keys:'quisto complexo septos parede nodulo calcificacao bosniak',
+      graph:rComplexCyst,
+      descr:'Quisto com <strong>septos, parede espessada, calcificações, conteúdo ecogénico</strong> (hemático/proteico) ou <strong>nódulo mural</strong>. Já não cumpre os critérios de quisto simples.',
+      sig:'Exige estratificação de risco pela <strong>classificação de Bosniak</strong> (ver separador próprio). O risco de malignidade aumenta com a complexidade.',
+      cond:'Caracterizar com <strong>TC ou RM com contraste</strong> (a ecografia tem limitações). Conteúdo móvel dependente sugere material proteico/hemático, não nódulo sólido.' },
+
+    { grp:'Lesões quísticas', name:'Doença renal poliquística', tag:'atencao', tagL:'Investigar', keys:'poliquistica pkd adpkd multiplos quistos hereditaria',
+      graph:rPCKD,
+      descr:'<strong>Múltiplos quistos bilaterais</strong> de vários tamanhos que substituem o parênquima e aumentam o volume renal.',
+      sig:'A forma autossómica dominante (DRPAD) associa-se a HTA, doença renal crónica progressiva, quistos hepáticos e risco de aneurismas. História familiar frequente.',
+      cond:'Confirmar contexto e história familiar. Controlo da HTA, vigilância da função renal e referenciação a Nefrologia. Distinguir de quistos simples múltiplos relacionados com a idade.' },
+
+    { grp:'Lesões sólidas', name:'Angiomiolipoma (AML)', tag:'benigno', tagL:'Benigno', keys:'angiomiolipoma aml hiperecogenico gordura',
+      graph:rAML,
+      descr:'Lesão sólida <strong>marcadamente hiperecogénica</strong> (semelhante ao seio renal), bem definida, geralmente pequena. A gordura é a chave do diagnóstico.',
+      sig:'Tumor benigno mais comum do rim. Lesões grandes (&gt;4 cm) têm risco de hemorragia.',
+      cond:'A hiperecogenicidade na ecografia não é específica — <strong>confirmar a gordura por TC/RM</strong> (excluir carcinoma de células renais, que também pode ser hiperecogénico). AML &gt;4 cm: referenciar.' },
+
+    { grp:'Lesões sólidas', name:'Massa sólida / suspeita de tumor', tag:'urgente', tagL:'Investigar', keys:'tumor massa solida carcinoma celulas renais heterogenea vascularizada',
+      graph:rTumour,
+      descr:'Lesão <strong>sólida</strong>, heterogénea, que distorce o contorno renal, frequentemente com vascularização ao Doppler. Pode ter componente quístico (&lt;25%).',
+      sig:'Toda a massa sólida renal é suspeita de <strong>carcinoma de células renais</strong> até prova em contrário.',
+      cond:'<strong>Referenciar</strong>. Caracterizar e estadiar com TC/RM com contraste. Não atribuir a achado benigno sem caracterização adequada.' },
+
+    { grp:'Obstrução e cálculos', name:'Litíase renal (cálculo)', tag:'atencao', tagL:'Atenção', keys:'calculo litiase pedra sombra acustica hiperecogenico',
+      graph:rStone,
+      descr:'Foco <strong>hiperecogénico</strong> com <strong>sombra acústica posterior</strong>, habitualmente no seio renal/calizes. O Doppler pode mostrar artefacto de cintilação ("twinkling").',
+      sig:'Litíase. Pode ser assintomática (calicial) ou causar cólica/obstrução se migrar para o ureter. Ver separador "Cálculos" para orientação por tamanho.',
+      cond:'Avaliar tamanho, localização e presença de hidronefrose. A ecografia tem baixa sensibilidade para cálculos ureterais — a TC é o exame de referência.' },
+
+    { grp:'Obstrução e cálculos', name:'Hidronefrose', tag:'atencao', tagL:'Graduar', keys:'hidronefrose dilatacao pielocalicial obstrucao',
+      graph:rHydro,
+      descr:'<strong>Dilatação anecogénica do sistema pielocalicial</strong> (bacinete e calizes), com aspeto ramificado/comunicante no seio renal.',
+      sig:'Traduz obstrução (cálculo, estenose, tumor, compressão) ou, por vezes, dilatação não obstrutiva (refluxo, pós-obstrutiva, gravidez). Ver separador "Hidronefrose" para graduação e conduta.',
+      cond:'Graduar (ligeira/moderada/grave) e procurar a causa e o nível da obstrução. Hidronefrose com febre/sépsis ou rim único é emergência urológica.' },
+
+    { grp:'Parênquima', name:'Doença renal crónica / nefropatia médica', tag:'atencao', tagL:'Atenção', keys:'cronica rins pequenos cortex fino ecogenicidade aumentada nefropatia',
+      graph:rChronic,
+      descr:'Rins <strong>pequenos</strong>, com <strong>córtex adelgaçado</strong> e <strong>ecogenicidade aumentada</strong> (córtex igual ou superior ao fígado/baço), com má diferenciação cortico-medular.',
+      sig:'Sugere doença renal crónica/nefropatia parenquimatosa. Rins de tamanho normal não a excluem (ex: diabetes, amiloidose, rim poliquístico).',
+      cond:'Correlacionar com a função renal (creatinina/TFG) e proteinúria. Referenciar a Nefrologia conforme estádio e etiologia.' }
+  ];
+
+  document.getElementById('tab-renal').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Ecografia renal — princípios</div>'
+    + '<div class="info-block gold"><p>A ecografia avalia bem <strong>tamanho, contornos, espessura do parênquima, ecogenicidade, dilatação e lesões focais</strong>. Distingue facilmente <strong>quisto</strong> (anecogénico, reforço posterior) de <strong>massa sólida</strong>. É operador-dependente e tem limitações para cálculos ureterais e caracterização de lesões complexas — nesses casos a TC/RM é superior.</p></div>'
+    + '<div class="info-block blue" style="margin-bottom:0;"><div class="ib-title">Ecogenicidade — regra rápida</div><p>Córtex renal normal é <strong>menos ecogénico que o fígado e o baço</strong>. Córtex mais ecogénico que o fígado sugere doença parenquimatosa. O seio renal central é normalmente o mais brilhante (gordura).</p></div></div>'
+    + '<input type="text" class="search-box no-print" id="renal-search" placeholder="Pesquisar achado (ex: quisto, cálculo, hidronefrose, tumor)..." oninput="filterPat(\'renal\')">'
+    + '<div id="renal-container"></div>';
+  renderPatterns(RENAL, 'renal-container');
+
+
+  // =====================================================================
+  //  BOSNIAK
+  // =====================================================================
+  var BOSNIAK = [
+    { name:'Bosniak I', tag:'benigno', tagL:'~0% malignidade', keys:'bosniak i simples parede fina',
+      graph:function(){return bosniak('I');},
+      descr:'<strong>Quisto simples.</strong> Parede fina e lisa (≤2 mm), sem septos, sem calcificações, sem realce. Conteúdo homogéneo tipo líquido.',
+      sig:'Benigno. Risco de malignidade praticamente nulo.',
+      cond:'<strong>Sem seguimento.</strong> Pode ser descrito como "quisto" e não como "massa quística".' },
+    { name:'Bosniak II', tag:'benigno', tagL:'~0% (até ~12%)', keys:'bosniak ii septos finos calcificacao minima',
+      graph:function(){return bosniak('II');},
+      descr:'Poucos <strong>septos finos</strong> (≤3) e finos, calcificações finas, ou quisto hiperdenso/proteico homogéneo de pequenas dimensões. Sem realce mensurável.',
+      sig:'Considerado <strong>benigno</strong>. Risco muito baixo.',
+      cond:'<strong>Sem seguimento</strong> necessário na maioria dos casos.' },
+    { name:'Bosniak IIF', tag:'seguir', tagL:'seguimento (~5–46%)', keys:'bosniak iif follow up seguimento septos espessos',
+      graph:function(){return bosniak('IIF');},
+      descr:'Múltiplos septos finos ou ligeiro espessamento liso da parede/septos, ou calcificações mais espessas. <strong>F = follow-up</strong> (seguimento).',
+      sig:'Maioritariamente benigno, mas com risco intermédio. A progressão para III/IV associa-se a malignidade elevada.',
+      cond:'<strong>Seguimento imagiológico</strong> (TC/RM), tipicamente a 6 meses e depois anual durante ~5 anos. Estabilidade favorece benignidade.' },
+    { name:'Bosniak III', tag:'atencao', tagL:'~50–80% malignidade', keys:'bosniak iii parede espessa septos espessos indeterminado',
+      graph:function(){return bosniak('III');},
+      descr:'<strong>Parede ou septos espessos/irregulares</strong> (≥4 mm) ou com realce mensurável. Lesão <strong>indeterminada</strong>.',
+      sig:'Cerca de metade (a maioria das séries) são malignos. Não distinguível de forma fiável só pela ecografia.',
+      cond:'<strong>Referenciar a Urologia.</strong> Habitualmente cirurgia/ressecção, embora a vigilância ativa seja opção em doentes selecionados (idade, comorbilidades).' },
+    { name:'Bosniak IV', tag:'urgente', tagL:'~85–90% malignidade', keys:'bosniak iv nodulo mural realce solido maligno',
+      graph:function(){return bosniak('IV');},
+      descr:'<strong>Componente sólido com realce</strong> (nódulo mural) ou tecido com realce, distinto dos septos/parede.',
+      sig:'Quase sempre maligno (carcinoma de células renais quístico).',
+      cond:'<strong>Referenciar com prioridade.</strong> Tratamento (geralmente cirúrgico) recomendado se as condições do doente o permitirem.' }
+  ];
+
+  document.getElementById('tab-bosniak').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Classificação de Bosniak (v2019)</div>'
+    + '<div class="info-block gold"><p>Estratifica o <strong>risco de malignidade das lesões quísticas renais</strong>. Foi desenvolvida e validada para <strong>TC e RM com contraste</strong> — a ecografia (mesmo com contraste/CEUS) tem maior variabilidade. Quando uma lesão tem características de mais do que uma categoria, atribui-se a <strong>categoria mais alta</strong>. Não se aplica a quistos infetados/inflamatórios.</p></div>'
+    + '<div class="info-block blue" style="margin-bottom:0;"><div class="ib-title">Definição</div><p>Considera-se "massa quística" quando &lt;25% é composta por tecido com realce. Os achados-chave a descrever são: <strong>parede, septos, calcificações, conteúdo e realce/componente sólido</strong>.</p></div></div>'
+    + '<div id="bosniak-container"></div>'
+    + '<div class="card"><div class="card-title"><span class="icon">+</span> Resumo — risco e conduta</div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Categoria</th><th>Risco de malignidade</th><th>Conduta</th></tr></thead><tbody>'
+    + '<tr><td><span class="badge b-green">I</span></td><td>~0%</td><td>Sem seguimento</td></tr>'
+    + '<tr><td><span class="badge b-green">II</span></td><td>~0% (baixo)</td><td>Sem seguimento</td></tr>'
+    + '<tr><td><span class="badge b-blue">IIF</span></td><td>Intermédio</td><td>Seguimento imagiológico ~5 anos</td></tr>'
+    + '<tr><td><span class="badge b-orange">III</span></td><td>~50–80%</td><td>Referenciar; cirurgia ou vigilância ativa</td></tr>'
+    + '<tr><td><span class="badge b-red">IV</span></td><td>~85–90%</td><td>Referenciar; tratamento (cirúrgico)</td></tr>'
+    + '</tbody></table></div>'
+    + '<p style="font-size:11px;color:#7a6a52;margin-top:10px;font-style:italic;">As percentagens variam entre estudos e dependem do método e do viés de seleção (sobretudo IIF e III).</p></div>';
+  renderPatterns(BOSNIAK, 'bosniak-container');
+
+
+  // =====================================================================
+  //  HIDRONEFROSE
+  // =====================================================================
+  var HIDRO = [
+    { name:'Grau 0 — ausente', tag:'benigno', tagL:'Normal', keys:'grau 0 sem dilatacao normal',
+      graph:function(){return hydroGrade(0);},
+      descr:'Sistema pielocalicial não dilatado. Seio renal central ecogénico normal.',
+      sig:'Sem obstrução detetável. A ausência de hidronefrose torna menos provável um cálculo ureteral &gt;5 mm.',
+      cond:'Sem ação específica relativa à dilatação. Correlacionar com a clínica.' },
+    { name:'Grau I — ligeira', tag:'seguir', tagL:'Ligeira', keys:'grau 1 ligeira bacinete pelve dilatacao',
+      graph:function(){return hydroGrade(1);},
+      descr:'Dilatação do <strong>bacinete (pelve renal)</strong>, com calizes ainda preservados ou minimamente dilatados.',
+      sig:'Obstrução ligeira ou dilatação não obstrutiva. Frequentemente associada a cálculos pequenos (≤5 mm) com boa probabilidade de passagem espontânea.',
+      cond:'Geralmente conservadora se assintomática/dor controlada. Investigar causa se persistente. Hidratação e analgesia; vigiar.' },
+    { name:'Grau II — moderada', tag:'atencao', tagL:'Moderada', keys:'grau 2 moderada calizes dilatados',
+      graph:function(){return hydroGrade(2);},
+      descr:'Dilatação do bacinete <strong>e dos calizes</strong> (major e minor), com <strong>parênquima preservado</strong>.',
+      sig:'Obstrução mais significativa; maior probabilidade de cálculo &gt;5 mm. Maior risco de eventos aos 30 dias.',
+      cond:'<strong>Avaliação urológica</strong> (urgente se sintomas refratários). Imagem complementar (TC) para localizar e medir o cálculo/causa.' },
+    { name:'Grau III — grave', tag:'urgente', tagL:'Grave', keys:'grau 3 grave balonizacao calizes adelgaçamento cortical',
+      graph:function(){return hydroGrade(4);},
+      descr:'<strong>Balonização dos calizes</strong> com <strong>adelgaçamento do parênquima/córtex</strong> renal. Sistema marcadamente dilatado.',
+      sig:'Obstrução grave; risco de lesão renal se prolongada. Pode traduzir cálculo grande, obstrução tumoral ou estenose.',
+      cond:'<strong>Referenciação urológica.</strong> Risco de perda de função se não desobstruída. Procurar a causa e o nível da obstrução.' },
+    { name:'Sinais de alarme (qualquer grau)', tag:'urgente', tagL:'Emergência', keys:'febre sepsis pionefrose rim unico lesao renal aguda anuria bilateral',
+      descr:'Hidronefrose com <strong>febre/sépsis</strong> (suspeita de pionefrose), <strong>lesão renal aguda</strong>, <strong>anúria</strong>, obstrução <strong>bilateral</strong> ou em <strong>rim único/transplantado</strong>.',
+      sig:'Emergência urológica — risco de urossépsis e de perda de função renal.',
+      cond:'<strong>Referenciação urgente</strong> para drenagem (nefrostomia/cateter ureteral) e antibioterapia. Não atrasar.' }
+  ];
+  document.getElementById('tab-hidro').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Hidronefrose — graduação e conduta</div>'
+    + '<div class="info-block gold"><p>A hidronefrose traduz <strong>dilatação do sistema pielocalicial</strong>. A graduação ecográfica (ligeira → moderada → grave) orienta a probabilidade de obstrução significativa e a urgência. Nem toda a dilatação é obstrutiva (refluxo, gravidez, dilatação pós-obstrutiva).</p></div>'
+    + '<div class="info-block blue" style="margin-bottom:0;"><div class="ib-title">Relação com o tamanho do cálculo</div><p>A ausência de hidronefrose, ou hidronefrose ligeira, torna <strong>menos provável um cálculo ureteral &gt;5 mm</strong>. Hidronefrose moderada/grave associa-se a maior probabilidade de cálculos maiores e de necessidade de intervenção.</p></div></div>'
+    + '<div id="hidro-container"></div>';
+  renderPatterns(HIDRO, 'hidro-container');
+
+
+  // =====================================================================
+  //  CÁLCULOS — orientação por tamanho (calculadora + tabela)
+  // =====================================================================
+  document.getElementById('tab-calculo').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Cálculos — probabilidade de passagem e conduta por tamanho</div>'
+    + '<div class="info-block gold"><p>A probabilidade de passagem espontânea depende sobretudo do <strong>tamanho</strong> e da <strong>localização</strong> (os distais passam mais). As orientações abaixo seguem AUA/EAU; decisões devem ser <strong>partilhadas com o doente</strong> e individualizadas.</p></div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Tamanho</th><th>Passagem espontânea</th><th>Conduta orientadora</th></tr></thead><tbody>'
+    + '<tr><td><span class="badge b-green">&lt; 5 mm</span></td><td>~&gt; 75%</td><td>Tratamento conservador (hidratação, analgesia). Observação 4–6 semanas.</td></tr>'
+    + '<tr><td><span class="badge b-orange">5–10 mm</span></td><td>~50%</td><td>Tentativa de expulsão com <strong>terapêutica médica expulsiva (MET)</strong> — alfabloqueante (ex: tamsulosina), sobretudo se distal. Seguimento urológico.</td></tr>'
+    + '<tr><td><span class="badge b-red">&gt; 10 mm</span></td><td>~&lt; 25%</td><td>Baixa probabilidade de passagem → <strong>referenciar a Urologia</strong> para intervenção (LEOC, ureteroscopia, etc.).</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="info-block blue" style="margin-top:14px;"><div class="ib-title">Terapêutica médica expulsiva (MET)</div><p>Recomendada para cálculos ureterais distais ≤10 mm (sobretudo &gt;5 mm): <strong>alfabloqueante</strong> durante ~4 semanas, com analgesia e vigilância. Período de observação ≤4–6 semanas.</p></div>'
+    + '<div class="info-block red" style="margin-bottom:0;"><div class="ib-title">Referenciação urgente — independentemente do tamanho</div><p>• <strong>Cálculo obstrutivo com febre/sépsis</strong> (urossépsis) → drenagem urgente + antibiótico<br>• <strong>Lesão renal aguda</strong> ou obstrução em <strong>rim único</strong><br>• <strong>Obstrução bilateral</strong> · Dor incontrolável · Vómitos incoercíveis</p></div></div>'
+
+    + '<div class="card"><div class="card-title"><span class="icon">+</span> Orientador por tamanho</div>'
+    + '<p class="section-intro">Introduza o tamanho do cálculo (e localização) para uma orientação geral.</p>'
+    + '<div class="input-grid">'
+    + '<div class="field-group"><label>Tamanho do cálculo (mm)</label><input type="number" id="st_size" placeholder="ex: 6" min="0" max="50" step="0.5"></div>'
+    + '<div class="field-group"><label>Localização</label><select id="st_loc"><option value="ureter_distal">Ureter distal</option><option value="ureter_prox">Ureter proximal/médio</option><option value="rim">Rim (calicial/bacinete)</option></select></div>'
+    + '<div class="field-group"><label>Sinais de alarme</label><select id="st_flag"><option value="no">Não</option><option value="yes">Febre / rim único / LRA / bilateral</option></select></div>'
+    + '</div>'
+    + '<div class="btn-row"><button class="btn-primary" onclick="interpretStone()">Orientar</button><button class="btn-secondary" onclick="resetStone()">Limpar</button></div>'
+    + '<div id="stone-result" class="calc-result"></div></div>';
+
+  function sv(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+  function interpretStone(){
+    var size=sv('st_size'); var loc=document.getElementById('st_loc').value; var flag=document.getElementById('st_flag').value==='yes';
+    if(size==null){ mkAviso('Introduza o tamanho do cálculo.'); return; }
+    var rows=[];
+    function row(l,ic,t,x){ rows.push({l:l,ic:ic,t:t,x:x}); }
+    if(flag){ row('alert','!','Sinais de alarme presentes','Referenciação URGENTE independentemente do tamanho — risco de urossépsis ou de perda de função renal. Drenagem urgente + antibiótico se infeção.'); }
+    if(size<5){ row('ok','✓','Cálculo &lt; 5 mm','Alta probabilidade de passagem espontânea (~&gt;75%). Conservador: hidratação e analgesia, observação 4–6 semanas.'); }
+    else if(size<=10){ row('warn','~','Cálculo 5–10 mm','Probabilidade intermédia (~50%). Considerar terapêutica médica expulsiva (alfabloqueante)'+(loc==='ureter_distal'?' — sobretudo eficaz no ureter distal.':'.')+' Seguimento urológico.'); }
+    else { row('alert','!','Cálculo &gt; 10 mm','Baixa probabilidade de passagem (~&lt;25%). Referenciar a Urologia para intervenção (LEOC, ureteroscopia, etc.).'); }
+    if(loc==='rim' && !flag){ row('info','i','Localização renal','Cálculos caliciais pequenos e assintomáticos podem ser vigiados. Avaliar referenciação se ≥6 mm, sintomáticos ou de crescimento.'); }
+    if(loc==='ureter_prox' && size>=5 && !flag){ row('info','i','Localização proximal','Cálculos proximais passam menos do que os distais; limiar mais baixo para referenciação.'); }
+
+    var hasAlert=rows.some(r=>r.l==='alert');
+    var banner = hasAlert? {c:'alert',i:'!',t:'Requer referenciação'} : (rows.some(r=>r.l==='warn')? {c:'warn',i:'~',t:'Ponderar MET e seguimento'} : {c:'ok',i:'✓',t:'Provável conduta conservadora'});
+    var html='<div class="result-row '+banner.c+'"><span class="rr-icon">'+banner.i+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
+    rows.forEach(function(r){ html+='<div class="result-row '+r.l+'"><span class="rr-icon">'+r.ic+'</span><div><div class="rr-title">'+r.t+'</div><div class="rr-text">'+r.x+'</div></div></div>'; });
+    html+='<div class="info-block gold" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Nota:</strong> orientação geral; a decisão deve ser partilhada e individualizada (sintomas, comorbilidades, função renal, composição/dureza do cálculo). A ecografia mede mal os cálculos ureterais — a TC é o exame de referência.</p></div>';
+    var res=document.getElementById('stone-result'); res.innerHTML=html; res.classList.add('visible'); res.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function resetStone(){ document.getElementById('st_size').value=''; document.getElementById('st_loc').value='ureter_distal'; document.getElementById('st_flag').value='no'; document.getElementById('stone-result').classList.remove('visible'); }
+
+
+  // =====================================================================
+  //  ECOGRAFIA VESICAL
+  // =====================================================================
+  var VESICAL = [
+    { name:'Bexiga normal', tag:'benigno', tagL:'Normal', keys:'normal parede fina anecogenica',
+      graph:bNormal,
+      descr:'Conteúdo <strong>anecogénico</strong>, parede lisa e fina: <strong>3–5 mm</strong> com a bexiga cheia (pode descer a 2–3 mm em repleção). Contorno regular.',
+      sig:'Bexiga normal, sem espessamento, lesões ou resíduo significativo.',
+      cond:'Sem ação. A espessura da parede depende do grau de repleção (medir com a bexiga razoavelmente cheia).' },
+    { name:'Parede espessada / trabeculada', tag:'atencao', tagL:'Atenção', keys:'parede espessa trabeculada detrusor hipertrofia obstrucao boo',
+      graph:bThick,
+      descr:'<strong>Espessamento da parede</strong> (&gt;5 mm com bexiga cheia) e/ou aspeto <strong>trabeculado</strong>, por vezes com divertículos.',
+      sig:'Sugere <strong>obstrução crónica à saída</strong> (ex: hiperplasia benigna da próstata) ou bexiga hiperativa/neurogénica, com hipertrofia do detrusor.',
+      cond:'Correlacionar com sintomas do trato urinário inferior (LUTS), próstata e resíduo pós-miccional. Considerar urofluxometria e referenciação urológica.' },
+    { name:'Resíduo pós-miccional (RPM) elevado', tag:'atencao', tagL:'Atenção', keys:'residuo pos miccional rpm retencao esvaziamento incompleto',
+      graph:bResidual,
+      descr:'Volume de urina remanescente após a micção (volume = altura × largura × profundidade × 0,52).',
+      sig:'RPM &lt;50 mL é normal (&lt;100 mL aceitável em idosos). RPM &gt;100 mL sugere esvaziamento incompleto; &gt;200–300 mL indica retenção significativa (obstrução, detrusor hipoativo, neurogénica, fármacos).',
+      cond:'Confirmar (variabilidade). Investigar causa (próstata, fármacos anticolinérgicos, causa neurológica). RPM muito elevado/retenção aguda → algaliação e referenciação.' },
+    { name:'Litíase vesical', tag:'atencao', tagL:'Atenção', keys:'calculo vesical movel sombra acustica',
+      graph:bStone,
+      descr:'Foco <strong>hiperecogénico móvel</strong> (desloca com a posição) com <strong>sombra acústica posterior</strong>, na porção dependente da bexiga.',
+      sig:'Frequentemente associada a estase/obstrução (HBP) ou corpo estranho/algália. Pode causar hematúria, infeções de repetição e LUTS.',
+      cond:'Referenciar para avaliação urológica e tratamento da causa subjacente (frequentemente obstrução).' },
+    { name:'Lesão / espessamento focal (suspeita de tumor)', tag:'urgente', tagL:'Investigar', keys:'tumor vesical massa focal papilar nao movel hematuria',
+      graph:bTumour,
+      descr:'<strong>Massa ou espessamento focal não móvel</strong> projetando-se da parede para o lúmen (séssil ou papilar). Não se desloca com a posição (ao contrário do cálculo).',
+      sig:'Suspeita de <strong>neoplasia vesical</strong>, sobretudo com hematúria (macro ou microscópica) em doente com fatores de risco (tabaco, idade).',
+      cond:'<strong>Referenciar para cistoscopia.</strong> A ecografia normal não exclui tumor — a hematúria inexplicada exige investigação urológica.' },
+    { name:'Protrusão prostática intravesical (IPP)', tag:'seguir', tagL:'Contexto', keys:'ipp prostata intravesical protrusao hbp lobo medio',
+      graph:bProstate,
+      descr:'<strong>Protrusão da próstata para o interior da bexiga</strong>, visível na sua base. Pode medir-se o grau de protrusão (IPP).',
+      sig:'Marcador de hiperplasia benigna da próstata e preditor de obstrução à saída e de menor probabilidade de sucesso de tratamento médico.',
+      cond:'Correlacionar com LUTS, volume prostático, urofluxometria e RPM. Orientar tratamento da HBP conforme sintomas e achados.' }
+  ];
+  document.getElementById('tab-vesical').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Ecografia vesical — princípios</div>'
+    + '<div class="info-block gold"><p>Avalia <strong>repleção, espessura e regularidade da parede, conteúdo (cálculos, coágulos, lesões), próstata</strong> e o <strong>resíduo pós-miccional</strong>. É essencial na avaliação dos sintomas do trato urinário inferior (LUTS) e da retenção.</p></div>'
+    + '<div class="info-block blue" style="margin-bottom:0;"><div class="ib-title">Volume vesical / RPM</div><p>Volume (mL) = altura × largura × profundidade × <strong>0,52</strong> (fórmula do elipsoide). <strong>RPM normal &lt;50 mL</strong> (&lt;100 mL aceitável em idosos); &gt;100 mL merece investigação.</p></div></div>'
+    + '<input type="text" class="search-box no-print" id="vesical-search" placeholder="Pesquisar achado (ex: parede, resíduo, cálculo, próstata)..." oninput="filterPat(\'vesical\')">'
+    + '<div id="vesical-container"></div>';
+  renderPatterns(VESICAL, 'vesical-container');
+
+
+  // =====================================================================
+  //  UROFLUXOMETRIA
+  // =====================================================================
+  var URO = [
+    { name:'Curva em sino (bell) — normal', tag:'benigno', tagL:'Normal', keys:'sino bell normal qmax',
+      graph:function(){return uroflow('bell');},
+      descr:'Curva <strong>simétrica em forma de sino</strong>, com subida e descida suaves e pico bem definido. <strong>Qmax &gt; 15 mL/s</strong> (com volume adequado, &gt;150 mL).',
+      sig:'Padrão normal. Baixa probabilidade de obstrução à saída.',
+      cond:'Sem ação. Lembrar que a urofluxometria depende do volume urinado — usar nomogramas e repetir se volume &lt;150 mL.' },
+    { name:'Curva em planalto (plateau) — obstrutiva', tag:'atencao', tagL:'Obstrução', keys:'planalto plateau obstrucao boo prostata estenose qmax baixo',
+      graph:function(){return uroflow('plateau');},
+      descr:'Fluxo <strong>baixo e mantido ("achatado")</strong>, com pico arredondado e prolongado. <strong>Qmax tipicamente &lt;10–15 mL/s</strong>.',
+      sig:'Sugere <strong>obstrução anatómica à saída</strong> (hiperplasia benigna da próstata, estenose da uretra).',
+      cond:'Investigar a causa (próstata, estenose), avaliar RPM e referenciar a Urologia. A urofluxometria isolada não distingue obstrução de hipocontractilidade — pode exigir estudo urodinâmico.' },
+    { name:'Curva em torre (tower)', tag:'seguir', tagL:'Contexto', keys:'torre tower hiperativa pico alto rapido',
+      graph:function(){return uroflow('tower');},
+      descr:'Pico <strong>alto, estreito e rápido</strong>, com esvaziamento curto.',
+      sig:'Pode associar-se a <strong>bexiga hiperativa</strong> (contração forte do detrusor).',
+      cond:'Correlacionar com sintomas de urgência/frequência. Considerar abordagem da bexiga hiperativa.' },
+    { name:'Curva em staccato', tag:'seguir', tagL:'Contexto', keys:'staccato disfuncao pavimento pelvico flutuacoes',
+      graph:function(){return uroflow('staccato');},
+      descr:'Fluxo contínuo mas com <strong>flutuações/oscilações</strong> sobrepostas (variações da velocidade sem chegar a zero).',
+      sig:'Associada a <strong>disfunção do pavimento pélvico</strong> / contrações esfincterianas durante a micção (dissinergia).',
+      cond:'Frequente em disfunção miccional; considerar reeducação do pavimento pélvico e avaliação especializada se persistente.' },
+    { name:'Curva interrompida (interrupted)', tag:'atencao', tagL:'Atenção', keys:'interrompida interrupted underactive esforço abdominal detrusor hipoativo',
+      graph:function(){return uroflow('interrupted');},
+      descr:'Fluxo que <strong>cai a zero e recomeça</strong> em vários episódios (micção em "jatos"), frequentemente por esforço abdominal.',
+      sig:'Sugere <strong>detrusor hipoativo/underactive</strong> com necessidade de prensa abdominal, ou obstrução.',
+      cond:'Avaliar RPM (frequentemente elevado), causa neurológica/fármacos. Referenciar; pode necessitar de estudo urodinâmico.' }
+  ];
+  document.getElementById('tab-urofluxo').innerHTML =
+    '<div class="card"><div class="card-title"><span class="icon">i</span> Urofluxometria — interpretação</div>'
+    + '<div class="info-block gold"><p>Mede o <strong>fluxo urinário ao longo do tempo</strong>. É um teste de rastreio <strong>não invasivo</strong>: identifica quem precisa de mais investigação, mas <strong>não distingue, por si só, obstrução de hipocontractilidade do detrusor</strong> (para isso é necessário estudo pressão-fluxo/urodinâmica).</p></div>'
+    + '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Qmax (fluxo máximo)</th><th>Probabilidade de obstrução</th></tr></thead><tbody>'
+    + '<tr><td><span class="badge b-green">&gt; 15 mL/s</span></td><td>Baixa</td></tr>'
+    + '<tr><td><span class="badge b-orange">10–15 mL/s</span></td><td>Equívoca / indeterminada</td></tr>'
+    + '<tr><td><span class="badge b-red">&lt; 10 mL/s</span></td><td>Alta (obstrução ou hipocontractilidade)</td></tr>'
+    + '</tbody></table></div>'
+    + '<div class="info-block blue" style="margin-top:14px;margin-bottom:0;"><div class="ib-title">Requisitos para validade</div><p>Volume urinado <strong>≥150 mL</strong> (idealmente). Volumes baixos tornam o Qmax pouco fiável — usar <strong>nomogramas</strong> ajustados ao volume e, se necessário, repetir. Interpretar sempre em conjunto com sintomas (IPSS), RPM e próstata.</p></div></div>'
+    + '<div id="uro-container"></div>';
+  renderPatterns(URO, 'uro-container');
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>
