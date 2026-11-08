@@ -7,6 +7,7 @@
    MGF.escalas(raiz, configs)      liga escalas de pontuação declaradas em configs
    MGF.copiar(texto, botao)        copia texto e dá feedback no botão
    MGF.decimal(n)                  1.5 → "1,5"
+   MGF.dobras(raiz)                liga os cartões que abrem e fecham (.mgf-dobra); devolve abrir(dobra, sim)
    ===================================================================== */
 (function () {
   "use strict";
@@ -167,5 +168,33 @@
     return { calcular: calcular, limpar: limpar, estado: estado, textoCopia: textoCopia };
   }
 
-  window.MGF = { separadores: separadores, escalas: escalas, copiar: copiar, decimal: decimal, marcar: marcar };
+  /* ---------------------------------------------------------------
+     Cartões que abrem e fecham:
+       <div class="mgf-dobra">
+         <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="x">…</button>
+         <div class="mgf-dobra-corpo" id="x" hidden>…</div>
+       </div>
+     --------------------------------------------------------------- */
+  function abrir(dobra, sim) {
+    var b = dobra.querySelector(".mgf-dobra-topo"), c = dobra.querySelector(".mgf-dobra-corpo");
+    if (!b || !c) return;
+    b.setAttribute("aria-expanded", sim ? "true" : "false");
+    c.hidden = !sim;
+  }
+  function aberta(dobra) {
+    var b = dobra.querySelector(".mgf-dobra-topo");
+    return !!b && b.getAttribute("aria-expanded") === "true";
+  }
+  function dobras(raiz) {
+    raiz.addEventListener("click", function (e) {
+      var b = e.target.closest(".mgf-dobra-topo");
+      if (!b || !raiz.contains(b)) return;
+      var d = b.closest(".mgf-dobra");
+      abrir(d, !aberta(d));
+    });
+    return abrir;
+  }
+
+  window.MGF = { separadores: separadores, escalas: escalas, copiar: copiar, decimal: decimal, marcar: marcar,
+                 dobras: dobras, abrir: abrir, aberta: aberta };
 })();
