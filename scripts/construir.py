@@ -27,6 +27,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 FONTE = RAIZ / "fonte"
 ASSETS = RAIZ / "assets"
+JS_FERRAMENTA = (Path(__file__).resolve().parent.parent / "assets" / "js" / "ferramenta.js").read_text(encoding="utf-8")
 ESTRUTURA = json.loads((FONTE / "estrutura.json").read_text(encoding="utf-8"))
 SITE = ESTRUTURA["site"]
 HOJE = dt.date.today().isoformat()
@@ -315,6 +316,7 @@ def pagina_ferramenta(f, ferramentas):
 </div>
 </div>
 {rodape(prefixo)}
+<script src="{prefixo}assets/js/ferramenta.js"></script>
 <script>
 {f["script"]}
 </script>
@@ -388,6 +390,9 @@ def pagina_autonoma(f, css):
 {bibliografia_html(f)}
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="{url}">{e(url)}</a> · Feedback: {SITE["email"]} · Licença MIT</p>
 </div>
+<script>
+{JS_FERRAMENTA}
+</script>
 <script>
 {f["script"]}
 </script>
@@ -539,6 +544,8 @@ ESCALAS_NAO_INCLUIDAS = [
     ("EPDS (Escala de Depressão Pós-Parto de Edimburgo)", "Só a calculadora de pontuação. Distribuir o texto exige autorização do Royal College of Psychiatrists.", "https://camcops.readthedocs.io/en/latest/tasks/epds.html", "Esclarecimento sobre os direitos"),
     ("Escala de Sonolência de Epworth", "Só a calculadora de pontuação. O autor exige licença.", "https://epworthsleepinessscale.com/", "Site oficial"),
     ("STOP-Bang", "Só a calculadora de pontuação. O uso precisa de autorização dos autores.", "https://www.stopbang.ca/", "Site oficial"),
+    ("GPCOG", "Só a calculadora de pontuação. É gratuito para clínicos, mas não pode ser alterado e não tem versão portuguesa no site oficial.", "https://gpcog.com.au/", "Site oficial"),
+    ("Mini-Cog", "Só a calculadora de pontuação. Uso clínico livre, mas não pode ser modificado.", "https://mini-cog.com/", "Site oficial"),
     ("M-CHAT", "Só a indicação de quando aplicar. A reprodução eletrónica precisa de autorização.", "https://mchatscreen.com/", "Site oficial (versão M-CHAT-R/F)"),
 ]
 
@@ -640,7 +647,8 @@ def gerar_modelo(css):
     """Modelo para colegas: ficheiro único, com as cores e letras do site embutidas."""
     modelo = (FONTE / "modelo" / "modelo-ferramenta.html").read_text(encoding="utf-8")
     base = "/* NÃO ALTERAR: cores, letras e componentes do MGF no Plural (gerado automaticamente). */\n" + css
-    escrever(RAIZ / "modelos" / "modelo-ferramenta.html", modelo.replace("/* {{BASE}} */", base))
+    modelo = modelo.replace("/* {{BASE}} */", base).replace("/* {{BASE_JS}} */", "/* NÃO ALTERAR (gerado automaticamente). */\n" + JS_FERRAMENTA)
+    escrever(RAIZ / "modelos" / "modelo-ferramenta.html", modelo)
 
 
 def escrever(caminho, texto):
