@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalas de saúde mental</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "escalas-saude-mental",
+  "titulo": "Escalas de saúde mental",
+  "descricao": "EPDS, HADS, GPCOG e Mini-Cog: depressão perinatal, ansiedade e depressão, e rastreio de défice cognitivo.",
+  "area": "recursos-medicos",
+  "grupo": "escalas-e-calculadoras",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "palavras": [
+    "EPDS",
+    "Edimburgo",
+    "depressão pós-parto",
+    "puerpério",
+    "depressão perinatal",
+    "HADS",
+    "ansiedade",
+    "depressão",
+    "GPCOG",
+    "Mini-Cog",
+    "demência",
+    "défice cognitivo",
+    "memória",
+    "rastreio cognitivo",
+    "MMSE",
+    "MoCA",
+    "saúde mental"
+  ],
+  "bibliografia": [
+    "EPDS: Cox JL, Holden JM, Sagovsky R. Detection of postnatal depression. Development of the 10-item Edinburgh Postnatal Depression Scale. Br J Psychiatry. 1987;150:782–786.",
+    "EPDS: Augusto A, et al. Post-natal depression in an urban area of Portugal: comparison of childbearing women and matched controls. Psychol Med. 1996;26(1):135–141.",
+    "EPDS: Cepêda T, Brito I, Heitor MJ. Promoção da Saúde Mental na Gravidez e Primeira Infância: manual de orientação para profissionais de saúde. DGS; 2005.",
+    "HADS: Zigmond AS, Snaith RP. The Hospital Anxiety and Depression Scale. Acta Psychiatr Scand. 1983;67(6):361–370.",
+    "HADS: Pais-Ribeiro J, et al. Validation study of a Portuguese version of the Hospital Anxiety and Depression Scale. Psychol Health Med. 2007;12(2):225–237.",
+    "GPCOG: Brodaty H, et al. The GPCOG: a new screening test for dementia designed for general practice. J Am Geriatr Soc. 2002;50(3):530–534.",
+    "Mini-Cog: Borson S, et al. The Mini-Cog: a cognitive 'vital signs' measure for dementia screening in multi-lingual elderly. Int J Geriatr Psychiatry. 2000;15(11):1021–1027.",
+    "Mini-Cog: Borson S, et al. Simplifying detection of cognitive impairment: comparison of the Mini-Cog and Mini-Mental State Examination in a multiethnic sample. J Am Geriatr Soc. 2005;53(5):871–874."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Itens da calculadora lado a lado em ecrãs largos. */
+.sm-grelha { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 14px; }
+.sm-seccao { font-size: 19px; font-weight: 800; margin: 8px 0 10px; }
+.sm-seccao span { font-family: var(--letra-texto); font-size: 15px; font-weight: 400; color: var(--cor-texto-3); margin-left: 6px; }
+.sm-quando { margin: 0 0 10px; }
+/* HADS: duas pontuações. */
+.sm-duplo { display: flex; gap: 28px; }
+.sm-duplo > div { display: flex; flex-direction: column; gap: 4px; }
+.mgf-resultado-topo .sm-duplo-rotulo { color: var(--cor-menta); }
+.sm-duplo-rotulo { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--cor-texto-3); }
+.sm-barras { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sm-barras > div { display: flex; flex-direction: column; gap: 6px; }
+@media (max-width: 560px) { .sm-duplo { gap: 18px; } .sm-barras { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-direitos"><strong>MMSE e MoCA não estão incluídos.</strong> Os direitos de autor não permitem publicá-los aqui (<a href="https://miguel-henriques5.github.io/mgfplural/acerca.html#escalas" rel="noopener">ver porquê e onde obter as versões autorizadas</a>). Para rastreio cognitivo, tens o GPCOG e o Mini-Cog.</p>
+
+  <div class="mgf-separadores" role="tablist" aria-label="Escalas">
+    <button type="button" class="mgf-separador" role="tab" id="sep-epds" aria-controls="painel-epds" aria-selected="true">EPDS</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-hads" aria-controls="painel-hads" aria-selected="false">HADS</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-gpcog" aria-controls="painel-gpcog" aria-selected="false">GPCOG</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-minicog" aria-controls="painel-minicog" aria-selected="false">Mini-Cog</button>
+  </div>
+
+  <!-- ========== Escala de Depressão Pós-Parto de Edimburgo (EPDS) ========== -->
+  <section class="mgf-painel" id="painel-epds" role="tabpanel" aria-labelledby="sep-epds" data-escala="epds">
+    <div class="mgf-titulo-escala">
+      <h2>Escala de Depressão Pós-Parto de Edimburgo (EPDS)</h2>
+      <p>Calculadora de pontuação: 10 itens, de 0 a 3 pontos cada, referentes aos últimos 7 dias</p>
+    </div>
+    <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de depressão na gravidez e no pós-parto (por exemplo, na consulta de revisão do puerpério). É preenchida pela própria mulher e refere-se aos últimos 7 dias.</p>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora: não reproduzimos o texto das perguntas. Aplica o questionário em papel (versão portuguesa validada) e introduz aqui a pontuação de cada resposta, pela mesma ordem. No formulário, os itens 3 e 5 a 10 têm a pontuação invertida: regista os pontos da resposta (0–3), não a sua posição. <a href="https://www.rcpsych.ac.uk/" rel="noopener">Royal College of Psychiatrists</a>.</p>
+    <div class="sm-grelha">
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 1</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e1" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e1" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 2</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e2" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e2" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 3</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e3" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e3" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 4</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e4" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 5</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e5" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e5" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e5" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e5" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 6</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e6" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e6" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e6" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e6" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 7</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e7" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e7" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e7" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e7" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 8</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e8" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e8" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e8" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e8" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 9</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e9" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e9" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e9" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e9" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 10 · autoagressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="e10" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e10" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e10" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="e10" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    </div>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Pontuação EPDS</h3>
+        <div class="mgf-pontuacao" id="epds-pontuacao" aria-live="polite">0<small>/30</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="epds-barra"></span></div>
+        <div class="mgf-interp" id="epds-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Interpretação</th><th>Recomendação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 8</td><td>Depressão improvável</td><td>Manter apoio e vigilância</td></tr>
+              <tr><td class="mgf-nivel-atencao">9 – 11</td><td>Depressão possível</td><td>Suporte; rastrear em 2–4 semanas; acompanhamento em CSP</td></tr>
+              <tr><td class="mgf-nivel-alerta">≥ 12</td><td>Depressão provável</td><td>Acompanhamento em CSP; ponderar avaliação diagnóstica e tratamento por Psiquiatria</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mgf-interp" id="epds-alerta" data-nivel="alerta" hidden><strong>Atenção:</strong> o item 10 (ideação de autoagressão) foi pontuado &gt; 0. Avaliação clínica urgente recomendada.</div>
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== HADS ========== -->
+  <section class="mgf-painel" id="painel-hads" role="tabpanel" aria-labelledby="sep-hads" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Escala de Ansiedade e Depressão Hospitalar (HADS)</h2>
+      <p>Calculadora de pontuação: 14 itens, de 0 a 3 pontos cada, referentes à última semana</p>
+    </div>
+    <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de ansiedade e depressão em adultos, sobretudo com doença física. É preenchida pelo próprio e refere-se à última semana. Os itens ímpares avaliam a ansiedade e os pares a depressão.</p>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora: a HADS é vendida pela GL Assessment e não reproduzimos o texto dos itens. Aplica a versão oficial e introduz aqui a pontuação de cada resposta (0–3), pela mesma ordem. <a href="https://www.gl-assessment.co.uk/products/hospital-anxiety-depression-scale/" rel="noopener">GL Assessment</a>.</p>
+    <div class="sm-grelha">
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 1 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h1" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h1" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h1" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h1" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 2 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h2" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h2" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h2" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h2" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 3 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h3" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h3" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h3" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h3" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 4 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h4" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h4" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h4" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h4" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 5 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h5" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h5" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h5" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h5" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 6 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h6" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h6" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h6" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h6" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 7 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h7" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h7" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h7" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h7" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 8 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h8" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h8" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h8" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h8" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 9 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h9" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h9" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h9" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h9" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 10 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h10" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h10" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h10" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h10" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 11 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h11" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h11" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h11" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h11" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 12 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h12" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h12" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h12" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h12" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 13 · Ansiedade</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h13" data-sub="a" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h13" data-sub="a" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h13" data-sub="a" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h13" data-sub="a" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 14 · Depressão</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="h14" data-sub="d" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h14" data-sub="d" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h14" data-sub="d" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="h14" data-sub="d" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    </div>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Resultado HADS</h3>
+        <div class="sm-duplo">
+          <div><span class="sm-duplo-rotulo">Ansiedade</span><div class="mgf-pontuacao" id="hads-a-pontuacao" aria-live="polite">0<small>/21</small></div></div>
+          <div><span class="sm-duplo-rotulo">Depressão</span><div class="mgf-pontuacao" id="hads-d-pontuacao" aria-live="polite">0<small>/21</small></div></div>
+        </div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="sm-barras">
+          <div><span class="sm-duplo-rotulo">Ansiedade</span><div class="mgf-barra" aria-hidden="true"><span id="hads-a-barra"></span></div></div>
+          <div><span class="sm-duplo-rotulo">Depressão</span><div class="mgf-barra" aria-hidden="true"><span id="hads-d-barra"></span></div></div>
+        </div>
+        <div class="mgf-interp" id="hads-a-interp" hidden></div>
+        <div class="mgf-interp" id="hads-d-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Interpretação (Ansiedade e Depressão)</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 7</td><td>Improvável</td></tr>
+              <tr><td class="mgf-nivel-atencao">8 – 11</td><td>Possível (questionável ou duvidosa)</td></tr>
+              <tr><td class="mgf-nivel-alerta">12 – 21</td><td>Provável</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== GPCOG · General Practitioner Assessment of Cognition ========== -->
+  <section class="mgf-painel" id="painel-gpcog" role="tabpanel" aria-labelledby="sep-gpcog" data-escala="gpcog" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>GPCOG · General Practitioner Assessment of Cognition</h2>
+      <p>Calculadora de pontuação: secção do utente (0–9) e, se for preciso, secção do informador (0–6)</p>
+    </div>
+    <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de défice cognitivo nos cuidados de saúde primários, quando há queixa de memória do utente ou da família, ou suspeita clínica. A secção do utente demora cerca de 4 minutos e a do informador cerca de 2.</p>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> O GPCOG é gratuito para clínicos, mas o conteúdo não pode ser alterado e o site oficial não tem versão portuguesa. Por isso, esta é só a calculadora. Aplica o formulário oficial e introduz aqui os pontos. <a href="https://gpcog.com.au/" rel="noopener">gpcog.com.au</a>.</p>
+    <h3 class="sm-seccao">Secção do utente</h3>
+    <div class="sm-grelha">
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Orientação temporal · data exata</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gp1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Correta</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Incorreta</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Desenho do relógio · números bem colocados</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gp2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Correto</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Incorreto</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Desenho do relógio · ponteiros na hora pedida</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gp3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Correto</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Incorreto</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Informação · acontecimento recente nas notícias</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gp4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Refere com pormenor</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não refere</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Evocação do nome e morada · 1 ponto por elemento</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gp5" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+    </fieldset>
+    </div>
+    <h3 class="sm-seccao">Secção do informador <span>só se o utente tiver 5 a 8 pontos</span></h3>
+    <p class="mgf-nota">Cada pergunta compara com há alguns anos. Só a resposta «Sim» vale 0; «Não», «Não sei» ou «Não se aplica» valem 1 ponto. Pontuações mais altas indicam menos défice.</p>
+    <div class="sm-grelha">
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 1</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi1" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi1" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 2</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi2" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi2" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 3</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi3" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi3" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 4</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi4" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi4" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 5</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi5" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi5" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Pergunta 6</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="gpi6" data-fora-da-soma value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="gpi6" data-fora-da-soma value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não, não sabe ou não se aplica</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    </div>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Secção do utente</h3>
+        <div class="mgf-pontuacao" id="gpcog-pontuacao" aria-live="polite">0<small>/9</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="gpcog-barra"></span></div>
+        <div class="mgf-interp" id="gpcog-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Interpretação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">Utente 9</td><td>Sem défice cognitivo significativo; não são precisos mais testes</td></tr>
+              <tr><td class="mgf-nivel-atencao">Utente 5 – 8</td><td>Mais informação necessária: aplicar a secção do informador</td></tr>
+              <tr><td class="mgf-nivel-alerta">Utente 0 – 4</td><td>Défice cognitivo indicado: prosseguir com a avaliação habitual</td></tr>
+              <tr><td class="mgf-nivel-alerta">Informador 0 – 3</td><td>Défice cognitivo indicado (com utente 5 – 8)</td></tr>
+              <tr><td class="mgf-nivel-normal">Informador 4 – 6</td><td>Défice cognitivo não indicado (com utente 5 – 8)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== Mini-Cog ========== -->
+  <section class="mgf-painel" id="painel-minicog" role="tabpanel" aria-labelledby="sep-minicog" data-escala="minicog" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Mini-Cog</h2>
+      <p>Calculadora de pontuação: evocação de 3 palavras (0–3) e desenho do relógio (0 ou 2)</p>
+    </div>
+    <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio breve de défice cognitivo (cerca de 3 minutos), quando há queixa de memória do utente ou da família, ou suspeita clínica. Pouco influenciado pela escolaridade e pela língua.</p>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> Mini-Cog © S. Borson. Pode ser usado para fins clínicos e de ensino, mas não pode ser modificado, por isso não reproduzimos as listas de palavras nem as instruções. Aplica a versão oficial e introduz aqui os pontos. <a href="https://mini-cog.com/" rel="noopener">mini-cog.com</a>.</p>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Evocação das palavras · 1 ponto por palavra evocada espontaneamente, sem pistas</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="mc1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="mc1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="mc1" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="mc1" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Desenho do relógio</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="mc2" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Normal · todos os números, por ordem e na posição aproximada, sem faltas nem repetições, e ponteiros na hora pedida</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="mc2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Anormal, ou não consegue ou recusa desenhar</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Pontuação Mini-Cog</h3>
+        <div class="mgf-pontuacao" id="minicog-pontuacao" aria-live="polite">0<small>/5</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="minicog-barra"></span></div>
+        <div class="mgf-interp" id="minicog-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Interpretação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-alerta">0 – 2</td><td>Rastreio positivo (ponto de corte &lt; 3, validado para demência)</td></tr>
+              <tr><td class="mgf-nivel-atencao">3</td><td>Abaixo do ponto de corte de maior sensibilidade (&lt; 4): considerar avaliação adicional</td></tr>
+              <tr><td class="mgf-nivel-normal">4 – 5</td><td>Rastreio negativo; não exclui défice cognitivo</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  var raiz = document.getElementById("ferramenta");
+  MGF.separadores(raiz);
+
+  /* ---------- EPDS: limiares e textos iguais à versão original ---------- */
+  var alertaEpds = document.getElementById("epds-alerta");
+  function verAlerta() {
+    var r = raiz.querySelector('input[name="e10"]:checked');
+    alertaEpds.hidden = !(r && parseFloat(r.value) > 0);
+  }
+  document.getElementById("painel-epds").addEventListener("change", verAlerta);
+
+  /* ---------- GPCOG ---------- */
+  function informador() {
+    var s = 0, n = 0;
+    for (var i = 1; i <= 6; i++) {
+      var r = raiz.querySelector('input[name="gpi' + i + '"]:checked');
+      if (r) { s += parseFloat(r.value); n++; }
+    }
+    return { soma: s, completo: n === 6 };
+  }
+
+  MGF.escalas(raiz, {
+    epds: {
+      max: 30, titulo: "EPDS — Escala de Depressão Pós-Parto de Edimburgo",
+      interp: function (s) {
+        if (s <= 8) return ["normal", "<strong>Depressão improvável</strong> (" + s + " pontos) — manter apoio e vigilância"];
+        if (s <= 11) return ["atencao", "<strong>Depressão possível</strong> (" + s + " pontos) — suporte; rastrear em 2–4 semanas"];
+        return ["alerta", "<strong>Depressão provável</strong> (" + s + " pontos) — acompanhamento em CSP; ponderar avaliação psiquiátrica"];
+      },
+      copia: function (s, interp, st) {
+        return st.valores.e10 > 0 ? "ALERTA: Questão 10 (ideação de autoagressão) pontuada > 0. Avaliação clínica urgente." : "";
+      },
+      aoLimpar: function () { alertaEpds.hidden = true; }
+    },
+    gpcog: {
+      max: 9, titulo: "GPCOG — General Practitioner Assessment of Cognition",
+      interp: function (s) {
+        if (s === 9) return ["normal", "<strong>Sem défice cognitivo significativo</strong> (" + s + "/9) — não são necessários mais testes"];
+        if (s <= 4) return ["alerta", "<strong>Défice cognitivo indicado</strong> (" + s + "/9) — prosseguir com a avaliação habitual"];
+        var inf = informador();
+        if (!inf.completo) return ["info", "<strong>Mais informação necessária</strong> (" + s + "/9) — aplicar a secção do informador"];
+        if (inf.soma <= 3) return ["alerta", "<strong>Défice cognitivo indicado</strong> (utente " + s + "/9, informador " + inf.soma + "/6) — prosseguir com a avaliação habitual"];
+        return ["normal", "<strong>Défice cognitivo não indicado</strong> (utente " + s + "/9, informador " + inf.soma + "/6)"];
+      },
+      copia: function () {
+        var inf = informador();
+        return inf.completo ? "Secção do informador: " + inf.soma + "/6" : "";
+      }
+    },
+    minicog: {
+      max: 5, titulo: "Mini-Cog",
+      interp: function (s) {
+        if (s <= 2) return ["alerta", "<strong>Rastreio positivo</strong> (" + s + "/5) — ponto de corte &lt; 3 validado para demência; avaliação clínica indicada"];
+        if (s === 3) return ["atencao", "<strong>Abaixo do ponto de corte de maior sensibilidade</strong> (" + s + "/5) — considerar avaliação adicional"];
+        return ["normal", "<strong>Rastreio negativo</strong> (" + s + "/5) — não exclui défice cognitivo"];
+      }
+    }
+  });
+
+  /* ---------- HADS: duas subescalas; textos iguais à versão original ---------- */
+  var painelHads = document.getElementById("painel-hads");
+  function nivelHads(s, nome) {
+    if (s <= 7) return ["normal", "<strong>" + nome + " improvável</strong> (" + s + " pts)"];
+    if (s <= 11) return ["atencao", "<strong>" + nome + " possível</strong> (" + s + " pts) — avaliação recomendada"];
+    return ["alerta", "<strong>" + nome + " provável</strong> (" + s + " pts) — avaliação clínica indicada"];
+  }
+  function subescala(sub) {
+    var s = 0, n = 0;
+    painelHads.querySelectorAll('input[data-sub="' + sub + '"]:checked').forEach(function (r) { s += parseFloat(r.value); n++; });
+    return { soma: s, completo: n === 7 };
+  }
+  function calcHads() {
+    [["a", "Ansiedade"], ["d", "Depressão"]].forEach(function (p) {
+      var r = subescala(p[0]), c = document.getElementById("hads-" + p[0] + "-interp");
+      document.getElementById("hads-" + p[0] + "-pontuacao").innerHTML = r.soma + "<small>/21</small>";
+      document.getElementById("hads-" + p[0] + "-barra").style.width = (r.soma / 21 * 100) + "%";
+      if (r.completo) { var n = nivelHads(r.soma, p[1]); c.dataset.nivel = n[0]; c.innerHTML = n[1]; c.hidden = false; }
+      else { c.hidden = true; c.innerHTML = ""; delete c.dataset.nivel; }
+    });
+  }
+  function textoHads() {
+    var t = "HADS — Escala de Ansiedade e Depressão";
+    [["a", "Ansiedade"], ["d", "Depressão"]].forEach(function (p) {
+      var r = subescala(p[0]), c = document.getElementById("hads-" + p[0] + "-interp");
+      t += "\n" + p[1] + ": " + r.soma + "/21";
+      if (!c.hidden) t += " — " + c.textContent.replace(/\s+/g, " ").trim();
+    });
+    return t;
+  }
+  painelHads.addEventListener("change", function () { MGF.marcar(painelHads); calcHads(); });
+  painelHads.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-acao]");
+    if (!b) return;
+    if (b.dataset.acao === "limpar") {
+      painelHads.querySelectorAll("input").forEach(function (i) { i.checked = false; });
+      MGF.marcar(painelHads); calcHads();
+    } else if (b.dataset.acao === "imprimir") window.print();
+    else if (b.dataset.acao === "copiar") MGF.copiar(textoHads(), b);
+  });
+})();
+</script>
+</body>
+</html>
