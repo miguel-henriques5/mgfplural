@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Guia de antibioterapia · MGF no Plural</title>
+<meta name="description" content="Indicações e doses de antibióticos e outros anti-infeciosos nas infeções mais comuns em ambulatório, para adultos e crianças.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+.atb-tabela { min-width: 560px; }
+.atb-tabela td:first-child { width: 120px; }
+.atb-pista { display: block; font-size: 13px; color: var(--cor-texto-3); }
+.atb-entrada { padding: 10px 0; border-bottom: 1px solid var(--cor-linha-suave); font-size: 15px; }
+.atb-entrada:last-child { border-bottom: 0; }
+.atb-entrada-rotulo { display: block; font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 2px; }
+.atb-entrada-farmaco { display: block; font-weight: 700; }
+.atb-entrada-alt { display: block; font-size: 14px; color: var(--cor-texto-2); }
+#atb-nota-final { margin-top: 20px; }
+</style>
+</head>
+<body data-ferramenta="guia-antibioterapia" data-titulo="Guia de antibioterapia">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</span><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</span><span class="menu-em-breve">Em breve</span></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-layout">
+<nav class="ferramenta-lateral" aria-label="Ferramentas de prescrição">
+<a href="../index.html">← Recursos médicos</a>
+<span class="ferramenta-lateral-grupo"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</span>
+<a href="guia-antibioterapia.html" aria-current="page">Guia de antibioterapia</a><a href="apoio-a-prescricao.html">Apoio à prescrição</a><a href="doses-pediatricas.html">Doses pediátricas</a><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a><a href="guia-terapeutico.html">Guia terapêutico</a>
+</nav>
+<div class="ferramenta-principal" id="conteudo">
+<ol class="migalhas" aria-label="Estás aqui">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><a href="../index.html#ferramentas-de-prescricao">Ferramentas de prescrição</a></li>
+<li aria-current="page">Guia de antibioterapia</li>
+</ol>
+<div class="ficha">
+<div class="ficha-linha">
+<div class="ficha-titulo">
+<h1>Guia de antibioterapia</h1>
+<div class="ficha-meta">
+<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
+<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+</div>
+</div>
+<div class="ficha-acoes">
+<a class="botao botao-principal" href="../../../descarregar/guia-antibioterapia.html" download="guia-antibioterapia.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+</div>
+</div>
+<div class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt=""><span>Apoia, não substitui, o juízo clínico. O que escreves aqui fica só neste computador: não escrevas dados que identifiquem doentes.</span></div>
+</div>
+<div class="area-ferramenta">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Indicações e doses em situações clínicas infeciosas comuns em ambulatório · edição de novembro de 2025. Escolhe uma área ou pesquisa por patologia ou antibiótico; carrega num cartão para ver as doses.</p>
+  <div class="mgf-guia-controlos">
+    <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar no guia de antibioterapia</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="atb-pesquisa" placeholder="Pesquisar patologia, antibiótico…" autocomplete="off"></label>
+    <div class="mgf-filtros" id="atb-filtros" role="group" aria-label="Filtrar por área">
+      <button type="button" data-cat="all" aria-pressed="true">Todas</button>
+      <button type="button" data-cat="respiratório" aria-pressed="false">Respiratório</button>
+      <button type="button" data-cat="gastrointestinal" aria-pressed="false">Gastrointestinal</button>
+      <button type="button" data-cat="genitourinário" aria-pressed="false">Geniturinário</button>
+      <button type="button" data-cat="ist" aria-pressed="false">IST</button>
+      <button type="button" data-cat="pele" aria-pressed="false">Pele</button>
+      <button type="button" data-cat="outras" aria-pressed="false">Outras</button>
+    </div>
+  </div>
+
+  <section class="mgf-seccao" data-cat="respiratório">
+    <div class="mgf-seccao-titulo"><h3>Respiratório</h3><span>6 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="amigdalite faringite streptococo penicilina amoxicilina cefuroxima azitromicina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-1"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Amigdalite / Faringite</span><span class="mgf-dobra-sub">Streptococcus pyogenes · 1ª linha IM ou oral 10 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-1" hidden>
+          <div class="mgf-nota" data-nivel="atencao">Dose 1ª linha igual para adulto e crianças &gt;27 kg (Penicilina e Amoxicilina). Amoxicilina: dose igual acima dos 20 kg.</div>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td>
+          <span class="mgf-farmaco">Benzilpenicilina 1.200.000 UI</span> IM, toma única<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Amoxicilina 500 mg</span> oral 12/12h · 10 dias
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Cefuroxima 250 mg</span> oral 12/12h · 10 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 500 mg</span> oral 1×/dia · 5 dias
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td>
+          <span class="mgf-farmaco">Benzilpenicilina</span> IM toma única<br>
+          &gt;27 kg → 1.200.000 UI · &lt;27 kg → 600.000 UI<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Amoxicilina 50 mg/kg/dia</span> oral 12/12h · 10 dias (máx 1 g/dia)
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Cefuroxima 20–30 mg/kg/dia</span> 12/12h · 10 dias (máx 1 g/dia)<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 12 mg/kg/dia</span> oral 1×/dia · 5 dias (máx 500 mg/dia)
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="otite média amoxicilina amoxi-clav azitromicina cefuroxima">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-2"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Otite Média Aguda</span><span class="mgf-dobra-sub">Amoxicilina em altas doses em crianças · 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-2" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 500 mg</span> oral 8/8h · 7 dias</td>
+          <td>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 875+125 mg</span> 12/12h · 5–7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 500 mg</span> oral 1×/dia · 3 dias
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 80 mg/kg/dia</span> oral 12/12h · 5–7 dias (máx 3 g/dia)</td>
+          <td>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 80 mg/kg/dia</span> 12/12h · 7 dias (máx 3 g/dia)<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cefuroxima 30 mg/kg/dia</span> 12/12h · 7 dias (máx 1 g/dia)<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 10 mg/kg/dia</span> oral 1×/dia · 3 dias (máx 500 mg/dia)
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="sinusite amoxicilina amoxi-clav doxiciclina cefixima">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-3"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Sinusite Bacteriana Aguda</span><span class="mgf-dobra-sub">Amoxicilina 1ª linha · 5–10 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-3" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 500 mg</span> oral 8/8h · 5 dias</td>
+          <td>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> 8/8h · 5 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> bid · ou <span class="mgf-farmaco-alt">Cefixima 400 mg</span>
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 80 mg/kg/dia</span> oral 8/8h · 10 dias (máx 3 g/dia)</td>
+          <td>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 80 mg/kg/dia</span> 8/8h · 10 dias (máx 3 g/dia)<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cefuroxima 30 mg/kg/dia</span> 12/12h · 10 dias (máx 1 g/dia)
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="otite externa ofloxacina ciprofloxacina dexametasona amoxi-clav canal auditivo">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-4"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Otite Externa Aguda</span><span class="mgf-dobra-sub">Tratamento tópico auricular · 7–10 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-4" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Se Edema Canal</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td>
+          <span class="mgf-farmaco">Ofloxacina 3 mg/ml</span> 10 gotas auriculares 24/24h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Ciprofloxacina 3 mg/ml</span> 2–4 gotas 8/8h · 7–10 dias
+          </td>
+          <td>
+          <em>Se edema do canal:</em> <span class="mgf-farmaco-alt">Ofloxacina + Dexametasona 3+1 mg/ml</span> 3–4 gotas 12/12h · 7–10 dias<br>
+          <em>Se celulite:</em> <span class="mgf-farmaco-alt">Amoxi-Clav 875+125 mg</span> oral 8/8h · 7 dias
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td>
+          <span class="mgf-farmaco">Ofloxacina 3 mg/ml</span> 5 gotas 24/24h · 7 dias (6m–13a)<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Ciprofloxacina 3 mg/ml</span> 2–4 gotas 8/8h · 7–10 dias
+          </td>
+          <td>
+          <em>Se edema:</em> <span class="mgf-farmaco-alt">Ofloxacina + Dexametasona</span> 2 gotas 12/12h · 7–10 dias<br>
+          <em>Oral:</em> <span class="mgf-farmaco-alt">Amoxi-Clav 80–90 mg/kg/dia</span> (máx 1.5 g/dia) 8/8h · 7 dias
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="pneumonia comunitária amoxicilina azitromicina levofloxacina atípica">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-5"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Pneumonia Adquirida na Comunidade</span><span class="mgf-dobra-sub">Amoxicilina sem comorbilidades · Fluoroquinolona com fatores de risco</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-5" hidden>
+          <div class="mgf-nota" data-nivel="info">Doxiciclina e Levofloxacina contraindicadas na gravidez.</div>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha (sem comorbilidades)</th><th>2ª Linha / Com comorbilidades</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td>
+          <span class="mgf-farmaco">Amoxicilina 1000 mg</span> oral 8/8h · 5–7 dias<br>
+          <em>Se pneumonia atípica:</em><br>
+          <span class="mgf-farmaco">Azitromicina 500 mg</span> oral 24/24h · 3 dias
+          </td>
+          <td>
+          Amoxicilina + Azitromicina (mesmas doses)<br>
+          <span class="mgf-ou">ou (comorbilidades + fatores de risco)</span>
+          <span class="mgf-farmaco-alt">Levofloxacina 500 mg</span> 1×/dia · 5 dias
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 90–100 mg/kg/dia</span> (máx 3 g/dia) oral 8/8h · 7 dias</td>
+          <td>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 90–100 mg/kg/dia</span> (máx 3 g/dia) 8/8h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cefuroxima 30–40 mg/kg/dia</span> (máx 1 g/dia) 8/8h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 10 mg/kg/dia</span> (máx 500 mg/dia) 24/24h · 5 dias
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+          <div class="mgf-nota" data-tom="menta">
+          <strong>Traqueo-Bronquite grave / Tosse Convulsa (Bordetella pertussis):</strong><br>
+          Azitromicina 500 mg oral 24/24h · 3 dias
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="dpoc exacerbação amoxicilina amoxi-clav doxiciclina azitromicina levofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-6"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">DPOC Exacerbada</span><span class="mgf-dobra-sub">Amoxicilina ou Amoxi-Clav 1ª linha · 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-6" hidden>
+          <div class="mgf-nota" data-nivel="atencao">Doxiciclina e Levofloxacina contraindicadas na gravidez.</div>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td>
+          <span class="mgf-farmaco">Amoxicilina 500 mg</span> oral 8/8h · 5–7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Amoxi-Clav 500+125 mg</span> oral 8/8h · 5 dias
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> oral 12/12h · 5 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Azitromicina 500 mg</span> oral 24/24h · 3 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Levofloxacina 500 mg</span> oral 24/24h · 5 dias
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mgf-seccao" data-cat="gastrointestinal">
+    <div class="mgf-seccao-titulo"><h3>Gastrointestinal</h3><span>4 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="helicobacter pylori erradicação pylera bismuto omeprazol ibp claritromicina metronidazol levofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-7"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Helicobacter pylori</span><span class="mgf-dobra-sub">Esquema quádruplo · 10–14 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-7" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Esquema</th><th>Regime</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><strong>1ª Linha — Quádruplo sem bismuto</strong> (concomitante)</td>
+          <td>
+          <span class="mgf-farmaco">Amoxicilina 1000 mg</span> oral 12/12h<br>
+          + <span class="mgf-farmaco">Claritromicina 500 mg</span> oral 12/12h<br>
+          + <span class="mgf-farmaco">Metronidazol 500 mg</span> oral 12/12h<br>
+          + <span class="mgf-farmaco">IBP dose standard</span> oral 12/12h · <strong>14 dias</strong>
+          </td>
+          </tr>
+          <tr>
+          <td><strong>1ª Linha alternativa — Com Bismuto (Pylera)</strong></td>
+          <td>
+          <span class="mgf-farmaco">Pylera</span> (bismuto + metronidazol + tetraciclina) 3 cápsulas 6/6h<br>
+          + <span class="mgf-farmaco">Omeprazol 20 mg</span> oral 12/12h · <strong>10 dias</strong>
+          </td>
+          </tr>
+          <tr>
+          <td><strong>2ª Linha</strong> (resistência ao Pylera)</td>
+          <td>
+          <span class="mgf-farmaco-alt">Levofloxacina 500 mg</span> oral 24/24h<br>
+          + <span class="mgf-farmaco-alt">Amoxicilina 1000 mg</span> 12/12h<br>
+          + <span class="mgf-farmaco-alt">IBP</span> 12/12h · <strong>14 dias</strong>
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="diarreia aguda infecciosa campylobacter salmonela shigella azitromicina ciprofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-8"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Diarreia Aguda Infecciosa</span><span class="mgf-dobra-sub">Campylobacter · Salmonela · Shigella</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-8" hidden>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Campylobacter</span>
+          <span class="atb-entrada-farmaco">Azitromicina 500 mg oral 1×/dia · 3–5 dias</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Salmonela</span>
+          <span class="atb-entrada-farmaco">Azitromicina 500 mg oral 1×/dia · 6 dias</span>
+          <span class="atb-entrada-alt">D1: 1 g (2 comprimidos)</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Shigella</span>
+          <span class="atb-entrada-farmaco">Ciprofloxacina 500 mg oral 12/12h · 3 dias</span>
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="diarreia viajante azitromicina toma única">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-9"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Diarreia do Viajante</span><span class="mgf-dobra-sub">Azitromicina · Toma única ou 3 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-9" hidden>
+          <div class="atb-entrada">
+          <span class="atb-entrada-farmaco">Azitromicina 1 g oral, toma única</span>
+          <span class="atb-entrada-alt">ou Azitromicina 500 mg oral 24/24h · 3 dias</span>
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="diverticulite aguda amoxi-clav sulfametoxazol trimetoprim metronidazol">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-10"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Diverticulite Aguda</span><span class="mgf-dobra-sub">Amoxi-Clav 1ª linha · 7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-10" hidden>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">1ª Linha</span>
+          <span class="atb-entrada-farmaco">Amoxicilina + Ácido Clavulânico 875+125 mg oral 8/8h · 7 dias</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Alternativa</span>
+          <span class="atb-entrada-farmaco">Cotrimoxazol 800+160 mg oral 12/12h + Metronidazol 500 mg oral 8/8h · 7 dias</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mgf-seccao" data-cat="genitourinário">
+    <div class="mgf-seccao-titulo"><h3>Geniturinário</h3><span>6 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="cistite ITU nitrofurantoína fosfomicina cefuroxima sulfametoxazol trimetoprim amoxi-clav ciprofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-11"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Cistite</span><span class="mgf-dobra-sub">Nitrofurantoína / Fosfomicina para mulher · Cotrimoxazol para homem</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-11" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha / Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="areia">Mulher</span></td>
+          <td>
+          <span class="mgf-farmaco">Nitrofurantoína 100 mg</span> oral 6/6h · 5 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Fosfomicina 3000 mg</span> oral toma única
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h · 3 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 5–7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cefuroxima 250 mg</span> oral 12/12h · 5–7 dias
+          </td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Grávida</span></td>
+          <td><span class="mgf-farmaco">Fosfomicina 3000 mg</span> oral toma única</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 5–7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="areia">Homem</span></td>
+          <td><span class="mgf-farmaco">Cotrimoxazol 800+160 mg</span> oral 12/12h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Ciprofloxacina 500 mg</span> oral 12/12h · 7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><span class="mgf-farmaco">Cefuroxima 20–30 mg/kg/dia</span> 12/12h · 4 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 50 mg/kg/dia</span> (máx 3000 mg/dia) oral 12/12h · 3–4 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="pielonefrite ceftriaxona cefuroxima amoxi-clav cotrimoxazol ciprofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-12"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Pielonefrite</span><span class="mgf-dobra-sub">Ceftriaxona IM/IV dose de carga · Cefuroxima oral 7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-12" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>2ª Linha</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td>
+          <span class="mgf-farmaco">Ceftriaxona 1000 mg</span> IV ou IM toma única<br>
+          + <span class="mgf-farmaco">Cefuroxima 500 mg</span> oral 12/12h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Amoxi-Clav 875+125 mg</span> oral 12/12h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h · 7 dias
+          </td>
+          <td><span class="mgf-farmaco-alt">Ciprofloxacina 500 mg</span> oral 12/12h · 5–7 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="prostatite cotrimoxazol ciprofloxacina levofloxacina aguda crónica">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-13"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Prostatite</span><span class="mgf-dobra-sub">10 dias a 6 semanas consoante aguda ou crónica</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-13" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>Aguda</th><th>Crónica</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="areia">Homem</span></td>
+          <td>
+          <span class="mgf-farmaco">Cotrimoxazol 800+160 mg</span> oral 12/12h · 10 dias–4 sem<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Ciprofloxacina 500 mg</span> oral 12/12h · 10 dias–4 sem
+          </td>
+          <td>
+          Prolongar esquema da aguda para <strong>4–6 semanas</strong><br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Levofloxacina 500–750 mg</span> oral 24/24h · 4–6 semanas
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="balanite clotrimazol fluconazol miconazol hidrocortisona">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-14"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Balanite</span><span class="mgf-dobra-sub">Antifúngico tópico · 7–14 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-14" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Se Inflamação Marcada</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="areia">Homem</span></td>
+          <td>
+          <span class="mgf-farmaco">Clotrimazol creme 10 mg/g</span> 12/12h · 7–14 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Fluconazol 150 mg oral</span> toma única
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Miconazol + Hidrocortisona creme 20 mg/g</span> 12/12h · 7–14 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Clotrimazol + Betametasona creme</span> 12/12h · 7–14 dias
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="orquiepididimite ceftriaxona doxiciclina cotrimoxazol IST">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-15"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Orquiepididimite</span><span class="mgf-dobra-sub">IST vs causa não-IST · 10–14 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-15" hidden>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Por causa IST</span>
+          <span class="atb-entrada-farmaco">Ceftriaxona 1000 mg IM toma única + Doxiciclina 100 mg oral 12/12h · 10–14 dias</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Por causa não-IST</span>
+          <span class="atb-entrada-farmaco">Cotrimoxazol 800+160 mg oral 12/12h · 10–14 dias</span>
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="vulvovaginite candidíase vaginose bacteriana tricomoníase clotrimazol fluconazol metronidazol clindamicina bartolinite">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-16"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Vulvo-Vaginite / Bartolinite</span><span class="mgf-dobra-sub">Candidíase · Vaginose Bacteriana · Tricomoníase</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-16" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Diagnóstico</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><strong>Candidíase</strong></td>
+          <td>
+          <span class="mgf-farmaco">Clotrimazol 500 mg</span> cápsula mole vaginal, aplicação única<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Clotrimazol 100 mg</span> comprimido vaginal 24/24h · 6 dias
+          </td>
+          <td><span class="mgf-farmaco-alt">Fluconazol 150 mg oral</span> toma única</td>
+          </tr>
+          <tr>
+          <td><strong>Vaginose Bacteriana</strong><br><em class="atb-pista">odor a peixe · aderente às paredes</em></td>
+          <td>
+          <span class="mgf-farmaco">Metronidazol 500 mg oral</span> 12/12h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Metronidazol 500 mg óvulos vaginais</span> 24/24h · 5 dias
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Clindamicina 300 mg oral</span> 12/12h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Clindamicina 2% creme vaginal</span> 24/24h · 7 dias
+          </td>
+          </tr>
+          <tr>
+          <td><strong>Tricomoníase</strong><br><em class="atb-pista">amarela/verde · arejada · abundante</em></td>
+          <td>
+          <span class="mgf-farmaco">Metronidazol 500 mg oral</span> 12/12h · 7 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Metronidazol 2000 mg oral</span> dose única
+          </td>
+          <td><div class="mgf-nota" data-nivel="info">Tratar parceiros: Metronidazol 2000 mg oral toma única</div></td>
+          </tr>
+          </tbody>
+          </table></div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Bartolinite (glândulas de Bartholin)</span>
+          <span class="atb-entrada-farmaco">Cotrimoxazol 800+160 mg oral 12/12h · 7 dias</span>
+          <span class="atb-entrada-alt">± Amoxi-Clav 875+125 mg 12/12h ou Metronidazol 500 mg 8/8h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mgf-seccao" data-cat="ist">
+    <div class="mgf-seccao-titulo"><h3>Infecções Sexualmente Transmissíveis</h3><span>2 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="sífilis benzilpenicilina benzatínica ceftriaxona doxiciclina primária secundária latente">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-17"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Sífilis</span><span class="mgf-dobra-sub">Benzilpenicilina benzatínica IM · Duração depende do estadio</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-17" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Estadio</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><strong>Primária, Secundária ou Latente recente</strong> (&lt;1 ano)</td>
+          <td><span class="mgf-farmaco">Benzilpenicilina benzatínica 2.400.000 UI</span> IM toma única</td>
+          <td>
+          <span class="mgf-farmaco-alt">Ceftriaxona 1000 mg</span> IM/IV 24/24h · 10–14 dias<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> oral 12/12h · 14 dias
+          </td>
+          </tr>
+          <tr>
+          <td><strong>Latente tardia</strong> (&gt;1 ano) ou duração desconhecida</td>
+          <td><span class="mgf-farmaco">Benzilpenicilina benzatínica 2.400.000 UI</span> IM 1×/semana · 3 semanas</td>
+          <td><span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> oral 12/12h · 21–28 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="uretrite cervicite gonorreia clamídia ceftriaxona azitromicina doxiciclina cefixima levofloxacina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-18"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Uretrite / Cervicite</span><span class="mgf-dobra-sub">Empírica · Gonorreia · Clamídia</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-18" hidden>
+          <div class="mgf-nota" data-nivel="info">Tratar parceiros sexuais e recomendar abstinência sexual durante 14 dias.</div>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Agente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><strong>Empírica</strong></td>
+          <td>
+          <span class="mgf-farmaco">Ceftriaxona 1000 mg IM</span> toma única<br>
+          + <span class="mgf-farmaco">Azitromicina 2000 mg oral</span> toma única<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco">Doxiciclina 100 mg</span> 12/12h · 7 dias
+          </td>
+          <td>
+          <span class="mgf-farmaco-alt">Azitromicina 2000 mg oral</span> toma única<br>
+          + <span class="mgf-farmaco-alt">Gentamicina 240 mg IM</span> toma única<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Cefixima 400 mg oral</span> toma única
+          </td>
+          </tr>
+          <tr>
+          <td><strong>Gonorreia</strong></td>
+          <td><span class="mgf-farmaco">Ceftriaxona 1000 mg IM</span> toma única</td>
+          <td><span class="mgf-farmaco-alt">Cefixima 800 mg oral</span> toma única (se impossível IM)</td>
+          </tr>
+          <tr>
+          <td><strong>Clamídia</strong></td>
+          <td><span class="mgf-farmaco">Doxiciclina 100 mg oral</span> 12/12h · 7 dias</td>
+          <td>
+          <span class="mgf-farmaco-alt">Azitromicina 1000 mg oral</span> toma única<br>
+          <span class="mgf-ou">ou</span>
+          <span class="mgf-farmaco-alt">Levofloxacina 500 mg oral</span> 24/24h · 7 dias
+          </td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mgf-seccao" data-cat="pele">
+    <div class="mgf-seccao-titulo"><h3>Pele e Tecidos Moles</h3><span>6 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="impétigo ectima ácido fusídico mupirocina flucloxacilina amoxi-clav foliculite furúnculo paroníquia panarício">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-19"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Impétigo / Ectima</span><span class="mgf-dobra-sub">Tópico (localizado) ou sistémico (generalizado/ectima) · 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-19" hidden>
+          <div class="mgf-nota" data-nivel="atencao">
+          <strong>Impétigo:</strong> crosta melicérica superficial · tópico se localizado · oral se generalizado<br>
+          <strong>Impétigo bolhoso:</strong> bolhas flácidas · mais frequente em crianças · geralmente precisa AB oral<br>
+          <strong>Ectima:</strong> úlcera profunda com crosta grossa · sempre AB oral
+          </div>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><em>Tópico:</em> <span class="mgf-farmaco">Ácido Fusídico 20 mg/g creme</span> 8/8h · 5 dias<br><em>Sistémico:</em> <span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7 dias</td>
+          <td><em>Tópico:</em> <span class="mgf-farmaco-alt">Mupirocina 20 mg/g pomada</span> 8/8h · 5 dias<br><em>Sistémico:</em> <span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><em>Tópico:</em> <span class="mgf-farmaco">Ácido Fusídico 20 mg/g creme</span> 8/8h · 5 dias<br><em>Sistémico:</em> <span class="mgf-farmaco">Flucloxacilina 50–100 mg/kg/dia</span> (máx 1500 mg) oral 6/6h · 7 dias</td>
+          <td><em>Tópico:</em> <span class="mgf-farmaco-alt">Mupirocina 20 mg/g pomada</span> 8/8h · 5 dias<br><em>Sistémico:</em> <span class="mgf-farmaco-alt">Amoxi-Clav 40–50 mg/kg/dia</span> (máx 1500 mg) oral 8/8h · 5–7 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+          <div class="mgf-nota" data-tom="menta">
+          <strong>Foliculite / Furúnculo / Carbúnculo:</strong> igual ao impétigo. Exceto se suspeita de Pseudomonas (Ciprofloxacina 500 mg 12/12h · 7 dias) ou Enterobacterales (Cotrimoxazol 800+160 mg 12/12h · 7 dias). A foliculite resolve frequentemente sem AB.
+          </div>
+          <div class="mgf-nota" data-tom="menta">
+          <strong>Paroníquia / Panarício:</strong> igual ao impétigo (Fucidine / Mupirocina + Flucloxacilina / Amoxi-Clav).<br>
+          Outras opções: Clindamicina 300–450 mg 6/6h–8/8h · 7 dias | Cotrimoxazol 800+160 mg 12/12h · 7 dias | Doxiciclina 100 mg 12/12h + Metronidazol 500 mg 8/8h · 7 dias
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="abcesso drenagem flucloxacilina amoxi-clav clindamicina cotrimoxazol doxiciclina incisão">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-20"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Abcesso</span><span class="mgf-dobra-sub">Incisão e drenagem é o tratamento principal · AB adjuvante 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-20" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><strong>Incisão e drenagem</strong><br><span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Clindamicina 300–450 mg</span> 6/6h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> oral 12/12h · 7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><strong>Incisão e drenagem</strong><br><span class="mgf-farmaco">Flucloxacilina 50–100 mg/kg/dia</span> (máx 1500–2000 mg) oral 6/6h · 5 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 40–50 mg/kg/dia</span> (máx 1500 mg) oral 8/8h · 5 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="erisipela celulite flucloxacilina benzilpenicilina amoxi-clav clindamicina cotrimoxazol doxiciclina amoxicilina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-21"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Erisipela / Celulite</span><span class="mgf-dobra-sub">Flucloxacilina 1ª linha em adultos · 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-21" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco">Benzilpenicilina benzatínica 1.200.000 UI</span> IM toma única</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 5 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Clindamicina 300–450 mg</span> 6/6h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h · 5 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Doxiciclina 100 mg</span> oral 12/12h · 5 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><em>Erisipela:</em> <span class="mgf-farmaco">Amoxicilina 50 mg/kg/dia</span> 8/8h · 10 dias<br><em>Celulite:</em> <span class="mgf-farmaco">Flucloxacilina 50–100 mg/kg/dia</span> (máx 1500–2000 mg) oral 6/6h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 40–50 mg/kg/dia</span> (máx 1500 mg) oral 8/8h · 7 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="úlcera perna ferida flucloxacilina amoxi-clav clindamicina cotrimoxazol metronidazol anaeróbios">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-22"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Infecção Úlcera de Perna</span><span class="mgf-dobra-sub">Flucloxacilina em feridas recentes · Amoxi-Clav nas não recentes</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-22" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Tipo de Ferida</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><strong>Recentes (até 3 meses)</strong></td>
+          <td><span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 500+125 mg</span> oral 8/8h · 7 dias</td>
+          </tr>
+          <tr>
+          <td><strong>Não recentes (&gt;3 meses)</strong></td>
+          <td><span class="mgf-farmaco">Amoxi-Clav 500+125 mg</span> oral 8/8h · 7 dias<br><em>Se suspeita anaeróbios:</em> <span class="mgf-farmaco">Clindamicina 300–450 mg</span> oral 8/8h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h · 7 dias<br><em>+ anaeróbios:</em> <span class="mgf-farmaco-alt">Metronidazol 500 mg</span> oral 8/8h · 7 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="pé diabético flucloxacilina amoxi-clav cotrimoxazol metronidazol ciprofloxacina clindamicina pseudomonas osteomielite">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-23"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Infecção Pé Diabético</span><span class="mgf-dobra-sub">7–30 dias consoante gravidade · cobertura alargada se osteomielite</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-23" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Gravidade</th><th>Regime</th></tr></thead>
+          <tbody>
+          <tr><td><strong>Ligeira</strong></td><td><span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7–14 dias</td></tr>
+          <tr><td><strong>Moderada a Grave</strong></td><td><span class="mgf-farmaco">Amoxi-Clav 500+125 mg</span> oral 8/8h · 14–30 dias</td></tr>
+          <tr><td><strong>Suspeita anaeróbios</strong></td><td><span class="mgf-farmaco">Cotrimoxazol 800+160 mg</span> oral 12/12h + <span class="mgf-farmaco">Metronidazol 500 mg</span> oral 8/8h · 14–30 dias</td></tr>
+          <tr><td><strong>Pseudomonas / Osteomielite</strong></td><td><span class="mgf-farmaco">Ciprofloxacina 500–750 mg</span> oral 12/12h + <span class="mgf-farmaco">Clindamicina 300–450 mg</span> 8/8h · 14–30 dias</td></tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="mordedura humana animal amoxi-clav cotrimoxazol metronidazol profilaxia clindamicina">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-24"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Mordedura Humana e Animal</span><span class="mgf-dobra-sub">Amoxi-Clav tratamento 7 dias · Profilaxia 3 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-24" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa (alergia beta-lactâmicos)</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><em>Tratamento:</em> <span class="mgf-farmaco">Amoxi-Clav 500+125 mg</span> oral 8/8h · 7 dias<br><em>Profilaxia:</em> mesmo AB · 3 dias</td>
+          <td><span class="mgf-farmaco-alt">Cotrimoxazol 800+160 mg</span> oral 12/12h + <span class="mgf-farmaco-alt">Metronidazol 500 mg</span> oral 8/8h · 7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><em>Tratamento:</em> <span class="mgf-farmaco">Amoxi-Clav 40–50 mg/kg/dia</span> (máx 1500 mg) 8/8h · 7 dias<br><em>Profilaxia:</em> mesmo AB · 3 dias</td>
+          <td><em>Tratamento:</em> <span class="mgf-farmaco-alt">Cotrimoxazol 10 mg/kg/dia</span> (máx 160 mg) 12/12h + <span class="mgf-farmaco-alt">Clindamicina 30 mg/kg/dia</span> (máx 1800 mg) oral 8/8h · 7 dias<br><em>Profilaxia:</em> mesmo AB · 3 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mgf-seccao" data-cat="outras">
+    <div class="mgf-seccao-titulo"><h3>Outras Infecções</h3><span>3 patologias</span></div>
+    <div class="mgf-grelha">
+      <div class="mgf-dobra" data-tags="mastite flucloxacilina amoxi-clav clindamicina lactante">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-25"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Mastite</span><span class="mgf-dobra-sub">Flucloxacilina 1ª linha (lactante ou não) · 7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-25" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="areia">Lactante / Não lactante</span></td>
+          <td><span class="mgf-farmaco">Flucloxacilina 500–1000 mg</span> oral 6/6h · 7 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 875+125 mg</span> 12/12h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Clindamicina 300 mg</span> 6/6h · 7 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="conjuntivite cloranfenicol colírio ácido fusídico ciprofloxacina ofloxacina azitromicina criança">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-26"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Conjuntivite Bacteriana</span><span class="mgf-dobra-sub">Cloranfenicol colírio 1ª linha · Pomada noturna</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-26" hidden>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">1ª Linha</span>
+          <span class="atb-entrada-farmaco">Cloranfenicol colírio 8 mg/ml: 1 gota cada 2h (D1–D2) → depois 1 gota 8/8h</span>
+          <span class="atb-entrada-alt">+ Pomada de Cloranfenicol à noite</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Alternativas</span>
+          <span class="atb-entrada-farmaco">Ácido Fusídico gel oftálmico 10 mg/g: 1 aplicação 8/8h</span>
+          <span class="atb-entrada-alt">ou Ciprofloxacina pomada · ou Ofloxacina colírio</span>
+          </div>
+          <div class="atb-entrada">
+          <span class="atb-entrada-rotulo">Criancas com menos de 2 anos</span>
+          <span class="atb-entrada-farmaco">Azitromicina (Azyter) colírio: 1 gota 12/12h · 3 dias</span>
+          </div>
+        </div>
+      </div>
+      <div class="mgf-dobra" data-tags="dentária abcesso periodontal amoxicilina amoxi-clav clindamicina cotrimoxazol">
+        <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="atb-27"><span class="mgf-dobra-texto"><span class="mgf-dobra-titulo">Infecções Dentárias</span><span class="mgf-dobra-sub">Abcesso dentário · 5–7 dias</span></span><svg class="mgf-dobra-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="mgf-dobra-corpo" id="atb-27" hidden>
+          <div class="mgf-tabela-caixa"><table class="mgf-tabela atb-tabela">
+          <thead><tr><th>Doente</th><th>1ª Linha</th><th>Alternativa</th></tr></thead>
+          <tbody>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="menta">Adulto</span></td>
+          <td><span class="mgf-farmaco">Amoxicilina 500 mg</span> oral 8/8h · 5–7 dias</td>
+          <td><span class="mgf-farmaco-alt">Amoxi-Clav 875+125 mg</span> oral 8/8h · 7 dias<br><span class="mgf-ou">ou</span><span class="mgf-farmaco-alt">Clindamicina 300 mg 6/6h ou 450 mg 8/8h</span> (máx 1800 mg/dia) · 5–7 dias</td>
+          </tr>
+          <tr>
+          <td><span class="mgf-rotulo" data-tom="ambar">Criança</span></td>
+          <td><em>Tratamento:</em> <span class="mgf-farmaco">Amoxi-Clav 40–50 mg/kg/dia</span> (máx 1500 mg) oral 8/8h · 7 dias<br><em>Profilaxia:</em> mesmo AB · 3 dias</td>
+          <td><em>Tratamento:</em> <span class="mgf-farmaco-alt">Cotrimoxazol 10 mg/kg/dia</span> (máx 160 mg) 12/12h + <span class="mgf-farmaco-alt">Clindamicina 30 mg/kg/dia</span> (máx 1800 mg) oral 8/8h · 7 dias<br><em>Profilaxia:</em> mesmo AB · 3 dias</td>
+          </tr>
+          </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mgf-vazio" id="atb-vazio" hidden>Nenhum resultado encontrado.</div>
+  <p class="mgf-nota" id="atb-nota-final"><strong>Nota:</strong> Este guia destina-se a uso clínico em ambulatório e não substitui o julgamento clínico individualizado. As doses e indicações devem ser sempre confirmadas face ao contexto clínico, alergias e antibiograma quando disponível.</p>
+
+</main>
+</div>
+<div class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Guia de antibioterapia em ambulatório, edição de novembro de 2025 (compilação do autor a partir das normas da DGS e das fichas técnicas).</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório (amigdalite, otite média aguda, sinusite, pneumonia adquirida na comunidade, infeção urinária).</li><li>INFARMED. Resumo das Características do Medicamento (RCM) dos antibióticos referidos.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</div>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="apoio-a-prescricao.html"><span>Seguinte →</span><strong>Apoio à prescrição</strong></a></nav>
+</div>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+(function () {
+  "use strict";
+  /* Pesquisa e filtros: mesma lógica da versão original (procura nas etiquetas, título, subtítulo e
+     conteúdo de cada cartão; os cartões encontrados abrem-se). */
+  var raiz = document.getElementById("ferramenta");
+  MGF.dobras(raiz);
+  var pesquisa = document.getElementById("atb-pesquisa");
+  var botoes = raiz.querySelectorAll("#atb-filtros button");
+  var seccoes = raiz.querySelectorAll(".mgf-seccao");
+  var vazio = document.getElementById("atb-vazio");
+  var filtro = "all";
+
+  function texto(el, sel) { var x = el.querySelector(sel); return x ? x.textContent : ""; }
+
+  function aplicar() {
+    var q = pesquisa.value.toLowerCase().trim();
+    var algum = false;
+    seccoes.forEach(function (sec) {
+      if (filtro !== "all" && filtro !== sec.dataset.cat) { sec.hidden = true; return; }
+      var visivel = false;
+      sec.querySelectorAll(".mgf-dobra").forEach(function (c) {
+        if (!q) { c.hidden = false; visivel = true; return; }
+        var palheiro = (c.dataset.tags || "") + " " + texto(c, ".mgf-dobra-titulo") + " " +
+                       texto(c, ".mgf-dobra-sub") + " " + texto(c, ".mgf-dobra-corpo");
+        var v = palheiro.toLowerCase().indexOf(q) !== -1;
+        c.hidden = !v;
+        if (v) { visivel = true; MGF.abrir(c, true); }
+      });
+      sec.hidden = !visivel;
+      if (visivel) algum = true;
+    });
+    vazio.hidden = algum;
+  }
+
+  botoes.forEach(function (b) {
+    b.addEventListener("click", function () {
+      botoes.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      filtro = b.dataset.cat;
+      aplicar();
+    });
+  });
+  pesquisa.addEventListener("input", aplicar);
+})();
+</script>
+</body>
+</html>

@@ -317,6 +317,79 @@
 .mgf-mensagem { color: var(--clin-alerta); font-weight: 700; font-size: 15px; }
 .mgf-mensagem:empty { display: none; }
 
+/* =====================================================================
+   Guias de consulta (antibioterapia, prescrição, exames…)
+   Pesquisa, filtros, secções, cartões que abrem e fecham, notas e rótulos.
+   ===================================================================== */
+.mgf-guia-intro { color: var(--cor-texto-2); font-size: 16px; margin: 0 0 14px; }
+.mgf-guia-controlos { display: flex; flex-direction: column; gap: 10px; margin: 0 0 20px; }
+
+/* Caixa de pesquisa com lupa */
+.mgf-pesquisa { position: relative; display: block; }
+.mgf-pesquisa svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--cor-texto-3); pointer-events: none; }
+.mgf-pesquisa input {
+  width: 100%; font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta);
+  min-height: 48px; padding: 10px 14px 10px 42px; border: 1.5px solid var(--cor-campo);
+  border-radius: var(--raio); background: var(--cor-branco);
+}
+.mgf-pesquisa input:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+
+/* Secções de um guia */
+.mgf-seccao { margin: 0 0 24px; }
+.mgf-seccao[hidden] { display: none; }
+.mgf-seccao-titulo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--cor-linha); }
+.mgf-seccao-titulo h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
+.mgf-seccao-titulo span { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .04em; color: var(--cor-texto-3); }
+.mgf-grelha { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+/* Cartão que abre e fecha (botão com aria-expanded + corpo com hidden) */
+.mgf-dobra { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); overflow: hidden; }
+.mgf-dobra[hidden] { display: none; }
+.mgf-dobra-topo {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px;
+  padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta);
+  font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s;
+}
+.mgf-dobra-topo:hover { background: var(--cor-papel); }
+.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-menta-clara); }
+.mgf-dobra-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 800; font-size: 18px; letter-spacing: -0.015em; line-height: 1.2; }
+.mgf-dobra-sub { font-size: 14px; color: var(--cor-texto-2); line-height: 1.4; }
+.mgf-dobra-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+.mgf-dobra-topo[aria-expanded="true"] .mgf-dobra-seta { transform: rotate(180deg); }
+.mgf-dobra-corpo { padding: 14px 18px 18px; border-top: 1px solid var(--cor-linha-suave); display: flex; flex-direction: column; gap: 12px; }
+.mgf-dobra-corpo[hidden] { display: none; }
+
+/* Sem resultados */
+.mgf-vazio { text-align: center; padding: 28px 16px; color: var(--cor-texto-3); background: var(--cor-branco); border: 1.5px dashed var(--cor-linha); border-radius: var(--raio); }
+.mgf-vazio[hidden] { display: none; }
+
+/* Notas com tom: atenção (âmbar), info (azul) e realce da marca (menta) */
+.mgf-nota[data-nivel] { border-left: 5px solid; }
+.mgf-nota[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+.mgf-nota[data-nivel="info"]    { background: var(--clin-info-fundo);    color: var(--clin-info);    border-color: var(--clin-info-borda); }
+.mgf-nota[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta);  border-color: var(--clin-alerta-borda); }
+.mgf-nota[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal);  border-color: var(--clin-normal-borda); }
+.mgf-nota[data-tom="menta"] { background: var(--cor-menta-clara); color: var(--cor-verde-fundo); border-left: 5px solid var(--cor-verde-medio); }
+.mgf-nota[data-nivel] strong:first-child, .mgf-nota[data-tom] strong:first-child { color: inherit; }
+
+/* Rótulos neutros (população, via, tipo). Não têm significado clínico. */
+.mgf-rotulo { display: inline-block; font-size: 13px; font-weight: 700; line-height: 1.3; padding: 2px 8px; border-radius: 6px; white-space: nowrap; background: var(--cor-papel); color: var(--cor-texto-2); border: 1px solid var(--cor-linha); }
+.mgf-rotulo[data-tom="menta"] { background: var(--cor-menta-clara); color: var(--cor-verde-fundo); border-color: var(--cor-menta); }
+.mgf-rotulo[data-tom="ambar"] { background: var(--cor-ambar-claro); color: var(--cor-ambar-texto); border-color: var(--cor-mostarda); }
+.mgf-rotulo[data-tom="areia"] { background: var(--cor-areia); color: var(--cor-tinta); border-color: var(--cor-linha); }
+
+/* Fármacos dentro de tabelas */
+.mgf-farmaco { font-weight: 700; color: var(--cor-tinta); }
+.mgf-farmaco-alt { font-weight: 700; color: var(--cor-texto-2); }
+.mgf-ou { display: block; font-style: italic; font-size: 13px; color: var(--cor-texto-3); margin: 2px 0; }
+
+@media print {
+  .mgf-guia-controlos, .mgf-vazio { display: none !important; }
+  .mgf-dobra { break-inside: avoid; }
+  .mgf-dobra-seta { display: none; }
+}
+
 
 body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); }
 .autonomo { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 16px; }
@@ -501,6 +574,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
    MGF.escalas(raiz, configs)      liga escalas de pontuação declaradas em configs
    MGF.copiar(texto, botao)        copia texto e dá feedback no botão
    MGF.decimal(n)                  1.5 → "1,5"
+   MGF.dobras(raiz)                liga os cartões que abrem e fecham (.mgf-dobra); devolve abrir(dobra, sim)
    ===================================================================== */
 (function () {
   "use strict";
@@ -661,7 +735,35 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
     return { calcular: calcular, limpar: limpar, estado: estado, textoCopia: textoCopia };
   }
 
-  window.MGF = { separadores: separadores, escalas: escalas, copiar: copiar, decimal: decimal, marcar: marcar };
+  /* ---------------------------------------------------------------
+     Cartões que abrem e fecham:
+       <div class="mgf-dobra">
+         <button type="button" class="mgf-dobra-topo" aria-expanded="false" aria-controls="x">…</button>
+         <div class="mgf-dobra-corpo" id="x" hidden>…</div>
+       </div>
+     --------------------------------------------------------------- */
+  function abrir(dobra, sim) {
+    var b = dobra.querySelector(".mgf-dobra-topo"), c = dobra.querySelector(".mgf-dobra-corpo");
+    if (!b || !c) return;
+    b.setAttribute("aria-expanded", sim ? "true" : "false");
+    c.hidden = !sim;
+  }
+  function aberta(dobra) {
+    var b = dobra.querySelector(".mgf-dobra-topo");
+    return !!b && b.getAttribute("aria-expanded") === "true";
+  }
+  function dobras(raiz) {
+    raiz.addEventListener("click", function (e) {
+      var b = e.target.closest(".mgf-dobra-topo");
+      if (!b || !raiz.contains(b)) return;
+      var d = b.closest(".mgf-dobra");
+      abrir(d, !aberta(d));
+    });
+    return abrir;
+  }
+
+  window.MGF = { separadores: separadores, escalas: escalas, copiar: copiar, decimal: decimal, marcar: marcar,
+                 dobras: dobras, abrir: abrir, aberta: aberta };
 })();
 
 </script>
