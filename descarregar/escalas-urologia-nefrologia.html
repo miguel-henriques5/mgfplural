@@ -584,7 +584,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
         <div class="mgf-campos">
           <label class="mgf-campo">Creatinina sérica (mg/dL)<input type="number" id="kdigo-cr" inputmode="decimal" placeholder="Ex.: 1,2" step="0.01" min="0.1"></label>
           <label class="mgf-campo">Idade (anos)<input type="number" id="kdigo-idade" inputmode="numeric" placeholder="Ex.: 65" min="18" max="100"></label>
-          <label class="mgf-campo">Sexo<select id="kdigo-sexo"><option value="">Selecione</option><option value="m">Masculino</option><option value="f">Feminino</option></select></label>
+          <label class="mgf-campo">Sexo<select id="kdigo-sexo"><option value="">Seleciona</option><option value="m">Masculino</option><option value="f">Feminino</option></select></label>
           <label class="mgf-campo">UACR / albuminúria (mg/g)<input type="number" id="kdigo-uacr" inputmode="decimal" placeholder="Ex.: 45" min="0"><small>Rácio albumina/creatinina urinária</small></label>
         </div>
         <p class="mgf-mensagem" id="kdigo-mensagem" role="alert"></p>
@@ -652,7 +652,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
           <button type="button" data-coluna="4" aria-pressed="false">G4 15–29</button>
           <button type="button" data-coluna="5" aria-pressed="false">G5 &lt; 15</button>
         </div>
-        <p class="mgf-nota"><strong>Nota.</strong> Esta tabela apoia a decisão clínica. Confirme sempre as fichas técnicas e consulte o farmacêutico em caso de dúvida. Para fármacos com intervalo terapêutico estreito, monitorize níveis séricos. Legenda: <span class="mgf-etiqueta" data-nivel="normal">sem ajuste</span> <span class="mgf-etiqueta" data-nivel="atencao">atenção</span> <span class="mgf-etiqueta" data-nivel="elevado">reduzir</span> <span class="mgf-etiqueta" data-nivel="alerta">evitar / CI</span></p>
+        <p class="mgf-nota"><strong>Nota.</strong> Esta tabela apoia a decisão clínica. Confirma sempre as fichas técnicas e consulta o farmacêutico em caso de dúvida. Para fármacos com intervalo terapêutico estreito, monitoriza níveis séricos. Legenda: <span class="mgf-etiqueta" data-nivel="normal">sem ajuste</span> <span class="mgf-etiqueta" data-nivel="atencao">atenção</span> <span class="mgf-etiqueta" data-nivel="elevado">reduzir</span> <span class="mgf-etiqueta" data-nivel="alerta">evitar / CI</span></p>
       </div>
     </div>
     <div class="mgf-cartao">
@@ -716,7 +716,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
             <table class="mgf-tabela tabela-farmacos">
             <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
             <tbody>
-            <tr><td class="farmaco">Paracetamol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td>Analgésico de 1ª escolha na DRC. Não ultrapasse 3g/dia em G4–G5</td></tr>
+            <tr><td class="farmaco">Paracetamol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td>Analgésico de 1ª escolha na DRC. Não ultrapasses 3g/dia em G4–G5</td></tr>
             <tr><td class="farmaco">AINE (ibuprofeno, naproxeno…)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Contraindicados na DRC; precipitam deterioração aguda, retêm sódio, aumentam PA. Incluídos nos SADMANS</td></tr>
             <tr><td class="farmaco">Tramadol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Metabolito ativo acumula; risco de convulsões e depressão SNC. Evitar se TFGe &lt;30</td></tr>
             <tr><td class="farmaco">Morfina / Oxicodona</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Metabolitos ativos acumulam-se; risco de sedação excessiva e depressão respiratória. Buprenorfina preferível em G4–G5</td></tr>
@@ -1036,7 +1036,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
     var sexo = document.getElementById("kdigo-sexo").value;
     var uacr = parseFloat(document.getElementById("kdigo-uacr").value);
     var msg = document.getElementById("kdigo-mensagem");
-    if (isNaN(cr) || isNaN(idade) || !sexo || isNaN(uacr)) { msg.textContent = "Preencha todos os campos."; return; }
+    if (isNaN(cr) || isNaN(idade) || !sexo || isNaN(uacr)) { msg.textContent = "Preenche todos os campos."; return; }
     msg.textContent = "";
     var tfg = ckdEpi2021(cr, idade, sexo), gc = categoriaG(tfg), ac = categoriaA(uacr);
     var ri = risco(gc.cat, ac.cat), r = RISCOS[ri];
@@ -1076,7 +1076,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
       ultimo = null;
     } else if (b.dataset.acao === "imprimir") window.print();
     else if (b.dataset.acao === "copiar") {
-      if (!ultimo) { MGF.copiar("Calcule primeiro o estadiamento KDIGO.", b); return; }
+      if (!ultimo) { MGF.copiar("Calcula primeiro o estadiamento KDIGO.", b); return; }
       var texto = "KDIGO — Estadiamento DRC\nTFGe (CKD-EPI 2021): " + MGF.decimal(ultimo.tfg) + " mL/min/1,73m²\nUACR: " + MGF.decimal(ultimo.uacr) +
         " mg/g\nInterpretação: " + document.getElementById("kdigo-interp").textContent;
       MGF.copiar(texto, b);

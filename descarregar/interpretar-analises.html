@@ -591,7 +591,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
     <button type="button" class="mgf-separador" role="tab" id="sep-proteinas" aria-controls="tab-proteinas" aria-selected="false">Eletroforese</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-serologias" aria-controls="tab-serologias" aria-selected="false">Serologias</button>
   </div>
-  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os intervalos de referência são <strong>orientativos</strong> e variam consoante o laboratório, o método, a idade, o sexo e o estado fisiológico (ex: gravidez). <strong>Use sempre os intervalos do laboratório que emitiu o resultado</strong> e interprete no contexto clínico. As unidades apresentadas são as mais comuns em Portugal/Europa (SI), com equivalências quando útil.</p>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os intervalos de referência são <strong>orientativos</strong> e variam consoante o laboratório, o método, a idade, o sexo e o estado fisiológico (ex: gravidez). <strong>Usa sempre os intervalos do laboratório que emitiu o resultado</strong> e interpreta no contexto clínico. As unidades apresentadas são as mais comuns em Portugal/Europa (SI), com equivalências quando útil.</p>
   <div class="mgf-painel mk-painel" id="tab-hemograma" role="tabpanel" aria-labelledby="sep-hemograma"></div>
   <div class="mgf-painel mk-painel" id="tab-bioquimica" role="tabpanel" aria-labelledby="sep-bioquimica" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-ionograma" role="tabpanel" aria-labelledby="sep-ionograma" hidden></div>
@@ -1082,19 +1082,19 @@ function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(
   // render the analyte-based tabs
   document.getElementById('tab-hemograma').innerHTML =
     '<div class="card"><div class="card-title"><span class="icon">i</span> Hemograma — séries vermelha, branca e plaquetas</div>'
-    + '<p class="section-intro">Os três valores-chave são a <strong>hemoglobina</strong>, os <strong>leucócitos</strong> e as <strong>plaquetas</strong>. Os índices eritrocitários (VGM, RDW) e a fórmula leucocitária orientam a causa. Toque em cada parâmetro para ver a interpretação.</p>'
+    + '<p class="section-intro">Os três valores-chave são a <strong>hemoglobina</strong>, os <strong>leucócitos</strong> e as <strong>plaquetas</strong>. Os índices eritrocitários (VGM, RDW) e a fórmula leucocitária orientam a causa. Carrega em cada parâmetro para ver a interpretação.</p>'
     + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'hemo-list\')" placeholder="Pesquisar parâmetro...">'
     + '<div id="hemo-list">'+renderAnalytes(HEMOGRAMA)+'</div></div>';
 
   document.getElementById('tab-bioquimica').innerHTML =
     '<div class="card"><div class="card-title"><span class="icon">i</span> Bioquímica — função renal, hepática e metabólica</div>'
-    + '<p class="section-intro">Os iões têm um separador próprio (Ionograma). Toque em cada parâmetro para ver as causas de elevação e diminuição.</p>'
+    + '<p class="section-intro">Os iões têm um separador próprio (Ionograma). Carrega em cada parâmetro para ver as causas de elevação e diminuição.</p>'
     + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'bioq-list\')" placeholder="Pesquisar parâmetro...">'
     + '<div id="bioq-list">'+renderAnalytes(BIOQUIMICA)+'</div></div>';
 
   document.getElementById('tab-ionograma').innerHTML =
     '<div class="card"><div class="card-title"><span class="icon">i</span> Ionograma — interpretação dos eletrólitos</div>'
-    + '<div class="info-block teal"><p>Os distúrbios eletrolíticos avaliam-se sempre no <strong>contexto clínico, da volémia e do equilíbrio ácido-base</strong>. Confirme alterações inesperadas (ex: hemólise da amostra falseia o potássio) e corrija os distúrbios graves de forma controlada.</p></div>'
+    + '<div class="info-block teal"><p>Os distúrbios eletrolíticos avaliam-se sempre no <strong>contexto clínico, da volémia e do equilíbrio ácido-base</strong>. Confirma alterações inesperadas (ex: hemólise da amostra falseia o potássio) e corrige os distúrbios graves de forma controlada.</p></div>'
     + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'ion-list\')" placeholder="Pesquisar ião...">'
     + '<div id="ion-list">'+renderAnalytes(IONOGRAMA)+'</div></div>'
     + '<div class="card"><div class="card-title"><span class="icon">+</span> Ferramentas de apoio</div>'
@@ -1104,7 +1104,7 @@ function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(
 
   document.getElementById('tab-coagulacao').innerHTML =
     '<div class="card"><div class="card-title"><span class="icon">i</span> Coagulação</div>'
-    + '<div class="info-block teal"><p>O <strong>TP/INR</strong> avalia a via extrínseca (sensível à varfarina e à vitamina K/fígado); o <strong>aPTT</strong> avalia a via intrínseca (sensível à heparina e à hemofilia). Interprete o padrão em conjunto.</p></div>'
+    + '<div class="info-block teal"><p>O <strong>TP/INR</strong> avalia a via extrínseca (sensível à varfarina e à vitamina K/fígado); o <strong>aPTT</strong> avalia a via intrínseca (sensível à heparina e à hemofilia). Interpreta o padrão em conjunto.</p></div>'
     + '<input type="text" class="search-box no-print" oninput="filterAn(this,\'coag-list\')" placeholder="Pesquisar teste...">'
     + '<div id="coag-list">'+renderAnalytes(COAGULACAO)+'</div></div>'
     + '<div class="card"><div class="card-title"><span class="icon">+</span> Padrões úteis</div>'

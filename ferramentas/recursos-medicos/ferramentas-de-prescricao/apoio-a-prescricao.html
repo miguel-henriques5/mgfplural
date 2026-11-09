@@ -259,7 +259,7 @@
 </div>
 <div class="rodape-fim">
 <span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>
@@ -735,7 +735,7 @@ function switchSub(group, id, ev){
   function convertOpioid(){
     var fi=+document.getElementById('cv_from').value, ti=+document.getElementById('cv_to').value;
     var dose=parseFloat(document.getElementById('cv_dose').value);
-    if(isNaN(dose)||dose<0){ apAviso('Introduza a dose diária atual.'); return; }
+    if(isNaN(dose)||dose<0){ apAviso('Introduz a dose diária atual.'); return; }
     var from=OPIO[fi], to=OPIO[ti];
     var ome = dose*from.toOME;
     var target = ome/to.toOME;
@@ -750,7 +750,7 @@ function switchSub(group, id, ev){
 
   function calcRescue(){
     var ddem=parseFloat(document.getElementById('rg_ddem').value); var frac=+document.getElementById('rg_frac').value; var route=+document.getElementById('rg_route').value;
-    if(isNaN(ddem)||ddem<0){ apAviso('Introduza a DDEM (dose diária de equivalente de morfina).'); return; }
+    if(isNaN(ddem)||ddem<0){ apAviso('Introduz a DDEM (dose diária de equivalente de morfina).'); return; }
     var oral=ddem/frac; var dose=oral/route;
     var routeName = route===1?'oral':(route===2?'subcutânea':'intravenosa');
     var html='<div class="result-row ok"><span class="rr-icon">→</span><div><div class="rr-title">Dose de resgate ('+routeName+')</div><div class="rr-text"><span class="big-num">'+(Math.round(dose*10)/10)+'</span> mg de morfina (1/'+frac+' da DDEM'+(route>1?', ajustada à via':'')+')</div></div></div>';
@@ -877,7 +877,7 @@ function switchSub(group, id, ev){
     // Comparador
     + '<div class="subpanel active" data-group="hta" id="sh-comp">'
     + '<div class="card"><div class="card-title"><span class="icon">i</span> Comparar fármacos (dose e semivida)</div>'
-    + '<p class="section-intro">Selecione até 3 fármacos para comparar dose diária, frequência e semivida lado a lado. A semivida orienta a duração de ação e o nº de tomas.</p>'
+    + '<p class="section-intro">Seleciona até 3 fármacos para comparar dose diária, frequência e semivida lado a lado. A semivida orienta a duração de ação e o nº de tomas.</p>'
     + '<div class="input-grid">'
     + '<div class="field-group"><label>Fármaco 1</label><select id="cmp1"></select></div>'
     + '<div class="field-group"><label>Fármaco 2</label><select id="cmp2"></select></div>'
@@ -907,7 +907,7 @@ function switchSub(group, id, ev){
   }
   function compareAHT(){
     var idx=['cmp1','cmp2','cmp3'].map(id=>+document.getElementById(id).value).filter(i=>i>=0);
-    if(idx.length<2){ apAviso('Selecione pelo menos 2 fármacos.'); return; }
+    if(idx.length<2){ apAviso('Seleciona pelo menos 2 fármacos.'); return; }
     var head='<tr><th>Fármaco</th>'+idx.map(i=>'<th>'+AHT[i].dci+'</th>').join('')+'</tr>';
     function rowf(lbl,fn){ return '<tr><td class="term">'+lbl+'</td>'+idx.map(i=>'<td>'+fn(AHT[i])+'</td>').join('')+'</tr>'; }
     var body=rowf('Classe',d=>d.cls)
@@ -1354,7 +1354,7 @@ function switchSub(group, id, ev){
     // Comparador
     h += '<div class="subpanel" data-group="dlp" id="sdl-comp">'
       + '<div class="card"><div class="card-title"><span class="icon">+</span> Comparar estatinas (potência, efeitos e custo)</div>'
-      + '<p class="section-intro">Escolha 2–3 opções para comparar intensidade, redução do LDL, notas de segurança/interações e custo orientativo.</p>'
+      + '<p class="section-intro">Escolhe 2–3 opções para comparar intensidade, redução do LDL, notas de segurança/interações e custo orientativo.</p>'
       + '<div class="input-grid">'
       + '<div class="field-group"><label>Opção 1</label><select id="sc1"></select></div>'
       + '<div class="field-group"><label>Opção 2</label><select id="sc2"></select></div>'
@@ -1402,7 +1402,7 @@ function switchSub(group, id, ev){
   };
   function compareStatins(){
     var idx=['sc1','sc2','sc3'].map(id=>+document.getElementById(id).value).filter(i=>i>=0);
-    if(idx.length<2){ apAviso('Selecione pelo menos 2 opções.'); return; }
+    if(idx.length<2){ apAviso('Seleciona pelo menos 2 opções.'); return; }
     var head='<tr><th>Parâmetro</th>'+idx.map(i=>'<th>'+statinLabel(STATINS[i])+'</th>').join('')+'</tr>';
     function rowf(lbl,fn){ return '<tr><td class="term">'+lbl+'</td>'+idx.map(i=>'<td>'+fn(STATINS[i])+'</td>').join('')+'</tr>'; }
     var body=rowf('Intensidade',s=>'<span class="badge '+intensCls[s.intens]+'">'+intensLbl[s.intens]+'</span>')

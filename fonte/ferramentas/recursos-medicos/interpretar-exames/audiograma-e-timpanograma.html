@@ -322,7 +322,7 @@
   <div class="mgf-painel mk-painel" id="tab-calc" role="tabpanel" aria-labelledby="sep-calc" hidden>
     <div class="card">
       <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Audiograma</div>
-      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduza a média de tons puros (PTA, 500/1000/2000 Hz) de cada via. A ferramenta classifica o grau e o tipo de perda.</p>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduz a média de tons puros (PTA, 500/1000/2000 Hz) de cada via. A ferramenta classifica o grau e o tipo de perda.</p>
       <div class="sub-head">Ouvido a avaliar</div>
       <div class="input-grid" style="margin-bottom:14px;">
         <div class="field-group">
@@ -351,7 +351,7 @@
     </div>
     <div class="card">
       <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Timpanograma</div>
-      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduza os valores medidos para obter o tipo de Jerger e o significado clínico.</p>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduz os valores medidos para obter o tipo de Jerger e o significado clínico.</p>
       <div class="input-grid">
         <div class="field-group">
           <label>Pressão do pico (daPa)</label>
@@ -685,7 +685,7 @@ function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(
     var air=cv('a_air'), bone=cv('a_bone');
     var asym=document.getElementById('a_sym').value==='asym';
     var sudden=document.getElementById('a_onset').value==='sudden';
-    if(air==null){ mkAviso('Introduza pelo menos a média da via aérea (PTA).'); return; }
+    if(air==null){ mkAviso('Introduz pelo menos a média da via aérea (PTA).'); return; }
     var rows=[];
     function row(level,icon,title,text){ rows.push({level:level,icon:icon,title:title,text:text}); }
 
@@ -757,18 +757,18 @@ function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(
         row('info','','Pico a '+press+' daPa','Pressão fora do intervalo normal de referência — correlacionar com clínica.');
       } else {
         // peak yes but no pressure given
-        if(comp!=null && comp<0.3) row('warn','','Pico de baixa compliance','Sugere rigidez (Tipo As). Verifique a pressão do pico para confirmar.');
-        else if(comp!=null && comp>1.6) row('warn','','Pico de alta compliance','Sugere hipermobilidade (Tipo Ad). Verifique a pressão do pico.');
-        else row('info','','Pico presente','Introduza a pressão do pico para classificação completa (A vs C).');
+        if(comp!=null && comp<0.3) row('warn','','Pico de baixa compliance','Sugere rigidez (Tipo As). Verifica a pressão do pico para confirmar.');
+        else if(comp!=null && comp>1.6) row('warn','','Pico de alta compliance','Sugere hipermobilidade (Tipo Ad). Verifica a pressão do pico.');
+        else row('info','','Pico presente','Introduz a pressão do pico para classificação completa (A vs C).');
       }
     }
 
-    if(rows.length===0){ mkAviso('Introduza pelo menos um valor (ou indique se há pico).'); return; }
+    if(rows.length===0){ mkAviso('Introduz pelo menos um valor (ou indica se há pico).'); return; }
     var hasAlert=rows.some(r=>r.level==='alert'), hasWarn=rows.some(r=>r.level==='warn');
     var banner = hasWarn||hasAlert ? {cls:'warn',icon:'',t:'Achado a correlacionar com otoscopia e audiograma'} : {cls:'ok',icon:'',t:'Função do ouvido médio normal'};
     var html='<div class="result-row '+banner.cls+'"><span class="rr-icon">'+banner.icon+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
     rows.forEach(r=>{ html+='<div class="result-row '+r.level+'"><span class="rr-icon">'+r.icon+'</span><div><div class="rr-title">'+r.title+'</div><div class="rr-text">'+r.text+'</div></div></div>'; });
-    html+='<div class="info-block teal" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Lembrete:</strong> o timpanograma avalia o ouvido médio, não a audição. Interprete sempre em conjunto com a otoscopia e o audiograma.</p></div>';
+    html+='<div class="info-block teal" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Lembrete:</strong> o timpanograma avalia o ouvido médio, não a audição. Interpreta sempre em conjunto com a otoscopia e o audiograma.</p></div>';
     var res=document.getElementById('timpano-result'); res.innerHTML=html; res.classList.add('visible'); res.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function resetTimpano(){ ['t_press','t_comp','t_ecv'].forEach(id=>document.getElementById(id).value=''); document.getElementById('t_peak').value='yes'; document.getElementById('timpano-result').classList.remove('visible'); }
