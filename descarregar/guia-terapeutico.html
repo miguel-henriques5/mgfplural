@@ -405,7 +405,18 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 .bibliografia ol { margin: 0 0 8px; padding-left: 18px; }
 .bibliografia p, .autonomo-rodape { margin: 0; font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
 .autonomo a { color: var(--cor-verde); }
-@media print { body { background: #fff; } .autonomo { padding: 0; } .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 10px; } }
+@media print {
+  body { background: #fff; }
+  .autonomo { padding: 0; gap: 6px; }
+  .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 6px; }
+  .autonomo-topo { gap: 2px; }
+  .autonomo-marca { font-size: 12px; } .autonomo-marca svg { width: 24px; height: 17px; }
+  .autonomo-topo h1 { font-size: 20px; }
+  .autonomo-meta, .autonomo-rodape, .bibliografia p { font-size: 9px; }
+  .autonomo-aviso { background: none; padding: 0; font-size: 10px; }
+  .bibliografia { font-size: 9px; }
+  .autonomo-rodape a { text-decoration: none; }
+}
 
 /* Guia terapêutico */
 .gt-pequeno { font-size: 14px; color: var(--cor-texto-3); }
@@ -492,6 +503,11 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 .gt-janela .mgf-campo .gt-passo input { width: 40px; min-height: 40px; padding: 0; border: 0; border-radius: 0; }
 .gt-mdoses { grid-template-columns: repeat(5, 1fr); }
 @media (max-width: 560px) { .gt-mdoses { grid-template-columns: repeat(3, 1fr); } }
+.gt-sos-campos { display: grid; grid-template-columns: 1fr 140px; gap: 10px; }
+.gt-sos-campos[hidden], #gt-mealsField[hidden] { display: none; }
+.gt-grupo-sos { background: var(--cor-ambar-claro); color: var(--cor-ambar-texto); }
+.td-sos { font-size: 15px; color: var(--cor-texto-2); }
+@media (max-width: 560px) { .gt-sos-campos { grid-template-columns: 1fr; } }
 .gt-aviso { display: none; position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 120; background: var(--cor-tinta); color: var(--cor-papel); padding: 10px 18px; border-radius: 99px; font-size: 15px; font-weight: 700; box-shadow: var(--sombra-alta); }
 @media print { .gt-pesquisa, .gt-barra, .td-actions, .dose-btn, .gt-texto, .mgf-separadores { display: none !important; } }
 </style>
@@ -502,7 +518,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 <span class="autonomo-marca"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="14" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="14" stroke-linejoin="round"/></svg><span><span style="font-weight:400">mgf no </span><b>plural</b></span></span>
 <h1>Guia terapêutico</h1>
 <span class="autonomo-meta">Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</span>
-<span class="autonomo-aviso">Apoia, não substitui, o juízo clínico. O que escreves aqui fica só neste computador: não escrevas dados que identifiquem doentes.</span>
+<span class="autonomo-aviso">Apoia, não substitui, o juízo clínico.</span>
 </header>
 <div class="autonomo-ferramenta">
 <main class="mgf-ferramenta" id="ferramenta">
@@ -598,7 +614,12 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
         <input id="gt-mDose" type="text" placeholder="Outra dosagem ou escrever livremente…" aria-label="Dosagem">
       </div>
       <label class="mgf-campo">Forma farmacêutica<input id="gt-mForm" type="text" placeholder="ex.: comprimido, cápsula, inalador"></label>
-      <div class="mgf-campo">Unidades por refeição
+      <label class="mgf-opcao gt-so-dci"><input type="checkbox" id="gt-mSos" onchange="mostrarSos()"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Tomar só em SOS (quando necessário)<small>Aparece numa secção própria no fim da guia e não conta nos totais por dia.</small></span></label>
+      <div class="gt-sos-campos" id="gt-sosFields" hidden>
+        <label class="mgf-campo">Indicação<input id="gt-mSosIndic" type="text" placeholder="ex.: se dor ou febre"></label>
+        <label class="mgf-campo">Máximo por dia<input id="gt-mSosMax" type="number" min="1" step="1" placeholder="ex.: 3"></label>
+      </div>
+      <div class="mgf-campo" id="gt-mealsField">Unidades por refeição
         <div class="gt-mdoses">
         <div class="gt-mdose">
           <span class="gt-mdose-rotulo"><svg class="gt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10l-1.5 17.1a1 1 0 0 1-1 .9h-5a1 1 0 0 1-1-.9z"/><path d="M7.6 9h8.8"/></svg>Jejum</span>
@@ -655,6 +676,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 </main>
 </div>
 <section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<p class="autonomo-rodape">O que escreves nesta ferramenta não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</p>
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html</a> · Feedback: mgfplural@gmail.com · Licença MIT</p>
 </div>
 <script>
@@ -1076,6 +1098,10 @@ function openModal(m, isNew=false){
   document.getElementById('gt-mForm').value=m.form||'';
   document.getElementById('gt-mNotes').value=m.notes||'';
   MEAL_KEYS.forEach(k=>{document.getElementById('gt-md-'+k).value=m[k]||0;});
+  document.getElementById('gt-mSos').checked=!!m.sos;
+  document.getElementById('gt-mSosIndic').value=m.sosIndic||'';
+  document.getElementById('gt-mSosMax').value=m.sosMax||'';
+  mostrarSos();
 
   document.getElementById('gt-modal').style.display='flex';
 }
@@ -1121,6 +1147,10 @@ function saveModal(){
     dinner:    parseFloat(document.getElementById('gt-md-dinner').value)||0,
     bedtime:   parseFloat(document.getElementById('gt-md-bedtime').value)||0,
   };
+  updated.sos=document.getElementById('gt-mSos').checked;
+  updated.sosIndic=updated.sos?document.getElementById('gt-mSosIndic').value.trim():'';
+  updated.sosMax=updated.sos?(parseInt(document.getElementById('gt-mSosMax').value)||''):'';
+  if(updated.sos) MEAL_KEYS.forEach(k=>{updated[k]=0;});
   if(modalMed._isNew){
     meds.push(updated);
     toast(`${updated.dciOnly||!updated.tradeName?updated.dci:updated.tradeName} adicionado ✓`);
@@ -1183,6 +1213,7 @@ function render(){
   body.innerHTML='';
 
   const renderRow=m=>{
+    if(m.sos){renderSosRow(m);return;}
     const cat=CATS[m.catIdx]??CATS[11];
     const dn=displayName(m);
     const tr=document.createElement('tr');
@@ -1218,7 +1249,7 @@ function render(){
 
   if(groupView){
     CATS.forEach((cat,ci)=>{
-      const items=meds.filter(m=>(m.catIdx??11)===ci);
+      const items=meds.filter(m=>(m.catIdx??11)===ci&&!m.sos);
       if(!items.length) return;
       const trG=document.createElement('tr'); trG.className='gt-linha-grupo';
       trG.innerHTML=`<td colspan="7">
@@ -1228,7 +1259,14 @@ function render(){
       items.forEach(renderRow);
     });
   } else {
-    meds.forEach(renderRow);
+    meds.filter(m=>!m.sos).forEach(renderRow);
+  }
+  const sosMeds=meds.filter(m=>m.sos);
+  if(sosMeds.length){
+    const trS=document.createElement('tr'); trS.className='gt-linha-grupo gt-linha-sos';
+    trS.innerHTML=`<td colspan="7"><span class="gt-grupo gt-grupo-sos">Em SOS</span> <span class="gt-pequeno">quando necessário · não conta nos totais por dia</span></td>`;
+    body.appendChild(trS);
+    sosMeds.forEach(renderRow);
   }
   updateTotals();
   updateSourceText();
@@ -1244,7 +1282,7 @@ function buildSourceText(){
   if(!meds.length) return '';
   const lines=[];
   CATS.forEach((cat,ci)=>{
-    const items=meds.filter(m=>(m.catIdx??11)===ci);
+    const items=meds.filter(m=>(m.catIdx??11)===ci&&!m.sos);
     if(!items.length) return;
     lines.push(`# ${cat.label}`);
     items.forEach(m=>{
@@ -1263,6 +1301,21 @@ function buildSourceText(){
     });
     lines.push('');
   });
+  const sosMeds=meds.filter(m=>m.sos);
+  if(sosMeds.length){
+    lines.push('# Em SOS');
+    sosMeds.forEach(m=>{
+      const dn=displayName(m);
+      let line=dn.main;
+      if(dn.trade) line+=` (${dn.trade})`;
+      if(m.dose) line+=` ${m.dose}`;
+      line+=` — SOS`;
+      if(m.sosIndic) line+=` ${m.sosIndic}`;
+      if(m.sosMax) line+=`, máx. ${m.sosMax}/dia`;
+      if(m.notes) line+=`  [${m.notes}]`;
+      lines.push(line);
+    });
+  }
   return lines.join('\n').trim();
 }
 
@@ -1283,7 +1336,7 @@ function copySourceText(){
 
 function updateTotals(){
   MEAL_KEYS.forEach((k,i)=>{
-    const t=meds.reduce((s,m)=>s+(parseFloat(m[k])||0),0);
+    const t=meds.reduce((s,m)=>s+(m.sos?0:(parseFloat(m[k])||0)),0);
     document.getElementById('gt-tot'+i).textContent=t%1===0?t:t.toFixed(1);
   });
 }
@@ -1385,11 +1438,14 @@ function runImport(){
   if(!raw){toast('Cola algum texto primeiro.');return;}
   const lines=raw.split(/\n/).map(l=>l.trim())
     .filter(l=>l.length>2 && !l.startsWith('#')); // ignorar cabeçalhos de categoria
-  importResults=lines.map(line=>({
-    line, row:matchDrug(line),
-    dose:extractDose(line), mealDoses:extractMealDoses(line),
-    notes:extractNotes(line)
-  }));
+  importResults=lines.map(line=>{
+    const sos=extractSos(line);
+    return {
+      line, row:matchDrug(line),
+      dose:extractDose(line), mealDoses:sos?{fasting:0,breakfast:0,lunch:0,dinner:0,bedtime:0}:extractMealDoses(line),
+      notes:extractNotes(line), sos
+    };
+  });
   renderImportPreview();
 }
 
@@ -1409,7 +1465,7 @@ function renderImportPreview(){
         <strong>${escHtml(r.row[0])}</strong>
         <span class="ip-badge" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
         ${r.dose?`<span class="ip-dose">${r.dose}</span>`:''}
-        <span class="ip-refeicoes">${meals||'—'}</span>
+        <span class="ip-refeicoes">${r.sos?escHtml(sosTexto({sosIndic:r.sos.indic,sosMax:r.sos.max})):(meals||'—')}</span>
       </div>`;
     } else {
       html+=`<div class="ip-row">
@@ -1438,6 +1494,7 @@ function confirmImport(){
       catIdx:r.row[1], form:(r.row[3]&&r.row[3][0])||'comprimido',
       dose:r.dose, notes:r.notes||'', dciOnly:true, _doses:r.row[2]||[], _names:r.row[4]||[], _free:false,
       ...r.mealDoses,
+      ...(r.sos?{sos:true,sosIndic:r.sos.indic,sosMax:r.sos.max}:{}),
     });
     added++;
   });
@@ -1471,7 +1528,7 @@ function exportPDF(){
   // Uma única tabela contínua: cabeçalho de horas UMA vez,
   // categorias como linhas separadoras (banner colorido) dentro da tabela.
   const bodyRows=CATS.flatMap((cat,ci)=>{
-    const items=meds.filter(m=>(m.catIdx??11)===ci);
+    const items=meds.filter(m=>(m.catIdx??11)===ci&&!m.sos);
     if(!items.length) return [];
     const catRow=`<tr class="cat-sep"><td colspan="6" style="background:${cat.bgImp};border-left:5px solid ${cat.corImp}">
         <span class="cat-lbl" style="color:${cat.corImp}">${cat.label}</span>
@@ -1492,7 +1549,7 @@ function exportPDF(){
       </tr>`;
     }).join('');
     return [catRow+medRows];
-  }).join('');
+  }).join('')+sosRowsPDF();
 
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html lang="pt"><head><meta charset="UTF-8"><title>Guia Terapêutica</title>
@@ -1523,6 +1580,8 @@ body{font-family:'Atkinson Hyperlegible',Verdana,Arial,sans-serif;color:#1C1917;
 .dc{text-align:center;padding:13px 6px;border-bottom:1px solid #EDE9E3;border-left:1px solid #F2EFEA;vertical-align:middle}
 .dv{font-size:20px;font-weight:700;color:#1C1917}
 .dash{color:#D1CBC2;font-size:16px}
+.sos-txt{padding:13px 14px;border-bottom:1px solid #EDE9E3;border-left:1px solid #F2EFEA;vertical-align:middle;font-size:15px}
+.sos-txt strong{font-weight:700}
 .footer{margin-top:22px;text-align:center;font-size:12px;color:#9CA3AF;border-top:1px solid #E2DDD4;padding-top:12px}
 @media print{
   body{padding:0}
@@ -1559,6 +1618,76 @@ body{font-family:'Atkinson Hyperlegible',Verdana,Arial,sans-serif;color:#1C1917;
 function switchTab(panelId){
   document.getElementById('sep-'+panelId).click();
 }
+/* ── SOS ── */
+function mostrarSos(){
+  const sos=document.getElementById('gt-mSos').checked;
+  document.getElementById('gt-sosFields').hidden=!sos;
+  document.getElementById('gt-mealsField').hidden=sos;
+}
+function sosTexto(m){
+  const p=['SOS'];
+  if(m.sosIndic) p.push(m.sosIndic);
+  if(m.sosMax) p.push(`máx. ${m.sosMax}/dia`);
+  return p.join(' · ');
+}
+function renderSosRow(m){
+  const body=document.getElementById('gt-tableBody');
+  const cat=CATS[m.catIdx]??CATS[11];
+  const dn=displayName(m);
+  const tr=document.createElement('tr'); tr.className='gt-linha-med-sos';
+  tr.innerHTML=`
+    <td class="td-name">
+      <div class="td-name-main">${escHtml(dn.main)}</div>
+      ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
+      ${m.dose?`<div class="td-name-trade">${escHtml(m.dose)}</div>`:''}
+      <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
+    </td>
+    <td colspan="5" class="td-sos">${escHtml(sosTexto(m))}</td>
+    <td class="td-actions">
+      <button type="button" class="btn-icon-sm" onclick="openModal(meds.find(x=>x.id==='${m.id}'))" aria-label="Editar ${escHtml(dn.main)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg></button>
+      <button type="button" class="btn-icon-sm del" onclick="removeMed('${m.id}')" aria-label="Remover ${escHtml(dn.main)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </td>`;
+  body.appendChild(tr);
+  const trN=document.createElement('tr');
+  trN.innerHTML=`<td colspan="7" class="td-notes">
+    <input class="notes-input" aria-label="Notas" placeholder="Notas: ex.: tomar em jejum, com água abundante…"
+      value="${escHtml(m.notes||'')}"
+      onchange="setNotes('${m.id}',this.value)" onblur="setNotes('${m.id}',this.value)">
+  </td>`;
+  body.appendChild(trN);
+}
+/* Linha de texto com «SOS»: indicação a seguir e máximo por dia (ex.: «SOS se dor, máx. 3/dia») */
+function extractSos(line){
+  const semNotas=line.replace(/\[[^\]]*\]/g,'');
+  const m=semNotas.match(/\bS\.?O\.?S\.?(?![a-z])(.*)$/i);
+  if(!m) return null;
+  const resto=m[1];
+  const mx=resto.match(/m[aá]x(?:imo)?\.?\s*(?:de\s*)?(\d+)/i);
+  const indic=resto.split(/[,;·]?\s*m[aá]x(?:imo)?\b/i)[0].replace(/^[\s,;:·—-]+|[\s,;:·—-]+$/g,'');
+  return {indic, max:mx?parseInt(mx[1]):''};
+}
+/* Folha impressa: secção «Em SOS» no fim (texto para o doente, tratamento formal) */
+function sosRowsPDF(){
+  const sosMeds=meds.filter(m=>m.sos);
+  if(!sosMeds.length) return '';
+  const linhas=sosMeds.map(m=>{
+    const dn=displayName(m);
+    const quando=['Só se necessário'+(m.sosIndic?` (${escHtml(m.sosIndic)})`:'')];
+    if(m.sosMax) quando.push(`no máximo <strong>${m.sosMax}</strong> ${m.sosMax==1?'vez':'vezes'} por dia`);
+    return `<tr>
+        <td class="dn">
+          <span class="dn-main">${escHtml(dn.main)}</span>
+          ${dn.trade?`<span class="dn-trade">${escHtml(dn.trade)}</span>`:''}
+          ${m.dose?`<span class="dn-dose">${escHtml(m.dose)}</span>`:''}
+          ${m.notes?`<span class="dn-notes">${escHtml(m.notes)}</span>`:''}
+        </td><td class="sos-txt" colspan="5">${quando.join(' · ')}</td>
+      </tr>`;
+  }).join('');
+  return `<tr class="cat-sep"><td colspan="6" style="background:#F8E7C4;border-left:5px solid #845406">
+        <span class="cat-lbl" style="color:#845406">Em SOS — quando necessário</span>
+      </td></tr>`+linhas;
+}
+
 function uid(){return Math.random().toString(36).slice(2,9)}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function toast(msg){
