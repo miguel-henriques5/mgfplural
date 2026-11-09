@@ -298,7 +298,7 @@
   <div class="mgf-painel mk-painel" id="tab-holter" role="tabpanel" aria-labelledby="sep-holter" hidden>
     <div class="card">
       <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Holter de 24h</div>
-      <p style="font-size:13px;color:#2C3A38;margin-bottom:16px;line-height:1.5;">Introduza os valores do relatório. A ferramenta calcula a carga de extrassístoles e sinaliza achados que requerem atenção.</p>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:16px;line-height:1.5;">Introduz os valores do relatório. A ferramenta calcula a carga de extrassístoles e sinaliza achados que requerem atenção.</p>
       <div class="input-grid">
         <div class="field-group">
           <label>FC média (bpm)</label>
@@ -385,7 +385,7 @@
       </div>
       <div class="info-block green">
         <div class="ib-title">Diário de sintomas</div>
-        <p>Peça sempre ao doente um <strong>diário datado de sintomas</strong>. A correlação entre o sintoma e o ritmo registado nesse momento é o achado mais valioso do Holter.</p>
+        <p>Pede sempre ao doente um <strong>diário datado de sintomas</strong>. A correlação entre o sintoma e o ritmo registado nesse momento é o achado mais valioso do Holter.</p>
       </div>
     </div>
   </div>
@@ -855,7 +855,7 @@
     // Symptoms correlation
     if(sympt) row('alert','','Sintomas durante os achados','A correlação sintoma–ritmo é diagnóstica. Documentar no diário e valorizar na referenciação.');
 
-    if(rows.length===0){ mkAviso('Introduza pelo menos um valor para interpretar.'); return; }
+    if(rows.length===0){ mkAviso('Introduz pelo menos um valor para interpretar.'); return; }
 
     // overall flag
     var hasAlert = rows.some(r=>r.level==='alert');
