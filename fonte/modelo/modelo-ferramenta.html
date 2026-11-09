@@ -11,7 +11,11 @@
   2. Escreve a ferramenta DENTRO de <main class="mgf-ferramenta" id="ferramenta"> … </main>.
   3. Usa as classes já prontas (mgf-cartao, mgf-opcao, mgf-resultado, mgf-interp, mgf-tabela,
      mgf-botao…). Estão explicadas no GUIA-DESIGN.md e no exemplo abaixo.
-  4. Estilos só desta ferramenta: no bloco <style data-mgf="ferramenta">.
+  4. Estilos só desta ferramenta: no bloco <script data-mgf="base">
+/* {{BASE_JS}} */
+</script>
+
+<style data-mgf="ferramenta">.
      Código JavaScript: no bloco <script data-mgf="ferramenta">.
   5. NÃO alteres o bloco <style data-mgf="base">: tem as cores e as letras do site.
   6. Regras: um único ficheiro, sem nada carregado da internet, sem guardar dados de doentes,

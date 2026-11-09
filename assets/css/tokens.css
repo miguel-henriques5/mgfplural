@@ -41,6 +41,7 @@
      A cor nunca é o único sinal: o texto diz sempre o nível. */
   --clin-normal: #1B6B35;  --clin-normal-fundo: #E8F5EC;  --clin-normal-borda: #3E9A5C;
   --clin-atencao: #7A4A00; --clin-atencao-fundo: #FFF4D6; --clin-atencao-borda: #D99A00;
+  --clin-elevado: #8F3A00; --clin-elevado-fundo: #FDEBDB; --clin-elevado-borda: #E07A1F;
   --clin-alerta: #9E2318;  --clin-alerta-fundo: #FDECEA;  --clin-alerta-borda: #D2483C;
   --clin-info: #1C4A80;    --clin-info-fundo: #EAF1FA;    --clin-info-borda: #4A80BF;
 

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planificação da vigilância da gravidez</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "planificacao-vigilancia-gravidez",
+  "titulo": "Planificação da vigilância da gravidez",
+  "descricao": "Datas das consultas, análises, ecografias, rastreios e vacinas numa gravidez de baixo risco, a partir da DUM, da ecografia ou da idade gestacional.",
+  "area": "recursos-medicos",
+  "grupo": "escalas-e-calculadoras",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 1,
+  "palavras": [
+    "gravidez",
+    "grávida",
+    "DPP",
+    "data provável do parto",
+    "DUM",
+    "idade gestacional",
+    "IG",
+    "ecografia",
+    "calendário",
+    "saúde materna",
+    "Tdpa",
+    "anti-D",
+    "PTGO"
+  ],
+  "bibliografia": [
+    "DGS. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: Direção-Geral da Saúde; 2015.",
+    "DGS. Normas de Orientação Clínica — Vigilância da Gravidez de Baixo Risco."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+.plano { min-width: 560px; }
+.plano td { vertical-align: middle; }
+.plano td:first-child { display: flex; align-items: center; gap: 10px; }
+.plano td:first-child span.texto { display: flex; flex-direction: column; }
+.plano small, .plano .datas span { font-size: 13px; color: var(--cor-texto-3); }
+.plano .datas { display: flex; flex-direction: column; gap: 1px; }
+.plano tr[data-estado="past"] td { color: var(--cor-texto-3); }
+.plano tr[data-estado="current"] { background: var(--clin-atencao-fundo); }
+.ponto { display: inline-block; flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; }
+.ponto[data-estado="current"] { background: var(--clin-atencao-borda); }
+.ponto[data-estado="future"] { background: var(--clin-normal-borda); }
+.ponto[data-estado="past"] { background: var(--cor-campo); }
+.semana { display: inline-block; font-family: var(--letra-mono); font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.semana[data-t="1t"] { background: var(--cor-menta-clara); }
+.semana[data-t="2t"] { background: var(--cor-ambar-claro); }
+.semana[data-t="3t"] { background: var(--cor-areia); }
+.semana[data-t="vac"] { background: var(--clin-info-fundo); color: var(--clin-info); }
+.semana[data-t="str"] { background: var(--cor-papel); border: 1px solid var(--cor-linha); }
+.plano-alertas { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.plano-legenda { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; color: var(--cor-texto-2); margin: 0 0 12px; }
+.plano-legenda > span { display: inline-flex; align-items: center; gap: 6px; }
+.plano-seccao h3.mgf-cartao-titulo { font-size: 15px; margin: 0; }
+.so-imprimir { display: none; }
+@media print {
+  #dados { display: none !important; }
+  .so-imprimir { display: flex; }
+  .plano-impressao { justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--cor-linha); border-radius: 8px; font-size: 13px; }
+  .plano { min-width: 0; font-size: 12px; }
+  .plano-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .plano-grelha .mgf-cartao { margin: 0; }
+  .plano-alertas .mgf-interp { padding: 6px 10px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <form class="mgf-cartao" id="dados" novalidate>
+    <div class="mgf-cartao-titulo">Dados da grávida</div>
+    <div class="mgf-cartao-corpo" style="gap:16px">
+      <label class="mgf-campo">Nome da grávida (opcional, só para imprimir)<input type="text" id="nome" autocomplete="off"><small>Não fica guardado.</small></label>
+      <div class="mgf-campo" role="group" aria-labelledby="base-rotulo">
+        <span id="base-rotulo">Base de cálculo</span>
+        <div class="mgf-filtros" id="modos">
+          <button type="button" data-modo="dum" aria-pressed="true">DUM — último período menstrual</button>
+          <button type="button" data-modo="eco" aria-pressed="false">Ecografia do 1.º trimestre</button>
+          <button type="button" data-modo="ig" aria-pressed="false">Idade gestacional atual</button>
+        </div>
+      </div>
+      <div class="mgf-campos">
+        <label class="mgf-campo" data-modo-campo="dum">1.º dia do último período menstrual (DUM)<input type="date" id="dum"><small>A data provável do parto é a DUM + 280 dias (40 semanas).</small></label>
+        <label class="mgf-campo" data-modo-campo="eco" hidden>Data da ecografia do 1.º trimestre<input type="date" id="eco-data"></label>
+        <div class="mgf-campo" data-modo-campo="eco" hidden><span>Idade gestacional na ecografia</span>
+          <div style="display:flex;gap:8px">
+            <input type="number" id="eco-semanas" aria-label="Semanas" placeholder="Semanas" min="8" max="14" style="width:50%">
+            <input type="number" id="eco-dias" aria-label="Dias" placeholder="Dias" min="0" max="6" style="width:50%">
+          </div><small>11–13 semanas + 6 dias (ecografia do 1.º trimestre)</small></div>
+        <label class="mgf-campo" data-modo-campo="ig" hidden>Idade gestacional atual — semanas<input type="number" id="ig-semanas" placeholder="Ex.: 16" min="4" max="42"></label>
+        <label class="mgf-campo" data-modo-campo="ig" hidden>Idade gestacional atual — dias<input type="number" id="ig-dias" placeholder="Ex.: 3" min="0" max="6"><small>Data de referência: hoje (<span id="hoje"></span>)</small></label>
+        <label class="mgf-campo">Grupo Rh<select id="rh"><option value="">Não especificado</option><option value="pos">Rh positivo</option><option value="neg">Rh negativo — necessita imunoglobulina anti-D</option></select></label>
+      </div>
+      <p class="mgf-mensagem" id="mensagem" role="alert"></p>
+      <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular plano de vigilância</button></div>
+    </div>
+  </form>
+
+  <div id="plano" hidden>
+    <p class="so-imprimir plano-impressao"><strong id="imprimir-nome"></strong><span id="imprimir-data"></span></p>
+    <div class="mgf-resumo" id="resumo">
+      <div><span class="mgf-resumo-rotulo">DPP</span><span class="mgf-resumo-valor" id="res-dpp">—</span><span class="mgf-resumo-sub">Data provável do parto</span></div>
+      <div><span class="mgf-resumo-rotulo">Idade gestacional hoje</span><span class="mgf-resumo-valor" id="res-ig">—</span><span class="mgf-resumo-sub">semanas + dias</span></div>
+      <div><span class="mgf-resumo-rotulo">Trimestre</span><span class="mgf-resumo-valor" id="res-trim">—</span><span class="mgf-resumo-sub" id="res-trim-rotulo">—</span></div>
+    </div>
+    <div class="plano-alertas">
+      <p class="mgf-interp" data-nivel="alerta" id="alerta-rh" hidden><strong>Rh negativo</strong> — Imunoglobulina anti-D programada para as 28 semanas (<span id="alerta-rh-data"></span>)</p>
+      <p class="mgf-interp" data-nivel="info" id="alerta-tdpa"><strong>Vacina Tdpa</strong> — Entre as 20 e 36 semanas (idealmente às 32 semanas). Data ideal: <span id="alerta-tdpa-data"></span></p>
+      <p class="mgf-interp" data-nivel="atencao" id="alerta-termo"><strong>Consultas semanais na Maternidade</strong> — A partir das 38 semanas (<span id="alerta-termo-data"></span>)</p>
+    </div>
+    <p class="plano-legenda"><span><span class="ponto" data-estado="current"></span> Em curso</span><span><span class="ponto" data-estado="future"></span> Pendente</span><span><span class="ponto" data-estado="past"></span> Realizado</span></p>
+    <div class="plano-grelha">
+    <section class="mgf-cartao plano-seccao" id="sec-consultas">
+      <h3 class="mgf-cartao-titulo">Consultas de vigilância — centro de saúde</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Consulta</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-consultas-linhas"></tbody>
+        </table>
+      </div>
+      <p class="mgf-nota" style="margin:0 14px 14px">Nas grávidas seguidas em protocolo partilhado CSP/Maternidade, a 5.ª e a 6.ª consultas (30–33 semanas) podem ser da responsabilidade dos cuidados primários.</p>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-analises">
+      <h3 class="mgf-cartao-titulo">Análises de sangue</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Análises</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-analises-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-ecografias">
+      <h3 class="mgf-cartao-titulo">Ecografias</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Ecografia</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-ecografias-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-rastreios">
+      <h3 class="mgf-cartao-titulo">Rastreios bioquímicos</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Rastreio</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-rastreios-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-vacinas">
+      <h3 class="mgf-cartao-titulo">Vacinas e procedimentos especiais</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Procedimento</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-vacinas-linhas"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mgf-cartao plano-seccao" id="sec-maternidade">
+      <h3 class="mgf-cartao-titulo">Consultas na Maternidade / consultório</h3>
+      <div class="mgf-tabela-caixa">
+        <table class="mgf-tabela plano">
+          <thead><tr><th>Consulta</th><th>Janela (semanas)</th><th>Datas</th></tr></thead>
+          <tbody id="sec-maternidade-linhas"></tbody>
+        </table>
+      </div>
+      <p class="mgf-nota" style="margin:0 14px 14px">A partir das 38 semanas, consultas semanais de vigilância na Maternidade.</p>
+    </section>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" id="recalcular"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Recalcular</button>
+      <button type="button" class="mgf-botao" id="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir plano</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" id="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resumo</button>
+    </div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  /* Cálculos de datas iguais à versão original (UTC, para evitar erros com a hora de verão). */
+  var agora = new Date();
+  var hoje = new Date(Date.UTC(agora.getFullYear(), agora.getMonth(), agora.getDate()));
+  function $(id) { return document.getElementById(id); }
+  function fmtData(d) {
+    if (!d || isNaN(d)) return "—";
+    return String(d.getUTCDate()).padStart(2, "0") + "/" + String(d.getUTCMonth() + 1).padStart(2, "0") + "/" + d.getUTCFullYear();
+  }
+  function somarDias(d, n) { return new Date(d.getTime() + n * 86400000); }
+  function igDaDum(dum) {
+    var dias = Math.round((hoje.getTime() - dum.getTime()) / 86400000);
+    return { semanas: Math.floor(dias / 7), dias: dias % 7 };
+  }
+  function dumDaIg(semanas, dias) { return new Date(hoje.getTime() - (semanas * 7 + parseInt(dias || 0, 10)) * 86400000); }
+  function dataNaSemana(dum, s, d) { return somarDias(dum, s * 7 + (d || 0)); }
+  function estado(dum, s1, d1, s2, d2) {
+    var i = dataNaSemana(dum, s1, d1), f = dataNaSemana(dum, s2, d2);
+    if (hoje > f) return "past";
+    if (hoje >= i && hoje <= f) return "current";
+    return "future";
+  }
+  var ROTULO = { past: "Realizado", current: "Em curso", future: "Pendente" };
+  $("hoje").textContent = fmtData(hoje);
+
+  /* Modo de cálculo */
+  var modo = "dum";
+  $("modos").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    modo = b.dataset.modo;
+    $("modos").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    document.querySelectorAll("[data-modo-campo]").forEach(function (c) { c.hidden = c.dataset.modoCampo !== modo; });
+  });
+
+  function linha(dum, rotulo, s1, d1, s2, d2, t, sIdeal, dIdeal) {
+    var est = estado(dum, s1, d1, s2, d2);
+    var ideal = sIdeal !== undefined ? "<span>(ideal: " + fmtData(dataNaSemana(dum, sIdeal, dIdeal || 0)) + ")</span>" : "";
+    return '<tr data-estado="' + est + '">' +
+      '<td><span class="ponto" data-estado="' + est + '"></span><span class="texto"><strong>' + rotulo + "</strong><small>" + ROTULO[est] + "</small></span></td>" +
+      '<td><span class="semana" data-t="' + t + '">' + s1 + "s" + (d1 ? "+" + d1 + "d" : "") + " – " + s2 + "s" + (d2 ? "+" + d2 + "d" : "") + "</span></td>" +
+      '<td class="datas"><span>De: ' + fmtData(dataNaSemana(dum, s1, d1)) + "</span><span>Até: " + fmtData(dataNaSemana(dum, s2, d2)) + "</span>" + ideal + "</td></tr>";
+  }
+  function dataDoCampo(v) { var p = v.split("-").map(Number); return new Date(Date.UTC(p[0], p[1] - 1, p[2])); }
+
+  function calcular() {
+    var dum, msg = $("mensagem");
+    if (modo === "dum") {
+      var v = $("dum").value;
+      if (!v) { msg.textContent = "Introduza a data da DUM."; return; }
+      dum = dataDoCampo(v);
+    } else if (modo === "eco") {
+      var ed = $("eco-data").value, es = parseInt($("eco-semanas").value, 10), edias = parseInt($("eco-dias").value, 10) || 0;
+      if (!ed || isNaN(es)) { msg.textContent = "Introduza a data e a IG da ecografia."; return; }
+      dum = somarDias(dataDoCampo(ed), -(es * 7 + edias));
+    } else {
+      var is = parseInt($("ig-semanas").value, 10), idias = parseInt($("ig-dias").value, 10) || 0;
+      if (isNaN(is)) { msg.textContent = "Introduza a idade gestacional atual."; return; }
+      dum = dumDaIg(is, idias);
+    }
+    msg.textContent = "";
+    var dpp = somarDias(dum, 280), ig = igDaDum(dum), rh = $("rh").value, nome = $("nome").value.trim();
+    $("res-dpp").textContent = fmtData(dpp);
+    $("res-ig").textContent = ig.semanas + "s + " + ig.dias + "d";
+    var trim = ig.semanas < 14 ? "1º" : ig.semanas < 28 ? "2º" : "3º";
+    $("res-trim").textContent = trim;
+    $("res-trim-rotulo").textContent = trim + " Trimestre";
+    $("imprimir-nome").textContent = nome || "Grávida";
+    $("imprimir-data").textContent = "Plano gerado a " + fmtData(hoje);
+    var rhNeg = rh === "neg";
+    $("alerta-rh-data").textContent = fmtData(dataNaSemana(dum, 28));
+    $("alerta-rh").hidden = !rhNeg;
+    $("alerta-tdpa-data").textContent = fmtData(dataNaSemana(dum, 32));
+    $("alerta-termo-data").textContent = fmtData(dataNaSemana(dum, 38));
+
+    $("sec-consultas-linhas").innerHTML =
+      linha(dum, "1ª Consulta", 0, 0, 11, 6, "1t") + linha(dum, "2ª Consulta", 12, 0, 18, 6, "1t") +
+      linha(dum, "3ª Consulta", 19, 0, 24, 6, "2t") + linha(dum, "4ª Consulta", 25, 0, 30, 6, "2t") +
+      linha(dum, "5ª Consulta", 31, 0, 33, 6, "3t") + linha(dum, "6ª Consulta", 34, 0, 36, 6, "3t") +
+      linha(dum, "7ª Consulta", 37, 0, 38, 6, "3t");
+    $("sec-analises-linhas").innerHTML =
+      linha(dum, "Análises 1º Trimestre", 0, 0, 12, 6, "1t") +
+      linha(dum, "Análises 2º Trim. — Rubéola / Urocult.", 18, 0, 20, 6, "2t") +
+      linha(dum, "Análises 2º Trim. — PTGO / Hgrama / Coombs", 24, 0, 28, 6, "2t") +
+      linha(dum, "Análises 3º Trimestre", 32, 0, 34, 6, "3t");
+    $("sec-ecografias-linhas").innerHTML =
+      linha(dum, "Ecografia 1º Trimestre", 11, 0, 13, 6, "1t") +
+      linha(dum, "Ecografia Morfológica 2º Trim.", 20, 0, 22, 6, "2t") +
+      linha(dum, "Ecografia 3º Trimestre", 30, 0, 32, 6, "3t");
+    $("sec-rastreios-linhas").innerHTML =
+      linha(dum, "Rastreio Combinado 1º Trim.", 11, 0, 13, 6, "1t", 12, 0) +
+      linha(dum, "Rastreio Bioquímico 2º Trim.", 15, 0, 20, 6, "2t", 16, 0);
+    var vac = linha(dum, "Tdpa (tosse convulsa)", 20, 0, 36, 6, "vac", 32, 0);
+    if (rhNeg) vac += linha(dum, "Imunoglobulina anti-D", 27, 0, 28, 6, "vac", 28, 0);
+    vac += linha(dum, "Colheita Streptococcus β hem. (SGB)", 35, 0, 37, 6, "str");
+    $("sec-vacinas-linhas").innerHTML = vac;
+    $("sec-maternidade-linhas").innerHTML =
+      linha(dum, "Consulta de Obstetrícia (1ª ref.)", 0, 0, 11, 6, "1t") +
+      linha(dum, "Consultas semanais (≥ 38 semanas)", 38, 0, 41, 6, "3t");
+    $("plano").hidden = false;
+    $("resumo").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("dados").addEventListener("submit", function (e) { e.preventDefault(); calcular(); });
+  $("recalcular").addEventListener("click", function () { $("plano").hidden = true; window.scrollTo({ top: 0, behavior: "smooth" }); });
+  $("imprimir").addEventListener("click", function () { window.print(); });
+  $("copiar").addEventListener("click", function () {
+    var nome = $("nome").value.trim();
+    var l = ["PLANO DE VIGILÂNCIA DA GRAVIDEZ"];
+    if (nome) l.push("Grávida: " + nome);
+    l.push("Data do plano: " + fmtData(hoje));
+    l.push("IG atual: " + $("res-ig").textContent + " (" + $("res-trim").textContent + " trimestre)");
+    l.push("DPP: " + $("res-dpp").textContent);
+    l.push("");
+    function seccao(id) {
+      var out = [];
+      document.querySelectorAll("#" + id + "-linhas tr").forEach(function (tr) {
+        var c = tr.querySelectorAll("td");
+        var datas = Array.prototype.map.call(c[2].querySelectorAll("span"), function (s) { return s.textContent; }).join(" | ");
+        out.push("  · " + c[0].querySelector("strong").textContent + " [" + c[1].textContent + "] — " + datas);
+      });
+      return out;
+    }
+    [["CONSULTAS (Centro de Saúde):", "sec-consultas"], ["ANÁLISES:", "sec-analises"], ["ECOGRAFIAS:", "sec-ecografias"],
+     ["RASTREIOS BIOQUÍMICOS:", "sec-rastreios"], ["VACINAS E PROCEDIMENTOS:", "sec-vacinas"]].forEach(function (s, i) {
+      if (i) l.push("");
+      l.push(s[0]); l = l.concat(seccao(s[1]));
+    });
+    MGF.copiar(l.join("\n"), this);
+  });
+})();
+</script>
+</body>
+</html>

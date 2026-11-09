@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalas de urologia e nefrologia</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "escalas-urologia-nefrologia",
+  "titulo": "Escalas de urologia e nefrologia",
+  "descricao": "IPSS para sintomas prostáticos, estadiamento KDIGO da DRC (TFGe CKD-EPI 2021 e albuminúria) e ajuste de medicação por TFGe.",
+  "area": "recursos-medicos",
+  "grupo": "escalas-e-calculadoras",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "palavras": [
+    "IPSS",
+    "próstata",
+    "HBP",
+    "LUTS",
+    "KDIGO",
+    "DRC",
+    "doença renal crónica",
+    "TFG",
+    "TFGe",
+    "CKD-EPI",
+    "creatinina",
+    "albuminúria",
+    "UACR",
+    "ajuste renal",
+    "fármacos",
+    "SADMANS"
+  ],
+  "bibliografia": [
+    "IPSS: Barry MJ, et al. The American Urological Association symptom index for benign prostatic hyperplasia. J Urol. 1992;148(5):1549–1557.",
+    "IPSS: DGS. Norma n.º 048/2011 — Abordagem Terapêutica Farmacológica da Hiperplasia Benigna da Próstata.",
+    "KDIGO: KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease. Kidney International. 2024.",
+    "CKD-EPI 2021: Inker LA, et al. New creatinine- and cystatin C-based equations to estimate GFR without race. N Engl J Med. 2021;385:1737–1749.",
+    "Medicação na DRC: ADA. Standards of Care in Diabetes — CKD. Diabetes Care. 2024;47(Suppl 1):S219–S230.",
+    "Medicação na DRC: KDIGO 2022 Clinical Practice Guideline for Diabetes Management in CKD. Kidney International. 2022;102(5S):S1–S127.",
+    "Medicação na DRC: Fichas técnicas EMA / Prontuário Terapêutico Nacional (INFARMED).",
+    "Medicação na DRC: Matzke GR, et al. Drug dosing consideration in patients with acute and chronic kidney disease. JASN. 2011;22(7):1144–1157."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+.ipss-escala { display: flex; justify-content: space-between; margin: 0; padding: 0 14px 10px; font-size: 13px; color: var(--cor-texto-3); }
+.ipss-qol { margin: 0; font-size: 15px; color: var(--cor-texto-2); }
+.kdigo-matriz td, .kdigo-matriz th { text-align: center; }
+.kdigo-matriz td:first-child { text-align: left; font-weight: 700; white-space: nowrap; }
+.kdigo-matriz td[data-nivel] { font-size: 14px; font-weight: 700; }
+.kdigo-matriz td[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal); }
+.kdigo-matriz td[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); }
+.kdigo-matriz td[data-nivel="elevado"] { background: var(--clin-elevado-fundo); color: var(--clin-elevado); }
+.kdigo-matriz td[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta); }
+.kdigo-matriz td.atual { outline: 3px solid var(--cor-tinta); outline-offset: -3px; }
+.tabela-farmacos { min-width: 860px; font-size: 14px; }
+.tabela-farmacos td.farmaco { font-weight: 700; }
+.tabela-farmacos td:last-child { min-width: 240px; color: var(--cor-texto-2); }
+.tabela-farmacos .esbatida { opacity: .25; }
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-separadores" role="tablist" aria-label="Escalas">
+    <button type="button" class="mgf-separador" role="tab" id="sep-ipss" aria-controls="painel-ipss" aria-selected="true">IPSS — próstata</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-kdigo" aria-controls="painel-kdigo" aria-selected="false">KDIGO — DRC</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-farmacos" aria-controls="painel-farmacos" aria-selected="false">Medicação na DRC</button>
+  </div>
+
+  <!-- ========== Índice Internacional de Sintomas Prostáticos (IPSS) ========== -->
+  <section class="mgf-painel" id="painel-ipss" role="tabpanel" aria-labelledby="sep-ipss" data-escala="ipss">
+    <div class="mgf-titulo-escala">
+      <h2>Índice Internacional de Sintomas Prostáticos (IPSS)</h2>
+      <p>Avalia sintomas do trato urinário inferior (LUTS) na hiperplasia benigna da próstata · último mês</p>
+    </div>
+    <p class="mgf-direitos"><strong>Tradução não oficial.</strong> O IPSS é de domínio público, mas esta tradução portuguesa foi feita para este projeto e não está validada. Para investigação ou documentação formal, usa uma versão portuguesa validada.</p>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">1. No último mês, quantas vezes teve a sensação de não esvaziar completamente a bexiga, depois de terminar de urinar?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss1" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">2. No último mês, quantas vezes teve que urinar de novo, menos de 2 horas depois de terminar de urinar?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss2" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">3. No último mês, notou que parava e recomeçava várias vezes quando urinava?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss3" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">4. No último mês, quantas vezes notou que foi difícil conter a vontade de urinar?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss4" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">5. No último mês, quantas vezes notou que o jato urinário estava fraco?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss5" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">6. No último mês, quantas vezes teve que fazer força para começar a urinar?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss6" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">7. No último mês, quantas vezes, em média, teve que se levantar durante a noite para urinar?</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ipss7" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5</span></label>
+      </div>
+      <p class="ipss-escala"><span>0 — Nenhuma vez</span><span>5 — Quase sempre</span></p>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Qualidade de vida — Se passasse o resto da sua vida com os seus sintomas urinários atuais, como se sentiria?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0 — Muito satisfeito</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1 — Satisfeito</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2 — Mais ou menos satisfeito</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3 — Indiferente</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="4"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">4 — Mais ou menos insatisfeito</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="5"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">5 — Infeliz</span></label>
+        <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="6"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">6 — Muito mal</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Resultado IPSS</h3>
+        <div class="mgf-pontuacao" id="ipss-pontuacao" aria-live="polite">0<small>/35</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="ipss-barra"></span></div>
+        <div class="mgf-interp" id="ipss-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Gravidade</th><th>Abordagem</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 7</td><td>Sintomas ligeiros</td><td>Vigilância; medidas higieno-dietéticas</td></tr>
+              <tr><td class="mgf-nivel-atencao">8 – 19</td><td>Sintomas moderados</td><td>Ponderar tratamento farmacológico (α-bloqueante e/ou 5-ARI)</td></tr>
+              <tr><td class="mgf-nivel-alerta">20 – 35</td><td>Sintomas severos</td><td>Tratamento farmacológico ou cirúrgico; referenciar Urologia</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="ipss-qol">Qualidade de vida: <strong id="ipss-qol">—</strong></p>
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== KDIGO ========== -->
+  <section class="mgf-painel" id="painel-kdigo" role="tabpanel" aria-labelledby="sep-kdigo" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Estadiamento KDIGO da doença renal crónica</h2>
+      <p>TFGe (CKD-EPI 2021) + albuminúria (UACR) · classificação e risco de progressão (KDIGO 2024)</p>
+    </div>
+    <form class="mgf-cartao" id="kdigo-formulario" novalidate>
+      <div class="mgf-cartao-titulo">Dados do doente</div>
+      <div class="mgf-cartao-corpo" style="gap:14px">
+        <div class="mgf-campos">
+          <label class="mgf-campo">Creatinina sérica (mg/dL)<input type="number" id="kdigo-cr" inputmode="decimal" placeholder="Ex.: 1,2" step="0.01" min="0.1"></label>
+          <label class="mgf-campo">Idade (anos)<input type="number" id="kdigo-idade" inputmode="numeric" placeholder="Ex.: 65" min="18" max="100"></label>
+          <label class="mgf-campo">Sexo<select id="kdigo-sexo"><option value="">Selecione</option><option value="m">Masculino</option><option value="f">Feminino</option></select></label>
+          <label class="mgf-campo">UACR / albuminúria (mg/g)<input type="number" id="kdigo-uacr" inputmode="decimal" placeholder="Ex.: 45" min="0"><small>Rácio albumina/creatinina urinária</small></label>
+        </div>
+        <p class="mgf-mensagem" id="kdigo-mensagem" role="alert"></p>
+        <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular estadiamento KDIGO</button></div>
+      </div>
+    </form>
+    <div id="kdigo-resultado" hidden>
+      <div class="mgf-resumo" id="kdigo-resumo"></div>
+      <div class="mgf-interp" id="kdigo-interp" style="margin-top:12px"></div>
+      <div class="mgf-cartao" style="margin-top:12px">
+        <div class="mgf-cartao-titulo">Matriz de risco KDIGO — TFGe × albuminúria</div>
+        <div class="mgf-cartao-corpo">
+          <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela kdigo-matriz">
+              <thead>
+                <tr><th rowspan="2">Categoria TFGe (mL/min/1,73 m²)</th><th colspan="3">Albuminúria (UACR mg/g)</th></tr>
+                <tr><th>A1 &lt; 30<br><small>Normal a ligeira</small></th><th>A2 30–300<br><small>Moderada</small></th><th>A3 &gt; 300<br><small>Grave</small></th></tr>
+              </thead>
+              <tbody id="kdigo-matriz"></tbody>
+            </table>
+          </div>
+          <p class="mgf-nota"><strong>Nota.</strong> A célula com contorno e a indicação "estadio atual" corresponde ao doente. Risco: baixo, moderado, alto e muito alto (também escrito em cada célula).</p>
+        </div>
+      </div>
+      <div class="mgf-cartao">
+        <div class="mgf-cartao-titulo">Monitorização e referenciação</div>
+        <div class="mgf-cartao-corpo">
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>TFGe (mL/min)</th><th>Frequência de monitorização</th><th>Referenciação</th></tr></thead>
+            <tbody>
+              <tr><td>≥ 60 (G1–G2)</td><td>Anualmente, se estável</td><td>CSP; referir se causa incerta ou progressão rápida</td></tr>
+              <tr><td>45–59 (G3a)</td><td>A cada 6 meses</td><td>CSP; ponderar referenciação a Nefrologia</td></tr>
+              <tr><td>30–44 (G3b)</td><td>A cada 3–6 meses</td><td>Referenciação a Nefrologia recomendada</td></tr>
+              <tr><td>15–29 (G4)</td><td>A cada 3 meses</td><td>Referenciação a Nefrologia obrigatória; preparar TRS</td></tr>
+              <tr><td>&lt; 15 (G5)</td><td>Mensal</td><td>Nefrologia / diálise ou transplante</td></tr>
+            </tbody>
+          </table>
+        </div>
+          <p class="mgf-aviso"><strong>Referir urgentemente se:</strong> TFGe cair &gt; 25% em ≤ 3 meses, UACR &gt; 300 mg/g de novo, hematúria glomerular, HTA refratária, hipercaliémia ou suspeita de causa tratável.</p>
+        </div>
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== MEDICAÇÃO NA DRC ========== -->
+  <section class="mgf-painel" id="painel-farmacos" role="tabpanel" aria-labelledby="sep-farmacos" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Ajuste de medicação na DRC</h2>
+      <p>Principais fármacos usados em MGF com necessidade de ajuste por TFGe · baseado em KDIGO 2024, ADA 2024 e fichas técnicas EMA/FDA</p>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-corpo" style="gap:10px">
+        <span class="mgf-refs"><h4 style="margin:0">Destacar a coluna da TFGe do doente (mL/min/1,73 m²)</h4></span>
+        <div class="mgf-filtros" id="filtro-tfg" role="group" aria-label="Filtrar por TFGe">
+          <button type="button" data-coluna="0" aria-pressed="true">Todos</button>
+          <button type="button" data-coluna="1" aria-pressed="false">G1–G2 ≥ 60</button>
+          <button type="button" data-coluna="2" aria-pressed="false">G3a 45–59</button>
+          <button type="button" data-coluna="3" aria-pressed="false">G3b 30–44</button>
+          <button type="button" data-coluna="4" aria-pressed="false">G4 15–29</button>
+          <button type="button" data-coluna="5" aria-pressed="false">G5 &lt; 15</button>
+        </div>
+        <p class="mgf-nota"><strong>Nota.</strong> Esta tabela apoia a decisão clínica. Confirme sempre as fichas técnicas e consulte o farmacêutico em caso de dúvida. Para fármacos com intervalo terapêutico estreito, monitorize níveis séricos. Legenda: <span class="mgf-etiqueta" data-nivel="normal">sem ajuste</span> <span class="mgf-etiqueta" data-nivel="atencao">atenção</span> <span class="mgf-etiqueta" data-nivel="elevado">reduzir</span> <span class="mgf-etiqueta" data-nivel="alerta">evitar / CI</span></p>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Antidiabéticos Orais e Injetáveis</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">Metformina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Atenção</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Suspender</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Não iniciar se TFGe &lt;45; suspender se TFGe &lt;30. Suspender antes de contraste iodado se TFGe 30–60</td></tr>
+            <tr><td class="farmaco">Empagliflozina (iSGLT2)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Uso p/ nefroprot.</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Suspender</span></td><td>Eficácia glicémica reduzida &lt;45; manter até &lt;20 para nefroproteção (KDIGO 2024). Suspender em cirurgia ou jejum prolongado</td></tr>
+            <tr><td class="farmaco">Dapagliflozina (iSGLT2)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Uso p/ nefroprot.</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Suspender</span></td><td>Igual à empagliflozina; aprovado para DRC com UACR ≥200 independentemente da DM</td></tr>
+            <tr><td class="farmaco">Semaglutida (GLP-1 RA)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td>Sem ajuste renal; vigilância de náuseas/desidratação em G4–G5. Aprovado KDIGO 2024 como 3ª linha na DM2+DRC</td></tr>
+            <tr><td class="farmaco">Sitagliptina (iDPP-4)</td><td><span class="mgf-etiqueta" data-nivel="normal">100 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">50 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">50 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">25 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">25 mg/d</span></td><td>Ajustar dose; bem tolerada na DRC; não aumenta risco de hipoglicemia</td></tr>
+            <tr><td class="farmaco">Saxagliptina (iDPP-4)</td><td><span class="mgf-etiqueta" data-nivel="normal">5 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">2,5 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">2,5 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">2,5 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td>Evitar se TFGe &lt;15; associada a risco de IC — evitar em IC</td></tr>
+            <tr><td class="farmaco">Sulfonilureias (SU)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Risco de hipoglicemia aumenta com DRC. Glicazida MR preferível (metabolismo hepático). Glibenclamida contraindicada</td></tr>
+            <tr><td class="farmaco">Insulina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose ±30%</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td>Clearance da insulina reduz com TFGe; aumenta risco de hipoglicemia. Monitorizar frequentemente</td></tr>
+            <tr><td class="farmaco">Finerenona (ns-MRA)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado K+</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td>Indicado DM2+DRC+UACR &gt;30 em RAASi máx. TFGe &gt;25 e K+ normal. Monitorizar K+ e TFGe regularmente</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Anti-hipertensores e Cardiológicos</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">IECA (ex. ramipril, perindopril)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado K+/Cr</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar*</span></td><td>1ª linha em DRC+proteinúria. Verificar K+ e Cr 2–4 sem após início. Suspender se Cr subir &gt;30% em 4 sem ou K+ &gt;5,5 mEq/L. *Em G5 pre-diálise: individualizar</td></tr>
+            <tr><td class="farmaco">ARA II (ex. losartan, olmesartan)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado K+/Cr</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar*</span></td><td>Mesmas recomendações que IECA. Não combinar IECA+ARA II+aliscireno (KDIGO 2024)</td></tr>
+            <tr><td class="farmaco">Amlodipina (BCC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td>Sem ajuste renal; preferível como 2ª linha na DRC. Combinação com IECA/ARA II eficaz</td></tr>
+            <tr><td class="farmaco">Furosemida</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↑ dose</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↑ dose</span></td><td>Diurético preferido em DRC avançada (tiazídicos perdem eficácia &lt;30). Suspender em desidratação aguda</td></tr>
+            <tr><td class="farmaco">Hidroclorotiazida / Indapamida</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Atenção</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Ineficaz como diurético se TFGe &lt;30. Indapamida pode manter efeito anti-hipertensor</td></tr>
+            <tr><td class="farmaco">Espironolactona</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. K+</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Risco elevado de hipercalémia na DRC. Monitorizar K+ 1–2 semanas após início. Evitar se K+ basal &gt;5,0 mEq/L</td></tr>
+            <tr><td class="farmaco">Bisoprolol / Nebivolol (β-bloqueante)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit.</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td>Sem contraindicação formal; titular conforme resposta. Metoprolol preferível (eliminação hepática)</td></tr>
+            <tr><td class="farmaco">Digoxina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td>Intervalo terapêutico estreito; acumulação em DRC. Monitorizar níveis séricos e ECG</td></tr>
+            <tr><td class="farmaco">Estatinas (ex. atorvastatina)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td>KDIGO 2024: estatina recomendada se TFGe &lt;60 e idade ≥50 anos. Rosuvastatina: não exceder 10 mg/d se TFGe &lt;30</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Anticoagulantes e Antiagregantes</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">Apixabano (NOAC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Atenção</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td>Preferível entre NOACs na DRC. Usar critérios de redução de dose: Cr ≥1,5 mg/dL + idade ≥80 ou peso ≤60 kg. Não recomendado TFGe &lt;15</td></tr>
+            <tr><td class="farmaco">Rivaroxabano (NOAC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>15 mg/d se TFGe 30–49; contraindicado &lt;15. Usar com precaução em G3b</td></tr>
+            <tr><td class="farmaco">Dabigatrano (NOAC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit.</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>80% excreção renal; evitar se TFGe &lt;30. Maior risco hemorrágico em DRC comparado com apixabano</td></tr>
+            <tr><td class="farmaco">Edoxabano (NOAC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit.</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>↓ dose se TFGe 15–50. Contraindicado &lt;15</td></tr>
+            <tr><td class="farmaco">Varfarina (AVK)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. INR</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. INR</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. INR</span></td><td>Não necessita ajuste renal mas INR mais instável na DRC. Risco hemorrágico acrescido em G4–G5. Considerar NOACs</td></tr>
+            <tr><td class="farmaco">AAS (antiagregante)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td>Aumenta risco de hemorragia GI na DRC avançada. Usar apenas com indicação cardiovascular clara</td></tr>
+            <tr><td class="farmaco">Heparina de baixo peso molecular (HBPM)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit.</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar/monit.</span></td><td>Acumulação em DRC severa; monitorizar anti-Xa se TFGe &lt;30. Heparina não fracionada preferível em G4–G5</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Analgésicos e Anti-inflamatórios</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">Paracetamol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td>Analgésico de 1ª escolha na DRC. Não ultrapasse 3g/dia em G4–G5</td></tr>
+            <tr><td class="farmaco">AINE (ibuprofeno, naproxeno…)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Contraindicados na DRC; precipitam deterioração aguda, retêm sódio, aumentam PA. Incluídos nos SADMANS</td></tr>
+            <tr><td class="farmaco">Tramadol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Metabolito ativo acumula; risco de convulsões e depressão SNC. Evitar se TFGe &lt;30</td></tr>
+            <tr><td class="farmaco">Morfina / Oxicodona</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Metabolitos ativos acumulam-se; risco de sedação excessiva e depressão respiratória. Buprenorfina preferível em G4–G5</td></tr>
+            <tr><td class="farmaco">Gabapentina / Pregabalina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose ↓↓</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose ↓↓↓</span></td><td>Ajuste obrigatório por TFGe; risco de sedação e miopatia. Consultar tabelas de dosagem específicas</td></tr>
+            <tr><td class="farmaco">Colquicina (gota)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Acumulação em DRC; risco de miopatia e neuropatia. Evitar em G5. Alopurinol preferível na profilaxia</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Antibióticos (mais comuns em MGF)</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">Amoxicilina / Amoxicilina+ac. clavulânico</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Intervalo ↑</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td>Excreção renal; ajustar intervalo em G3b–G5</td></tr>
+            <tr><td class="farmaco">Nitrofurantoína</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Ineficaz e tóxico se TFGe &lt;45. Não usar para ITU em DRC moderada–grave</td></tr>
+            <tr><td class="farmaco">Ciprofloxacina / Norfloxacina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td>Ajustar em G3b–G5; potencial para cristalúria. Monitorizar neurotoxicidade</td></tr>
+            <tr><td class="farmaco">Trimetoprim / Co-trimoxazol</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Bloqueia secreção tubular de creatinina (eleva Cr sem alterar TFGe real). Hipercalémia</td></tr>
+            <tr><td class="farmaco">Azitromicina / Claritromicina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td>Azitromicina: sem ajuste. Claritromicina: ↓ dose se TFGe &lt;30. Interação com estatinas</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Outros Fármacos Relevantes em MGF</div>
+      <div class="mgf-tabela-caixa">
+            <table class="mgf-tabela tabela-farmacos">
+            <thead><tr><th>Fármaco</th><th>≥60 (G1–G2)</th><th>45–59 (G3a)</th><th>30–44 (G3b)</th><th>15–29 (G4)</th><th>&lt;15 (G5)</th><th>Notas</th></tr></thead>
+            <tbody>
+            <tr><td class="farmaco">Alopurinol (gota / DRC)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">↓ dose</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">100 mg/d</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">50–100 mg/d</span></td><td>Acumulação de metabolito ativo; risco de síndrome de hipersensibilidade. Iniciar baixa dose e titular</td></tr>
+            <tr><td class="farmaco">Alendronato (bifosfonato)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Evitar</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">CI</span></td><td>Contraindicado se TFGe &lt;35 mL/min; risco de mineralização anormal</td></tr>
+            <tr><td class="farmaco">Linagliptina (iDPP-4)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Cuidado</span></td><td>Única iDPP-4 sem ajuste até G4; eliminação predominantemente hepática</td></tr>
+            <tr><td class="farmaco">Levotiroxina</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. TSH</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Monit. TSH</span></td><td>Sem ajuste renal formal; monitorizar TSH mais frequentemente (DRC altera metabolismo hormonal)</td></tr>
+            <tr><td class="farmaco">Contraste iodado (EV)</td><td><span class="mgf-etiqueta" data-nivel="normal">Normal</span></td><td><span class="mgf-etiqueta" data-nivel="atencao">Pré-hidrat.</span></td><td><span class="mgf-etiqueta" data-nivel="elevado">Pré-hidrat.</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Risco AKI</span></td><td><span class="mgf-etiqueta" data-nivel="alerta">Risco AKI</span></td><td>Suspender metformina 48h antes se TFGe 30–60. Pré-hidratação com SF 0,9% 1 mL/kg/h, 6–12h antes e após</td></tr>
+            </tbody>
+            </table>
+      </div>
+    </div>
+    <p class="mgf-aviso"><strong>SADMANS</strong> — Fármacos a suspender em doença aguda desidratante: <strong>S</strong>GLT2i · <strong>A</strong>AINE · <strong>D</strong>iuréticos · <strong>M</strong>etformina · <strong>A</strong>CEIS/ARAs · <strong>N</strong>SARs (renina) · <strong>S</strong>ulfonilureias. Instruir o doente a interromper estes fármacos em episódios de vómitos, diarreia ou febre elevada.</p>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir tabela</button>
+    </div>
+  </section>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  var raiz = document.getElementById("ferramenta");
+  MGF.separadores(raiz);
+
+  /* ---------- IPSS (limiares e textos iguais à versão original) ---------- */
+  var qolTextos = ["Muito satisfeito", "Satisfeito", "Mais ou menos satisfeito", "Indiferente", "Mais ou menos insatisfeito", "Infeliz", "Muito mal"];
+  function textoQol() {
+    var r = raiz.querySelector('input[name="ipssqol"]:checked');
+    return r ? r.value + " — " + qolTextos[parseInt(r.value, 10)] : "—";
+  }
+  var painelIpss = document.getElementById("painel-ipss");
+  painelIpss.addEventListener("change", function () { document.getElementById("ipss-qol").textContent = textoQol(); });
+  MGF.escalas(raiz, {
+    ipss: {
+      max: 35, titulo: "IPSS — Índice Internacional de Sintomas Prostáticos",
+      interp: function (s) {
+        if (s <= 7) return ["normal", "<strong>Sintomas ligeiros</strong> (" + s + " pontos) — Vigilância; medidas higieno-dietéticas"];
+        if (s <= 19) return ["atencao", "<strong>Sintomas moderados</strong> (" + s + " pontos) — Ponderar tratamento farmacológico (α-bloqueante e/ou 5-ARI)"];
+        return ["alerta", "<strong>Sintomas severos</strong> (" + s + " pontos) — Tratamento farmacológico ou cirúrgico; referenciar Urologia"];
+      },
+      copia: function () { return "Qualidade de Vida: " + textoQol(); },
+      aoLimpar: function () { document.getElementById("ipss-qol").textContent = "—"; }
+    }
+  });
+
+  /* ---------- KDIGO / CKD-EPI 2021 (fórmulas e limiares iguais à versão original) ---------- */
+  function ckdEpi2021(cr, idade, sexo) {
+    var k = sexo === "f" ? 0.7 : 0.9;
+    var a = sexo === "f" ? -0.241 : -0.302;
+    var r = cr / k;
+    var tfg = 142 * Math.pow(Math.min(r, 1), a) * Math.pow(Math.max(r, 1), -1.200) * Math.pow(0.9938, idade) * (sexo === "f" ? 1.012 : 1);
+    return Math.round(tfg * 10) / 10;
+  }
+  function categoriaG(t) {
+    if (t >= 90) return { cat: "G1", nivel: "normal" };
+    if (t >= 60) return { cat: "G2", nivel: "normal" };
+    if (t >= 45) return { cat: "G3a", nivel: "atencao" };
+    if (t >= 30) return { cat: "G3b", nivel: "atencao" };
+    if (t >= 15) return { cat: "G4", nivel: "elevado" };
+    return { cat: "G5", nivel: "alerta" };
+  }
+  function categoriaA(u) {
+    if (u < 30) return { cat: "A1", nivel: "normal" };
+    if (u <= 300) return { cat: "A2", nivel: "atencao" };
+    return { cat: "A3", nivel: "alerta" };
+  }
+  var G = ["G1", "G2", "G3a", "G3b", "G4", "G5"], A = ["A1", "A2", "A3"];
+  var MATRIZ = [[0, 1, 2], [0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 4], [4, 4, 4]];
+  var RISCOS = [
+    { rotulo: "Baixo", nivel: "normal" }, { rotulo: "Moderado", nivel: "atencao" }, { rotulo: "Alto", nivel: "elevado" },
+    { rotulo: "Muito alto", nivel: "alerta" }, { rotulo: "Muito alto", nivel: "alerta" }
+  ];
+  function risco(g, a) { return MATRIZ[G.indexOf(g)][A.indexOf(a)]; }
+  var ultimo = null;
+
+  function caixa(rotulo, valor, sub, nivel) {
+    return '<div data-nivel="' + nivel + '"><span class="mgf-resumo-rotulo">' + rotulo + '</span><span class="mgf-resumo-valor">' + valor + '</span><span class="mgf-resumo-sub">' + sub + "</span></div>";
+  }
+  function calcularKdigo() {
+    var cr = parseFloat(document.getElementById("kdigo-cr").value);
+    var idade = parseInt(document.getElementById("kdigo-idade").value, 10);
+    var sexo = document.getElementById("kdigo-sexo").value;
+    var uacr = parseFloat(document.getElementById("kdigo-uacr").value);
+    var msg = document.getElementById("kdigo-mensagem");
+    if (isNaN(cr) || isNaN(idade) || !sexo || isNaN(uacr)) { msg.textContent = "Preencha todos os campos."; return; }
+    msg.textContent = "";
+    var tfg = ckdEpi2021(cr, idade, sexo), gc = categoriaG(tfg), ac = categoriaA(uacr);
+    var ri = risco(gc.cat, ac.cat), r = RISCOS[ri];
+    ultimo = { tfg: tfg, uacr: uacr };
+    document.getElementById("kdigo-resumo").innerHTML =
+      caixa("TFGe (CKD-EPI 2021)", MGF.decimal(tfg), "mL/min/1,73 m² · <strong>" + gc.cat + "</strong>", gc.nivel) +
+      caixa("Albuminúria (UACR)", MGF.decimal(uacr), "mg/g · <strong>" + ac.cat + "</strong>", ac.nivel) +
+      caixa("Risco KDIGO", r.rotulo, gc.cat + " + " + ac.cat, r.nivel);
+    var t = MGF.decimal(tfg), u = MGF.decimal(uacr), base = " — TFGe " + t + " (" + gc.cat + "), UACR " + u + " mg/g (" + ac.cat + "). ";
+    var interp = document.getElementById("kdigo-interp");
+    if (ri === 0) { interp.dataset.nivel = "normal"; interp.innerHTML = "<strong>Risco baixo</strong>" + base + "Monitorização anual em CSP."; }
+    else if (ri === 1) { interp.dataset.nivel = "atencao"; interp.innerHTML = "<strong>Risco moderado</strong>" + base + "Otimizar fatores de risco cardiovascular e renal."; }
+    else if (ri === 2) { interp.dataset.nivel = "elevado"; interp.innerHTML = "<strong>Risco alto</strong>" + base + "Ponderar referenciação a Nefrologia."; }
+    else { interp.dataset.nivel = "alerta"; interp.innerHTML = "<strong>Risco muito alto</strong>" + base + "Referenciação a Nefrologia recomendada/obrigatória."; }
+    var rotulosG = ["G1 ≥ 90", "G2 60–89", "G3a 45–59", "G3b 30–44", "G4 15–29", "G5 &lt; 15"], linhas = "";
+    G.forEach(function (g, gi) {
+      linhas += "<tr><td>" + rotulosG[gi] + "</td>";
+      A.forEach(function (a) {
+        var x = RISCOS[risco(g, a)], atual = g === gc.cat && a === ac.cat;
+        linhas += '<td data-nivel="' + x.nivel + '"' + (atual ? ' class="atual"' : "") + ">" + x.rotulo + (atual ? "<br><small>estadio atual</small>" : "") + "</td>";
+      });
+      linhas += "</tr>";
+    });
+    document.getElementById("kdigo-matriz").innerHTML = linhas;
+    document.getElementById("kdigo-resultado").hidden = false;
+  }
+  var painelKdigo = document.getElementById("painel-kdigo");
+  document.getElementById("kdigo-formulario").addEventListener("submit", function (e) { e.preventDefault(); calcularKdigo(); });
+  painelKdigo.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-acao]");
+    if (!b) return;
+    if (b.dataset.acao === "limpar") {
+      ["kdigo-cr", "kdigo-idade", "kdigo-uacr"].forEach(function (id) { document.getElementById(id).value = ""; });
+      document.getElementById("kdigo-sexo").value = "";
+      document.getElementById("kdigo-mensagem").textContent = "";
+      document.getElementById("kdigo-resultado").hidden = true;
+      ultimo = null;
+    } else if (b.dataset.acao === "imprimir") window.print();
+    else if (b.dataset.acao === "copiar") {
+      if (!ultimo) { MGF.copiar("Calcule primeiro o estadiamento KDIGO.", b); return; }
+      var texto = "KDIGO — Estadiamento DRC\nTFGe (CKD-EPI 2021): " + MGF.decimal(ultimo.tfg) + " mL/min/1,73m²\nUACR: " + MGF.decimal(ultimo.uacr) +
+        " mg/g\nInterpretação: " + document.getElementById("kdigo-interp").textContent;
+      MGF.copiar(texto, b);
+    }
+  });
+
+  /* ---------- Medicação na DRC: destacar a coluna da TFGe ---------- */
+  var filtros = document.getElementById("filtro-tfg");
+  filtros.addEventListener("click", function (e) {
+    var b = e.target.closest("button");
+    if (!b) return;
+    filtros.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    var col = parseInt(b.dataset.coluna, 10);
+    raiz.querySelectorAll(".tabela-farmacos tr").forEach(function (linha) {
+      var celulas = linha.querySelectorAll("td, th");
+      celulas.forEach(function (c, i) {
+        c.classList.toggle("esbatida", col > 0 && i > 0 && i !== col && i !== celulas.length - 1);
+      });
+    });
+  });
+  document.getElementById("painel-farmacos").addEventListener("click", function (e) {
+    if (e.target.closest('[data-acao="imprimir"]')) window.print();
+  });
+})();
+</script>
+</body>
+</html>

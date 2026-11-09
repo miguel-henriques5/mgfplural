@@ -1,6 +1,32 @@
 /* Gerado por scripts/construir.py — não editar à mão. */
 window.MGF_CATALOGO = [
  {
+  "id": "planificacao-vigilancia-gravidez",
+  "titulo": "Planificação da vigilância da gravidez",
+  "descricao": "Datas das consultas, análises, ecografias, rastreios e vacinas numa gravidez de baixo risco, a partir da DUM, da ecografia ou da idade gestacional.",
+  "area": "Recursos médicos",
+  "grupo": "Escalas e calculadoras",
+  "icone": "escala",
+  "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "gravidez",
+   "grávida",
+   "DPP",
+   "data provável do parto",
+   "DUM",
+   "idade gestacional",
+   "IG",
+   "ecografia",
+   "calendário",
+   "saúde materna",
+   "Tdpa",
+   "anti-D",
+   "PTGO"
+  ]
+ },
+ {
   "id": "escalas-cardiovasculares",
   "titulo": "Escalas cardiovasculares",
   "descricao": "Wells para TEP e para TVP, CHA₂DS₂-VASc e HAS-BLED, com interpretação e resultado para copiar.",
@@ -21,6 +47,93 @@ window.MGF_CATALOGO = [
    "anticoagulação",
    "HAS-BLED",
    "risco hemorrágico"
+  ]
+ },
+ {
+  "id": "escalas-doencas-respiratorias",
+  "titulo": "Escalas de doenças respiratórias",
+  "descricao": "CURB-65, STOP-Bang, Epworth, Fagerström e Richmond: pneumonia, apneia do sono e cessação tabágica.",
+  "area": "Recursos médicos",
+  "grupo": "Escalas e calculadoras",
+  "icone": "escala",
+  "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "CURB-65",
+   "CURB",
+   "pneumonia",
+   "PAC",
+   "STOP-Bang",
+   "SAOS",
+   "apneia do sono",
+   "Epworth",
+   "sonolência",
+   "Fagerström",
+   "nicotina",
+   "tabaco",
+   "Richmond",
+   "cessação tabágica",
+   "motivação"
+  ]
+ },
+ {
+  "id": "escalas-saude-mental",
+  "titulo": "Escalas de saúde mental",
+  "descricao": "EPDS, HADS, GPCOG e Mini-Cog: depressão perinatal, ansiedade e depressão, e rastreio de défice cognitivo.",
+  "area": "Recursos médicos",
+  "grupo": "Escalas e calculadoras",
+  "icone": "escala",
+  "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "EPDS",
+   "Edimburgo",
+   "depressão pós-parto",
+   "puerpério",
+   "depressão perinatal",
+   "HADS",
+   "ansiedade",
+   "depressão",
+   "GPCOG",
+   "Mini-Cog",
+   "demência",
+   "défice cognitivo",
+   "memória",
+   "rastreio cognitivo",
+   "MMSE",
+   "MoCA",
+   "saúde mental"
+  ]
+ },
+ {
+  "id": "escalas-urologia-nefrologia",
+  "titulo": "Escalas de urologia e nefrologia",
+  "descricao": "IPSS para sintomas prostáticos, estadiamento KDIGO da DRC (TFGe CKD-EPI 2021 e albuminúria) e ajuste de medicação por TFGe.",
+  "area": "Recursos médicos",
+  "grupo": "Escalas e calculadoras",
+  "icone": "escala",
+  "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "IPSS",
+   "próstata",
+   "HBP",
+   "LUTS",
+   "KDIGO",
+   "DRC",
+   "doença renal crónica",
+   "TFG",
+   "TFGe",
+   "CKD-EPI",
+   "creatinina",
+   "albuminúria",
+   "UACR",
+   "ajuste renal",
+   "fármacos",
+   "SADMANS"
   ]
  }
 ];

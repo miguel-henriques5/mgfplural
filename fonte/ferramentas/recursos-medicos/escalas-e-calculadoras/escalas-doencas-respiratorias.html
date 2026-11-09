@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalas de doenças respiratórias</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "escalas-doencas-respiratorias",
+  "titulo": "Escalas de doenças respiratórias",
+  "descricao": "CURB-65, STOP-Bang, Epworth, Fagerström e Richmond: pneumonia, apneia do sono e cessação tabágica.",
+  "area": "recursos-medicos",
+  "grupo": "escalas-e-calculadoras",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "palavras": [
+    "CURB-65",
+    "CURB",
+    "pneumonia",
+    "PAC",
+    "STOP-Bang",
+    "SAOS",
+    "apneia do sono",
+    "Epworth",
+    "sonolência",
+    "Fagerström",
+    "nicotina",
+    "tabaco",
+    "Richmond",
+    "cessação tabágica",
+    "motivação"
+  ],
+  "bibliografia": [
+    "CURB-65: DGS. Norma n.º 045/2011 — Antibioterapia na Pneumonia Adquirida na Comunidade em Adultos.",
+    "CURB-65: Lim WS, et al. Thorax. 2003;58(5):377–382.",
+    "STOP-Bang: Chung F, et al. STOP questionnaire: a tool to screen patients for obstructive sleep apnea. Anesthesiology. 2008;108(5):812–821.",
+    "Epworth: Johns MW. A new method for measuring daytime sleepiness: the Epworth Sleepiness Scale. Sleep. 1991;14:540–545.",
+    "Epworth: DGS. Norma n.º 022/2014 — Seguimento nos Cuidados de Saúde Primários de doentes com SAOS.",
+    "Fagerström: Heatherton TF, et al. The Fagerström Test for Nicotine Dependence. Br J Addict. 1991;86(9):1119–1127.",
+    "Richmond: Ferreira LF, et al. Rev Port Saúde Pública. 2009;27:37–56.",
+    "Richmond: Richmond RL, et al. Addiction. 1993;88(8):1127–1135."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Esta ferramenta usa só os componentes comuns (ferramenta.css). */
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-separadores" role="tablist" aria-label="Escalas">
+    <button type="button" class="mgf-separador" role="tab" id="sep-curb65" aria-controls="painel-curb65" aria-selected="true">CURB-65</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-stopbang" aria-controls="painel-stopbang" aria-selected="false">STOP-Bang</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-epworth" aria-controls="painel-epworth" aria-selected="false">Epworth</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-fagerstrom" aria-controls="painel-fagerstrom" aria-selected="false">Fagerström</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-richmond" aria-controls="painel-richmond" aria-selected="false">Richmond</button>
+  </div>
+
+  <!-- ========== CURB-65 ========== -->
+  <section class="mgf-painel" id="painel-curb65" role="tabpanel" aria-labelledby="sep-curb65" data-escala="curb65">
+    <div class="mgf-titulo-escala">
+      <h2>CURB-65</h2>
+      <p>Escala de severidade da pneumonia adquirida na comunidade</p>
+    </div>
+
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-so-leitor">Critérios — 1 ponto por critério presente</legend>
+      <div class="mgf-cartao-titulo" aria-hidden="true">Critérios — 1 ponto por critério presente</div>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>C</strong> — Confusão · alteração aguda do estado mental</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>U</strong> — Ureia (BUN) &gt; 19 mg/dL (7 mmol/L)</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>R</strong> — Frequência respiratória &gt; 30/min</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>B</strong> — Pressão arterial sistólica &lt; 90 mmHg ou diastólica ≤ 60 mmHg</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>65</strong> — Idade ≥ 65 anos</span><span class="mgf-opcao-pontos">+1</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Pontuação CURB-65</h3>
+        <div class="mgf-pontuacao" id="curb65-pontuacao" aria-live="polite">0<small>/5</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="curb65-barra"></span></div>
+        <div class="mgf-interp" id="curb65-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Mortalidade</th><th>Recomendação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0</td><td>0,7%</td><td>Tratamento em ambulatório</td></tr>
+              <tr><td class="mgf-nivel-normal">1</td><td>3,2%</td><td>Ambulatório com supervisão</td></tr>
+              <tr><td class="mgf-nivel-atencao">2</td><td>13,0%</td><td>Internamento de curta duração</td></tr>
+              <tr><td class="mgf-nivel-alerta">3</td><td>17,0%</td><td>Referenciação hospitalar urgente</td></tr>
+              <tr><td class="mgf-nivel-alerta">4</td><td>41,5%</td><td>Referenciação urgente · considerar UCI</td></tr>
+              <tr><td class="mgf-nivel-alerta">5</td><td>57,0%</td><td>Referenciação urgente · internar em UCI</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== STOP-Bang ========== -->
+  <section class="mgf-painel" id="painel-stopbang" role="tabpanel" aria-labelledby="sep-stopbang" data-escala="stopbang" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>STOP-Bang</h2>
+      <p>Rastreio do risco de SAOS (síndrome de apneia obstrutiva do sono)</p>
+    </div>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora de pontuação, com os critérios resumidos. Para aplicar o questionário ao utente, usa a versão oficial: <a href="https://www.stopbang.ca/" rel="noopener">stopbang.ca</a>.</p>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-so-leitor">Critérios presentes — 1 ponto cada</legend>
+      <div class="mgf-cartao-titulo" aria-hidden="true">Critérios presentes — 1 ponto cada</div>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>S</strong> — Ressonar alto</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>T</strong> — Cansaço ou sonolência diurna frequentes</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>O</strong> — Apneias observadas durante o sono</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>P</strong> — Hipertensão arterial (ou em tratamento)</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>B</strong> — IMC &gt; 35 kg/m²</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>A</strong> — Idade &gt; 50 anos</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>N</strong> — Perímetro cervical &gt; 40 cm</span><span class="mgf-opcao-pontos">+1</span></label>
+        <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>G</strong> — Sexo masculino</span><span class="mgf-opcao-pontos">+1</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Risco de SAOS</h3>
+        <div class="mgf-pontuacao" id="stopbang-pontuacao" aria-live="polite">0<small>/8</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="stopbang-barra"></span></div>
+        <div class="mgf-interp" id="stopbang-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Risco de SAOS</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 2</td><td>Baixo risco de SAOS</td></tr>
+              <tr><td class="mgf-nivel-alerta">3 – 8</td><td>Risco elevado de SAOS · considerar estudo do sono</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== Escala de Sonolência de Epworth ========== -->
+  <section class="mgf-painel" id="painel-epworth" role="tabpanel" aria-labelledby="sep-epworth" data-escala="epworth" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Escala de Sonolência de Epworth</h2>
+      <p>Pontuação de 0 (nenhuma probabilidade de dormitar) a 3 (forte probabilidade) em cada uma das 8 situações</p>
+    </div>
+    <p class="mgf-direitos"><strong>Direitos de autor.</strong> A escala tem licença do autor, por isso não reproduzimos as 8 situações. Aplica a versão oficial (<a href="https://epworthsleepinessscale.com/" rel="noopener">epworthsleepinessscale.com</a>) e introduz aqui a pontuação de cada item, pela mesma ordem.</p>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 1</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep1" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep1" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 2</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep2" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep2" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 3</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep3" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep3" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 4</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep4" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 5</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep5" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep5" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep5" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep5" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 6</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep6" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep6" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep6" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep6" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 7</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep7" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep7" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep7" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep7" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">Item 8</legend>
+      <div class="mgf-cartao-corpo mgf-em-linha">
+        <label class="mgf-opcao"><input type="radio" name="ep8" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">0</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep8" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">1</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep8" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">2</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ep8" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Pontuação Epworth</h3>
+        <div class="mgf-pontuacao" id="epworth-pontuacao" aria-live="polite">0<small>/24</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="epworth-barra"></span></div>
+        <div class="mgf-interp" id="epworth-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Interpretação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 6</td><td>Sono normal</td></tr>
+              <tr><td class="mgf-nivel-atencao">7 – 8</td><td>Sonolência moderada</td></tr>
+              <tr><td class="mgf-nivel-alerta">9 – 24</td><td>Sonolência anormal (possivelmente patológica)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== Teste de Fagerström adaptado ========== -->
+  <section class="mgf-painel" id="painel-fagerstrom" role="tabpanel" aria-labelledby="sep-fagerstrom" data-escala="fagerstrom" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Teste de Fagerström adaptado</h2>
+      <p>Dependência física da nicotina · ferramenta terapêutica para cessação tabágica</p>
+    </div>
+
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">1. Quanto tempo depois de acordar fuma o 1.º cigarro?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag1" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Primeiros 5 minutos</span><span class="mgf-opcao-pontos">3 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag1" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">6–30 minutos</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">31–60 minutos</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Mais de 60 minutos</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">2. É difícil para si não fumar em espaços onde é proibido?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">3. Qual é o cigarro que teria mais dificuldade em abandonar?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">O 1.º da manhã</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Qualquer outro</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">4. Quantos cigarros fuma por dia?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">10 ou menos</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">11 a 20</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag4" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">21 a 30</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">31 ou mais</span><span class="mgf-opcao-pontos">3 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">5. Fuma mais frequentemente nas primeiras horas após acordar?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag5" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag5" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">6. Fuma mesmo quando está doente?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="fag6" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="fag6" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Dependência da nicotina</h3>
+        <div class="mgf-pontuacao" id="fagerstrom-pontuacao" aria-live="polite">0<small>/10</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="fagerstrom-barra"></span></div>
+        <div class="mgf-interp" id="fagerstrom-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Dependência</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-normal">0 – 4</td><td>Dependência baixa</td></tr>
+              <tr><td class="mgf-nivel-atencao">5 – 6</td><td>Dependência média</td></tr>
+              <tr><td class="mgf-nivel-alerta">7 – 10</td><td>Dependência elevada</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+  <!-- ========== Teste de Richmond ========== -->
+  <section class="mgf-painel" id="painel-richmond" role="tabpanel" aria-labelledby="sep-richmond" data-escala="richmond" hidden>
+    <div class="mgf-titulo-escala">
+      <h2>Teste de Richmond</h2>
+      <p>Motivação para deixar de fumar · ferramenta clínica para planear o apoio à cessação tabágica</p>
+    </div>
+
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">1. Gostaria de deixar de fumar se o pudesse fazer facilmente?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="ric1" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric1" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim</span><span class="mgf-opcao-pontos">1 pt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">2. Tem realmente vontade de deixar de fumar?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="ric2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Nenhuma</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric2" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Pouca</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric2" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Alguma</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric2" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Muita</span><span class="mgf-opcao-pontos">3 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">3. Acredita que conseguirá deixar de fumar nas próximas 2 semanas?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="ric3" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric3" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Talvez</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric3" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Provavelmente</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric3" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">De certeza</span><span class="mgf-opcao-pontos">3 pts</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="mgf-cartao">
+      <legend class="mgf-cartao-titulo">4. Pensa que será ex-fumador/a dentro de 6 meses?</legend>
+      <div class="mgf-cartao-corpo">
+        <label class="mgf-opcao"><input type="radio" name="ric4" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Dificilmente</span><span class="mgf-opcao-pontos">0 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric4" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Pode ser</span><span class="mgf-opcao-pontos">1 pt</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric4" value="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Provavelmente</span><span class="mgf-opcao-pontos">2 pts</span></label>
+        <label class="mgf-opcao"><input type="radio" name="ric4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">De certeza</span><span class="mgf-opcao-pontos">3 pts</span></label>
+      </div>
+    </fieldset>
+    <div class="mgf-resultado">
+      <div class="mgf-resultado-topo">
+        <h3>Motivação para a cessação</h3>
+        <div class="mgf-pontuacao" id="richmond-pontuacao" aria-live="polite">0<small>/10</small></div>
+      </div>
+      <div class="mgf-resultado-corpo">
+        <div class="mgf-barra" aria-hidden="true"><span id="richmond-barra"></span></div>
+        <div class="mgf-interp" id="richmond-interp" hidden></div>
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela">
+            <thead><tr><th>Pontuação</th><th>Motivação</th></tr></thead>
+            <tbody>
+              <tr><td class="mgf-nivel-alerta">0 – 6</td><td>Motivação baixa</td></tr>
+              <tr><td class="mgf-nivel-atencao">7 – 9</td><td>Motivação moderada</td></tr>
+              <tr><td class="mgf-nivel-normal">10</td><td>Motivação elevada</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
+      <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
+    </div>
+  </section>
+
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+  "use strict";
+  var raiz = document.getElementById("ferramenta");
+  MGF.separadores(raiz);
+
+  /* Limiares e textos iguais à versão original. */
+  var mortalidadeCurb = [
+    ["0,7%", "Ambulatório"], ["3,2%", "Ambulatório c/ supervisão"], ["13,0%", "Internamento curta duração"],
+    ["17,0%", "Referenciação hospitalar urgente"], ["41,5%", "Referenciação urgente — considerar UCI"], ["57,0%", "Referenciação urgente — UCI"]
+  ];
+  MGF.escalas(raiz, {
+    curb65: {
+      max: 5, titulo: "CURB-65 — Severidade da Pneumonia",
+      faixas: [
+        [0, 1, "normal", "<strong>Risco baixo</strong> — considerar tratamento em ambulatório"],
+        [2, 2, "atencao", "<strong>Risco intermédio</strong> — considerar internamento de curta duração"],
+        [3, 5, "alerta", "<strong>Pneumonia grave</strong> — referenciação hospitalar urgente"]
+      ],
+      copia: function (s) {
+        var l = mortalidadeCurb[Math.min(s, 5)];
+        return "Mortalidade estimada: " + l[0] + "\nRecomendação: " + l[1];
+      }
+    },
+    stopbang: {
+      max: 8, titulo: "STOP-Bang — Risco de SAOS",
+      faixas: [
+        [0, 2, "normal", "<strong>Baixo risco</strong> de SAOS"],
+        [3, 8, "alerta", "<strong>Risco elevado</strong> de SAOS — considerar estudo do sono"]
+      ]
+    },
+    epworth: {
+      max: 24, titulo: "Escala de Sonolência de Epworth",
+      interp: function (s) {
+        if (s <= 6) return ["normal", "<strong>Sono normal</strong> (" + s + " pontos)"];
+        if (s <= 8) return ["atencao", "<strong>Sonolência moderada</strong> (" + s + " pontos)"];
+        return ["alerta", "<strong>Sonolência anormal</strong> — possivelmente patológica (" + s + " pontos)"];
+      }
+    },
+    fagerstrom: {
+      max: 10, titulo: "Teste de Fagerström — Dependência à Nicotina",
+      faixas: [
+        [0, 4, "normal", "<strong>Dependência baixa</strong> à nicotina"],
+        [5, 6, "atencao", "<strong>Dependência média</strong> à nicotina"],
+        [7, 10, "alerta", "<strong>Dependência elevada</strong> à nicotina"]
+      ]
+    },
+    richmond: {
+      max: 10, titulo: "Teste de Richmond — Motivação para Cessação Tabágica",
+      faixas: [
+        [0, 6, "alerta", "<strong>Motivação baixa</strong> — reforçar a decisão e planear a cessação"],
+        [7, 9, "atencao", "<strong>Motivação moderada</strong> — apoiar com plano estruturado"],
+        [10, 10, "normal", "<strong>Motivação elevada</strong> — iniciar cessação tabágica imediatamente"]
+      ]
+    }
+  });
+})();
+</script>
+</body>
+</html>
