@@ -226,7 +226,7 @@
 </div>
 <div class="rodape-fim">
 <span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>
@@ -282,15 +282,15 @@
     var dum, msg = $("mensagem");
     if (modo === "dum") {
       var v = $("dum").value;
-      if (!v) { msg.textContent = "Introduza a data da DUM."; return; }
+      if (!v) { msg.textContent = "Introduz a data da DUM."; return; }
       dum = dataDoCampo(v);
     } else if (modo === "eco") {
       var ed = $("eco-data").value, es = parseInt($("eco-semanas").value, 10), edias = parseInt($("eco-dias").value, 10) || 0;
-      if (!ed || isNaN(es)) { msg.textContent = "Introduza a data e a IG da ecografia."; return; }
+      if (!ed || isNaN(es)) { msg.textContent = "Introduz a data e a IG da ecografia."; return; }
       dum = somarDias(dataDoCampo(ed), -(es * 7 + edias));
     } else {
       var is = parseInt($("ig-semanas").value, 10), idias = parseInt($("ig-dias").value, 10) || 0;
-      if (isNaN(is)) { msg.textContent = "Introduza a idade gestacional atual."; return; }
+      if (isNaN(is)) { msg.textContent = "Introduz a idade gestacional atual."; return; }
       dum = dumDaIg(is, idias);
     }
     msg.textContent = "";

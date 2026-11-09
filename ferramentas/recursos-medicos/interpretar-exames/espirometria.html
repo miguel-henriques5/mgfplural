@@ -671,7 +671,7 @@
 </div>
 <div class="rodape-fim">
 <span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-08</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>
@@ -712,7 +712,7 @@
     const isChild = document.getElementById('patient_age').value === 'child';
 
     if (fev1 === null || fvc === null || ratio === null) {
-      mkAviso('Por favor introduza FEV₁ (%), FVC (%) e FEV₁/FVC.');
+      mkAviso('Introduz FEV₁ (%), FVC (%) e FEV₁/FVC.');
       return;
     }
 
@@ -859,7 +859,7 @@
       document.getElementById('bronco-content').innerHTML = `
         <div class="bronco-result neg">
           <div class="br-title">Dados insuficientes para classificação completa</div>
-          <p>Para classificar a prova de broncodilatação em adultos são necessários tanto a variação percentual (≥12%) <strong>como</strong> a variação absoluta em mL (≥200 mL). Introduza ambos os valores.</p>
+          <p>Para classificar a prova de broncodilatação em adultos são necessários tanto a variação percentual (≥12%) <strong>como</strong> a variação absoluta em mL (≥200 mL). Introduz ambos os valores.</p>
         </div>`;
     } else {
       broncoCard.style.display = 'none';
