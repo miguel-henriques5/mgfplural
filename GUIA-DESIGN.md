@@ -94,7 +94,7 @@ Usa o ficheiro modelo-ferramenta.html em anexo como base e segue estas regras:
 - Mantém intacto o bloco <style data-mgf="base">. Não definas cores nem letras novas: usa as variáveis CSS (var(--cor-verde), var(--letra-titulo), etc.).
 - Escreve a ferramenta dentro de <main class="mgf-ferramenta" id="ferramenta">, usando as classes mgf- do modelo (mgf-cartao, mgf-opcao, mgf-resultado, mgf-interp com data-nivel="normal|atencao|alerta|info", mgf-tabela, mgf-nota, mgf-botao).
 - Estilos próprios só no bloco <style data-mgf="ferramenta">; JavaScript só no bloco <script data-mgf="ferramenta">, sem bibliotecas externas.
-- Preenche a ficha JSON (id, titulo, descricao, area, grupo, autor, versao, revisto, layout, palavras, bibliografia completa).
+- Preenche a ficha JSON (id, titulo, descricao, area, grupo, autor, versao, revisto, layout, palavras, bibliografia completa). Opcional: `icone`, o nome de uma ilustração de `assets/img/icones/` (sem `.svg`) que aparece no cabeçalho e nos cartões da ferramenta; sem ele, usa-se a do grupo.
 - Português de Portugal com o Acordo Ortográfico; decimais com vírgula.
 - Sem emojis. A cor nunca é o único sinal: escreve sempre o nível em texto.
 - Não envies dados para a internet e não guardes dados que identifiquem doentes.

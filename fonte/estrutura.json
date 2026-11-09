@@ -18,8 +18,8 @@
       "grupos": [
         { "id": "escalas-e-calculadoras", "nome": "Escalas e calculadoras", "icone": "escala", "tom": "menta" },
         { "id": "ferramentas-de-prescricao", "nome": "Ferramentas de prescrição", "icone": "comprimidos", "tom": "ambar" },
-        { "id": "interpretar-exames", "nome": "Interpretar exames", "icone": "analises", "tom": "papel" },
-        { "id": "programas-e-valencias", "nome": "Programas e valências", "icone": "programas", "tom": "areia" },
+        { "id": "interpretar-exames", "nome": "Interpretar exames", "icone": "analises", "tom": "areia" },
+        { "id": "programas-e-valencias", "nome": "Programas e valências", "icone": "programas", "tom": "papel" },
         { "id": "cabulas", "nome": "Cábulas", "icone": "folheto", "tom": "menta" },
         { "id": "canivete", "nome": "Canivete", "icone": "checklist", "tom": "ambar" },
         { "id": "registo-e-vigilancia", "nome": "Registo e vigilância", "icone": "nota-soap", "tom": "areia", "atalhos_inicio": true }

@@ -7,7 +7,8 @@ e gera, na raiz do repositório:
 
   index.html                         página inicial
   acerca.html                        acerca, contribuir, privacidade, offline
-  ferramentas/<area>/index.html      página de cada área com ferramentas
+  ferramentas/<area>/index.html      página de cada área com ferramentas ("Ver tudo")
+  ferramentas/<area>/<grupo>/index.html   página de cada grupo (só as ferramentas desse grupo)
   ferramentas/<area>/<grupo>/<id>.html   página da ferramenta no site
   descarregar/<id>.html              versão autónoma, para descarregar (funciona offline)
   assets/js/catalogo.js              catálogo para a pesquisa
@@ -72,6 +73,19 @@ def logo(prefixo, negativo=False):
 
 def icone(prefixo, nome):
     return f'{prefixo}assets/img/icones/{nome}.svg'
+
+
+def icone_ferramenta(f):
+    """Ilustração própria da ferramenta (campo «icone» da ficha) ou, se não tiver, a do grupo."""
+    if f.get("icone"):
+        if not (ASSETS / "img" / "icones" / f"{f['icone']}.svg").exists():
+            erro(f"{f['id']}: ilustração em falta: assets/img/icones/{f['icone']}.svg")
+        return f["icone"]
+    return grupo_por_id(area_por_id(f["area"]), f["grupo"])["icone"]
+
+
+def tem_ferramentas(ferramentas, area_id, grupo_id):
+    return any(f["area"] == area_id and f["grupo"] == grupo_id for f in ferramentas)
 
 
 SVG_DESCARREGAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>'
@@ -153,7 +167,10 @@ def menu_ferramentas(prefixo, ferramentas, ativo=False):
     partes.append('<div class="menu-grupos">')
     for g in principal["grupos"]:
         fs = [f for f in ferramentas if f["area"] == principal["id"] and f["grupo"] == g["id"]]
-        partes.append(f'<div><span class="menu-grupo-titulo"><img src="{icone(prefixo, g["icone"])}" alt="">{e(g["nome"])}</span>')
+        if fs:
+            partes.append(f'<div><a class="menu-grupo-titulo" href="{prefixo}ferramentas/{principal["id"]}/{g["id"]}/index.html"><img src="{icone(prefixo, g["icone"])}" alt="">{e(g["nome"])}</a>')
+        else:
+            partes.append(f'<div><span class="menu-grupo-titulo"><img src="{icone(prefixo, g["icone"])}" alt="">{e(g["nome"])}</span>')
         for f in fs:
             seta = " ↗" if f["layout"] == "completa" else ""
             alvo = ' target="_blank" rel="noopener"' if f["layout"] == "completa" else ""
@@ -209,7 +226,7 @@ def rodape(prefixo):
 </nav>
 </div>
 <div class="rodape-fim">
-<span>As ferramentas apoiam, não substituem, o juízo clínico.</span>
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
 <span class="mono">licença MIT · site v{SITE["versao"]} · {HOJE}</span>
 </div>
 </div></footer>
@@ -238,8 +255,10 @@ def bibliografia_html(f, titulo_tag="h2"):
             f'<p>Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto em {e(f["revisto"])}</p></section>')
 
 
-AVISO_CLINICO = ("Apoia, não substitui, o juízo clínico. O que escreves aqui fica só neste computador: "
-                 "não escrevas dados que identifiquem doentes.")
+AVISO_CLINICO = "Apoia, não substitui, o juízo clínico."
+AVISO_PRIVACIDADE = ("O que escreves nesta ferramenta não sai do teu computador; mesmo assim, não escrevas dados que "
+                     "identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.")
+FUNDO_TOM = {"menta": "tom-menta", "ambar": "tom-ambar", "papel": "tom-areia", "areia": "tom-areia"}
 
 
 def tem_estilo(f):
@@ -255,8 +274,8 @@ def pagina_ferramenta(f, ferramentas):
     irmas = [x for x in ferramentas if x["area"] == f["area"] and x["grupo"] == f["grupo"]]
     i = irmas.index(f)
     atual = ' aria-current="page"'
-    lateral = "".join(
-        f'<a href="{x["id"]}.html"{atual if x is f else ""}>{e(x["titulo"])}</a>' for x in irmas)
+    lista = "".join(
+        f'<li><a href="{x["id"]}.html"{atual if x is f else ""}>{e(x["titulo"])}</a></li>' for x in irmas)
     ant = irmas[i - 1] if i > 0 else None
     seg = irmas[i + 1] if i < len(irmas) - 1 else None
     nav_as = ""
@@ -270,24 +289,21 @@ def pagina_ferramenta(f, ferramentas):
     estilo = f'<link rel="stylesheet" href="{prefixo}assets/css/ferramenta.css">\n'
     if tem_estilo(f):
         estilo += f"<style>\n{f['estilo']}\n</style>\n"
+    tom = FUNDO_TOM[grupo["tom"]]
     return f"""{cabeca(f["titulo"] + " · MGF no Plural", prefixo, f["descricao"], extra=estilo)}
 <body data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}">
 {topo(prefixo, ferramentas, "ferramentas")}
-<div class="contentor ferramenta-layout">
-<nav class="ferramenta-lateral" aria-label="{e(grupo["nome"])}">
-<a href="../index.html">← {e(area["nome"])}</a>
-<span class="ferramenta-lateral-grupo"><img src="{icone(prefixo, grupo["icone"])}" alt="">{e(grupo["nome"])}</span>
-{lateral}
-</nav>
-<div class="ferramenta-principal" id="conteudo">
+<div class="contentor ferramenta-pagina">
 <ol class="migalhas" aria-label="Estás aqui">
 <li><a href="{prefixo}index.html">Início</a></li>
 <li><a href="../index.html">{e(area["nome"])}</a></li>
-<li><a href="../index.html#{grupo["id"]}">{e(grupo["nome"])}</a></li>
+<li><a href="index.html">{e(grupo["nome"])}</a></li>
 <li aria-current="page">{e(f["titulo"])}</li>
 </ol>
-<div class="ficha">
-<div class="ficha-linha">
+<div class="ferramenta-topo">
+<div class="ficha {tom}" id="conteudo">
+<div class="ficha-cabeca">
+<img class="ficha-ilustracao" src="{icone(prefixo, icone_ferramenta(f))}" alt="">
 <div class="ficha-titulo">
 <h1>{e(f["titulo"])}</h1>
 <div class="ficha-meta">
@@ -295,12 +311,19 @@ def pagina_ferramenta(f, ferramentas):
 <span class="ficha-versao">v{e(f["versao"])} · revisto em {e(f["revisto"])} · <a href="#bib-titulo">bibliografia</a></span>
 </div>
 </div>
+</div>
+<div class="ficha-base">
+<p class="aviso-clinico"><img src="{icone(prefixo, "privacidade")}" alt="">{AVISO_CLINICO}</p>
 <div class="ficha-acoes">
 <a class="botao botao-principal" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}Descarregar HTML</a>
 <a class="botao" href="{assunto_feedback(f)}">{SVG_MENSAGEM}Enviar feedback</a>
 </div>
 </div>
-<div class="aviso-clinico"><img src="{icone(prefixo, "privacidade")}" alt=""><span>{AVISO_CLINICO}</span></div>
+</div>
+<nav class="ferramenta-irmas {tom}" aria-label="{e(grupo["nome"])}">
+<a class="ferramenta-irmas-grupo" href="index.html"><img src="{icone(prefixo, grupo["icone"])}" alt="">{e(grupo["nome"])}</a>
+<ul>{lista}</ul>
+</nav>
 </div>
 <div class="area-ferramenta">
 {f["conteudo"]}
@@ -313,7 +336,6 @@ def pagina_ferramenta(f, ferramentas):
 </div>
 </div>
 {nav_as}
-</div>
 </div>
 {rodape(prefixo)}
 <script src="{prefixo}assets/js/ferramenta.js"></script>
@@ -351,7 +373,18 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 .bibliografia ol { margin: 0 0 8px; padding-left: 18px; }
 .bibliografia p, .autonomo-rodape { margin: 0; font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
 .autonomo a { color: var(--cor-verde); }
-@media print { body { background: #fff; } .autonomo { padding: 0; } .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 10px; } }
+@media print {
+  body { background: #fff; }
+  .autonomo { padding: 0; gap: 6px; }
+  .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 6px; }
+  .autonomo-topo { gap: 2px; }
+  .autonomo-marca { font-size: 12px; } .autonomo-marca svg { width: 24px; height: 17px; }
+  .autonomo-topo h1 { font-size: 20px; }
+  .autonomo-meta, .autonomo-rodape, .bibliografia p { font-size: 9px; }
+  .autonomo-aviso { background: none; padding: 0; font-size: 10px; }
+  .bibliografia { font-size: 9px; }
+  .autonomo-rodape a { text-decoration: none; }
+}
 """
     return tokens + "\n" + ferr + "\n" + pagina
 
@@ -388,6 +421,7 @@ def pagina_autonoma(f, css):
 {f["conteudo"]}
 </div>
 {bibliografia_html(f)}
+<p class="autonomo-rodape">{AVISO_PRIVACIDADE}</p>
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="{url}">{e(url)}</a> · Feedback: {SITE["email"]} · Licença MIT</p>
 </div>
 <script>
@@ -419,7 +453,7 @@ def pagina_inicio(ferramentas):
                     f'<span class="cartao-grupo-rodape"><strong>{e(g["nome"])}</strong>'
                     f'<span>{n if n else "Em breve"}</span></span>')
         if n:
-            grupos.append(f'<a class="cartao-grupo tom-{g["tom"]}" href="ferramentas/{principal["id"]}/index.html#{g["id"]}">{conteudo}</a>')
+            grupos.append(f'<a class="cartao-grupo tom-{g["tom"]}" href="ferramentas/{principal["id"]}/{g["id"]}/index.html">{conteudo}</a>')
         else:
             grupos.append(f'<div class="cartao-grupo tom-{g["tom"]} em-breve">{conteudo}</div>')
     blocos.append(f"""<div class="bloco-area">
@@ -485,6 +519,51 @@ def pagina_inicio(ferramentas):
 """
 
 
+# ---------------------------------------------------------------- cartão de ferramenta e página de grupo
+
+def cartao_ferramenta(f, prefixo, pasta):
+    completa = f["layout"] == "completa"
+    alvo = ' target="_blank" rel="noopener"' if completa else ""
+    etiqueta = '<span class="etiqueta-completa">↗ separador novo</span>' if completa else ""
+    return (f'<a class="cartao-ferramenta" href="{pasta}{f["id"]}.html"{alvo}>'
+            f'<span class="cartao-ferramenta-cabeca"><img src="{icone(prefixo, icone_ferramenta(f))}" alt=""><strong>{e(f["titulo"])}</strong></span>'
+            f'{etiqueta}<p>{e(f["descricao"])}</p>'
+            f'<span class="cartao-ferramenta-rodape"><span>{e(f["autor"])} · v{e(f["versao"])}</span><span aria-hidden="true">→</span></span></a>')
+
+
+def pagina_grupo(area, grupo, ferramentas):
+    prefixo = "../../../"
+    fs = [f for f in ferramentas if f["area"] == area["id"] and f["grupo"] == grupo["id"]]
+    botoes = []
+    for g in area["grupos"]:
+        if not tem_ferramentas(ferramentas, area["id"], g["id"]):
+            continue
+        atual = ' aria-current="page"' if g is grupo else ""
+        n = len([f for f in ferramentas if f["area"] == area["id"] and f["grupo"] == g["id"]])
+        botoes.append(f'<a class="{FUNDO_TOM[g["tom"]]}" href="../{g["id"]}/index.html"{atual}>'
+                      f'<img src="{icone(prefixo, g["icone"])}" alt="">{e(g["nome"])} <span>{n}</span></a>')
+    botoes.append(f'<a class="ver-tudo" href="../index.html">Ver tudo →</a>')
+    cartoes = "".join(cartao_ferramenta(f, prefixo, "") for f in fs)
+    return f"""{cabeca(grupo["nome"] + " · MGF no Plural", prefixo, area["descricao"])}
+<body>
+{topo(prefixo, ferramentas, "ferramentas")}
+<main id="conteudo">
+<div class="contentor area-topo">
+<ol class="migalhas" aria-label="Estás aqui"><li><a href="{prefixo}index.html">Início</a></li><li><a href="../index.html">{e(area["nome"])}</a></li><li aria-current="page">{e(grupo["nome"])}</li></ol>
+<div class="area-titulo grupo-titulo {FUNDO_TOM[grupo["tom"]]}"><img src="{icone(prefixo, grupo["icone"])}" alt="">
+<div><h1>{e(grupo["nome"])}</h1><p>{len(fs)} ferramenta{"s" if len(fs) != 1 else ""} · {e(area["nome"])}</p></div></div>
+</div>
+<div class="grupos-chips"><nav class="contentor" aria-label="Outros grupos de ferramentas">{"".join(botoes)}</nav></div>
+<div class="contentor seccao">
+<div class="grelha">{cartoes}</div>
+</div>
+</main>
+{rodape(prefixo)}
+</body>
+</html>
+"""
+
+
 # ---------------------------------------------------------------- página de área
 
 def pagina_area(area, ferramentas):
@@ -498,15 +577,10 @@ def pagina_area(area, ferramentas):
         chips.append(f'<a href="#{g["id"]}">{e(g["nome"])} · {len(fs)}</a>')
         cartoes = []
         for f in fs:
-            completa = f["layout"] == "completa"
-            alvo = ' target="_blank" rel="noopener"' if completa else ""
-            etiqueta = '<span class="etiqueta-completa">↗ separador novo</span>' if completa else ""
-            cartoes.append(f'<a class="cartao-ferramenta" href="{g["id"]}/{f["id"]}.html"{alvo}>'
-                           f'<strong>{e(f["titulo"])}</strong>{etiqueta}<p>{e(f["descricao"])}</p>'
-                           f'<span class="cartao-ferramenta-rodape"><span>{e(f["autor"])} · v{e(f["versao"])}</span><span aria-hidden="true">→</span></span></a>')
+            cartoes.append(cartao_ferramenta(f, prefixo, f'{g["id"]}/'))
         fundo = {"menta": "var(--cor-menta-clara)", "ambar": "var(--cor-ambar-claro)", "papel": "var(--cor-branco)", "areia": "var(--cor-areia)"}[g["tom"]]
         seccoes.append(f"""<section class="grupo" id="{g["id"]}">
-<div class="grupo-cabeca"><img src="{icone(prefixo, g["icone"])}" alt="" style="background:{fundo}"><h2>{e(g["nome"])}</h2><span class="mono">{len(fs)}</span></div>
+<div class="grupo-cabeca"><img src="{icone(prefixo, g["icone"])}" alt="" style="background:{fundo}"><h2><a href="{g["id"]}/index.html">{e(g["nome"])}</a></h2><span class="mono">{len(fs)}</span></div>
 <div class="grelha">{"".join(cartoes)}</div>
 </section>""")
     em_falta = [g["nome"] for g in area["grupos"] if not [f for f in fs_area if f["grupo"] == g["id"]]]
@@ -632,7 +706,7 @@ def escrever_catalogo(ferramentas):
         grupo = grupo_por_id(area, f["grupo"])
         dados.append({
             "id": f["id"], "titulo": f["titulo"], "descricao": f["descricao"],
-            "area": area["nome"], "grupo": grupo["nome"], "icone": grupo["icone"],
+            "area": area["nome"], "grupo": grupo["nome"], "icone": icone_ferramenta(f),
             "url": f["caminho"], "layout": f["layout"], "autor": f["autor"],
             "palavras": f.get("palavras", []),
         })
@@ -671,6 +745,9 @@ def main():
     for a in ESTRUTURA["areas"]:
         if any(f["area"] == a["id"] for f in ferramentas):
             escrever(RAIZ / "ferramentas" / a["id"] / "index.html", pagina_area(a, ferramentas))
+            for g in a["grupos"]:
+                if tem_ferramentas(ferramentas, a["id"], g["id"]):
+                    escrever(RAIZ / "ferramentas" / a["id"] / g["id"] / "index.html", pagina_grupo(a, g, ferramentas))
     escrever(RAIZ / "index.html", pagina_inicio(ferramentas))
     escrever(RAIZ / "acerca.html", pagina_acerca(ferramentas))
     escrever_catalogo(ferramentas)

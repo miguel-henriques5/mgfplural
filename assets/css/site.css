@@ -191,19 +191,52 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .etiqueta-completa { font-size: 12px; font-weight: 700; color: var(--cor-ambar-texto); background: var(--cor-ambar-claro); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
 .aviso-migracao { background: var(--cor-ambar-claro); border-radius: 14px; padding: 14px 16px; font-size: 15px; }
 
-/* ---------- Página de ferramenta ---------- */
-.ferramenta-layout { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; padding-top: 22px; padding-bottom: 64px; }
-.ferramenta-lateral { flex: 1 1 240px; max-width: 280px; background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 14px 12px; display: flex; flex-direction: column; gap: 2px; }
-.ferramenta-lateral-grupo { display: flex; align-items: center; gap: 10px; padding: 10px 8px 8px; font-family: var(--letra-titulo); font-weight: 800; font-size: 18px; }
-.ferramenta-lateral-grupo img { width: 36px; height: 36px; }
-.ferramenta-lateral a { font-size: 15px; color: var(--cor-texto-2); text-decoration: none; padding: 9px 10px; border-radius: 10px; transition: background .2s, transform .25s var(--mola); }
-.ferramenta-lateral a:hover { background: var(--cor-menta-clara); transform: translateX(3px); }
-.ferramenta-lateral a[aria-current="page"] { background: var(--cor-verde); color: var(--cor-branco); font-weight: 700; transform: none; }
-.ferramenta-principal { flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
-.ficha { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-.ficha-linha { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
-.ficha-titulo { flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
-.ficha h1 { font-weight: 800; font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.02; }
+/* ---------- Página de ferramenta ----------
+   Em cima: cabeçalho (com a cor do grupo) e navegação do grupo lado a lado, com a mesma altura.
+   Em baixo: a ferramenta a toda a largura. */
+.tom-menta { --tom-fundo: #EDF7F3; --tom-borda: #CDE7DF; }
+.tom-ambar { --tom-fundo: #FCF3E2; --tom-borda: #F0DDB4; }
+.tom-areia { --tom-fundo: #F3F0E8; --tom-borda: #E2DCCD; }
+.ferramenta-pagina { display: flex; flex-direction: column; gap: 16px; padding-top: 22px; padding-bottom: 64px; }
+.ferramenta-topo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 16px; align-items: stretch; }
+.ficha { background: var(--tom-fundo, var(--cor-branco)); border: 1px solid var(--tom-borda, var(--cor-linha-suave)); border-radius: 22px; padding: 20px 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+.ficha-cabeca { display: flex; align-items: center; gap: 16px; }
+.ficha-ilustracao { width: 72px; height: 72px; flex: 0 0 auto; background: var(--cor-branco); border-radius: var(--raio-forma); padding: 6px; }
+.ficha-titulo { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.ficha h1 { font-weight: 800; font-size: clamp(1.8rem, 3.2vw, 2.4rem); letter-spacing: -0.03em; line-height: 1.02; }
+.ficha .autor { background: var(--cor-branco); }
+.ficha-base { display: flex; justify-content: space-between; align-items: center; gap: 10px 16px; flex-wrap: wrap; }
+.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; line-height: 1.3; color: var(--cor-texto-2); }
+.aviso-clinico img { width: 26px; height: 26px; flex: 0 0 auto; }
+.ferramenta-irmas { background: var(--cor-branco); border: 1px solid var(--tom-borda, var(--cor-linha-suave)); border-radius: 22px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.ferramenta-irmas-grupo { display: flex; align-items: center; gap: 8px; padding: 4px 6px 6px; font-family: var(--letra-titulo); font-weight: 800; font-size: 17px; color: var(--cor-tinta); text-decoration: none; border-bottom: 1px solid var(--cor-linha-suave); }
+.ferramenta-irmas-grupo img { width: 30px; height: 30px; background: var(--tom-fundo); border-radius: var(--raio-forma); }
+.ferramenta-irmas-grupo:hover { color: var(--cor-verde); }
+.ferramenta-irmas ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.ferramenta-irmas li a { display: block; font-size: 14px; line-height: 1.25; color: var(--cor-texto-2); text-decoration: none; padding: 5px 8px; border-radius: 8px; transition: background .2s; }
+.ferramenta-irmas li a:hover { background: var(--tom-fundo); color: var(--cor-tinta); }
+.ferramenta-irmas li a[aria-current="page"] { background: var(--cor-verde); color: var(--cor-branco); font-weight: 700; }
+@media (min-width: 1100px) { .ferramenta-irmas ul { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 4px; } .ferramenta-topo { grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); } }
+/* cartões de ferramenta com ilustração */
+.cartao-ferramenta-cabeca { display: flex; align-items: center; gap: 12px; }
+.cartao-ferramenta-cabeca img { width: 52px; height: 52px; flex: 0 0 auto; background: var(--cor-papel); border-radius: var(--raio-forma); padding: 4px; }
+/* página de grupo */
+.grupo-titulo img { background: var(--tom-fundo); }
+.grupos-chips a { display: inline-flex; align-items: center; gap: 8px; }
+.grupos-chips a img { width: 26px; height: 26px; }
+.grupos-chips a span { font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); }
+.grupos-chips a[aria-current="page"] { background: var(--tom-fundo); border-color: var(--tom-borda); font-weight: 700; }
+.grupos-chips a.ver-tudo { background: none; border-color: transparent; color: var(--cor-verde); text-decoration: underline; }
+.grupo-cabeca h2 a { color: inherit; text-decoration: none; }
+.grupo-cabeca h2 a:hover { color: var(--cor-verde); }
+.rodape-aviso { max-width: 760px; }
+.grupos-chips + .seccao { padding-top: 24px; }
+.ficha .autor { white-space: nowrap; flex: 0 0 auto; }
+@media (max-width: 560px) {
+  .ficha-cabeca { align-items: flex-start; }
+  .ficha-ilustracao { width: 48px; height: 48px; padding: 4px; }
+  .ficha .autor { font-size: 14px; }
+}
 .ficha-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .autor { display: inline-flex; align-items: center; gap: 8px; background: var(--cor-menta-clara); border-radius: 999px; padding: 4px 14px 4px 4px; font-size: 15px; }
 .autor-iniciais { width: 28px; height: 28px; border-radius: 50%; background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
@@ -215,8 +248,6 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .botao-principal { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
 .botao-principal:hover { color: var(--cor-branco); background: var(--cor-verde-fundo); }
 .botao-principal:hover svg { transform: translateY(3px); }
-.aviso-clinico { display: flex; align-items: center; gap: 12px; background: var(--cor-menta-clara); border-radius: 14px; padding: 10px 14px; font-size: 15px; line-height: 1.45; }
-.aviso-clinico img { width: 36px; height: 36px; flex: 0 0 auto; }
 .area-ferramenta { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 24px; }
 .ferramenta-pe { display: flex; flex-wrap: wrap; gap: 16px; }
 .bibliografia { flex: 1 1 320px; background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 18px 20px; font-size: 13px; color: var(--cor-texto-3); }
@@ -242,7 +273,6 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 @media (max-width: 760px) {
   .menu-painel-interior { grid-template-columns: 1fr; max-height: 75vh; overflow: auto; }
   .menu-lateral { border-left: 0; padding-left: 0; border-top: 1px solid var(--cor-linha-suave); padding-top: 12px; }
-  .ferramenta-lateral { max-width: none; }
   .area-titulo h1 { font-size: 36px; }
   .heroi { padding-top: 32px; }
   .heroi-simbolo { display: none; }
@@ -258,23 +288,39 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 /* ---------- Impressão: só a ferramenta ---------- */
 @media print {
   body { background: #fff; }
-  .topo, .rodape, .ferramenta-lateral, .ficha-acoes, .feedback, .anterior-seguinte, .migalhas, .saltar { display: none !important; }
-  .ferramenta-layout { padding: 0; display: block; }
-  .ficha, .area-ferramenta, .bibliografia { border: 0; padding: 0 0 12px; }
-  .aviso-clinico { border: 1px solid var(--cor-linha); }
+  .topo, .rodape, .ferramenta-irmas, .ficha-acoes, .feedback, .anterior-seguinte, .migalhas, .saltar { display: none !important; }
+  .ferramenta-pagina { padding: 0; display: block; }
+  .ferramenta-topo { display: block; }
+  .ficha, .area-ferramenta, .bibliografia { border: 0; padding: 0 0 12px; background: none; }
+  .ficha-ilustracao { width: 34px; height: 34px; padding: 0; }
+  .ficha { gap: 4px; padding: 0 0 8px; }
+  .ficha-cabeca { gap: 10px; }
+  .ficha h1 { font-size: 20px; }
+  .ficha-titulo { gap: 2px; }
+  .ficha .autor { padding: 0; font-size: 11px; background: none; }
+  .ficha .autor-iniciais { display: none; }
+  .ficha-versao { font-size: 10px; }
+  .aviso-clinico { font-size: 10px; }
+  .aviso-clinico img { width: 14px; height: 14px; }
+  .bibliografia { font-size: 9px; padding: 6px 0 0; }
 }
 
 /* ---------- Ajustes ---------- */
 .nav-principal > a.botao-escuro { padding: 10px 16px; }
 .ferramenta-pe { align-items: flex-start; }
 .cartao-grupo-rodape span, .em-breve-texto { white-space: nowrap; }
+@media (max-width: 860px) {
+  .ferramenta-topo { display: contents; }
+  .ferramenta-irmas { order: 1; }
+}
 @media (max-width: 760px) {
-  .ferramenta-lateral { order: 2; }
   .ficha, .area-ferramenta { padding: 16px; border-radius: 18px; }
+  .ficha-ilustracao { width: 56px; height: 56px; }
   .topo .contentor { gap: 8px; }
   .nav-principal { gap: 4px 16px; font-size: 15px; }
   .contentor { padding: 0 16px; }
 }
-.area-topo .feedback { align-self: flex-start; }
+.area-topo .feedback { align-self: flex-start; flex: 0 0 auto; }
 .tabela-simples th { background: var(--cor-papel); border-bottom: 1.5px solid var(--cor-linha); }
 .tabela-simples td { padding: 10px 14px; border-top: 1px solid var(--cor-linha-suave); vertical-align: top; }
+.grupo-titulo { background: none; }
