@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TC cerebral e da coluna</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "tc-cerebral-e-coluna",
+  "titulo": "TC cerebral e da coluna",
+  "descricao": "Atlas de achados na TC cerebral e da coluna, glossário de termos do relatório e marcha diagnóstica.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 7,
+  "palavras": [
+    "TC",
+    "tomografia",
+    "TAC",
+    "TC-CE",
+    "cérebro",
+    "coluna",
+    "hérnia discal",
+    "estenose",
+    "AVC",
+    "leucoencefalopatia",
+    "atrofia",
+    "relatório de radiologia",
+    "glossário",
+    "densidade",
+    "Hounsfield"
+  ],
+  "bibliografia": [
+    "Radiology Masterclass. Acute CT Brain — Extra-axial haemorrhage. https://www.radiologymasterclass.co.uk/tutorials/ct/ct_acute_brain/ct_brain_subdural_extradural_subarachnoid",
+    "Radiology Cafe. Head and spine pathology. https://www.radiologycafe.com/radiology-basics/head-and-spine/head-pathology/",
+    "Medscape. Stroke Imaging e Subdural Hematoma Workup. https://emedicine.medscape.com/article/338385-overview",
+    "Stroke Manual. Computed tomography in stroke diagnosis. https://www.stroke-manual.com/computed-tomography-in-stroke-diagnosis/",
+    "RadiologyInfo.org. How to Read Your Head CT Report. https://www.radiologyinfo.org/en/info/article-head-ct-report",
+    "AJNR. Small Vessel Disease: What the Radiologist Needs to Know. https://www.ajnr.org/content/early/2021/10/07/ajnr.A7302",
+    "The Radiology Assistant. Lumbar Disc Nomenclature 2.0. https://radiologyassistant.nl/neuroradiology/spine/lumbar-disc-nomenclature-2-0",
+    "Insights into Imaging. ABCs of the degenerative spine. https://insightsimaging.springeropen.com/articles/10.1007/s13244-017-0584-z",
+    "Radiology Key. Degenerative Diseases of the Spine. https://radiologykey.com/degenerative-diseases-of-the-spine/",
+    "StatPearls / NCBI. Anatomy, Back, Intervertebral Discs (nomenclatura e cauda equina). https://www.ncbi.nlm.nih.gov/books/NBK470583/",
+    "AMBOSS. Degenerative disk disease (red flags). https://www.amboss.com/us/knowledge/degenerative-disk-disease",
+    "Applied Radiology. Imaging spinal stenosis. https://appliedradiology.com/articles/imaging-spinal-stenosis"
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #2C3A38; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #2C3A38; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #2C3A38; border: 2px solid transparent; border-radius: 8px; padding: 8px 15px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #4B5B58; color: #FFFFFF; border-color: #2C3A38; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .search-box { width: 100%; border: 1.5px solid #D7EDE7; border-radius: 10px; padding: 11px 16px; font-size: 15px; color: #13423D; background: #FFFFFF; margin-bottom: 16px; }
+#ferramenta .search-box:focus { outline: none; border-color: #4B5B58; }
+#ferramenta .pat-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); overflow: hidden; margin-bottom: 16px; border: 1px solid #D7EDE7; }
+#ferramenta .pat-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .pat-head:hover { background: #D7EDE7; }
+#ferramenta .pat-name { font-size: 15px; font-weight: 700; color: #13423D; }
+#ferramenta .pat-tag { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+#ferramenta .pat-tag.benigno { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .pat-tag.degen { background: #EAF1FA; color: #1C4A80; }
+#ferramenta .pat-tag.atencao { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .pat-tag.urgente { background: #FDECEA; color: #9E2318; }
+#ferramenta .pat-toggle { font-size: 18px; color: #2C3A38; transition: transform 0.2s; }
+#ferramenta .pat-card.open .pat-toggle { transform: rotate(180deg); }
+#ferramenta .pat-body { display: none; padding: 0 18px 18px; }
+#ferramenta .pat-card.open .pat-body { display: block; }
+#ferramenta .pat-graph { width: 100%; background: #13201E; border-radius: 8px; margin-bottom: 14px; overflow: hidden; display: flex; justify-content: center; padding: 8px; }
+#ferramenta .pat-graph svg { width: 100%; max-width: 320px; height: auto; display: block; }
+#ferramenta .pat-section { margin-bottom: 12px; }
+#ferramenta .pat-section .ps-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+#ferramenta .pat-section.descr .ps-label { color: #2C3A38; }
+#ferramenta .pat-section.signif .ps-label { color: #4B5B58; }
+#ferramenta .pat-section.conduta .ps-label { color: #1B6B35; }
+#ferramenta .pat-section p { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .pat-section strong { font-weight: 700; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #2C3A38; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 12px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 12px; font-size: 14px; color: #13423D; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .data-table .term { font-weight: 700; color: #2C3A38; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.indigo { background: #D7EDE7; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #13423D; line-height: 1.65; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.indigo .ib-title { color: #2C3A38; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #4B5B58; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #2C3A38; }
+#ferramenta .dens-scale { display: flex; border-radius: 8px; overflow: hidden; margin: 10px 0 6px; border: 1px solid #D7EDE7; }
+#ferramenta .dens-cell { flex: 1; padding: 10px 6px; text-align: center; font-size: 13px; font-weight: 600; line-height: 1.3; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #4B5B58; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #D7EDE7; color: #2C3A38; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #4B5B58; margin-top: 28px; padding-top: 16px; border-top: 1px solid #D7EDE7; }
+#ferramenta .btn-print { background: #FFFFFF; color: #4B5B58; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+#ferramenta .section-h { font-size: 15px; color: #2C3A38; margin: 6px 4px 12px; font-weight: 700; }
+#ferramenta .subgroup-lbl { font-size: 13px; font-weight: 700; color: #2C3A38; text-transform: uppercase; letter-spacing: 0.8px; margin: 18px 4px 10px; padding-bottom: 6px; border-bottom: 2px solid #D7EDE7; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+#ferramenta .pat-graph { background: #0d0f14; }
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Atlas de achados, glossário de termos e apoio à marcha diagnóstica.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-cerebro" aria-controls="tab-cerebro" aria-selected="true">TC Cérebro</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-coluna" aria-controls="tab-coluna" aria-selected="false">TC Coluna</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-glossario" aria-controls="tab-glossario" aria-selected="false">Glossário de termos</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-marcha" aria-controls="tab-marcha" aria-selected="false">Marcha diagnóstica</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> As imagens são <strong>esquemáticas</strong> (ilustram a morfologia típica do achado) e não substituem a leitura do exame real nem o relatório do radiologista. A TC não substitui a RM na avaliação de muitas patologias do parênquima, da medula e dos discos. Interprete sempre no contexto clínico.</p>
+  <div class="mgf-painel mk-painel" id="tab-cerebro" role="tabpanel" aria-labelledby="sep-cerebro">
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Densidades na TC — a base da leitura</div>
+      <div class="info-block indigo">
+        <p>A TC mede a densidade dos tecidos em <strong>unidades de Hounsfield (UH)</strong>. O essencial é distinguir o que está <strong>hiperdenso (branco)</strong> do que está <strong>hipodenso (escuro)</strong> em relação ao parênquima cerebral.</p>
+      </div>
+      <div class="dens-scale">
+        <div class="dens-cell" style="background:#13201E;color:#FFFFFF;">Ar<br>(−1000)</div>
+        <div class="dens-cell" style="background:#2C3A38;color:#FFFFFF;">Gordura<br>(−100)</div>
+        <div class="dens-cell" style="background:#4B5B58;color:#FFFFFF;">LCR<br>(0–15)</div>
+        <div class="dens-cell" style="background:#B9C6C2;color:#13423D;">Parênquima<br>(20–40)</div>
+        <div class="dens-cell" style="background:#DCE3E0;color:#13423D;">Sangue agudo<br>(50–90)</div>
+        <div class="dens-cell" style="background:#FFFFFF;color:#13423D;border-left:1px solid #B9C6C2;">Osso/cálcio<br>(&gt;200)</div>
+      </div>
+      <div class="info-block blue" style="margin-top:12px;margin-bottom:0;">
+        <div class="ib-title">Regra prática na urgência</div>
+        <p>Na TC sem contraste, o papel principal é <strong>excluir hemorragia</strong> (muito sensível) e identificar efeito de massa, hidrocefalia ou grandes enfartes. O <strong>AVC isquémico pode ter TC normal nas primeiras horas</strong> — a clínica orienta.</p>
+      </div>
+    </div>
+    <input type="text" class="search-box no-print" id="cerebro-search" placeholder="Pesquisar achado (ex: hemorragia, enfarte, atrofia, hidrocefalia)..." oninput="filterPat('cerebro')">
+    <div id="cerebro-container"></div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-coluna" role="tabpanel" aria-labelledby="sep-coluna" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> TC da coluna — o que avalia bem</div>
+      <div class="info-block indigo">
+        <p>A TC é <strong>superior à RM para o osso</strong> (fraturas, osteófitos, calcificações, alinhamento). Para disco, medula e raízes, a <strong>RM é o exame de escolha</strong>; a TC (ou a mielo-TC) usa-se quando a RM está contraindicada ou indisponível.</p>
+      </div>
+      <div class="info-block blue" style="margin-bottom:0;">
+        <div class="ib-title">Concordância clínico-radiológica</div>
+        <p>As alterações degenerativas são muito frequentes em pessoas <strong>assintomáticas</strong>. Um achado só é relevante se <strong>corresponder ao nível e lado dos sintomas</strong>. A imagem não se trata isoladamente.</p>
+      </div>
+    </div>
+    <input type="text" class="search-box no-print" id="coluna-search" placeholder="Pesquisar achado (ex: hérnia, estenose, fratura, espondilose)..." oninput="filterPat('coluna')">
+    <div id="coluna-container"></div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-glossario" role="tabpanel" aria-labelledby="sep-glossario" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Termos gerais de radiologia</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Termo</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Hiperdenso</td><td>Mais branco que o parênquima (sangue agudo, cálcio, osso, contraste).</td></tr>
+            <tr><td class="term">Hipodenso</td><td>Mais escuro que o parênquima (edema, enfarte estabelecido, gordura, ar, quistos).</td></tr>
+            <tr><td class="term">Isodenso</td><td>Densidade semelhante ao tecido adjacente (pode tornar lesões difíceis de ver).</td></tr>
+            <tr><td class="term">Efeito de massa</td><td>Deslocamento/compressão de estruturas vizinhas por uma lesão expansiva.</td></tr>
+            <tr><td class="term">Desvio da linha média</td><td>Deslocamento das estruturas centrais; marcador de gravidade do efeito de massa.</td></tr>
+            <tr><td class="term">Apagamento de sulcos</td><td>Perda da definição dos sulcos corticais; sugere edema/efeito de massa.</td></tr>
+            <tr><td class="term">Perda da diferenciação substância cinzenta-branca</td><td>Sinal precoce de isquemia.</td></tr>
+            <tr><td class="term">Realce (após contraste)</td><td>Captação de contraste; sugere quebra da barreira hematoencefálica (tumor, infeção, inflamação).</td></tr>
+            <tr><td class="term">Edema vasogénico</td><td>Hipodensidade em "dedos de luva" na substância branca, à volta de lesões (tumor, abcesso).</td></tr>
+            <tr><td class="term">Herniação</td><td>Deslocamento de tecido cerebral entre compartimentos (subfalcina, uncal, amigdalina) — emergência.</td></tr>
+            <tr><td class="term">Intra-axial / Extra-axial</td><td>Lesão dentro do parênquima / fora dele (entre o cérebro e o crânio).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Termos frequentes — cérebro</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Termo</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Leucoaraiose / doença de pequenos vasos</td><td>Hipodensidade da substância branca periventricular; alterações vasculares crónicas relacionadas com a idade/HTA. Sinónimos: "alterações da substância branca", "microangiopatia".</td></tr>
+            <tr><td class="term">Enfarte lacunar</td><td>Pequeno enfarte profundo (&lt;15 mm) por oclusão de pequeno vaso.</td></tr>
+            <tr><td class="term">Atrofia cortico-subcortical</td><td>Redução do volume cerebral com alargamento de sulcos e ventrículos; frequentemente apropriada para a idade.</td></tr>
+            <tr><td class="term">Sinal da ACM hiperdensa</td><td>Artéria cerebral média muito branca = trombo agudo (AVC isquémico precoce).</td></tr>
+            <tr><td class="term">Calcificações fisiológicas</td><td>Pineal, plexos coroideus, gânglios da base — habitualmente sem significado patológico.</td></tr>
+            <tr><td class="term">Quisto aracnoideu</td><td>Coleção de LCR extra-axial, de bordos lisos; geralmente achado benigno.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Termos frequentes — coluna</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Termo</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Espondilose</td><td>Termo genérico para alterações degenerativas da coluna (osteófitos, perda de altura discal).</td></tr>
+            <tr><td class="term">Disco protruso (protrusão)</td><td>Base da hérnia mais larga do que o material herniado. Anel fibroso intacto.</td></tr>
+            <tr><td class="term">Disco extruso (extrusão)</td><td>Material herniado mais largo do que a base; rotura do anel. Pode migrar.</td></tr>
+            <tr><td class="term">Sequestro discal</td><td>Fragmento discal livre, sem continuidade com o disco de origem.</td></tr>
+            <tr><td class="term">Bulging (abaulamento difuso)</td><td>Extensão simétrica do disco para além do bordo vertebral (&gt;25% da circunferência). Não é hérnia.</td></tr>
+            <tr><td class="term">Osteófito</td><td>Esporão ósseo nas margens vertebrais; reação degenerativa.</td></tr>
+            <tr><td class="term">Estenose do canal</td><td>Estreitamento do canal raquidiano (central, recesso lateral, foraminal).</td></tr>
+            <tr><td class="term">Espondilolistese</td><td>Deslizamento de um corpo vertebral sobre o adjacente (antero/retrolistese).</td></tr>
+            <tr><td class="term">Espondilólise</td><td>Defeito/fratura da pars interarticularis.</td></tr>
+            <tr><td class="term">Hipertrofia facetária / ligamento amarelo</td><td>Espessamento que contribui para estenose.</td></tr>
+            <tr><td class="term">Nódulo de Schmorl</td><td>Herniação do disco para dentro do corpo vertebral; geralmente benigno.</td></tr>
+            <tr><td class="term">Fenómeno de vácuo</td><td>Ar dentro do disco degenerado; sinal de degenerescência (geralmente benigno).</td></tr>
+            <tr><td class="term">Alterações de Modic</td><td>Alterações dos pratos vertebrais (descritas em RM); tipo 1 mais associado a dor.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-marcha" role="tabpanel" aria-labelledby="sep-marcha" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Leitura sistemática da TC cerebral</div>
+      <ul class="steps-list">
+        <li><div class="step-num">1</div><div class="step-text"><strong>Sangue?</strong> — procurar hiperdensidades (hemorragia intra ou extra-axial, HSA nas cisternas).</div></li>
+        <li><div class="step-num">2</div><div class="step-text"><strong>Cisternas</strong> — abertas e simétricas? Apagamento sugere efeito de massa / herniação iminente.</div></li>
+        <li><div class="step-num">3</div><div class="step-text"><strong>Cérebro</strong> — simetria, diferenciação cinzenta-branca, hipodensidades (enfarte, edema, lesões).</div></li>
+        <li><div class="step-num">4</div><div class="step-text"><strong>Ventrículos</strong> — dimensão (hidrocefalia?), simetria, desvio da linha média.</div></li>
+        <li><div class="step-num">5</div><div class="step-text"><strong>Osso e couro cabeludo</strong> — fraturas, hematomas do escalpe (janela óssea).</div></li>
+      </ul>
+      <p style="font-size:11px;color:#4B5B58;margin-top:10px;font-style:italic;">Mnemónica útil: "Blood Can Be Very Bad" — Blood, Cisterns, Brain, Ventricles, Bone.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Achados de emergência — cérebro</div>
+      <div class="info-block red">
+        <div class="ib-title">Ação imediata</div>
+        <p>
+        Hemorragia intracraniana (qualquer tipo) · Hemorragia subaracnoideia (cefaleia em trovoada) · Efeito de massa com <strong>desvio da linha média</strong> ou apagamento de cisternas · Sinais de herniação · Grande enfarte estabelecido · Hidrocefalia aguda · Fratura craniana com afundamento.
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Sinais de alarme da dor lombar (red flags) — quando imagiar</div>
+      <div class="info-block orange">
+        <p>
+        A lombalgia aguda inespecífica <strong>não requer imagem</strong>. Considerar TC/RM perante:<br>
+        • <strong>Síndrome de cauda equina</strong> (anestesia em sela, retenção/incontinência, défice bilateral) — <strong>emergência cirúrgica</strong><br>
+        • Défice neurológico progressivo ou motor relevante<br>
+        • Suspeita de <strong>infeção</strong> (febre, imunossupressão, UDIV) ou <strong>neoplasia</strong> (história de cancro, perda ponderal, dor noturna)<br>
+        • <strong>Trauma</strong> significativo ou osteoporose com suspeita de fratura<br>
+        • Dor sem melhoria após 4–6 semanas de tratamento conservador adequado
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Princípio-chave da coluna</div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <p>Achados degenerativos (bulging, protrusões, espondilose, alterações dos pratos) são <strong>muito comuns em assintomáticos</strong> e aumentam com a idade. <strong>Correlacionar sempre com a clínica</strong>: o nível, o lado e o tipo de défice devem corresponder à imagem antes de atribuir causalidade ou considerar cirurgia.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> TC vs RM — qual escolher</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Situação</th><th>Exame preferencial</th></tr></thead>
+          <tbody>
+            <tr><td>Suspeita de hemorragia aguda / trauma craniano</td><td>TC sem contraste</td></tr>
+            <tr><td>AVC isquémico (fase aguda, decisão de trombólise)</td><td>TC ± angio-TC / perfusão</td></tr>
+            <tr><td>Fratura vertebral / detalhe ósseo</td><td>TC</td></tr>
+            <tr><td>Hérnia discal, compressão medular/radicular</td><td>RM</td></tr>
+            <tr><td>Tumor, esclerose múltipla, lesões do parênquima</td><td>RM (com contraste)</td></tr>
+            <tr><td>Cauda equina (emergência)</td><td>RM urgente (TC se RM indisponível)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tool-footer">
+    As imagens são representações esquemáticas para fins educativos.<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o relatório do radiologista nem o julgamento do médico.</em>
+    <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  // =========================================================
+  //  SVG SCHEMATIC GENERATORS (own graphics, CT-style)
+  //  Brain: axial head outline on dark background.
+  //  viewBox 0 0 240 240
+  // =========================================================
+  const SKULL='#e8e8ee', BRAIN='#7d808f', BRAINL='#9396a4', VENT='#1c1e2b', BLOOD='#f4f4f8', HYPO='#4a4d5e', BONE='#f0f0f5';
+
+  function headBase(extra){
+    // skull + brain + ventricles
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    // skull (outer bright ring)
+    s+='<ellipse cx="120" cy="120" rx="92" ry="104" fill="'+BONE+'"/>';
+    // brain
+    s+='<ellipse cx="120" cy="122" rx="82" ry="94" fill="'+BRAIN+'"/>';
+    // interhemispheric fissure
+    s+='<line x1="120" y1="34" x2="120" y2="210" stroke="#5d6070" stroke-width="2"/>';
+    // lateral ventricles (two comma shapes)
+    s+=ventricles(1);
+    if(extra) s+=extra;
+    s+='</svg>';
+    return s;
+  }
+  function ventricles(scale){
+    scale=scale||1;
+    var cx=120;
+    function vent(side){
+      var d = side; // -1 left(image right), +1
+      var ox = cx + d*0; 
+      // simple frontal+body horn
+      var x0 = cx + d*6;
+      return '<path d="M'+(cx+d*6)+' 92 q'+(d*22)+' 6 '+(d*16)+' 40 q'+(d*-4)+' 14 '+(d*-14)+' 6 q'+(d*-6)+' -26 '+(d*-2)+' -46 z" fill="'+VENT+'" transform="scale(1,'+scale+')" transform-origin="120 120"/>';
+    }
+    return vent(-1)+vent(1);
+  }
+
+  // ---- BRAIN PATTERNS ----
+  function brNormal(){ return headBase(''); }
+
+  function brEDH(){ // epidural: biconvex lens hyperdense, right side
+    var lens='<path d="M210 80 Q150 120 210 168 Q224 124 210 80 Z" fill="'+BLOOD+'"/>';
+    // mass effect: shift midline slightly + compress ventricle
+    var shift='<line x1="128" y1="40" x2="124" y2="205" stroke="#5d6070" stroke-width="2"/>';
+    return headBase(lens);
+  }
+  function brSDH(){ // subdural: crescent following skull, left side
+    var cres='<path d="M30 60 Q14 122 36 184 Q40 186 44 182 Q26 122 44 64 Q38 58 30 60 Z" fill="'+BLOOD+'"/>';
+    return headBase(cres);
+  }
+  function brSAH(){ // subarachnoid: hyperdensity in sulci / star-shaped cisterns center
+    var star='<path d="M120 96 L130 116 L152 118 L134 132 L140 154 L120 140 L100 154 L106 132 L88 118 L110 116 Z" fill="'+BLOOD+'" opacity="0.95"/>';
+    // sylvian fissures bright
+    var syl='<path d="M70 120 q14 8 26 4" stroke="'+BLOOD+'" stroke-width="4" fill="none"/><path d="M170 120 q-14 8 -26 4" stroke="'+BLOOD+'" stroke-width="4" fill="none"/>';
+    return headBase(star+syl);
+  }
+  function brIPH(){ // intraparenchymal: rounded hyperdensity basal ganglia + edema
+    var edema='<ellipse cx="86" cy="120" rx="34" ry="30" fill="'+HYPO+'"/>';
+    var bleed='<ellipse cx="86" cy="120" rx="20" ry="17" fill="'+BLOOD+'"/>';
+    return headBase(edema+bleed);
+  }
+  function brIVH(){ // intraventricular: blood filling ventricles
+    var v='<path d="M114 92 q-22 6 -16 40 q4 14 14 6 q6 -26 2 -46 z" fill="'+BLOOD+'"/><path d="M126 92 q22 6 16 40 q-4 14 -14 6 q-6 -26 -2 -46 z" fill="'+BLOOD+'"/>';
+    return headBase(v);
+  }
+  function brInfarct(){ // ischemic: wedge hypodensity territory + sulcal effacement
+    var wedge='<path d="M120 70 L196 100 L186 150 L120 130 Z" fill="'+HYPO+'"/>';
+    return headBase(wedge);
+  }
+  function brHyperMCA(){ // hyperdense MCA sign
+    var mca='<line x1="120" y1="128" x2="158" y2="116" stroke="'+BLOOD+'" stroke-width="5" stroke-linecap="round"/>';
+    return headBase(mca);
+  }
+  function brAtrophy(){ // widened sulci + enlarged ventricles
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    s+='<ellipse cx="120" cy="120" rx="92" ry="104" fill="'+BONE+'"/>';
+    s+='<ellipse cx="120" cy="122" rx="82" ry="94" fill="'+BRAIN+'"/>';
+    // wide CSF gap between brain and skull
+    s+='<ellipse cx="120" cy="122" rx="82" ry="94" fill="none" stroke="'+VENT+'" stroke-width="6"/>';
+    s+='<line x1="120" y1="34" x2="120" y2="210" stroke="#3a3c4a" stroke-width="5"/>';
+    // sulci (dark lines)
+    for(var i=0;i<6;i++){ var a=i*60*Math.PI/180; var x1=120+Math.cos(a)*40,y1=122+Math.sin(a)*46,x2=120+Math.cos(a)*70,y2=122+Math.sin(a)*78; s+='<line x1="'+x1.toFixed(0)+'" y1="'+y1.toFixed(0)+'" x2="'+x2.toFixed(0)+'" y2="'+y2.toFixed(0)+'" stroke="'+VENT+'" stroke-width="3"/>'; }
+    // enlarged ventricles
+    s+='<path d="M112 88 q-30 8 -22 48 q6 18 18 8 q8 -32 4 -56 z" fill="'+VENT+'"/><path d="M128 88 q30 8 22 48 q-6 18 -18 8 q-8 -32 -4 -56 z" fill="'+VENT+'"/>';
+    s+='</svg>';
+    return s;
+  }
+  function brSVD(){ // small vessel disease: periventricular hypodensity
+    var halo='<path d="M112 88 q-22 6 -16 44 q4 16 14 6 q6 -28 2 -50 z" fill="'+VENT+'"/><path d="M128 88 q22 6 16 44 q-4 16 -14 6 q-6 -28 -2 -50 z" fill="'+VENT+'"/>';
+    var caps='<ellipse cx="120" cy="118" rx="46" ry="40" fill="none" stroke="'+HYPO+'" stroke-width="9" opacity="0.7"/>';
+    return headBase(caps+halo);
+  }
+  function brLacune(){ // small deep hypodensity
+    var lac='<circle cx="98" cy="112" r="7" fill="'+VENT+'"/>';
+    return headBase(lac);
+  }
+  function brHydro(){ // hydrocephalus: ballooned ventricles
+    var v='<path d="M108 80 q-40 10 -30 60 q8 22 24 10 q10 -40 6 -70 z" fill="'+VENT+'"/><path d="M132 80 q40 10 30 60 q-8 22 -24 10 q-10 -40 -6 -70 z" fill="'+VENT+'"/>';
+    var third='<ellipse cx="120" cy="140" rx="10" ry="16" fill="'+VENT+'"/>';
+    return headBase(v+third);
+  }
+  function brMass(){ // tumour with vasogenic edema + mass effect + midline shift
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    s+='<ellipse cx="120" cy="120" rx="92" ry="104" fill="'+BONE+'"/>';
+    s+='<ellipse cx="120" cy="122" rx="82" ry="94" fill="'+BRAIN+'"/>';
+    // shifted midline (to the right)
+    s+='<path d="M120 34 Q140 120 132 210" stroke="#5d6070" stroke-width="3" fill="none"/>';
+    // edema
+    s+='<ellipse cx="80" cy="110" rx="40" ry="38" fill="'+HYPO+'"/>';
+    // mass (slightly hyperdense)
+    s+='<circle cx="80" cy="110" r="18" fill="#b8bac8"/>';
+    s+='</svg>';
+    return s;
+  }
+  function brCalc(){ // physiological calcification (pineal / choroid)
+    var p='<circle cx="120" cy="126" r="5" fill="'+BLOOD+'"/>';
+    var ch='<circle cx="104" cy="116" r="4" fill="'+BLOOD+'"/><circle cx="136" cy="116" r="4" fill="'+BLOOD+'"/>';
+    return headBase(p+ch);
+  }
+
+  // =========================================================
+  //  SPINE PATTERNS — sagittal/axial schematic
+  //  viewBox 0 0 240 240
+  // =========================================================
+  const VBODY='#d9d3c4', DISC='#8a8f7a', CORD='#6e6e7a', CANAL='#262838', NERVE='#c2b89a';
+
+  function spineSagBase(extra){
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    // 4 vertebral bodies stacked (left), spinal canal (right of bodies)
+    var ys=[24,76,128,180];
+    for(var i=0;i<ys.length;i++){
+      s+='<rect x="40" y="'+ys[i]+'" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    }
+    // discs between
+    s+='<rect x="40" y="64" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    s+='<rect x="40" y="116" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    s+='<rect x="40" y="168" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    // spinal canal (dark vertical channel) + cord
+    s+='<rect x="128" y="20" width="34" height="204" fill="'+CANAL+'"/>';
+    s+='<rect x="136" y="20" width="18" height="204" rx="9" fill="'+CORD+'"/>';
+    // posterior elements hint
+    s+='<rect x="166" y="20" width="14" height="204" fill="'+VBODY+'" opacity="0.55"/>';
+    if(extra) s+=extra;
+    s+='</svg>';
+    return s;
+  }
+
+  function spNormal(){ return spineSagBase(''); }
+
+  function spBulge(){ // diffuse symmetric bulge, mild
+    var b='<path d="M124 116 q12 6 0 12 z" fill="'+DISC+'"/><rect x="124" y="117" width="8" height="10" rx="3" fill="'+DISC+'"/>';
+    return spineSagBase(b);
+  }
+  function spProtrusion(){ // focal, base wider than dome, indenting canal
+    var p='<path d="M124 114 q20 8 0 16 q-2 -8 0 -16 z" fill="'+DISC+'"/>';
+    return spineSagBase(p);
+  }
+  function spExtrusion(){ // dome wider than base, narrow neck
+    var e='<path d="M124 116 q8 -2 14 6 q4 6 0 10 q-8 4 -14 -2 q-3 -7 0 -14 z" fill="'+DISC+'"/>';
+    // cord compression hint
+    var comp='<rect x="138" y="112" width="16" height="22" rx="6" fill="#55576a"/>';
+    return spineSagBase(e+comp);
+  }
+  function spSequestration(){ // free fragment migrated
+    var e='<path d="M124 116 q8 0 12 6 q2 6 -2 8 z" fill="'+DISC+'"/>';
+    var frag='<ellipse cx="146" cy="100" rx="7" ry="9" fill="'+DISC+'"/>';
+    return spineSagBase(e+frag);
+  }
+  function spStenosis(){ // narrowed canal from multiple levels (osteophytes + ligament)
+    var o1='<path d="M124 64 q16 6 0 12 z" fill="'+VBODY+'"/><rect x="124" y="64" width="10" height="12" fill="'+VBODY+'"/>';
+    var o2='<path d="M124 116 q16 6 0 12 z" fill="'+VBODY+'"/><rect x="124" y="116" width="12" height="12" fill="'+VBODY+'"/>';
+    var lig='<rect x="162" y="20" width="8" height="204" fill="'+VBODY+'" opacity="0.8"/>';
+    // narrowed cord channel
+    return spineSagBase(o1+o2+lig);
+  }
+  function spSpondylolisthesis(){ // slipped vertebra
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    s+='<rect x="40" y="24" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    s+='<rect x="40" y="64" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    // slipped forward (anterolisthesis)
+    s+='<rect x="62" y="76" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    s+='<rect x="40" y="116" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    s+='<rect x="40" y="128" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    // canal disruption
+    s+='<rect x="146" y="20" width="34" height="204" fill="'+CANAL+'"/>';
+    s+='<path d="M150 24 L150 76 L172 76 L172 116 L150 116 L150 220" stroke="#55576a" stroke-width="10" fill="none"/>';
+    s+='</svg>';
+    return s;
+  }
+  function spOsteophyte(){ // anterior osteophytes / spondylosis
+    var o='<path d="M40 64 q-14 6 0 12 z" fill="'+VBODY+'"/><path d="M40 116 q-14 6 0 12 z" fill="'+VBODY+'"/>';
+    // disc height loss
+    var dl='<rect x="40" y="118" width="84" height="6" rx="2" fill="'+DISC+'"/>';
+    return spineSagBase(o+dl);
+  }
+  function spFracture(){ // vertebral compression fracture - wedge
+    var s='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">';
+    s+='<rect x="0" y="0" width="240" height="240" fill="#0d0f1a"/>';
+    s+='<rect x="40" y="24" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    s+='<rect x="40" y="64" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    // wedge-shaped (anterior height loss) vertebra
+    s+='<path d="M40 92 L124 78 L124 112 L40 112 Z" fill="'+VBODY+'"/>';
+    // fracture line
+    s+='<line x1="58" y1="78" x2="74" y2="112" stroke="#9a9488" stroke-width="2"/>';
+    s+='<rect x="40" y="112" width="84" height="12" rx="3" fill="'+DISC+'"/>';
+    s+='<rect x="40" y="124" width="84" height="40" rx="5" fill="'+VBODY+'"/>';
+    s+='<rect x="128" y="20" width="34" height="204" fill="'+CANAL+'"/>';
+    s+='<rect x="136" y="20" width="18" height="204" rx="9" fill="'+CORD+'"/>';
+    s+='</svg>';
+    return s;
+  }
+  function spSchmorl(){ // Schmorl node - disc into vertebral body
+    var n='<path d="M82 64 q0 -14 -10 0 q-2 8 10 0 z" fill="'+DISC+'"/><ellipse cx="80" cy="62" rx="9" ry="7" fill="'+DISC+'"/>';
+    return spineSagBase(n);
+  }
+  function spVacuum(){ // vacuum phenomenon - air in disc
+    var air='<rect x="60" y="118" width="44" height="8" rx="3" fill="#0d0f1a"/>';
+    return spineSagBase(air);
+  }
+  function spMets(){ // metastasis - lytic/sclerotic lesion in body
+    var lesion='<circle cx="72" cy="144" r="13" fill="#cfd8e6"/><circle cx="96" cy="150" r="8" fill="#cfd8e6"/>';
+    return spineSagBase(lesion);
+  }
+
+  // =========================================================
+  //  DATASETS
+  // =========================================================
+  const CEREBRO = [
+    // --- Hemorragias (extra-axial) ---
+    { grp:'Hemorragias', id:'edh', name:'Hematoma epidural (extradural)', tag:'urgente', tagL:'Emergência', keys:'epidural extradural lente biconvexo arteria meningea media trauma',
+      graph:brEDH,
+      descr:'Coleção <strong>hiperdensa biconvexa (em lente)</strong>, que <strong>não atravessa as suturas</strong>. Tipicamente temporoparietal, por lesão da artéria meníngea média.',
+      sig:'Geralmente traumático. Clássico "intervalo lúcido" seguido de deterioração rápida. Pode expandir e causar herniação.',
+      cond:'Emergência neurocirúrgica. Referenciação imediata. Avaliar efeito de massa e desvio da linha média.' },
+
+    { grp:'Hemorragias', id:'sdh', name:'Hematoma subdural', tag:'urgente', tagL:'Emergência', keys:'subdural crescente veias ponte idoso anticoagulado cronico',
+      graph:brSDH,
+      descr:'Coleção em <strong>crescente</strong> que acompanha a convexidade e <strong>atravessa as suturas</strong>. Agudo: hiperdenso; crónico: hipodenso; subagudo: isodenso.',
+      sig:'Rotura de veias-ponte. Mais comum em idosos, alcoólicos e anticoagulados, por vezes com trauma mínimo. Pode ser bilateral.',
+      cond:'Referenciação. Agudo com efeito de massa é emergência. Crónico pode ter apresentação insidiosa (confusão, cefaleia).' },
+
+    { grp:'Hemorragias', id:'sah', name:'Hemorragia subaracnoideia (HSA)', tag:'urgente', tagL:'Emergência', keys:'subaracnoideia hsa cisternas aneurisma trovoada thunderclap',
+      graph:brSAH,
+      descr:'Hiperdensidade nas <strong>cisternas da base, sulcos e fissuras</strong> (preenche os espaços de LCR, dando um aspeto "em estrela" central).',
+      sig:'Causa mais comum não traumática: <strong>rotura de aneurisma</strong>. Apresenta-se com cefaleia súbita intensa ("em trovoada"). Risco de re-hemorragia e vasospasmo.',
+      cond:'Emergência. Se a TC for negativa e a suspeita alta, ponderar punção lombar. Referenciação urgente (angio-TC, neurocirurgia).' },
+
+    // --- Hemorragias (intra-axial) ---
+    { grp:'Hemorragias', id:'iph', name:'Hemorragia intraparenquimatosa', tag:'urgente', tagL:'Emergência', keys:'intraparenquimatosa intracerebral hipertensiva ganglios base lobar',
+      graph:brIPH,
+      descr:'Hiperdensidade <strong>arredondada dentro do parênquima</strong>, frequentemente com <strong>edema hipodenso</strong> em redor. Localização típica hipertensiva: gânglios da base/tálamo.',
+      sig:'AVC hemorrágico. Causas: HTA (profunda), angiopatia amiloide (lobar, idosos), MAV, tumor, coagulopatia.',
+      cond:'Emergência. Controlo tensional, reverter anticoagulação se aplicável, referenciação. Avaliar efeito de massa e extensão intraventricular.' },
+
+    { grp:'Hemorragias', id:'ivh', name:'Hemorragia intraventricular', tag:'urgente', tagL:'Emergência', keys:'intraventricular sangue ventriculos hidrocefalia',
+      graph:brIVH,
+      descr:'Sangue <strong>hiperdenso dentro dos ventrículos</strong> (que normalmente são escuros). Pode haver nível líquido-sangue.',
+      sig:'Frequentemente por extensão de hemorragia intraparenquimatosa ou subaracnoideia. Risco de <strong>hidrocefalia obstrutiva</strong>.',
+      cond:'Emergência. Vigiar hidrocefalia; pode necessitar de drenagem ventricular. Referenciação.' },
+
+    // --- Isquémia ---
+    { grp:'Isquémia e vascular', id:'infarct', name:'Enfarte isquémico (estabelecido)', tag:'urgente', tagL:'Avaliar', keys:'enfarte isquemico avc hipodensidade territorio cunha edema',
+      graph:brInfarct,
+      descr:'<strong>Hipodensidade</strong> que respeita um <strong>território vascular</strong> (forma de cunha), com perda da diferenciação cinzenta-branca e apagamento de sulcos. Surge horas após o início.',
+      sig:'AVC isquémico. A TC pode ser <strong>normal nas primeiras horas</strong>. Grandes áreas hipodensas indicam enfarte extenso e maior risco de transformação hemorrágica.',
+      cond:'Na fase aguda, a clínica e o tempo de início orientam a trombólise/trombectomia. Excluir hemorragia é o passo crítico. Referenciação urgente (via verde AVC).' },
+
+    { grp:'Isquémia e vascular', id:'hypermca', name:'Sinal da ACM hiperdensa', tag:'urgente', tagL:'Avaliar', keys:'acm hiperdensa arteria cerebral media trombo oclusao precoce',
+      graph:brHyperMCA,
+      descr:'A <strong>artéria cerebral média surge anormalmente branca</strong> (densa) num dos lados, traduzindo trombo intraluminal.',
+      sig:'Sinal precoce de AVC isquémico por oclusão da ACM, por vezes antes de surgir a hipodensidade do parênquima.',
+      cond:'Procurar ativamente na presença de défice neurológico unilateral agudo. Referenciação urgente.' },
+
+    { grp:'Isquémia e vascular', id:'lacune', name:'Enfarte lacunar', tag:'atencao', tagL:'Atenção', keys:'lacunar lacuna pequeno vaso profundo',
+      graph:brLacune,
+      descr:'<strong>Pequena hipodensidade profunda</strong> (&lt;15 mm), nos gânglios da base, cápsula interna, tálamo ou tronco.',
+      sig:'Oclusão de pequeno vaso perfurante. Associado a HTA e diabetes. Pode ser assintomático ou dar síndromes lacunares.',
+      cond:'Controlo dos fatores de risco vascular. Correlacionar com clínica. Frequentemente achado em doença de pequenos vasos.' },
+
+    // --- Crónico / degenerativo ---
+    { grp:'Achados crónicos e degenerativos', id:'svd', name:'Doença de pequenos vasos / leucoaraiose', tag:'atencao', tagL:'Frequente', keys:'leucoaraiose pequenos vasos microangiopatia substancia branca periventricular',
+      graph:brSVD,
+      descr:'<strong>Hipodensidade simétrica da substância branca periventricular</strong> e profunda. Descrita como "alterações da substância branca", "microangiopatia" ou "leucoaraiose".',
+      sig:'Alterações vasculares crónicas relacionadas com a idade, HTA e fatores de risco. Associada a declínio cognitivo vascular e maior risco de AVC.',
+      cond:'Achado muito comum em idosos. Otimizar fatores de risco vascular. Geralmente não justifica alarme isolado; correlacionar com a clínica.' },
+
+    { grp:'Achados crónicos e degenerativos', id:'atrofia', name:'Atrofia cerebral', tag:'benigno', tagL:'Frequente', keys:'atrofia sulcos alargados ventriculos volume idade',
+      graph:brAtrophy,
+      descr:'<strong>Alargamento dos sulcos</strong> e <strong>dilatação ventricular</strong> com aumento dos espaços de LCR, por redução do volume cerebral.',
+      sig:'Frequentemente <strong>apropriada para a idade</strong>. Atrofia desproporcionada pode associar-se a doença neurodegenerativa, mas a TC não a diagnostica isoladamente.',
+      cond:'Interpretar no contexto da idade e da clínica. Se houver declínio cognitivo, a avaliação é clínica/RM, não pela TC apenas.' },
+
+    { grp:'Achados crónicos e degenerativos', id:'calc', name:'Calcificações fisiológicas', tag:'benigno', tagL:'Benigno', keys:'calcificacao pineal plexos coroideus ganglios base fisiologica',
+      graph:brCalc,
+      descr:'Pequenas <strong>hiperdensidades (cálcio)</strong> na glândula pineal, plexos coroideus e, por vezes, gânglios da base.',
+      sig:'Habitualmente sem significado patológico. Calcificações extensas/atípicas podem associar-se a algumas doenças metabólicas ou inflamatórias.',
+      cond:'Achado benigno comum. Não requer ação isolada.' },
+
+    // --- Massa e LCR ---
+    { grp:'Massa e LCR', id:'mass', name:'Lesão expansiva (tumor / massa)', tag:'urgente', tagL:'Investigar', keys:'tumor massa metastase edema vasogenico efeito massa desvio linha media',
+      graph:brMass,
+      descr:'Lesão com <strong>efeito de massa</strong>: edema vasogénico em redor (hipodenso "em dedos de luva"), apagamento de sulcos e, se grande, <strong>desvio da linha média</strong>. Pode realçar com contraste.',
+      sig:'Tumor primário, metástase, abcesso ou outra lesão. O edema e o efeito de massa determinam a urgência.',
+      cond:'Referenciação. Caracterização por RM com contraste. Sinais de hipertensão intracraniana ou herniação são emergência.' },
+
+    { grp:'Massa e LCR', id:'hydro', name:'Hidrocefalia', tag:'urgente', tagL:'Avaliar', keys:'hidrocefalia ventriculos dilatados obstrutiva pressao',
+      graph:brHydro,
+      descr:'<strong>Dilatação ventricular</strong> desproporcionada, por vezes com edema transependimário (hipodensidade à volta dos cornos).',
+      sig:'Obstrutiva (lesão a bloquear o fluxo de LCR) ou comunicante. A forma aguda causa hipertensão intracraniana.',
+      cond:'Hidrocefalia aguda é emergência. Referenciação. Distinguir de atrofia (nesta, os sulcos também estão alargados).' }
+  ];
+
+  const COLUNA = [
+    // --- Disco ---
+    { grp:'Patologia discal', id:'bulge', name:'Abaulamento discal (bulging)', tag:'benigno', tagL:'Frequente', keys:'bulging abaulamento difuso disco degenerescencia',
+      graph:spBulge,
+      descr:'Extensão <strong>simétrica e difusa</strong> do disco para além do bordo vertebral (&gt;25% da circunferência). <strong>Não é uma hérnia.</strong>',
+      sig:'Resultado da degenerescência do anel fibroso. Muito comum e frequentemente assintomático.',
+      cond:'Geralmente sem significado clínico isolado. Tratar a clínica, não a imagem.' },
+
+    { grp:'Patologia discal', id:'protrusion', name:'Protrusão discal', tag:'degen', tagL:'Degenerativo', keys:'protrusao protrusion base larga anel intacto hernia',
+      graph:spProtrusion,
+      descr:'Hérnia <strong>focal</strong> em que a <strong>base é mais larga do que o material herniado</strong>. Anel fibroso geralmente intacto.',
+      sig:'Pode comprimir uma raiz e causar radiculopatia se corresponder à clínica. Frequente em assintomáticos.',
+      cond:'Correlacionar com o défice (nível/lado). Tratamento conservador na maioria; referenciar se défice relevante ou refratário.' },
+
+    { grp:'Patologia discal', id:'extrusion', name:'Extrusão discal', tag:'atencao', tagL:'Atenção', keys:'extrusao extrusion domo largo anel roto compressao radicular',
+      graph:spExtrusion,
+      descr:'Material herniado <strong>mais largo do que a base</strong> ("pescoço" estreito), com rotura do anel. Pode comprimir raiz ou saco dural.',
+      sig:'Maior probabilidade de compressão neural sintomática. Curiosamente, extrusões reabsorvem mais frequentemente do que protrusões.',
+      cond:'Correlacionar com a clínica. Conservador se tolerável; referenciar se radiculopatia incapacitante, défice motor ou sinais de cauda equina.' },
+
+    { grp:'Patologia discal', id:'sequestration', name:'Sequestro discal', tag:'atencao', tagL:'Atenção', keys:'sequestro sequestration fragmento livre migrado',
+      graph:spSequestration,
+      descr:'<strong>Fragmento discal livre</strong>, que perdeu continuidade com o disco de origem e pode <strong>migrar</strong> no canal.',
+      sig:'Pode causar compressão neural num nível diferente do disco. Como a extrusão, tem boa taxa de reabsorção espontânea.',
+      cond:'Correlacionar com a clínica. Referenciar conforme défice. Vigiar sinais de cauda equina.' },
+
+    { grp:'Patologia discal', id:'schmorl', name:'Nódulo de Schmorl', tag:'benigno', tagL:'Benigno', keys:'schmorl nodulo herniacao prato vertebral',
+      graph:spSchmorl,
+      descr:'Herniação do disco <strong>através do prato vertebral para dentro do corpo</strong> vertebral.',
+      sig:'Geralmente um achado <strong>benigno e incidental</strong>. Raramente sintomático (quando agudo).',
+      cond:'Não requer ação. Tranquilizar.' },
+
+    { grp:'Patologia discal', id:'vacuum', name:'Fenómeno de vácuo', tag:'benigno', tagL:'Benigno', keys:'vacuo vacuum ar disco degenerescencia gas',
+      graph:spVacuum,
+      descr:'<strong>Ar (muito hipodenso) dentro do disco</strong> degenerado.',
+      sig:'Sinal de degenerescência discal. Quase sempre benigno.',
+      cond:'Sem ação específica; faz parte do quadro degenerativo.' },
+
+    // --- Canal / ósseo ---
+    { grp:'Canal e estruturas ósseas', id:'stenosis', name:'Estenose do canal raquidiano', tag:'atencao', tagL:'Atenção', keys:'estenose canal central recesso lateral foraminal claudicacao neurogenica',
+      graph:spStenosis,
+      descr:'<strong>Estreitamento do canal</strong> por combinação de osteófitos, hipertrofia facetária, espessamento do ligamento amarelo e/ou hérnia. Pode ser central, do recesso lateral ou foraminal.',
+      sig:'Causa típica de <strong>claudicação neurogénica</strong> (dor nos membros ao andar/estar de pé, que alivia ao sentar ou fletir o tronco).',
+      cond:'Correlacionar com a clínica. Conservador inicialmente; referenciar se incapacitante, défice progressivo ou sinais de cauda equina.' },
+
+    { grp:'Canal e estruturas ósseas', id:'osteophyte', name:'Espondilose / osteófitos', tag:'degen', tagL:'Degenerativo', keys:'espondilose osteofitos degenerativo perda altura discal artrose',
+      graph:spOsteophyte,
+      descr:'<strong>Osteófitos</strong> nas margens vertebrais, <strong>perda de altura discal</strong> e esclerose dos pratos — alterações degenerativas (espondilose).',
+      sig:'Muito comum e progride com a idade. Frequentemente assintomática; pode contribuir para estenose ou compressão foraminal.',
+      cond:'Tratar a clínica, não a imagem. Achado esperado no envelhecimento.' },
+
+    { grp:'Canal e estruturas ósseas', id:'listese', name:'Espondilolistese', tag:'atencao', tagL:'Atenção', keys:'espondilolistese deslizamento anterolistese retrolistese instabilidade',
+      graph:spSpondylolisthesis,
+      descr:'<strong>Deslizamento de um corpo vertebral sobre o adjacente</strong> (anterolistese se para a frente). Pode estreitar o canal e os foramens.',
+      sig:'Degenerativa ou ístmica (defeito da pars). Pode causar dor mecânica, radiculopatia ou estenose.',
+      cond:'Correlacionar com a clínica e a estabilidade. Conservador na maioria; referenciar se instável, défice ou refratária.' },
+
+    { grp:'Canal e estruturas ósseas', id:'fracture', name:'Fratura vertebral', tag:'urgente', tagL:'Avaliar', keys:'fratura compressao cunha osteoporotica trauma altura',
+      graph:spFracture,
+      descr:'<strong>Perda de altura do corpo vertebral</strong> (frequentemente em cunha, com perda da altura anterior) e/ou linha de fratura. A TC é excelente para o osso.',
+      sig:'Traumática, osteoporótica (fragilidade) ou patológica (tumoral). Avaliar envolvimento do muro posterior e do canal.',
+      cond:'Avaliar mecanismo e estabilidade. Fratura com compromisso neurológico ou instabilidade é emergência. Investigar osteoporose/neoplasia se fratura de fragilidade.' },
+
+    { grp:'Canal e estruturas ósseas', id:'mets', name:'Lesão óssea suspeita (metástase)', tag:'urgente', tagL:'Investigar', keys:'metastase lesao litica esclerotica tumor neoplasia destruicao',
+      graph:spMets,
+      descr:'Lesão <strong>lítica (destrutiva) ou esclerótica</strong> no corpo vertebral, por vezes com massa de partes moles associada ou colapso.',
+      sig:'A coluna é local frequente de metástases (mama, próstata, pulmão, rim). Sinal de alarme, sobretudo com dor noturna, perda ponderal ou história de cancro.',
+      cond:'Referenciação. Investigar origem. Compromisso medular/cauda equina é emergência (descompressão, corticoides, oncologia).' }
+  ];
+
+  // =========================================================
+  //  RENDER
+  // =========================================================
+  function renderPatterns(data, containerId, kind){
+    var c = document.getElementById(containerId);
+    var html=''; var lastGrp=null;
+    data.forEach(function(d){
+      if(d.grp !== lastGrp){ html += '<div class="subgroup-lbl">'+d.grp+'</div>'; lastGrp=d.grp; }
+      html += '<div class="pat-card" data-keys="'+(d.name+' '+d.keys+' '+d.grp).toLowerCase()+'">'
+        + '<button type="button" class="pat-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+        + '<span class="pat-name">'+d.name+'</span>'
+        + '<span style="display:flex;align-items:center;gap:10px;">'
+        + '<span class="pat-tag '+d.tag+'">'+d.tagL+'</span><svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></button>'
+        + '<div class="pat-body">'
+        + '<div class="pat-graph">'+d.graph()+'</div>'
+        + '<div class="pat-section descr"><div class="ps-label">Descrição na TC</div><p>'+d.descr+'</p></div>'
+        + '<div class="pat-section signif"><div class="ps-label">Significado clínico</div><p>'+d.sig+'</p></div>'
+        + '<div class="pat-section conduta"><div class="ps-label">Conduta em MGF</div><p>'+d.cond+'</p></div>'
+        + '</div></div>';
+    });
+    c.innerHTML = html;
+    var first = c.querySelector('.pat-card'); if(first) first.classList.add('open');
+  }
+  renderPatterns(CEREBRO, 'cerebro-container', 'cerebro');
+  renderPatterns(COLUNA, 'coluna-container', 'coluna');
+
+  function filterPat(which){
+    var q = document.getElementById(which+'-search').value.toLowerCase().trim();
+    var container = document.getElementById(which+'-container');
+    container.querySelectorAll('.pat-card').forEach(function(card){
+      var match = card.getAttribute('data-keys').indexOf(q) !== -1;
+      card.style.display = (q==='' || match) ? 'block' : 'none';
+    });
+    // hide group labels with no visible cards
+    container.querySelectorAll('.subgroup-lbl').forEach(function(lbl){
+      var sib=lbl.nextElementSibling, anyVisible=false;
+      while(sib && sib.classList.contains('pat-card')){ if(sib.style.display!=='none'){anyVisible=true;break;} sib=sib.nextElementSibling; }
+      lbl.style.display = anyVisible ? 'block' : 'none';
+    });
+  }
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>

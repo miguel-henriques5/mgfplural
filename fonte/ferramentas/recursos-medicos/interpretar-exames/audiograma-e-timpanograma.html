@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audiograma e timpanograma</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "audiograma-e-timpanograma",
+  "titulo": "Audiograma e timpanograma",
+  "descricao": "Atlas de padrões do audiograma e do timpanograma, graus de perda auditiva, interpretador e marcha diagnóstica.",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-08",
+  "layout": "normal",
+  "ordem": 4,
+  "palavras": [
+    "audiograma",
+    "audiometria",
+    "timpanograma",
+    "timpanometria",
+    "hipoacusia",
+    "surdez",
+    "perda auditiva",
+    "condutiva",
+    "neurossensorial",
+    "presbiacusia",
+    "Jerger",
+    "otite serosa"
+  ],
+  "bibliografia": [
+    "StatPearls / NCBI Bookshelf. Audiogram Interpretation. https://www.ncbi.nlm.nih.gov/books/NBK578179/",
+    "Geeky Medics. Audiogram Interpretation e Rinne's and Weber's tests. https://geekymedics.com/audiogram-interpretation/",
+    "Iowa Head and Neck Protocols. How to Read an Audiogram. https://iowaprotocols.medicine.uiowa.edu/protocols/how-read-audiogram",
+    "IntechOpen. Classification of Hearing Loss. https://www.intechopen.com/chapters/49574",
+    "Boys Town National Research Hospital. Degrees of Hearing Loss. https://www.boystownhospital.org/knowledge-center/degrees-hearing-loss",
+    "Medscape. Audiology Pure-Tone Testing. https://emedicine.medscape.com/article/1822962-overview",
+    "American Family Physician (AFP). Tympanometry. https://www.aafp.org/pubs/afp/issues/2004/1101/p1713.html",
+    "Interacoustics Academy. Tympanometry: An Introduction. https://www.interacoustics.com/academy/tympanometry-training/traditional-tympanometry/tympanometry",
+    "Amplivox. How to interpret a tympanogram. https://amplivox.com/knowledge-hub/how-to-interpret-a-tympanogram",
+    "ASHA. Tympanometry (Jerger / Liden). https://www.asha.org/policy/rp1988-00027/",
+    "Merck Manual Professional. Sudden Hearing Loss. https://www.merckmanuals.com/professional/ear-nose-and-throat-disorders/hearing-loss/sudden-hearing-loss",
+    "StatPearls / NCBI. Weber Test e Rinne Test. https://www.ncbi.nlm.nih.gov/books/NBK526135/"
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { max-width: 860px; margin: 0 auto; padding: 0 16px 64px; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #0F6E64; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #0F6E64; border: 2px solid transparent; border-radius: 8px; padding: 8px 15px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #0F6E64; color: #FFFFFF; border-color: #0F6E64; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .pat-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); overflow: hidden; margin-bottom: 16px; border: 1px solid #8FCFC0; }
+#ferramenta .pat-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .pat-head:hover { background: #D7EDE7; }
+#ferramenta .pat-name { font-size: 15px; font-weight: 700; color: #13423D; }
+#ferramenta .pat-tag { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+#ferramenta .pat-tag.normal { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .pat-tag.cond { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .pat-tag.sn { background: #EAF1FA; color: #1C4A80; }
+#ferramenta .pat-tag.urgente { background: #FDECEA; color: #9E2318; }
+#ferramenta .pat-toggle { font-size: 18px; color: #0F6E64; transition: transform 0.2s; }
+#ferramenta .pat-card.open .pat-toggle { transform: rotate(180deg); }
+#ferramenta .pat-body { display: none; padding: 0 18px 18px; }
+#ferramenta .pat-card.open .pat-body { display: block; }
+#ferramenta .pat-graph { width: 100%; background: #FFFFFF; border: 1px solid #8FCFC0; border-radius: 8px; margin-bottom: 14px; overflow: hidden; display: flex; justify-content: center; }
+#ferramenta .pat-graph svg { width: 100%; max-width: 380px; height: auto; display: block; }
+#ferramenta .pat-section { margin-bottom: 12px; }
+#ferramenta .pat-section .ps-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+#ferramenta .pat-section.descr .ps-label { color: #0F6E64; }
+#ferramenta .pat-section.signif .ps-label { color: #4B5B58; }
+#ferramenta .pat-section.conduta .ps-label { color: #1B6B35; }
+#ferramenta .pat-section p { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .pat-section strong { font-weight: 700; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 12px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 12px; font-size: 14px; color: #13423D; border-bottom: 1px solid #8FCFC0; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .badge-deg { border-radius: 5px; padding: 2px 8px; font-size: 13px; font-weight: 700; }
+#ferramenta .d-normal { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .d-mild { background: #EAF1FA; color: #1C4A80; }
+#ferramenta .d-mod { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .d-sev { background: #FDEBDB; color: #8F3A00; }
+#ferramenta .d-prof { background: #FDECEA; color: #9E2318; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.teal { background: #D7EDE7; border-left: 4px solid #0F6E64; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p { font-size: 14px; color: #13423D; line-height: 1.65; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.teal .ib-title { color: #0F6E64; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 5px; }
+#ferramenta label { font-size: 13px; font-weight: 600; color: #2C3A38; }
+#ferramenta input[type="number"], #ferramenta select { border: 1.5px solid #8FCFC0; border-radius: 8px; padding: 8px 12px; font-size: 15px; color: #13423D; background: #FFFFFF; width: 100%; appearance: auto; -webkit-appearance: auto; }
+#ferramenta input:focus, #ferramenta select:focus { outline: none; border-color: #0F6E64; background: #FFFFFF; }
+#ferramenta .field-hint { font-size: 13px; color: #2C3A38; font-style: italic; }
+#ferramenta .sub-head { font-size: 13px; font-weight: 700; color: #0F6E64; text-transform: uppercase; letter-spacing: 0.8px; margin: 6px 0 4px; }
+#ferramenta .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+#ferramenta .btn-primary { background: #0F6E64; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 22px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-primary:hover { background: #0F6E64; }
+#ferramenta .btn-secondary { background: #D7EDE7; color: #0F6E64; border: 1.5px solid #8FCFC0; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #8FCFC0; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+#ferramenta .calc-result { display: none; margin-top: 18px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 9px; margin-bottom: 9px; }
+#ferramenta .result-row.ok { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .result-row.warn { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .result-row.alert { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .result-row.info { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .result-row .rr-icon { font-size: 18px; line-height: 1.2; }
+#ferramenta .result-row .rr-title { font-size: 14px; font-weight: 700; color: #13423D; margin-bottom: 2px; }
+#ferramenta .result-row .rr-text { font-size: 13.5px; color: #13423D; line-height: 1.5; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #0F6E64; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #0F6E64; }
+#ferramenta .legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 10px 14px; background: #D7EDE7; border-radius: 9px; margin-bottom: 14px; }
+#ferramenta .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #13423D; }
+#ferramenta .leg-sym { font-weight: 700; font-size: 15px; }
+#ferramenta .leg-r { color: #9E2318; }
+#ferramenta .leg-l { color: #1C4A80; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #2C3A38; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #D7EDE7; color: #0F6E64; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #8FCFC0; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <p class="mgf-guia-intro">Atlas de padrões, valores de referência e apoio à marcha diagnóstica.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-audio" aria-controls="tab-audio" aria-selected="true">Audiograma</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-timpano" aria-controls="tab-timpano" aria-selected="false">Timpanograma</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-calc" aria-controls="tab-calc" aria-selected="false">Interpretador</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-marcha" aria-controls="tab-marcha" aria-selected="false">Marcha Diagnóstica</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os gráficos apresentados são <strong>esquemáticos</strong> (ilustrativos da morfologia típica) e não substituem a leitura do exame real, a audiometria formal nem o julgamento clínico. Os valores de referência podem variar com a idade, o equipamento e o protocolo utilizado.</p>
+  <div class="mgf-painel mk-painel" id="tab-audio" role="tabpanel" aria-labelledby="sep-audio">
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Como ler um audiograma</div>
+      <div class="info-block teal">
+        <p>O audiograma representa o <strong>limiar auditivo</strong> (a intensidade mais baixa, em dB HL, a que cada som é ouvido) por frequência (Hz). O eixo horizontal vai dos <strong>graves (125 Hz) aos agudos (8000 Hz)</strong>; o vertical vai de −10 dB (topo, sons fracos) a 120 dB (fundo, sons fortes). <strong>Quanto mais baixo no gráfico, pior a audição.</strong></p>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="leg-sym leg-r">O</span> Via aérea — ouvido direito</div>
+        <div class="legend-item"><span class="leg-sym leg-l">X</span> Via aérea — ouvido esquerdo</div>
+        <div class="legend-item"><span class="leg-sym leg-r">&lt;</span> Via óssea — direito</div>
+        <div class="legend-item"><span class="leg-sym leg-l">&gt;</span> Via óssea — esquerdo</div>
+      </div>
+      <div class="info-block blue" style="margin-bottom:0;">
+        <div class="ib-title">A chave: o gap aéreo-ósseo (GAP)</div>
+        <p>A <strong>via aérea</strong> testa todo o trajeto (ouvido externo → médio → interno). A <strong>via óssea</strong> testa diretamente a cóclea. Um <strong>GAP &gt;10 dB</strong> entre as duas indica componente <strong>condutivo</strong> (problema no ouvido externo/médio). Sem GAP, a perda é <strong>neurossensorial</strong>.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Graus de perda auditiva (PTA — média 500/1000/2000 Hz)</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Grau</th><th>Limiar (dB HL)</th><th>Impacto funcional</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge-deg d-normal">Normal</span></td><td>≤ 25 dB</td><td>Audição normal</td></tr>
+            <tr><td><span class="badge-deg d-mild">Ligeira</span></td><td>26–40 dB</td><td>Dificuldade com fala baixa ou em ruído</td></tr>
+            <tr><td><span class="badge-deg d-mod">Moderada</span></td><td>41–55 dB</td><td>Fala normal difícil; conversas abafadas</td></tr>
+            <tr><td><span class="badge-deg d-mod">Mod. severa</span></td><td>56–70 dB</td><td>Dificuldade mesmo em ambiente calmo</td></tr>
+            <tr><td><span class="badge-deg d-sev">Severa</span></td><td>71–90 dB</td><td>Fala quase impercetível sem amplificação</td></tr>
+            <tr><td><span class="badge-deg d-prof">Profunda</span></td><td>&gt; 90 dB</td><td>Sons do dia-a-dia inaudíveis sem apoio</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:#2C3A38;margin-top:10px;font-style:italic;">Os limites exatos variam ligeiramente entre fontes. Perdas entre categorias descrevem-se como combinação (ex: "moderada a severa").</p>
+    </div>
+    <h3 style="font-size:15px;color:#0F6E64;margin:6px 4px 12px;">Padrões característicos no audiograma</h3>
+    <div id="audio-container"></div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-timpano" role="tabpanel" aria-labelledby="sep-timpano" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Como ler um timpanograma</div>
+      <div class="info-block teal">
+        <p>A timpanometria avalia a <strong>função do ouvido médio</strong> medindo a mobilidade do tímpano (compliance/admitância) em função da pressão aplicada no canal. O eixo horizontal é a <strong>pressão (daPa)</strong>; o vertical é a <strong>compliance (ml/mmho)</strong>. O <strong>pico</strong> ocorre quando a pressão no canal iguala a do ouvido médio.</p>
+      </div>
+      <div class="info-block blue" style="margin-bottom:0;">
+        <div class="ib-title">Três parâmetros a avaliar</div>
+        <p>① <strong>Pressão do pico</strong> (normal −100 a +50 daPa) → função da trompa de Eustáquio. ② <strong>Altura/compliance do pico</strong> (normal ~0,3–1,6 ml) → fluido, rigidez ou hipermobilidade. ③ <strong>Volume do canal (ECV)</strong> (normal 0,6–2,0 cm³) → distingue perfuração (volume alto) de cerúmen/oclusão (volume baixo).</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Classificação de Jerger</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Tipo</th><th>Morfologia</th><th>Significado típico</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong></td><td>Pico normal (−100 a +50 daPa, compliance normal)</td><td>Ouvido médio normal</td></tr>
+            <tr><td><strong>As</strong></td><td>Pico baixo (shallow), pressão normal</td><td>Rigidez: otosclerose, timpanosclerose</td></tr>
+            <tr><td><strong>Ad</strong></td><td>Pico muito alto (deep)</td><td>Hipermobilidade: desarticulação ossicular, tímpano flácido</td></tr>
+            <tr><td><strong>B</strong></td><td>Plano, sem pico</td><td>Líquido (OME), ou perfuração (ver ECV)</td></tr>
+            <tr><td><strong>C</strong></td><td>Pico desviado para pressão negativa (&lt;−100/−150 daPa)</td><td>Disfunção da trompa de Eustáquio, retração</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <h3 style="font-size:15px;color:#0F6E64;margin:6px 4px 12px;">Padrões do timpanograma</h3>
+    <div id="timpano-container"></div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-calc" role="tabpanel" aria-labelledby="sep-calc" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Audiograma</div>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduza a média de tons puros (PTA, 500/1000/2000 Hz) de cada via. A ferramenta classifica o grau e o tipo de perda.</p>
+      <div class="sub-head">Ouvido a avaliar</div>
+      <div class="input-grid" style="margin-bottom:14px;">
+        <div class="field-group">
+          <label>Via aérea — PTA (dB)</label>
+          <input type="number" id="a_air" placeholder="ex: 45" min="-10" max="120">
+        </div>
+        <div class="field-group">
+          <label>Via óssea — PTA (dB)</label>
+          <input type="number" id="a_bone" placeholder="ex: 15" min="-10" max="120">
+          <span class="field-hint">Deixe vazio se não disponível</span>
+        </div>
+        <div class="field-group">
+          <label>Simetria</label>
+          <select id="a_sym"><option value="sym">Simétrica</option><option value="asym">Assimétrica (&gt;15 dB entre ouvidos)</option></select>
+        </div>
+        <div class="field-group">
+          <label>Início</label>
+          <select id="a_onset"><option value="grad">Gradual / crónico</option><option value="sudden">Súbito (&lt;72h)</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-primary" onclick="interpretAudio()">Interpretar audiograma</button>
+        <button type="button" class="btn-secondary" onclick="resetAudio()">↺ Limpar</button>
+      </div>
+      <div id="audio-result" class="calc-result"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de Timpanograma</div>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduza os valores medidos para obter o tipo de Jerger e o significado clínico.</p>
+      <div class="input-grid">
+        <div class="field-group">
+          <label>Pressão do pico (daPa)</label>
+          <input type="number" id="t_press" placeholder="ex: -30" min="-600" max="400">
+          <span class="field-hint">Deixe vazio se plano (sem pico)</span>
+        </div>
+        <div class="field-group">
+          <label>Compliance do pico (ml)</label>
+          <input type="number" id="t_comp" placeholder="ex: 0.7" min="0" max="6" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>Volume do canal — ECV (cm³)</label>
+          <input type="number" id="t_ecv" placeholder="ex: 1.2" min="0" max="6" step="0.1">
+        </div>
+        <div class="field-group">
+          <label>Há pico?</label>
+          <select id="t_peak"><option value="yes">Sim, há pico</option><option value="no">Não (traçado plano)</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-primary" onclick="interpretTimpano()">Interpretar timpanograma</button>
+        <button type="button" class="btn-secondary" onclick="resetTimpano()">↺ Limpar</button>
+        <button type="button" class="btn-print no-print" onclick="window.print()" style="margin-left:auto;">Imprimir</button>
+      </div>
+      <div id="timpano-result" class="calc-result"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Correlação Audiograma × Timpanograma × Diapasão</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Quadro</th><th>Audiograma</th><th>Timpanograma</th><th>Weber / Rinne</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Normal</strong></td><td>Aérea e óssea ≤25 dB, sem GAP</td><td>Tipo A</td><td>Weber central · Rinne + bilateral</td></tr>
+            <tr><td><strong>Condutiva</strong></td><td>GAP &gt;10 dB (óssea normal)</td><td>B / C / As</td><td>Weber lateraliza p/ ouvido <em>afetado</em> · Rinne −</td></tr>
+            <tr><td><strong>Neurossensorial</strong></td><td>Sem GAP (aérea = óssea)</td><td>Tipo A</td><td>Weber lateraliza p/ ouvido <em>são</em> · Rinne +</td></tr>
+            <tr><td><strong>Mista</strong></td><td>GAP + óssea também alterada</td><td>B / C / As</td><td>Variável</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block orange" style="margin-top:12px;margin-bottom:0;">
+        <p>O diapasão (512 Hz) é um <strong>rastreio</strong> de cabeceira que ajuda a confirmar o audiograma — não o substitui. Falsos-negativos do Rinne ocorrem na perda neurossensorial profunda unilateral (o som transmite-se pelo crânio ao ouvido contralateral).</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-marcha" role="tabpanel" aria-labelledby="sep-marcha" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Abordagem sistemática</div>
+      <ul class="steps-list">
+        <li><div class="step-num">1</div><div class="step-text"><strong>Anamnese</strong> — uni/bilateral, início (súbito vs gradual), sintomas associados (acufeno, vertigem, otorreia, otalgia), exposição a ruído, ototóxicos, antecedentes familiares.</div></li>
+        <li><div class="step-num">2</div><div class="step-text"><strong>Otoscopia</strong> — cerúmen, perfuração, líquido, retração, colesteatoma. Resolver causas externas (ex: cerúmen) antes de interpretar exames.</div></li>
+        <li><div class="step-num">3</div><div class="step-text"><strong>Diapasão (Weber/Rinne)</strong> — orienta condutiva vs neurossensorial à cabeceira.</div></li>
+        <li><div class="step-num">4</div><div class="step-text"><strong>Audiograma</strong> — grau (PTA) + tipo (GAP?) + configuração (descendente, entalhe, etc.).</div></li>
+        <li><div class="step-num">5</div><div class="step-text"><strong>Timpanograma</strong> — confirma a função do ouvido médio (fluido, pressão, perfuração).</div></li>
+        <li><div class="step-num">6</div><div class="step-text"><strong>Integrar e decidir</strong> — tratar causa reversível, referenciar conforme sinais de alarme.</div></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Sinais de alarme — referenciação urgente a ORL</div>
+      <div class="info-block red">
+        <div class="ib-title">Não atrasar</div>
+        <p>
+        • <strong>Perda neurossensorial SÚBITA</strong> (horas a dias) → <strong>emergência ORL</strong> (janela terapêutica com corticoides; idealmente &lt;72h)<br>
+        • <strong>Perda unilateral / assimétrica</strong> inexplicada → excluir <strong>schwannoma vestibular</strong> (RM)<br>
+        • Acufeno <strong>pulsátil</strong> ou unilateral persistente<br>
+        • Hipoacusia com <strong>sinais neurológicos focais</strong> (parésia facial, alterações do V/VII par)<br>
+        • <strong>Otorreia crónica</strong>, retração ou suspeita de <strong>colesteatoma</strong><br>
+        • Hipoacusia + <strong>vertigem</strong> incapacitante
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Quando referenciar (não urgente)</div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <p>
+        • Perda condutiva persistente (avaliar otosclerose, disfunção ossicular)<br>
+        • OME persistente &gt;3 meses (sobretudo em crianças com impacto na linguagem)<br>
+        • Candidatura a prótese auditiva / reabilitação<br>
+        • Perda progressiva ou flutuante (ex: suspeita de Ménière)<br>
+        • Criança com qualquer hipoacusia confirmada (impacto no desenvolvimento)
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Causas frequentes em MGF</div>
+      <div class="info-block teal" style="margin-bottom:0;">
+        <p>
+        <strong>Condutiva:</strong> rolhão de cerúmen, otite média aguda, OME (otite serosa), perfuração timpânica, otosclerose.<br>
+        <strong>Neurossensorial:</strong> presbiacusia (a mais comum, bilateral e descendente), perda induzida por ruído (entalhe a 4 kHz), ototóxicos, Ménière (graves), súbita idiopática, schwannoma vestibular (assimétrica).
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tool-footer">
+    Os gráficos são representações esquemáticas para fins educativos.<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico nem a avaliação por ORL/audiologia.</em>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados, desenhos e regras de interpretação: os da versão original. */
+function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  // =========================================================
+  //  AUDIOGRAM SVG GENERATOR (own graphics)
+  //  viewBox 0 0 320 260. Plot area x:50..300, y:20..230
+  //  Frequencies: 250,500,1000,2000,4000,8000 Hz
+  //  dB: -10 (top, y=20) .. 120 (bottom, y=230) -> 1dB = 1.615px
+  // =========================================================
+  const FREQS = [250,500,1000,2000,4000,8000];
+  const FX = [70,116,162,208,254,295]; // x positions
+  function dbY(db){ return 20 + ((db+10)/130)*210; }
+
+  function audioGrid(){
+    var s='';
+    // background
+    s+='<rect x="0" y="0" width="320" height="262" fill="#FFFFFF"/>';
+    // horizontal dB lines every 10 (label every 20)
+    for(var db=-10; db<=120; db+=10){
+      var y=dbY(db);
+      s+='<line x1="50" y1="'+y.toFixed(1)+'" x2="300" y2="'+y.toFixed(1)+'" stroke="'+(db%20===0?'#D7EDE7':'#D7EDE7')+'" stroke-width="'+(db===0?1.4:0.7)+'"/>';
+      if(db%20===0) s+='<text x="44" y="'+(y+3).toFixed(1)+'" font-size="8" fill="#4B5B58" text-anchor="end">'+db+'</text>';
+    }
+    // vertical freq lines
+    for(var i=0;i<FREQS.length;i++){
+      s+='<line x1="'+FX[i]+'" y1="20" x2="'+FX[i]+'" y2="230" stroke="#D7EDE7" stroke-width="0.7"/>';
+      var lbl = FREQS[i]>=1000 ? (FREQS[i]/1000)+'k' : FREQS[i];
+      s+='<text x="'+FX[i]+'" y="14" font-size="7.5" fill="#4B5B58" text-anchor="middle">'+lbl+'</text>';
+    }
+    // axis labels
+    s+='<text x="175" y="252" font-size="8" fill="#0F6E64" text-anchor="middle" font-weight="700">Frequência (Hz)</text>';
+    s+='<text x="12" y="128" font-size="8" fill="#0F6E64" text-anchor="middle" font-weight="700" transform="rotate(-90 12 128)">dB HL</text>';
+    return s;
+  }
+  // symbol drawing: O (right air, circle), X (left air), < right bone, > left bone
+  function symO(x,y,c){ return '<circle cx="'+x+'" cy="'+y.toFixed(1)+'" r="4.2" fill="none" stroke="'+c+'" stroke-width="1.8"/>'; }
+  function symX(x,y,c){ return '<path d="M'+(x-4)+' '+(y-4).toFixed(1)+' L'+(x+4)+' '+(y+4).toFixed(1)+' M'+(x+4)+' '+(y-4).toFixed(1)+' L'+(x-4)+' '+(y+4).toFixed(1)+'" stroke="'+c+'" stroke-width="1.8" fill="none"/>'; }
+  function polyAir(pts,c,dash){ return '<polyline points="'+pts.map(p=>p[0]+','+p[1].toFixed(1)).join(' ')+'" fill="none" stroke="'+c+'" stroke-width="1.6" '+(dash?'stroke-dasharray="3 2"':'')+'/>'; }
+
+  // build an audiogram from arrays of dB (air) and optional bone, for one or both ears
+  function buildAudiogram(opts){
+    // opts: air (array len6), bone(array or null), ear 'right'|'left'|'both'(use airL etc)
+    var s = '<svg viewBox="0 0 320 262" xmlns="http://www.w3.org/2000/svg">'+audioGrid();
+    function plotEar(air, bone, color, sym){
+      var pts=[]; 
+      for(var i=0;i<6;i++){ if(air[i]!=null){ var y=dbY(air[i]); pts.push([FX[i],y]); } }
+      s+=polyAir(pts,color,false);
+      for(var i=0;i<6;i++){ if(air[i]!=null){ var y=dbY(air[i]); s+= (sym==='O'?symO(FX[i],y,color):symX(FX[i],y,color)); } }
+      if(bone){ for(var i=0;i<6;i++){ if(bone[i]!=null){ var y=dbY(bone[i]); 
+        s+= (sym==='O' ? '<text x="'+FX[i]+'" y="'+(y+3).toFixed(1)+'" font-size="11" fill="'+color+'" text-anchor="middle" font-weight="700">&lt;</text>'
+                       : '<text x="'+FX[i]+'" y="'+(y+3).toFixed(1)+'" font-size="11" fill="'+color+'" text-anchor="middle" font-weight="700">&gt;</text>'); } } }
+    }
+    if(opts.both){ plotEar(opts.airR,opts.boneR,'#D2483C','O'); plotEar(opts.airL,opts.boneL,'#1C4A80','X'); }
+    else { plotEar(opts.air,opts.bone,opts.color||'#D2483C',opts.sym||'O'); }
+    s+='</svg>';
+    return s;
+  }
+
+  // ---- AUDIOGRAM dataset ----
+  const AUDIO_DATA = [
+    { id:'normal', name:'Audição normal', tag:'normal', tagL:'Normal', keys:'normal',
+      graph:()=>buildAudiogram({both:true, airR:[10,10,5,10,10,15], boneR:[10,10,5,10,10,15], airL:[10,5,10,10,15,10], boneL:[10,5,10,10,15,10]}),
+      descr:'Vias aérea e óssea sobrepostas, todos os limiares ≤25 dB, <strong>sem gap aéreo-ósseo</strong>.',
+      sig:'Audição dentro dos parâmetros normais em todas as frequências testadas.',
+      cond:'Sem necessidade de intervenção. Se houver queixas apesar do audiograma normal, reavaliar (ruído, processamento auditivo central).' },
+
+    { id:'condutiva', name:'Perda condutiva', tag:'cond', tagL:'Condutiva', keys:'condutiva gap aereo osseo otosclerose otite',
+      graph:()=>buildAudiogram({air:[45,50,45,50,45,50], bone:[10,10,5,10,10,10], color:'#9E2318', sym:'O'}),
+      descr:'Via aérea rebaixada com <strong>via óssea normal</strong> → <strong>gap aéreo-ósseo &gt;10 dB</strong>. Frequentemente mais marcada nos graves.',
+      sig:'Problema na transmissão pelo ouvido externo ou médio: cerúmen, otite média, OME, perfuração, otosclerose, disfunção ossicular.',
+      cond:'Otoscopia obrigatória. Tratar causa reversível (cerúmen, OME). Timpanograma ajuda a localizar. Referenciar se persistente ou suspeita de otosclerose/colesteatoma.' },
+
+    { id:'neurossensorial', name:'Perda neurossensorial', tag:'sn', tagL:'Neurossensorial', keys:'neurossensorial sensorineural sem gap coclea',
+      graph:()=>buildAudiogram({air:[20,30,40,50,60,70], bone:[20,30,40,50,60,70], color:'#1C4A80', sym:'X'}),
+      descr:'Vias aérea e óssea <strong>sobrepostas (sem gap)</strong>, ambas rebaixadas.',
+      sig:'Lesão da cóclea ou do nervo coclear: presbiacusia, ruído, ototóxicos, Ménière, súbita, schwannoma. Geralmente permanente.',
+      cond:'Caracterizar grau, simetria e início. Súbita ou assimétrica → referenciação urgente. Crónica/simétrica (presbiacusia) → reabilitação auditiva.' },
+
+    { id:'mista', name:'Perda mista', tag:'cond', tagL:'Mista', keys:'mista mixed gap osseo alterado',
+      graph:()=>buildAudiogram({air:[55,60,60,65,65,70], bone:[25,30,35,40,40,45], color:'#9E2318', sym:'O'}),
+      descr:'<strong>Gap aéreo-ósseo presente</strong> (componente condutivo) <strong>+ via óssea também rebaixada</strong> (componente neurossensorial).',
+      sig:'Coexistência de patologia do ouvido médio e da cóclea/nervo (ex: otosclerose avançada, otite crónica com lesão coclear).',
+      cond:'Referenciar a ORL para caracterização e estratégia (cirúrgica e/ou reabilitação). Timpanograma e imagem podem ser necessários.' },
+
+    { id:'presbiacusia', name:'Presbiacusia (relacionada com a idade)', tag:'sn', tagL:'Neurossensorial', keys:'presbiacusia idade descendente agudos bilateral',
+      graph:()=>buildAudiogram({both:true, airR:[10,15,20,35,55,70], boneR:[10,15,20,35,55,70], airL:[15,15,25,40,55,75], boneL:[15,15,25,40,55,75]}),
+      descr:'Curva <strong>descendente</strong>, perda neurossensorial <strong>bilateral e simétrica</strong> predominante nos <strong>agudos (&gt;2000 Hz)</strong>.',
+      sig:'Causa mais comum de hipoacusia no adulto/idoso. Afeta sobretudo a discriminação da fala em ambiente ruidoso.',
+      cond:'Confirmar simetria. Reabilitação com prótese auditiva melhora muito a qualidade de vida. Rastrear isolamento social e declínio cognitivo associados.' },
+
+    { id:'ruido', name:'Perda induzida por ruído', tag:'sn', tagL:'Neurossensorial', keys:'ruido entalhe notch 4000 4khz ocupacional trauma sonoro',
+      graph:()=>buildAudiogram({air:[10,10,15,20,55,25], bone:[10,10,15,20,55,25], color:'#9E2318', sym:'O'}),
+      descr:'<strong>Entalhe ("notch") a 3000–6000 Hz</strong>, tipicamente a <strong>4000 Hz</strong>, com recuperação parcial a 8000 Hz.',
+      sig:'Exposição a ruído ocupacional ou recreativo. Uma queda de ≥15 dB numa frequência (confirmada) é um desvio significativo do limiar.',
+      cond:'Reforçar proteção auditiva (a perda é prevenível mas irreversível). Vigilância audiométrica. Relevante em medicina do trabalho.' },
+
+    { id:'meniere', name:'Doença de Ménière', tag:'sn', tagL:'Neurossensorial', keys:'meniere graves baixas frequencias flutuante vertigem acufeno hidrops',
+      graph:()=>buildAudiogram({air:[55,45,35,25,20,20], bone:[55,45,35,25,20,20], color:'#9E2318', sym:'O'}),
+      descr:'Perda neurossensorial nas <strong>baixas frequências (graves)</strong>, classicamente flutuante, geralmente unilateral.',
+      sig:'Tríade de Ménière: <strong>vertigem episódica, acufeno e hipoacusia flutuante</strong>, com sensação de plenitude auricular (hidrops endolinfático).',
+      cond:'Referenciar a ORL. A perda nos graves e a flutuação são pistas. Documentar episódios e impacto.' },
+
+    { id:'schwannoma', name:'Perda assimétrica (suspeita de schwannoma)', tag:'urgente', tagL:'Investigar', keys:'schwannoma neurinoma acustico assimetrica unilateral retrococlear',
+      graph:()=>buildAudiogram({both:true, airR:[10,10,10,15,15,20], boneR:[10,10,10,15,15,20], airL:[25,35,45,55,60,65], boneL:[25,35,45,55,60,65]}),
+      descr:'Perda neurossensorial <strong>unilateral / assimétrica</strong> (diferença significativa entre ouvidos), por vezes com pior discriminação da fala do que o esperado pelo grau.',
+      sig:'Qualquer perda neurossensorial assimétrica inexplicada obriga a excluir <strong>schwannoma vestibular</strong> (tumor do VIII par) e outras causas retrococleares.',
+      cond:'Referenciar a ORL para <strong>RM</strong> dos ângulos pontocerebelosos. Acufeno unilateral persistente reforça a indicação.' },
+
+    { id:'sudden', name:'Perda neurossensorial súbita', tag:'urgente', tagL:'Emergência', keys:'subita sudden ssnhl idiopatica emergencia corticoides',
+      graph:()=>buildAudiogram({air:[60,65,70,75,80,85], bone:[60,65,70,75,80,85], color:'#1C4A80', sym:'X'}),
+      descr:'Perda neurossensorial <strong>unilateral, de instalação rápida</strong> (geralmente &lt;72h), frequentemente acentuada e em várias frequências.',
+      sig:'Maioria idiopática (possível causa vascular, viral, inflamatória). É uma <strong>emergência ORL</strong> — o tratamento precoce melhora o prognóstico.',
+      cond:'<strong>Referenciação urgente</strong>. A janela para corticoterapia é estreita. Não atribuir a "cerúmen" sem otoscopia e avaliação adequadas.' }
+  ];
+
+  // =========================================================
+  //  TYMPANOGRAM SVG GENERATOR
+  //  viewBox 0 0 320 220. x: pressure -400..+200 daPa, y: compliance 0..3 ml
+  // =========================================================
+  function tpX(p){ return 40 + ((p+400)/600)*255; } // -400..+200 -> 40..295
+  function tpY(c){ return 185 - (c/3)*150; }         // 0..3 ml -> 185..35
+  function timpGrid(){
+    var s='<rect x="0" y="0" width="320" height="220" fill="#FFFFFF"/>';
+    // normative box: pressure -100..+50, compliance 0.3..1.6
+    s+='<rect x="'+tpX(-100).toFixed(1)+'" y="'+tpY(1.6).toFixed(1)+'" width="'+(tpX(50)-tpX(-100)).toFixed(1)+'" height="'+(tpY(0.3)-tpY(1.6)).toFixed(1)+'" fill="#E8F5EC" stroke="#3E9A5C" stroke-width="1" stroke-dasharray="3 2"/>';
+    // pressure axis lines
+    for(var p=-400;p<=200;p+=100){ var x=tpX(p); s+='<line x1="'+x.toFixed(1)+'" y1="35" x2="'+x.toFixed(1)+'" y2="185" stroke="#D7EDE7" stroke-width="0.7"/>'; s+='<text x="'+x.toFixed(1)+'" y="198" font-size="7.5" fill="#4B5B58" text-anchor="middle">'+p+'</text>'; }
+    // compliance axis
+    for(var c=0;c<=3;c+=1){ var y=tpY(c); s+='<line x1="40" y1="'+y.toFixed(1)+'" x2="295" y2="'+y.toFixed(1)+'" stroke="#D7EDE7" stroke-width="0.7"/>'; s+='<text x="34" y="'+(y+3).toFixed(1)+'" font-size="7.5" fill="#4B5B58" text-anchor="end">'+c+'</text>'; }
+    s+='<text x="167" y="212" font-size="8" fill="#0F6E64" text-anchor="middle" font-weight="700">Pressão (daPa)</text>';
+    s+='<text x="10" y="110" font-size="8" fill="#0F6E64" text-anchor="middle" font-weight="700" transform="rotate(-90 10 110)">Compliance (ml)</text>';
+    return s;
+  }
+  function timpCurve(peakP, peakC, color, flat){
+    if(flat){
+      // flat trace near baseline
+      return '<polyline points="'+tpX(-400)+','+tpY(0.15).toFixed(1)+' '+tpX(200)+','+tpY(0.15).toFixed(1)+'" fill="none" stroke="'+color+'" stroke-width="2"/>';
+    }
+    // build a peaked curve (tent) centered at peakP
+    var pts=[];
+    var spread=180;
+    for(var p=-400;p<=200;p+=20){
+      var c = peakC * Math.exp(-Math.pow((p-peakP)/spread,2)*2.2) + 0.1;
+      pts.push([tpX(p), tpY(c)]);
+    }
+    return '<polyline points="'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" fill="none" stroke="'+color+'" stroke-width="2"/>';
+  }
+  function buildTimp(peakP, peakC, flat){
+    return '<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">'+timpGrid()+timpCurve(peakP,peakC,'#0F6E64',flat)+'</svg>';
+  }
+
+  const TIMP_DATA = [
+    { id:'tipoA', name:'Tipo A — normal', tag:'normal', tagL:'Normal', keys:'tipo a normal pico',
+      graph:()=>buildTimp(-20,1.0,false),
+      descr:'Pico bem definido entre <strong>−100 e +50 daPa</strong>, compliance normal (~0,3–1,6 ml), dentro da caixa normativa.',
+      sig:'Função do ouvido médio normal: tímpano móvel, sem líquido, pressão equilibrada.',
+      cond:'Sem patologia do ouvido médio. Se há hipoacusia com timpanograma A, pensar em causa neurossensorial.' },
+
+    { id:'tipoAs', name:'Tipo As — pico baixo (shallow)', tag:'cond', tagL:'Rigidez', keys:'tipo as shallow baixo rigidez otosclerose timpanosclerose',
+      graph:()=>buildTimp(-20,0.25,false),
+      descr:'Pico em <strong>pressão normal</strong> mas com <strong>compliance reduzida</strong> (pico achatado/raso).',
+      sig:'Sistema rígido: <strong>otosclerose</strong>, timpanosclerose, fixação ossicular. Pode haver perda condutiva associada.',
+      cond:'Correlacionar com audiograma (perda condutiva). Referenciar a ORL — otosclerose pode beneficiar de cirurgia.' },
+
+    { id:'tipoAd', name:'Tipo Ad — pico alto (deep)', tag:'cond', tagL:'Hipermobilidade', keys:'tipo ad deep alto hipermobilidade desarticulacao ossicular flacido',
+      graph:()=>buildTimp(-20,2.6,false),
+      descr:'Pico em pressão normal mas com <strong>compliance muito elevada</strong> (pico muito alto).',
+      sig:'Sistema hipermóvel: <strong>desarticulação/descontinuidade ossicular</strong> ou tímpano flácido/monomérico (cicatriz).',
+      cond:'Correlacionar com audiograma. Desarticulação ossicular dá perda condutiva — referenciar a ORL.' },
+
+    { id:'tipoB_fluido', name:'Tipo B — plano, volume normal (líquido)', tag:'cond', tagL:'OME', keys:'tipo b plano fluido liquido ome otite serosa efusao',
+      graph:()=>buildTimp(0,0,true),
+      descr:'Traçado <strong>plano, sem pico</strong>, com <strong>volume do canal NORMAL</strong> (0,6–2,0 cm³).',
+      sig:'Causa mais comum: <strong>líquido no ouvido médio (otite média com efusão/OME)</strong> ou redução acentuada da mobilidade timpânica.',
+      cond:'Confirmar otoscopia. OME frequentemente resolve espontaneamente; se persistir &gt;3 meses (sobretudo em crianças) referenciar a ORL.' },
+
+    { id:'tipoB_perf', name:'Tipo B — plano, volume alto (perfuração)', tag:'urgente', tagL:'Perfuração', keys:'tipo b plano perfuracao volume alto ecv tubo timpanostomia',
+      graph:()=>buildTimp(0,0,true),
+      descr:'Traçado <strong>plano, sem pico</strong>, mas com <strong>volume do canal AUMENTADO (&gt;2,0–2,5 cm³)</strong>.',
+      sig:'O volume elevado indica que a sonda "vê" também o ouvido médio: <strong>perfuração timpânica</strong> ou tubo de timpanostomia patente.',
+      cond:'Otoscopia para confirmar a perfuração. Distinguir de líquido (volume normal) é a chave. Referenciar conforme contexto (perfuração persistente, otorreia).' },
+
+    { id:'tipoB_cerumen', name:'Tipo B — plano, volume baixo (oclusão)', tag:'cond', tagL:'Oclusão', keys:'tipo b plano volume baixo cerumen rolhao oclusao sonda',
+      graph:()=>buildTimp(0,0,true),
+      descr:'Traçado <strong>plano</strong> com <strong>volume do canal MUITO BAIXO (&lt;0,3 cm³)</strong>.',
+      sig:'A sonda está obstruída: <strong>rolhão de cerúmen</strong>, oclusão do canal ou má colocação/encosto da sonda à parede.',
+      cond:'Remover cerúmen / reposicionar a sonda e repetir. Não é, por si, patologia do ouvido médio.' },
+
+    { id:'tipoC', name:'Tipo C — pico em pressão negativa', tag:'cond', tagL:'DTE', keys:'tipo c pressao negativa trompa eustaquio disfuncao retracao',
+      graph:()=>buildTimp(-250,0.8,false),
+      descr:'Pico presente mas <strong>desviado para pressão negativa</strong> (&lt;−100 a −150 daPa).',
+      sig:'<strong>Disfunção da trompa de Eustáquio</strong> com pressão negativa no ouvido médio e retração timpânica. Pode preceder ou suceder a OME.',
+      cond:'Frequente após constipações; muitas vezes transitório. Vigiar; se persistente ou sintomático, manobras da trompa e referenciação se necessário.' }
+  ];
+
+  function renderPatterns(data, containerId, kind){
+    var c = document.getElementById(containerId); var html='';
+    data.forEach(function(d){
+      html += '<div class="pat-card" data-keys="'+(d.name+' '+d.keys).toLowerCase()+'">'
+        + '<button type="button" class="pat-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+        + '<span class="pat-name">'+d.name+'</span>'
+        + '<span style="display:flex;align-items:center;gap:10px;">'
+        + '<span class="pat-tag '+d.tag+'">'+d.tagL+'</span><svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></button>'
+        + '<div class="pat-body">'
+        + '<div class="pat-graph">'+d.graph()+'</div>'
+        + '<div class="pat-section descr"><div class="ps-label">'+(kind==='audio'?'Descrição no audiograma':'Descrição no timpanograma')+'</div><p>'+d.descr+'</p></div>'
+        + '<div class="pat-section signif"><div class="ps-label">Significado clínico</div><p>'+d.sig+'</p></div>'
+        + '<div class="pat-section conduta"><div class="ps-label">Conduta em MGF</div><p>'+d.cond+'</p></div>'
+        + '</div></div>';
+    });
+    c.innerHTML = html;
+    var first = c.querySelector('.pat-card'); if(first) first.classList.add('open');
+  }
+  renderPatterns(AUDIO_DATA, 'audio-container', 'audio');
+  renderPatterns(TIMP_DATA, 'timpano-container', 'timp');
+
+  // =========================================================
+  //  AUDIOGRAM INTERPRETER
+  // =========================================================
+  function cv(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+  function degreeOf(db){
+    if(db<=25) return {l:'Normal', c:'ok'};
+    if(db<=40) return {l:'Ligeira', c:'info'};
+    if(db<=55) return {l:'Moderada', c:'warn'};
+    if(db<=70) return {l:'Moderada a severa', c:'warn'};
+    if(db<=90) return {l:'Severa', c:'alert'};
+    return {l:'Profunda', c:'alert'};
+  }
+  function interpretAudio(){
+    var air=cv('a_air'), bone=cv('a_bone');
+    var asym=document.getElementById('a_sym').value==='asym';
+    var sudden=document.getElementById('a_onset').value==='sudden';
+    if(air==null){ mkAviso('Introduza pelo menos a média da via aérea (PTA).'); return; }
+    var rows=[];
+    function row(level,icon,title,text){ rows.push({level:level,icon:icon,title:title,text:text}); }
+
+    var deg = degreeOf(air);
+    row(deg.c, '', 'Grau: '+deg.l+' ('+air+' dB)', 'Classificação pela média de tons puros (500/1000/2000 Hz) da via aérea.');
+
+    // type
+    if(bone!=null){
+      var gap = air - bone;
+      if(deg.l==='Normal' && (bone<=25)){
+        row('ok','','Sem perda significativa','Vias aérea e óssea normais.');
+      } else if(gap>10 && bone<=25){
+        row('warn','','Tipo: Condutiva (gap '+gap+' dB)','Via óssea normal com gap aéreo-ósseo. Problema no ouvido externo/médio. Otoscopia + timpanograma.');
+      } else if(gap<=10){
+        row('info','','Tipo: Neurossensorial','Vias aérea e óssea sobrepostas (sem gap). Lesão coclear/neural.');
+      } else if(gap>10 && bone>25){
+        row('warn','','Tipo: Mista (gap '+gap+' dB + óssea '+bone+' dB)','Componente condutivo + neurossensorial. Referenciar a ORL.');
+      }
+    } else {
+      row('info','','Tipo indeterminado','Via óssea não fornecida — não é possível distinguir condutiva de neurossensorial. O gap aéreo-ósseo é essencial.');
+    }
+
+    // red flags
+    if(sudden){ row('alert','','Início SÚBITO','Perda súbita (sobretudo neurossensorial) é EMERGÊNCIA ORL — referenciação urgente, janela terapêutica estreita.'); }
+    if(asym){ row('alert','','Perda ASSIMÉTRICA','Excluir causa retrococlear (schwannoma vestibular) com RM. Referenciar a ORL.'); }
+
+    var hasAlert=rows.some(r=>r.level==='alert'), hasWarn=rows.some(r=>r.level==='warn');
+    var banner = hasAlert ? {cls:'alert',icon:'',t:'Achados que exigem referenciação'} : (hasWarn ? {cls:'warn',icon:'',t:'Caracterizar e orientar'} : {cls:'ok',icon:'',t:'Sem achados de alarme'});
+    var html='<div class="result-row '+banner.cls+'"><span class="rr-icon">'+banner.icon+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
+    rows.forEach(r=>{ html+='<div class="result-row '+r.level+'"><span class="rr-icon">'+r.icon+'</span><div><div class="rr-title">'+r.title+'</div><div class="rr-text">'+r.text+'</div></div></div>'; });
+    var res=document.getElementById('audio-result'); res.innerHTML=html; res.classList.add('visible'); res.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function resetAudio(){ ['a_air','a_bone'].forEach(id=>document.getElementById(id).value=''); document.getElementById('a_sym').value='sym'; document.getElementById('a_onset').value='grad'; document.getElementById('audio-result').classList.remove('visible'); }
+
+  // =========================================================
+  //  TYMPANOGRAM INTERPRETER
+  // =========================================================
+  function interpretTimpano(){
+    var press=cv('t_press'), comp=cv('t_comp'), ecv=cv('t_ecv');
+    var hasPeak=document.getElementById('t_peak').value==='yes';
+    var rows=[];
+    function row(level,icon,title,text){ rows.push({level:level,icon:icon,title:title,text:text}); }
+
+    // ECV check first
+    if(ecv!=null){
+      if(ecv>2.5) row('warn','','Volume do canal alto ('+ecv+' cm³)','Sugere PERFURAÇÃO timpânica ou tubo de timpanostomia patente. Confirmar na otoscopia.');
+      else if(ecv<0.3) row('warn','','Volume do canal baixo ('+ecv+' cm³)','Sonda obstruída — cerúmen, oclusão ou má colocação. Remover/reposicionar e repetir.');
+      else row('ok','','Volume do canal normal ('+ecv+' cm³)','ECV dentro de 0,6–2,0 cm³.');
+    }
+
+    if(!hasPeak){
+      // Type B
+      var t='Tipo B (plano)';
+      if(ecv!=null && ecv>2.5){ row('warn','',t+' + volume alto','Padrão de PERFURAÇÃO timpânica / tubo patente.'); }
+      else if(ecv!=null && ecv<0.3){ row('warn','',t+' + volume baixo','Padrão de OCLUSÃO do canal (cerúmen) — não traduz patologia do ouvido médio.'); }
+      else { row('warn','',t+' + volume normal','Padrão de LÍQUIDO no ouvido médio (OME) ou tímpano imóvel. Otoscopia; se persistir >3 meses referenciar.'); }
+    } else {
+      // there is a peak: evaluate pressure and compliance
+      if(press!=null && press< -150){
+        row('warn','','Tipo C (pico a '+press+' daPa)','Pressão muito negativa: DISFUNÇÃO DA TROMPA DE EUSTÁQUIO / retração. Frequente pós-constipação; vigiar.');
+      } else if(press!=null && press< -100){
+        row('warn','','Tipo C (pico a '+press+' daPa)','Pressão negativa limítrofe: disfunção tubária. Correlacionar com clínica.');
+      } else if(press!=null && (press>=-100 && press<=50)){
+        // type A family — check compliance
+        if(comp!=null && comp<0.3){ row('warn','','Tipo As (pico baixo)','Pressão normal mas compliance reduzida → RIGIDEZ (otosclerose, timpanosclerose).'); }
+        else if(comp!=null && comp>1.6){ row('warn','','Tipo Ad (pico alto)','Pressão normal mas compliance elevada → HIPERMOBILIDADE (desarticulação ossicular, tímpano flácido).'); }
+        else { row('ok','','Tipo A (normal)','Pico em pressão e compliance normais → função do ouvido médio normal.'); }
+      } else if(press!=null){
+        row('info','','Pico a '+press+' daPa','Pressão fora do intervalo normal de referência — correlacionar com clínica.');
+      } else {
+        // peak yes but no pressure given
+        if(comp!=null && comp<0.3) row('warn','','Pico de baixa compliance','Sugere rigidez (Tipo As). Verifique a pressão do pico para confirmar.');
+        else if(comp!=null && comp>1.6) row('warn','','Pico de alta compliance','Sugere hipermobilidade (Tipo Ad). Verifique a pressão do pico.');
+        else row('info','','Pico presente','Introduza a pressão do pico para classificação completa (A vs C).');
+      }
+    }
+
+    if(rows.length===0){ mkAviso('Introduza pelo menos um valor (ou indique se há pico).'); return; }
+    var hasAlert=rows.some(r=>r.level==='alert'), hasWarn=rows.some(r=>r.level==='warn');
+    var banner = hasWarn||hasAlert ? {cls:'warn',icon:'',t:'Achado a correlacionar com otoscopia e audiograma'} : {cls:'ok',icon:'',t:'Função do ouvido médio normal'};
+    var html='<div class="result-row '+banner.cls+'"><span class="rr-icon">'+banner.icon+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
+    rows.forEach(r=>{ html+='<div class="result-row '+r.level+'"><span class="rr-icon">'+r.icon+'</span><div><div class="rr-title">'+r.title+'</div><div class="rr-text">'+r.text+'</div></div></div>'; });
+    html+='<div class="info-block teal" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Lembrete:</strong> o timpanograma avalia o ouvido médio, não a audição. Interprete sempre em conjunto com a otoscopia e o audiograma.</p></div>';
+    var res=document.getElementById('timpano-result'); res.innerHTML=html; res.classList.add('visible'); res.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function resetTimpano(){ ['t_press','t_comp','t_ecv'].forEach(id=>document.getElementById(id).value=''); document.getElementById('t_peak').value='yes'; document.getElementById('timpano-result').classList.remove('visible'); }
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>
