@@ -13,6 +13,7 @@
   "descricao": "Datas das consultas, análises, ecografias, rastreios e vacinas numa gravidez de baixo risco, a partir da DUM, da ecografia ou da idade gestacional.",
   "area": "recursos-medicos",
   "grupo": "escalas-e-calculadoras",
+  "icone": "gravidez",
   "autor": "Miguel Henriques",
   "versao": "1.0",
   "revisto": "2026-11-08",
@@ -69,14 +70,33 @@
 .plano-legenda > span { display: inline-flex; align-items: center; gap: 6px; }
 .plano-seccao h3.mgf-cartao-titulo { font-size: 15px; margin: 0; }
 .so-imprimir { display: none; }
+/* Impressão: o plano inteiro numa folha A4 */
+@page { size: A4; margin: 9mm 10mm; }
 @media print {
-  #dados { display: none !important; }
+  #dados, .plano-acoes, .mgf-botoes { display: none !important; }
   .so-imprimir { display: flex; }
-  .plano-impressao { justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--cor-linha); border-radius: 8px; font-size: 13px; }
-  .plano { min-width: 0; font-size: 12px; }
-  .plano-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .plano-grelha .mgf-cartao { margin: 0; }
-  .plano-alertas .mgf-interp { padding: 6px 10px; font-size: 12px; }
+  .plano-impressao { justify-content: space-between; gap: 12px; padding: 5px 10px; border: 1px solid var(--cor-linha); border-radius: 6px; font-size: 11px; }
+  #ferramenta .mgf-resumo { gap: 6px; }
+  #ferramenta .mgf-resumo > div { padding: 5px 10px; min-height: 0; }
+  #ferramenta .mgf-resumo-valor { font-size: 18px; }
+  #ferramenta .mgf-resumo-rotulo, #ferramenta .mgf-resumo-sub { font-size: 9px; }
+  .plano-alertas { gap: 4px; margin: 6px 0; }
+  .plano-alertas .mgf-interp { padding: 3px 8px; font-size: 10px; }
+  .plano-legenda { font-size: 10px; margin: 0 0 6px; gap: 10px; }
+  .plano-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .plano-grelha .mgf-cartao { margin: 0; border-radius: 8px; break-inside: avoid; }
+  .plano-seccao h3.mgf-cartao-titulo { font-size: 11px; padding: 4px 8px; }
+  .mgf-tabela-caixa { overflow: visible; }
+  .plano { min-width: 0; font-size: 9.5px; line-height: 1.25; }
+  .plano th { font-size: 9px; padding: 3px 5px; }
+  .plano td { padding: 2px 5px; }
+  .plano td:first-child { gap: 5px; }
+  .plano td:first-child span.texto { flex-direction: row; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .plano small, .plano .datas span { font-size: 9px; }
+  .plano .datas { flex-direction: row; flex-wrap: wrap; gap: 0 6px; }
+  .semana { font-size: 9px; padding: 1px 4px; }
+  .ponto { width: 7px; height: 7px; }
+  .plano-grelha .mgf-nota, .plano-grelha .mgf-aviso { font-size: 9.5px; padding: 4px 8px; margin: 4px; }
 }
 </style>
 </head>
