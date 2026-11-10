@@ -44,7 +44,8 @@
     "UpToDate, 2025. DynaMed, 2025.",
     "Bernardes AM. Universidade de Lisboa, 2025."
   ],
-  "corpo": "bancada"
+  "corpo": "bancada",
+  "resumo": "Categoria TGA e recomendação por trimestre"
 }
 </script>
 
@@ -54,6 +55,9 @@
 <script src="../../../../assets/js/ferramenta.js"></script>
 
 <style data-mgf="ferramenta">
+/* proposta B: na coluna da esquerda a legenda fica em lista */
+.mgf-comandos .preg-legenda { flex-direction: column; align-items: flex-start; gap: 8px; }
+
 .preg-legenda { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; color: var(--cor-texto-2); }
 .preg-legenda li { display: flex; align-items: center; gap: 6px; }
 .preg-tga { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 12px 16px; margin: 0 0 12px; }
@@ -72,7 +76,6 @@
 <main class="mgf-ferramenta" id="ferramenta">
   <div class="mgf-bancada mgf-bancada-guia">
   <div class="mgf-comandos">
-  <p class="mgf-guia-intro">Segurança, categorias TGA e recomendações por trimestre (T1, T2, T3). Escolhe uma classe ou pesquisa por fármaco, classe ou patologia; carrega num cartão para ver a tabela.</p>
   <div class="mgf-guia-controlos">
     <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar nos fármacos na gravidez</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gr-pesquisa" placeholder="Pesquisar fármaco, classe, patologia…" autocomplete="off"></label>
     <div class="mgf-filtros" id="gr-filtros" role="group" aria-label="Filtrar por classe">
@@ -106,6 +109,7 @@
     <p class="mgf-refs">Nota: A FDA substituiu as categorias A–X pelo sistema PLLR (2015) com descrições narrativas de risco. A classificação TGA australiana mantém-se como referência prática amplamente usada. Doxiciclina e Levofloxacina são sempre contraindicadas na gravidez.</p>
   </details>
   <p class="mgf-nota" data-nivel="info"><strong>Princípios gerais:</strong> Quando possível, diferir para depois do 1º trimestre · Usar a dose eficaz mais baixa pelo menor tempo possível · Preferir fármacos com perfil de segurança conhecido · A não-tratação também comporta riscos maternos e fetais.</p>
+  <p class="mgf-guia-intro">Segurança, categorias TGA e recomendações por trimestre (T1, T2, T3). Escolhe uma classe ou pesquisa por fármaco, classe ou patologia; carrega num cartão para ver a tabela.</p>
   </div>
   <div class="mgf-resposta">
   <section class="mgf-seccao" data-cat="antihipertensores">

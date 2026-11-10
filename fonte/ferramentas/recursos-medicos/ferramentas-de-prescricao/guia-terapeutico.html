@@ -36,7 +36,8 @@
   "bibliografia": [
     "INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais)."
   ],
-  "corpo": "coluna"
+  "corpo": "coluna",
+  "resumo": "Esquema de medicação por refeição, para o doente"
 }
 </script>
 
@@ -79,8 +80,9 @@
 .gt-tabela th:first-child { text-align: left; }
 .gt-tabela th .gt-ic { display: block; margin: 0 auto 4px; width: 20px; height: 20px; }
 .gt-linha-grupo td { background: var(--cor-papel); padding: 8px 12px; }
-.td-name { min-width: 170px; }
-.td-name-main { font-weight: 700; }
+.td-name { min-width: 170px; vertical-align: middle; }
+.td-name-main { font-family: var(--letra-titulo); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; line-height: 1.25; }
+.td-name-dose { font-family: var(--letra-texto); font-weight: 400; font-size: 16px; letter-spacing: 0; color: var(--cor-texto-2); white-space: nowrap; }
 .td-name-trade { font-size: 14px; font-style: italic; color: var(--cor-texto-2); }
 .td-name-cat { margin-top: 4px; }
 .td-dose { text-align: center; }
@@ -633,9 +635,9 @@ function render(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="td-name">
-        <div class="td-name-main">${escHtml(dn.main)}</div>
+        <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
         ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-        <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
+        ${groupView?'':`<span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>`}
       </td>
       ${MEAL_KEYS.map(k=>{
         const v=m[k]||0;
@@ -1051,9 +1053,8 @@ function renderSosRow(m){
   const tr=document.createElement('tr'); tr.className='gt-linha-med-sos';
   tr.innerHTML=`
     <td class="td-name">
-      <div class="td-name-main">${escHtml(dn.main)}</div>
+      <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
       ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-      ${m.dose?`<div class="td-name-trade">${escHtml(m.dose)}</div>`:''}
       <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
     </td>
     <td colspan="5" class="td-sos">${escHtml(sosTexto(m))}</td>

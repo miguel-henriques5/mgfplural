@@ -50,7 +50,8 @@
     "Mayo Clinic / Heart Rhythm. LVH, QT prolongation and mortality (PubMed). https://pubmed.ncbi.nlm.nih.gov/24956189/",
     "Critérios ECG de HVE (Sokolow-Lyon / Cornell) — PMC. https://pmc.ncbi.nlm.nih.gov/articles/PMC5245847/"
   ],
-  "corpo": "bancada"
+  "corpo": "bancada",
+  "resumo": "Atlas do ECG, valores normais e Holter"
 }
 </script>
 
@@ -558,7 +559,8 @@
   function traceAFlutter(){
     var p=[],x=2; pAdd(p,x,BASE);
     function saw(n){ for(var k=0;k<n;k++){ pAdd(p,x+1,BASE-12); pAdd(p,x+11,BASE+2); x+=12; } }
-    for(var i=0;i<3;i++){ saw(2); x=segQRS(p,x,{r:46,s:14}); }
+    // condução 2:1; traçado com a mesma largura dos outros, para não ficar mais alto
+    for(var i=0;i<9;i++){ saw(2); x=segQRS(p,x,{r:46,s:14}); }
     saw(2);
     return svgWrap(p);
   }
