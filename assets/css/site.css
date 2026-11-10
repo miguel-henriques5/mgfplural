@@ -246,16 +246,15 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .grupo-menu-painel li a[aria-current="page"] { background: var(--cor-verde); color: var(--cor-branco); font-weight: 700; }
 
 .ficha { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--cor-linha); }
-.ficha-ilustracao { width: 60px; height: 60px; flex: 0 0 auto; background: var(--tom-fundo, var(--cor-menta-clara)); border-radius: var(--raio-forma); padding: 5px; }
-.ficha-titulo { flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.ficha h1 { font-weight: 800; font-size: clamp(1.7rem, 3vw, 2rem); letter-spacing: -0.03em; line-height: 1.08; }
-.ficha-meta { margin: 0; font-size: 15px; color: var(--cor-texto-3); }
+.ficha-ilustracao { width: 56px; height: 56px; flex: 0 0 auto; background: var(--tom-fundo, var(--cor-menta-clara)); border-radius: var(--raio-forma); padding: 4px; }
+.ficha-titulo { flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ficha h1 { font-weight: 800; font-size: 30px; letter-spacing: -0.03em; line-height: 1.1; }
+.ficha-meta { margin: 0; font-size: 15px; line-height: 1.45; color: var(--cor-texto-3); }
 .ficha-meta strong { color: var(--cor-texto-2); }
-.aviso-clinico { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 15px; line-height: 1.3; color: var(--cor-texto-3); }
-.aviso-clinico img { width: 20px; height: 20px; flex: 0 0 auto; }
-.ficha-acoes { display: flex; gap: 8px; flex-wrap: wrap; }
-.ficha-acoes .botao { min-height: 44px; font-size: 15px; padding: 8px 14px; border: 1.5px solid var(--cor-linha); }
-.ficha-acoes .botao:hover { border-color: var(--cor-verde); }
+.ficha-acoes { display: flex; gap: 6px; flex-wrap: wrap; }
+.ficha-acoes .botao { min-height: 44px; height: 44px; font-size: 15px; padding: 0 14px; gap: 8px; border: 1.5px solid var(--cor-linha); border-radius: 12px; }
+.ficha-acoes .botao svg { width: 16px; height: 16px; }
+.ficha-acoes .botao:hover { border-color: var(--cor-verde); transform: none; box-shadow: none; }
 .ficha-acoes .botao:hover svg { transform: none; }
 
 .area-ferramenta { min-width: 0; }
@@ -266,6 +265,13 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .ferramenta-pe .bibliografia h2 { font-family: var(--letra-texto); font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--cor-tinta); margin: 0 0 6px; }
 .ferramenta-pe .bibliografia ol { margin: 0 0 6px; padding-left: 18px; line-height: 1.5; }
 .ferramenta-pe .bibliografia p { margin: 0; font-size: 14px; }
+.bibliografia-longa summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.bibliografia-longa summary::-webkit-details-marker { display: none; }
+.bibliografia-longa summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--cor-verde); border-bottom: 2px solid var(--cor-verde); transform: rotate(-45deg); transition: transform .2s; margin-right: 4px; }
+.bibliografia-longa details[open] summary::before { transform: rotate(45deg); }
+.ferramenta-pe .bibliografia-longa summary h2 { margin: 0; }
+.bibliografia-longa summary h2 span { font-weight: 400; color: var(--cor-texto-3); }
+.bibliografia-longa summary:hover h2 { color: var(--cor-verde); }
 .ferramenta-pe .feedback { flex: 1 1 320px; background: none; border-radius: 0; padding: 0; gap: 6px; }
 .ferramenta-pe .feedback strong { font-family: var(--letra-texto); font-size: 15px; letter-spacing: 0; }
 .ferramenta-pe .feedback-linha { color: var(--cor-texto-3); gap: 4px 8px; }
@@ -304,7 +310,9 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
   .ficha h1 { font-size: 20px; }
   .ficha-titulo { gap: 0; }
   .ficha-meta, .aviso-clinico { font-size: 10px; }
-  .aviso-clinico img { width: 12px; height: 12px; }
+  .aviso-clinico svg { width: 12px; height: 12px; }
+  body[data-impressao="doente"] .ficha, body[data-impressao="doente"] .ferramenta-pe,
+  body[data-impressao="doente"] .aviso-clinico { display: none !important; }
   .ferramenta-pe { border: 0; padding: 6px 0 0; margin: 0; }
   .ferramenta-pe .bibliografia, .ferramenta-pe .bibliografia h2, .ferramenta-pe .bibliografia p { font-size: 9px; }
 }

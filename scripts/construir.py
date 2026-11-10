@@ -248,11 +248,19 @@ def assunto_feedback(f):
     return f"mailto:{SITE['email']}?subject={quote(assunto)}&body={quote(corpo)}"
 
 
+BIBLIOGRAFIA_LONGA = 5   # mais referências do que isto: a lista fica fechada até se carregar
+
+
 def bibliografia_html(f, titulo_tag="h2"):
-    itens = "".join(f"<li>{e(r)}</li>" for r in f["bibliografia"])
+    refs = f["bibliografia"]
+    itens = "".join(f"<li>{e(r)}</li>" for r in refs)
+    autoria = f'<p>Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])}</p>'
+    if len(refs) > BIBLIOGRAFIA_LONGA:
+        return (f'<section class="bibliografia bibliografia-longa"><details id="bib">'
+                f'<summary><{titulo_tag} id="bib-titulo">Bibliografia <span>· {len(refs)} referências</span></{titulo_tag}></summary>'
+                f'<ol>{itens}</ol></details>{autoria}</section>')
     return (f'<section class="bibliografia" aria-labelledby="bib-titulo"><{titulo_tag} id="bib-titulo">Bibliografia</{titulo_tag}>'
-            f'<ol>{itens}</ol>'
-            f'<p>Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])}</p></section>')
+            f'<ol>{itens}</ol>{autoria}</section>')
 
 
 AVISO_CLINICO = "Apoia, não substitui, o juízo clínico."
@@ -267,10 +275,61 @@ def tem_estilo(f):
 
 # ---------------------------------------------------------------- página da ferramenta no site
 
+MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
+
+
 def data_pt(iso):
-    """2026-11-08 → 08/11/2026 (formato das datas no site)."""
+    """2026-11-08 → 8 nov 2026 (formato das datas no site)."""
     a, m, d = iso.split("-")
-    return f"{d}/{m}/{a}"
+    return f"{int(d)} {MESES[int(m) - 1]} {a}"
+
+
+def meta_ficha(f):
+    """Linha por baixo do título: resumo curto · autor · versão · data (como no mockup B)."""
+    partes = [e(f["resumo"])] if f.get("resumo") else []
+    partes += [f'<strong>{e(f["autor"])}</strong>', f'v{e(f["versao"])}', data_pt(f["revisto"])]
+    return " · ".join(partes)
+
+
+SVG_ESCUDO = ('<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" '
+              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>'
+              '<path d="M9 12l2 2 4-4"/></svg>')
+
+
+def fim_div(t, i):
+    """Índice a seguir ao </div> que fecha o <div> que começa em t[i]."""
+    nivel = 0
+    for m in re.finditer(r"<(/?)div\b[^>]*>", t[i:]):
+        nivel += -1 if m.group(1) else 1
+        if nivel == 0:
+            return i + m.end()
+    erro("div sem fecho")
+
+
+def com_aviso(conteudo):
+    """O aviso clínico fica junto dos comandos (fim da coluna da esquerda), como no mockup B;
+    numa ferramenta em coluna, logo no início."""
+    aviso = f'<p class="aviso-clinico">{SVG_ESCUDO}{AVISO_CLINICO}</p>'
+    marca = '<div class="mgf-comandos">'
+    if marca not in conteudo:
+        return aviso + "\n" + conteudo
+    partes, i = [], 0
+    while True:
+        j = conteudo.find(marca, i)
+        if j < 0:
+            break
+        k = fim_div(conteudo, j)
+        partes.append(conteudo[i:k - len("</div>")] + aviso + "\n")
+        i = k - len("</div>")
+    partes.append(conteudo[i:])
+    return "".join(partes)
+
+
+def impressao(f):
+    """"impressao": "doente" na ficha: a folha impressa é para o doente, sem cabeçalho, autoria nem bibliografia."""
+    if f.get("impressao") not in (None, "doente"):
+        erro(f"{f['id']}: o campo «impressao» da ficha só pode ser «doente»")
+    return ' data-impressao="doente"' if f.get("impressao") == "doente" else ""
 
 
 def classe_corpo(f):
@@ -305,7 +364,7 @@ def pagina_ferramenta(f, ferramentas):
         estilo += f"<style>\n{f['estilo']}\n</style>\n"
     tom = FUNDO_TOM[grupo["tom"]]
     return f"""{cabeca(f["titulo"] + " · MGF no Plural", prefixo, f["descricao"], extra=estilo)}
-<body data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}">
+<body data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}"{impressao(f)}>
 {topo(prefixo, ferramentas, "ferramentas")}
 <div class="contentor ferramenta-pagina pagina-{tom}">
 <nav class="migalhas-ferramenta" aria-label="Estás aqui">
@@ -321,8 +380,7 @@ def pagina_ferramenta(f, ferramentas):
 <img class="ficha-ilustracao" src="{icone(prefixo, icone_ferramenta(f))}" alt="">
 <div class="ficha-titulo">
 <h1>{e(f["titulo"])}</h1>
-<p class="ficha-meta">Criado por <strong>{e(f["autor"])}</strong> · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · <a href="#bib-titulo">bibliografia</a></p>
-<p class="aviso-clinico"><img src="{icone(prefixo, "privacidade")}" alt="">{AVISO_CLINICO}</p>
+<p class="ficha-meta">{meta_ficha(f)}</p>
 </div>
 <div class="ficha-acoes">
 <a class="botao" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}Descarregar</a>
@@ -330,7 +388,7 @@ def pagina_ferramenta(f, ferramentas):
 </div>
 </header>
 <div class="area-ferramenta {classe_corpo(f)}">
-{f["conteudo"]}
+{com_aviso(f["conteudo"])}
 </div>
 <footer class="ferramenta-pe">
 {bibliografia_html(f)}
@@ -388,6 +446,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
   .autonomo-pe { padding-top: 6px; }
   .bibliografia, .bibliografia h2 { font-size: 9px; }
   .autonomo-rodape a { text-decoration: none; }
+  body[data-impressao="doente"] .autonomo-topo, body[data-impressao="doente"] .autonomo-pe,
+  body[data-impressao="doente"] .aviso-clinico { display: none !important; }
 }
 """
     return tokens + "\n" + ferr + "\n" + pagina
@@ -413,15 +473,15 @@ def pagina_autonoma(f, css):
 <style>
 {css}{estilo_proprio}</style>
 </head>
-<body>
+<body{impressao(f)}>
 <div class="autonomo">
 <header class="autonomo-topo">
 <span class="autonomo-marca">{simbolo(14)}<span><span style="font-weight:400">mgf no </span><b>plural</b></span></span>
 <h1>{e(f["titulo"])}</h1>
-<p class="autonomo-meta">Criado por <strong>{e(f["autor"])}</strong> · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · {AVISO_CLINICO}</p>
+<p class="autonomo-meta">{meta_ficha(f)}</p>
 </header>
 <div class="autonomo-ferramenta {classe_corpo(f)}">
-{f["conteudo"]}
+{com_aviso(f["conteudo"])}
 </div>
 <div class="autonomo-pe">
 {bibliografia_html(f)}

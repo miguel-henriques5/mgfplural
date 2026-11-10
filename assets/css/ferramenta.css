@@ -206,7 +206,8 @@
 .mgf-campo { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 700; }
 .mgf-campo input, .mgf-campo select {
   font-family: var(--letra-texto); font-size: 16px; font-weight: 400; color: var(--cor-tinta);
-  min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco);
+  min-height: 48px; padding: 8px 14px; border: 1.5px solid var(--cor-campo); border-radius: 12px; background: var(--cor-branco);
+  font-size: 17px; box-sizing: border-box;
 }
 .mgf-campo input:focus, .mgf-campo select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
 .mgf-campo small { font-weight: 400; color: var(--cor-texto-3); font-size: 13px; }
@@ -365,7 +366,7 @@
 }
 
 /* Pergunta grande (proposta C) */
-.mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 0 0 14px; }
+.mgf-ferramenta .mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 8px 0 24px; }
 
 @media (max-width: 900px) {
   .mgf-bancada, .mgf-bancada-guia { grid-template-columns: minmax(0, 1fr); gap: 18px; }
@@ -373,3 +374,20 @@
   .mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button { width: auto; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); font-size: 15px; }
 }
+
+/* Aviso clínico: no fim da coluna dos comandos (proposta B) */
+.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; font-family: var(--letra-texto); font-size: 14px; line-height: 1.35; color: var(--cor-texto-3); }
+.aviso-clinico svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+.mgf-ferramenta > .aviso-clinico { margin: 0 0 14px; }
+
+/* Caixas de seleção como no mockup: linha leve e uma só seta para baixo */
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]) {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  min-height: 48px; padding: 0 44px 0 14px; box-sizing: border-box;
+  border: 1.5px solid var(--cor-campo); border-radius: 12px;
+  background: var(--cor-branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2313201E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px 18px;
+  font-family: var(--letra-texto); font-size: 17px; font-weight: 400; line-height: 1.3; color: var(--cor-tinta); cursor: pointer;
+}
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):hover { border-color: var(--cor-verde-medio); }
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):focus { outline: 3px solid var(--cor-menta); outline-offset: 0; border-color: var(--cor-verde); }
+html #ferramenta.mgf-ferramenta select:disabled { background-color: var(--cor-papel); color: var(--cor-texto-3); cursor: not-allowed; }
