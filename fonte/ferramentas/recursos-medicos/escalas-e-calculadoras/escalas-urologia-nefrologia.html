@@ -45,7 +45,8 @@
     "Medicação na DRC: KDIGO 2022 Clinical Practice Guideline for Diabetes Management in CKD. Kidney International. 2022;102(5S):S1–S127.",
     "Medicação na DRC: Fichas técnicas EMA / Prontuário Terapêutico Nacional (INFARMED).",
     "Medicação na DRC: Matzke GR, et al. Drug dosing consideration in patients with acute and chronic kidney disease. JASN. 2011;22(7):1144–1157."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -73,19 +74,19 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
   <div class="mgf-separadores" role="tablist" aria-label="Escalas">
     <button type="button" class="mgf-separador" role="tab" id="sep-ipss" aria-controls="painel-ipss" aria-selected="true">IPSS — próstata</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-kdigo" aria-controls="painel-kdigo" aria-selected="false">KDIGO — DRC</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-farmacos" aria-controls="painel-farmacos" aria-selected="false">Medicação na DRC</button>
   </div>
-
   <!-- ========== Índice Internacional de Sintomas Prostáticos (IPSS) ========== -->
   <section class="mgf-painel" id="painel-ipss" role="tabpanel" aria-labelledby="sep-ipss" data-escala="ipss">
     <div class="mgf-titulo-escala">
       <h2>Índice Internacional de Sintomas Prostáticos (IPSS)</h2>
       <p>Avalia sintomas do trato urinário inferior (LUTS) na hiperplasia benigna da próstata · último mês</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-direitos"><strong>Tradução não oficial.</strong> O IPSS é de domínio público, mas esta tradução portuguesa foi feita para este projeto e não está validada. Para investigação ou documentação formal, usa uma versão portuguesa validada.</p>
     <fieldset class="mgf-cartao">
       <legend class="mgf-cartao-titulo">1. No último mês, quantas vezes teve a sensação de não esvaziar completamente a bexiga, depois de terminar de urinar?</legend>
@@ -183,6 +184,8 @@
         <label class="mgf-opcao"><input type="radio" data-fora-da-soma name="ipssqol" value="6"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">6 — Muito mal</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Resultado IPSS</h3>
@@ -210,14 +213,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== KDIGO ========== -->
   <section class="mgf-painel" id="painel-kdigo" role="tabpanel" aria-labelledby="sep-kdigo" hidden>
     <div class="mgf-titulo-escala">
       <h2>Estadiamento KDIGO da doença renal crónica</h2>
       <p>TFGe (CKD-EPI 2021) + albuminúria (UACR) · classificação e risco de progressão (KDIGO 2024)</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <form class="mgf-cartao" id="kdigo-formulario" novalidate>
       <div class="mgf-cartao-titulo">Dados do doente</div>
       <div class="mgf-cartao-corpo" style="gap:14px">
@@ -231,6 +237,8 @@
         <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular estadiamento KDIGO</button></div>
       </div>
     </form>
+    </div>
+    <div class="mgf-resposta">
     <div id="kdigo-resultado" hidden>
       <div class="mgf-resumo" id="kdigo-resumo"></div>
       <div class="mgf-interp" id="kdigo-interp" style="margin-top:12px"></div>
@@ -268,13 +276,15 @@
         </div>
       </div>
     </div>
+    <div class="mgf-espera">O resultado aparece aqui depois de preencheres os dados.</div>
     <div class="mgf-botoes">
       <button type="button" class="mgf-botao" data-acao="limpar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/></svg>Limpar</button>
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== MEDICAÇÃO NA DRC ========== -->
   <section class="mgf-painel" id="painel-farmacos" role="tabpanel" aria-labelledby="sep-farmacos" hidden>
     <div class="mgf-titulo-escala">
@@ -401,7 +411,6 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir tabela</button>
     </div>
   </section>
-
 </main>
 
 <script data-mgf="ferramenta">

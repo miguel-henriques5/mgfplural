@@ -41,7 +41,8 @@
     "INFARMED. Resumo das Características do Medicamento (RCM) das suspensões orais referidas.",
     "DGS. Normas de orientação clínica sobre antibioterapia em ambulatório em idade pediátrica.",
     "BNF for Children (BNFc), edição em vigor."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -52,20 +53,20 @@
 
 <style data-mgf="ferramenta">
 .ped-peso { max-width: 260px; }
-.ped-peso-caixa { display: flex; align-items: center; gap: 10px; background: var(--cor-ambar-claro); border: 1.5px solid var(--cor-mostarda); border-radius: var(--raio-p); padding: 8px 14px; }
+.ped-peso-caixa { display: flex; align-items: center; gap: 10px; background: var(--cor-branco); border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); padding: 8px 14px; }
 .ped-peso-caixa:focus-within { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
-.ped-peso-caixa input { flex: 1; min-width: 0; border: 0; background: transparent; font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-tinta); padding: 0; min-height: 0; }
+.ped-peso-caixa input { flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-tinta); padding: 0; min-height: 0; }
 .ped-peso-caixa input:focus { outline: 0; }
-.ped-peso-caixa span { font-family: var(--letra-mono); font-weight: 500; color: var(--cor-ambar-texto); }
+.ped-peso-caixa span { font-family: inherit; font-weight: 400; color: var(--cor-texto-3); }
 .mgf-ferramenta .ped-peso-caixa input { border: 0; }
-.ped-rotulo { display: block; font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin: 0 0 8px; }
+.ped-rotulo { display: block; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--cor-texto-3); margin: 0 0 8px; }
 .ped-deslizador { display: none; background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 14px 16px; }
 .ped-deslizador.visible { display: block; }
 .ped-deslizador-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
-.ped-deslizador-topo label { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); }
-.ped-deslizador-valor { font-family: var(--letra-mono); font-size: 22px; font-weight: 500; color: var(--cor-verde); }
+.ped-deslizador-topo label { font-family: inherit; font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+.ped-deslizador-valor { font-family: inherit; font-size: 22px; font-weight: 700; color: var(--cor-verde); }
 .ped-deslizador-unidade { font-size: 14px; color: var(--cor-texto-2); margin-left: 4px; }
-.ped-deslizador-linha { display: flex; align-items: center; gap: 10px; font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); white-space: nowrap; }
+.ped-deslizador-linha { display: flex; align-items: center; gap: 10px; font-family: inherit; font-size: 13px; color: var(--cor-texto-3); white-space: nowrap; }
 .ped-deslizador-linha input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1; height: 6px; border-radius: 99px; background: var(--cor-linha); cursor: pointer; margin: 0; }
 .ped-deslizador-linha input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--cor-verde); border: 3px solid var(--cor-branco); box-shadow: 0 1px 4px rgba(19, 32, 30, .3); }
 .ped-deslizador-linha input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--cor-verde); border: 3px solid var(--cor-branco); box-shadow: 0 1px 4px rgba(19, 32, 30, .3); }
@@ -76,7 +77,7 @@
 .ped-pilulas .spill.capped strong { color: var(--clin-alerta); }
 .ped-tomas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .ped-toma { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; min-height: 56px; border: 1.5px solid var(--cor-linha); border-radius: var(--raio-p); background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); cursor: pointer; transition: border-color .15s, background .15s; }
-.ped-toma strong { font-family: var(--letra-mono); font-size: 20px; font-weight: 500; line-height: 1.1; }
+.ped-toma strong { font-family: inherit; font-size: 20px; font-weight: 700; line-height: 1.1; }
 .ped-toma span { font-size: 13px; color: var(--cor-texto-2); }
 .ped-toma:hover { border-color: var(--cor-verde); }
 .ped-toma[aria-pressed="true"] { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
@@ -86,20 +87,23 @@
 #ped-alert-max:not(.visible) { display: none; }
 #ped-obs-box:not(.visible) { display: none; }
 .ped-resumo .ped-chip.highlight { border-left-color: var(--cor-verde); background: var(--cor-menta-clara); }
-.ped-resumo .mgf-resumo-valor { font-size: 22px; }
-.ped-receita { margin: 0; background: var(--cor-papel); border: 1.5px solid var(--cor-verde-medio); border-radius: var(--raio-p); padding: 14px 16px; font-family: var(--letra-mono); font-size: 15px; line-height: 1.8; white-space: pre-wrap; color: var(--cor-tinta); }
-.ped-detalhes { list-style: none; margin: 0; padding: 0; }
+.ped-resumo { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.ped-resumo .mgf-resumo-valor { font-size: 20px; }
+.ped-receita { margin: 0; background: var(--cor-papel); border: 1.5px solid var(--cor-verde-medio); border-radius: var(--raio-p); padding: 14px 16px; font-family: inherit; font-size: 17px; line-height: 1.7; white-space: pre-wrap; color: var(--cor-tinta); }
+.ped-mais summary { cursor: pointer; color: var(--cor-verde); margin: 0; }
+.ped-detalhes { list-style: none; margin: 8px 0 0; padding: 0; }
 .ped-detalhes li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--cor-linha-suave); font-size: 15px; }
 .ped-detalhes li:last-child { border-bottom: 0; }
 .ped-detalhes li span:first-child { color: var(--cor-texto-2); }
-.ped-detalhes li span:last-child { font-family: var(--letra-mono); font-size: 14px; text-align: right; }
+.ped-detalhes li span:last-child { font-family: inherit; font-size: 14px; text-align: right; }
 @media (max-width: 420px) { .ped-tomas { grid-template-columns: repeat(2, 1fr); } }
 @media print { #ped-dados, .ped-deslizador, .ped-tomas-bloco, #ped-calcular { display: none !important; } }
 </style>
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
   <form class="mgf-cartao" id="ped-dados" novalidate>
     <div class="mgf-cartao-titulo">Dados do doente</div>
     <div class="mgf-cartao-corpo" style="gap:14px">
@@ -143,7 +147,6 @@
       </div>
     </div>
   </form>
-
   <div class="mgf-cartao">
     <div class="mgf-cartao-titulo">Posologia</div>
     <div class="mgf-cartao-corpo" style="gap:16px">
@@ -187,26 +190,27 @@
       <div><button type="button" class="mgf-botao mgf-botao-principal" id="ped-calcular">Calcular prescrição</button></div>
     </div>
   </div>
-
+  </div>
+  <div class="mgf-resposta">
   <div class="mgf-resultado" id="ped-card-resultado" style="display:none">
     <div class="mgf-resultado-topo"><h3>Prescrição</h3></div>
     <div class="mgf-resultado-corpo">
-      <div class="mgf-resumo ped-resumo" id="ped-chips-row"></div>
       <pre class="ped-receita" id="ped-rx-box"></pre>
+      <div class="mgf-resumo ped-resumo" id="ped-chips-row"></div>
       <div class="mgf-nota" data-nivel="atencao" id="ped-obs-box"></div>
-      <div>
-        <h4 class="ped-rotulo">Detalhes do cálculo</h4>
+      <details class="ped-mais">
+        <summary class="ped-rotulo">Detalhes do cálculo</summary>
         <ul class="ped-detalhes" id="ped-detail-list"></ul>
-      </div>
+      </details>
       <div class="mgf-botoes" style="margin:0">
         <button type="button" class="mgf-botao mgf-botao-principal" id="ped-btn-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar prescrição</button>
         <button type="button" class="mgf-botao" id="ped-imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       </div>
     </div>
   </div>
-
   <div class="mgf-vazio" id="ped-card-empty">Preenche os dados e carrega em <strong>Calcular prescrição</strong> para gerar a receita.</div>
-
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">

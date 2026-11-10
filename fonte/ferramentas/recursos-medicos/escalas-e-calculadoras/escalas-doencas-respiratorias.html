@@ -44,7 +44,8 @@
     "Fagerström: Heatherton TF, et al. The Fagerström Test for Nicotine Dependence. Br J Addict. 1991;86(9):1119–1127.",
     "Richmond: Ferreira LF, et al. Rev Port Saúde Pública. 2009;27:37–56.",
     "Richmond: Richmond RL, et al. Addiction. 1993;88(8):1127–1135."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -59,7 +60,6 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
   <div class="mgf-separadores" role="tablist" aria-label="Escalas">
     <button type="button" class="mgf-separador" role="tab" id="sep-curb65" aria-controls="painel-curb65" aria-selected="true">CURB-65</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-stopbang" aria-controls="painel-stopbang" aria-selected="false">STOP-Bang</button>
@@ -67,14 +67,14 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-fagerstrom" aria-controls="painel-fagerstrom" aria-selected="false">Fagerström</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-richmond" aria-controls="painel-richmond" aria-selected="false">Richmond</button>
   </div>
-
   <!-- ========== CURB-65 ========== -->
   <section class="mgf-painel" id="painel-curb65" role="tabpanel" aria-labelledby="sep-curb65" data-escala="curb65">
     <div class="mgf-titulo-escala">
       <h2>CURB-65</h2>
       <p>Escala de severidade da pneumonia adquirida na comunidade</p>
     </div>
-
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-so-leitor">Critérios — 1 ponto por critério presente</legend>
       <div class="mgf-cartao-titulo" aria-hidden="true">Critérios — 1 ponto por critério presente</div>
@@ -86,6 +86,8 @@
         <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>65</strong> — Idade ≥ 65 anos</span><span class="mgf-opcao-pontos">+1</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Pontuação CURB-65</h3>
@@ -116,14 +118,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== STOP-Bang ========== -->
   <section class="mgf-painel" id="painel-stopbang" role="tabpanel" aria-labelledby="sep-stopbang" data-escala="stopbang" hidden>
     <div class="mgf-titulo-escala">
       <h2>STOP-Bang</h2>
       <p>Rastreio do risco de SAOS (síndrome de apneia obstrutiva do sono)</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora de pontuação, com os critérios resumidos. Para aplicar o questionário ao utente, usa a versão oficial: <a href="https://www.stopbang.ca/" rel="noopener">stopbang.ca</a>.</p>
     <fieldset class="mgf-cartao">
       <legend class="mgf-so-leitor">Critérios presentes — 1 ponto cada</legend>
@@ -139,6 +144,8 @@
         <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>G</strong> — Sexo masculino</span><span class="mgf-opcao-pontos">+1</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Risco de SAOS</h3>
@@ -165,14 +172,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== Escala de Sonolência de Epworth ========== -->
   <section class="mgf-painel" id="painel-epworth" role="tabpanel" aria-labelledby="sep-epworth" data-escala="epworth" hidden>
     <div class="mgf-titulo-escala">
       <h2>Escala de Sonolência de Epworth</h2>
       <p>Pontuação de 0 (nenhuma probabilidade de dormitar) a 3 (forte probabilidade) em cada uma das 8 situações</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> A escala tem licença do autor, por isso não reproduzimos as 8 situações. Aplica a versão oficial (<a href="https://epworthsleepinessscale.com/" rel="noopener">epworthsleepinessscale.com</a>) e introduz aqui a pontuação de cada item, pela mesma ordem.</p>
     <fieldset class="mgf-cartao">
       <legend class="mgf-cartao-titulo">Item 1</legend>
@@ -246,6 +256,8 @@
         <label class="mgf-opcao"><input type="radio" name="ep8" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">3</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Pontuação Epworth</h3>
@@ -273,15 +285,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== Teste de Fagerström adaptado ========== -->
   <section class="mgf-painel" id="painel-fagerstrom" role="tabpanel" aria-labelledby="sep-fagerstrom" data-escala="fagerstrom" hidden>
     <div class="mgf-titulo-escala">
       <h2>Teste de Fagerström adaptado</h2>
       <p>Dependência física da nicotina · ferramenta terapêutica para cessação tabágica</p>
     </div>
-
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-cartao-titulo">1. Quanto tempo depois de acordar fuma o 1.º cigarro?</legend>
       <div class="mgf-cartao-corpo">
@@ -328,6 +342,8 @@
         <label class="mgf-opcao"><input type="radio" name="fag6" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Não</span><span class="mgf-opcao-pontos">0 pts</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Dependência da nicotina</h3>
@@ -355,15 +371,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== Teste de Richmond ========== -->
   <section class="mgf-painel" id="painel-richmond" role="tabpanel" aria-labelledby="sep-richmond" data-escala="richmond" hidden>
     <div class="mgf-titulo-escala">
       <h2>Teste de Richmond</h2>
       <p>Motivação para deixar de fumar · ferramenta clínica para planear o apoio à cessação tabágica</p>
     </div>
-
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-cartao-titulo">1. Gostaria de deixar de fumar se o pudesse fazer facilmente?</legend>
       <div class="mgf-cartao-corpo">
@@ -398,6 +416,8 @@
         <label class="mgf-opcao"><input type="radio" name="ric4" value="3"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">De certeza</span><span class="mgf-opcao-pontos">3 pts</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Motivação para a cessação</h3>
@@ -425,8 +445,9 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
 </main>
 
 <script data-mgf="ferramenta">

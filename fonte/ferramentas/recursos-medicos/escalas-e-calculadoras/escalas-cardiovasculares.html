@@ -18,7 +18,18 @@
   "versao": "1.0",
   "revisto": "2026-11-08",
   "layout": "normal",
-  "palavras": ["Wells", "TEP", "embolia pulmonar", "TVP", "trombose venosa", "CHA2DS2-VASc", "fibrilhação auricular", "anticoagulação", "HAS-BLED", "risco hemorrágico"],
+  "palavras": [
+    "Wells",
+    "TEP",
+    "embolia pulmonar",
+    "TVP",
+    "trombose venosa",
+    "CHA2DS2-VASc",
+    "fibrilhação auricular",
+    "anticoagulação",
+    "HAS-BLED",
+    "risco hemorrágico"
+  ],
   "bibliografia": [
     "Wells — TEP: Viterbo JF, Tavares MJ. Acta Med Port. 2005;18:209–220.",
     "Wells — TEP: Wells PS, et al. Thromb Haemost. 2000 Mar;83(3):416–20.",
@@ -28,7 +39,8 @@
     "CHA₂DS₂-VA: Van Gelder IC, et al. 2024 ESC Guidelines for the management of atrial fibrillation. Eur Heart J. 2024;45(36):3314–3414.",
     "HAS-BLED: Camm AJ, et al. ESC Guidelines for atrial fibrillation. 2010.",
     "HAS-BLED: Pisters R, et al. A novel score (HAS-BLED). Chest. 2010."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -42,20 +54,20 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
   <div class="mgf-separadores" role="tablist" aria-label="Escalas">
     <button type="button" class="mgf-separador" role="tab" id="sep-wellstep" aria-controls="painel-wellstep" aria-selected="true">Wells — TEP</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-wellstvp" aria-controls="painel-wellstvp" aria-selected="false">Wells — TVP</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-chads" aria-controls="painel-chads" aria-selected="false">CHA₂DS₂-VASc</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-hasbled" aria-controls="painel-hasbled" aria-selected="false">HAS-BLED</button>
   </div>
-
   <!-- ========== WELLS TEP ========== -->
   <section class="mgf-painel" id="painel-wellstep" role="tabpanel" aria-labelledby="sep-wellstep" data-escala="wellstep">
     <div class="mgf-titulo-escala">
       <h2>Score de Wells — TEP</h2>
       <p>Escala de probabilidade de tromboembolia pulmonar</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-so-leitor">Achados clínicos</legend>
       <div class="mgf-cartao-titulo" aria-hidden="true">Achados clínicos — seleciona os critérios presentes</div>
@@ -69,6 +81,8 @@
         <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Neoplasia maligna (sob tratamento, tratada nos últimos 6 meses ou sob cuidados paliativos)</span><span class="mgf-opcao-pontos">+1</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Probabilidade de TEP</h3>
@@ -98,14 +112,17 @@
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== WELLS TVP ========== -->
   <section class="mgf-painel" id="painel-wellstvp" role="tabpanel" aria-labelledby="sep-wellstvp" data-escala="wellstvp" hidden>
     <div class="mgf-titulo-escala">
       <h2>Score de Wells — TVP</h2>
       <p>Escala de probabilidade de trombose venosa profunda</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-so-leitor">Achados clínicos</legend>
       <div class="mgf-cartao-titulo" aria-hidden="true">Achados clínicos — 1 ponto por critério presente (exceto o último: −2)</div>
@@ -122,6 +139,8 @@
         <label class="mgf-opcao mgf-opcao-negativa"><input type="checkbox" data-pontos="-2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Diagnóstico alternativo tão provável como TVP (quisto de Baker, celulite, lesão muscular, trombose superficial, síndrome pós-flebítica, linfadenopatia, compressão venosa externa)</span><span class="mgf-opcao-pontos">−2</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Probabilidade de TVP</h3>
@@ -150,14 +169,17 @@
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== CHA2DS2-VASc ========== -->
   <section class="mgf-painel" id="painel-chads" role="tabpanel" aria-labelledby="sep-chads" data-escala="chads" hidden>
     <div class="mgf-titulo-escala">
       <h2>CHA₂DS₂-VASc</h2>
       <p>Risco tromboembólico e profilaxia antitrombótica na fibrilhação / flutter auricular (não valvular)</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-cartao-titulo"><strong>C</strong> — Insuficiência cardíaca congestiva</legend>
       <div class="mgf-cartao-corpo">
@@ -208,6 +230,8 @@
         <label class="mgf-opcao"><input type="radio" name="ch_sc" value="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Sim (feminino)</span><span class="mgf-opcao-pontos">+1 pt</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Risco tromboembólico</h3>
@@ -238,14 +262,17 @@
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== HAS-BLED ========== -->
   <section class="mgf-painel" id="painel-hasbled" role="tabpanel" aria-labelledby="sep-hasbled" data-escala="hasbled" hidden>
     <div class="mgf-titulo-escala">
       <h2>HAS-BLED</h2>
       <p>Risco hemorrágico em doentes hipocoagulados — avaliação risco-benefício na fibrilhação auricular</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <fieldset class="mgf-cartao">
       <legend class="mgf-so-leitor">Critérios</legend>
       <div class="mgf-cartao-titulo" aria-hidden="true">Critérios — seleciona os presentes</div>
@@ -261,6 +288,8 @@
         <label class="mgf-opcao"><input type="checkbox" data-pontos="1"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto"><strong>D</strong> — Abuso de álcool (&gt; 8 bebidas/semana)</span><span class="mgf-opcao-pontos">+1</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Risco hemorrágico</h3>
@@ -290,8 +319,9 @@
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
 </main>
 
 <script data-mgf="ferramenta">

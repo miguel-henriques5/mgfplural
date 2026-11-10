@@ -11,6 +11,10 @@
   2. Escreve a ferramenta DENTRO de <main class="mgf-ferramenta" id="ferramenta"> … </main>.
   3. Usa as classes já prontas (mgf-cartao, mgf-opcao, mgf-resultado, mgf-interp, mgf-tabela,
      mgf-botao…). Estão explicadas no GUIA-DESIGN.md e no exemplo abaixo.
+     Arrumação da página («bancada»): perguntas e campos à esquerda (mgf-comandos), resultado à
+     direita (mgf-resposta), como no exemplo. Num guia de consulta, usa "mgf-bancada mgf-bancada-guia":
+     pesquisa, filtros ou capítulos à esquerda e o conteúdo à direita. Se nada disto fizer sentido,
+     põe "corpo": "coluna" na ficha e faz uma coluna só, com uma pergunta de cada vez (mgf-pergunta).
   4. Estilos só desta ferramenta: no bloco <style data-mgf="ferramenta">.
      Código JavaScript: no bloco <script data-mgf="ferramenta">.
   5. NÃO alteres os blocos data-mgf="base" (estilo e script): têm as cores, as letras e os
@@ -48,7 +52,7 @@
 </style>
 </head>
 <body style="margin:0;background:var(--cor-papel);padding:24px 16px">
-<main class="mgf-ferramenta" id="ferramenta" style="max-width:900px;margin:0 auto">
+<main class="mgf-ferramenta" id="ferramenta" style="max-width:1200px;margin:0 auto">
 
   <!-- EXEMPLO: apaga e substitui pela tua ferramenta. -->
   <div class="mgf-titulo-escala">
@@ -56,6 +60,8 @@
     <p>Assinala os critérios presentes. A pontuação atualiza-se sozinha.</p>
   </div>
 
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
   <fieldset class="mgf-cartao">
     <legend class="mgf-so-leitor">Critérios</legend>
     <div class="mgf-cartao-titulo" aria-hidden="true">Critérios</div>
@@ -64,7 +70,9 @@
       <label class="mgf-opcao"><input type="checkbox" data-pontos="2"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Critério B</span><span class="mgf-opcao-pontos">+2</span></label>
     </div>
   </fieldset>
+  </div>
 
+  <div class="mgf-resposta">
   <div class="mgf-resultado">
     <div class="mgf-resultado-topo">
       <h3>Resultado</h3>
@@ -74,6 +82,8 @@
       <div class="mgf-interp" id="interp" hidden></div>
       <p class="mgf-nota"><strong>Nota.</strong> Os níveis usam sempre as mesmas cores clínicas: normal, atenção, alerta e info. Escreve sempre o nível em texto.</p>
     </div>
+  </div>
+  </div>
   </div>
 
 </main>

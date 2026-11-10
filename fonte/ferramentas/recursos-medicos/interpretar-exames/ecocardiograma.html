@@ -43,7 +43,8 @@
     "Baumgartner H, et al. Recommendations on the echocardiographic assessment of aortic valve stenosis (EACVI/ASE). J Am Soc Echocardiogr. 2017;30(4):372–392.",
     "Zoghbi WA, et al. Recommendations for noninvasive evaluation of native valvular regurgitation (ASE/SCMR). J Am Soc Echocardiogr. 2017;30(4):303–371.",
     "Rudski LG, et al. Guidelines for the echocardiographic assessment of the right heart in adults (ASE). J Am Soc Echocardiogr. 2010;23(7):685–713."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -62,14 +63,14 @@
 .eco-visao h3 { font-size: 18px; font-weight: 800; }
 .eco-visao p { font-size: 15px; color: var(--cor-texto-2); }
 .eco-modos { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 16px; }
-.eco-modos-titulo { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-ambar-texto); margin-bottom: 10px; }
+.eco-modos-titulo { font-family: inherit; font-size: 14px; color: var(--cor-ambar-texto); margin-bottom: 10px; font-weight: 700;}
 .eco-modos-grelha { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 15px; }
 .eco-modo { color: var(--cor-verde); }
 .eco-legenda { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
-.eco-param { font-family: var(--letra-mono); font-weight: 500; flex: 0 0 auto; }
+.eco-param { font-family: inherit; font-weight: 700; flex: 0 0 auto; }
 .eco-tabela { margin: 0; }
-.eco-tabela th { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
-.eco-formula { background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 10px 14px; font-family: var(--letra-mono); font-size: 14px; color: var(--cor-verde-fundo); }
+.eco-tabela th { font-family: inherit; font-size: 14px; font-weight: 700; }
+.eco-formula { background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--cor-verde-fundo); }
 .eco-formula-rotulo { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
 .eco-forte { color: var(--cor-tinta); }
 .eco-pequeno { font-size: 14px; color: var(--cor-texto-2); }
@@ -78,9 +79,10 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Parâmetros avaliados, valores de referência e significado clínico — guia estruturado para uso clínico diário.</p>
-<div class="mgf-separadores" role="tablist" aria-label="Secções do ecocardiograma">
+  <div class="mgf-separadores" role="tablist" aria-label="Secções do ecocardiograma">
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-overview" aria-controls="eco-overview" aria-selected="true">Visão Geral</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-estrutura" aria-controls="eco-estrutura" aria-selected="false">Estrutura</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-sistolica" aria-controls="eco-sistolica" aria-selected="false">Função Sistólica</button>
@@ -89,7 +91,9 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-pressoes" aria-controls="eco-pressoes" aria-selected="false">Pressões</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-outros" aria-controls="eco-outros" aria-selected="false">Outros</button>
   </div>
-<div class="mgf-painel" id="eco-overview" role="tabpanel" aria-labelledby="sep-eco-overview">
+  </div>
+  <div class="mgf-resposta">
+  <div class="mgf-painel" id="eco-overview" role="tabpanel" aria-labelledby="sep-eco-overview">
   <div class="mgf-titulo-escala">
     <h2>O que avalia um Ecocardiograma Formal?</h2>
     <p>O eco transtorácico (ETT) 2D/Doppler é o pilar da avaliação cardíaca não invasiva. Combina imagem morfológica com hemodinâmica funcional.</p>
@@ -132,7 +136,7 @@
     </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-estrutura" role="tabpanel" aria-labelledby="sep-eco-estrutura" hidden>
+  <div class="mgf-painel" id="eco-estrutura" role="tabpanel" aria-labelledby="sep-eco-estrutura" hidden>
   <div class="mgf-titulo-escala">
     <h2>Dimensões e Estrutura</h2>
     <p>Avaliação morfológica das câmaras cardíacas e paredes — base para diagnóstico de hipertrofia, dilatação e remodelagem.</p>
@@ -202,7 +206,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-sistolica" role="tabpanel" aria-labelledby="sep-eco-sistolica" hidden>
+  <div class="mgf-painel" id="eco-sistolica" role="tabpanel" aria-labelledby="sep-eco-sistolica" hidden>
   <div class="mgf-titulo-escala">
     <h2>Função Sistólica do VE</h2>
     <p>Avalia a capacidade de ejecção do ventrículo esquerdo — a FEVE é o parâmetro central, mas não é o único.</p>
@@ -275,7 +279,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-diastolica" role="tabpanel" aria-labelledby="sep-eco-diastolica" hidden>
+  <div class="mgf-painel" id="eco-diastolica" role="tabpanel" aria-labelledby="sep-eco-diastolica" hidden>
   <div class="mgf-titulo-escala">
     <h2>Função Diastólica</h2>
     <p>Avalia o relaxamento e a rigidez do VE. Parâmetros obtidos por Doppler transmitral (PW) e Doppler tecidular (TDI). Classificação pela ASE/EACVI 2016.</p>
@@ -364,7 +368,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-valvulas" role="tabpanel" aria-labelledby="sep-eco-valvulas" hidden>
+  <div class="mgf-painel" id="eco-valvulas" role="tabpanel" aria-labelledby="sep-eco-valvulas" hidden>
   <div class="mgf-titulo-escala">
     <h2>Doença Valvular</h2>
     <p>Avaliação das quatro válvulas — gradientes por Doppler CW, áreas por equação de continuidade/PHT, e quantificação de regurgitações por Doppler cor e volumetria.</p>
@@ -438,7 +442,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-pressoes" role="tabpanel" aria-labelledby="sep-eco-pressoes" hidden>
+  <div class="mgf-painel" id="eco-pressoes" role="tabpanel" aria-labelledby="sep-eco-pressoes" hidden>
   <div class="mgf-titulo-escala">
     <h2>Estimativa de Pressões</h2>
     <p>O eco-Doppler permite estimar de forma não invasiva as pressões pulmonares e de enchimento — fundamentais na avaliação de IC e hipertensão pulmonar.</p>
@@ -480,7 +484,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-outros" role="tabpanel" aria-labelledby="sep-eco-outros" hidden>
+  <div class="mgf-painel" id="eco-outros" role="tabpanel" aria-labelledby="sep-eco-outros" hidden>
   <div class="mgf-titulo-escala">
     <h2>Outros Parâmetros Relevantes</h2>
     <p>Avaliação do ventrículo direito, aorta, pericárdio e parâmetros adicionais de rotina.</p>
@@ -544,7 +548,8 @@
 </div>
   </div>
 </div>
-
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">

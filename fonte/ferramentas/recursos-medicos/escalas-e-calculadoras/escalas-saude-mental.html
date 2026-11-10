@@ -46,7 +46,8 @@
     "GPCOG: Brodaty H, et al. The GPCOG: a new screening test for dementia designed for general practice. J Am Geriatr Soc. 2002;50(3):530–534.",
     "Mini-Cog: Borson S, et al. The Mini-Cog: a cognitive 'vital signs' measure for dementia screening in multi-lingual elderly. Int J Geriatr Psychiatry. 2000;15(11):1021–1027.",
     "Mini-Cog: Borson S, et al. Simplifying detection of cognitive impairment: comparison of the Mini-Cog and Mini-Mental State Examination in a multiethnic sample. J Am Geriatr Soc. 2005;53(5):871–874."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -73,22 +74,21 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
   <p class="mgf-direitos"><strong>MMSE e MoCA não estão incluídos.</strong> Os direitos de autor não permitem publicá-los aqui (<a href="https://miguel-henriques5.github.io/mgfplural/acerca.html#escalas" rel="noopener">ver porquê e onde obter as versões autorizadas</a>). Para rastreio cognitivo, tens o GPCOG e o Mini-Cog.</p>
-
   <div class="mgf-separadores" role="tablist" aria-label="Escalas">
     <button type="button" class="mgf-separador" role="tab" id="sep-epds" aria-controls="painel-epds" aria-selected="true">EPDS</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-hads" aria-controls="painel-hads" aria-selected="false">HADS</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-gpcog" aria-controls="painel-gpcog" aria-selected="false">GPCOG</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-minicog" aria-controls="painel-minicog" aria-selected="false">Mini-Cog</button>
   </div>
-
   <!-- ========== Escala de Depressão Pós-Parto de Edimburgo (EPDS) ========== -->
   <section class="mgf-painel" id="painel-epds" role="tabpanel" aria-labelledby="sep-epds" data-escala="epds">
     <div class="mgf-titulo-escala">
       <h2>Escala de Depressão Pós-Parto de Edimburgo (EPDS)</h2>
       <p>Calculadora de pontuação: 10 itens, de 0 a 3 pontos cada, referentes aos últimos 7 dias</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de depressão na gravidez e no pós-parto (por exemplo, na consulta de revisão do puerpério). É preenchida pela própria mulher e refere-se aos últimos 7 dias.</p>
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora: não reproduzimos o texto das perguntas. Aplica o questionário em papel (versão portuguesa validada) e introduz aqui a pontuação de cada resposta, pela mesma ordem. No formulário, os itens 3 e 5 a 10 têm a pontuação invertida: regista os pontos da resposta (0–3), não a sua posição. <a href="https://www.rcpsych.ac.uk/" rel="noopener">Royal College of Psychiatrists</a>.</p>
     <div class="sm-grelha">
@@ -183,6 +183,8 @@
       </div>
     </fieldset>
     </div>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Pontuação EPDS</h3>
@@ -210,14 +212,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== HADS ========== -->
   <section class="mgf-painel" id="painel-hads" role="tabpanel" aria-labelledby="sep-hads" hidden>
     <div class="mgf-titulo-escala">
       <h2>Escala de Ansiedade e Depressão Hospitalar (HADS)</h2>
       <p>Calculadora de pontuação: 14 itens, de 0 a 3 pontos cada, referentes à última semana</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de ansiedade e depressão em adultos, sobretudo com doença física. É preenchida pelo próprio e refere-se à última semana. Os itens ímpares avaliam a ansiedade e os pares a depressão.</p>
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> Esta é só a calculadora: a HADS é vendida pela GL Assessment e não reproduzimos o texto dos itens. Aplica a versão oficial e introduz aqui a pontuação de cada resposta (0–3), pela mesma ordem. <a href="https://www.gl-assessment.co.uk/products/hospital-anxiety-depression-scale/" rel="noopener">GL Assessment</a>.</p>
     <div class="sm-grelha">
@@ -348,6 +353,8 @@
       </div>
     </fieldset>
     </div>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Resultado HADS</h3>
@@ -380,14 +387,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== GPCOG · General Practitioner Assessment of Cognition ========== -->
   <section class="mgf-painel" id="painel-gpcog" role="tabpanel" aria-labelledby="sep-gpcog" data-escala="gpcog" hidden>
     <div class="mgf-titulo-escala">
       <h2>GPCOG · General Practitioner Assessment of Cognition</h2>
       <p>Calculadora de pontuação: secção do utente (0–9) e, se for preciso, secção do informador (0–6)</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio de défice cognitivo nos cuidados de saúde primários, quando há queixa de memória do utente ou da família, ou suspeita clínica. A secção do utente demora cerca de 4 minutos e a do informador cerca de 2.</p>
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> O GPCOG é gratuito para clínicos, mas o conteúdo não pode ser alterado e o site oficial não tem versão portuguesa. Por isso, esta é só a calculadora. Aplica o formulário oficial e introduz aqui os pontos. <a href="https://gpcog.com.au/" rel="noopener">gpcog.com.au</a>.</p>
     <h3 class="sm-seccao">Secção do utente</h3>
@@ -478,6 +488,8 @@
       </div>
     </fieldset>
     </div>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Secção do utente</h3>
@@ -507,14 +519,17 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
   <!-- ========== Mini-Cog ========== -->
   <section class="mgf-painel" id="painel-minicog" role="tabpanel" aria-labelledby="sep-minicog" data-escala="minicog" hidden>
     <div class="mgf-titulo-escala">
       <h2>Mini-Cog</h2>
       <p>Calculadora de pontuação: evocação de 3 palavras (0–3) e desenho do relógio (0 ou 2)</p>
     </div>
+    <div class="mgf-bancada">
+    <div class="mgf-comandos">
     <p class="mgf-nota sm-quando"><strong>Quando aplicar.</strong> Rastreio breve de défice cognitivo (cerca de 3 minutos), quando há queixa de memória do utente ou da família, ou suspeita clínica. Pouco influenciado pela escolaridade e pela língua.</p>
     <p class="mgf-direitos"><strong>Direitos de autor.</strong> Mini-Cog © S. Borson. Pode ser usado para fins clínicos e de ensino, mas não pode ser modificado, por isso não reproduzimos as listas de palavras nem as instruções. Aplica a versão oficial e introduz aqui os pontos. <a href="https://mini-cog.com/" rel="noopener">mini-cog.com</a>.</p>
     <fieldset class="mgf-cartao">
@@ -533,6 +548,8 @@
         <label class="mgf-opcao"><input type="radio" name="mc2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Anormal, ou não consegue ou recusa desenhar</span><span class="mgf-opcao-pontos">0 pts</span></label>
       </div>
     </fieldset>
+    </div>
+    <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
         <h3>Pontuação Mini-Cog</h3>
@@ -560,8 +577,9 @@
       <button type="button" class="mgf-botao" data-acao="imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       <button type="button" class="mgf-botao mgf-botao-principal" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resultado</button>
     </div>
+    </div>
+    </div>
   </section>
-
 </main>
 
 <script data-mgf="ferramenta">

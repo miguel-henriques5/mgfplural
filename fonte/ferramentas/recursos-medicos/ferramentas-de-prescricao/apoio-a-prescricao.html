@@ -79,7 +79,8 @@
     "Marcas e doses dos inaladores/sprays nasais (Asma, DPOC e Rinite): tabela GRESP Asma/DPOC – Terapêutica Inalatória (inaladores disponíveis em Portugal) e RCM/Infarmed para as apresentações nasais (Avamys®, Nasonex®/Rinelon®, Flixonase®, Nasacort®, Dymista®, Allergodil®), para a beclometasona-formoterol extrafina (Foster®/Foster Nexthaler®) e para as terapêuticas que não constavam da tabela GRESP de 2017 — Bevespi® e as triplas Trelegy®/Elebrato® Ellipta (92/55/22), Trimbow® (87/5/9) e Trixeo®/Riltrava® Aerosphere. Disponibilidade e forças podem mudar — confirmar no https://www.infarmed.pt.",
     "Dermatologia — apontamentos clínicos do autor (corticoides tópicos, acne, escabiose, urticária, zona, dermatite atópica/seborreica, psoríase, infeções bacterianas/fúngicas, líquen plano, alopecia areata, eritema multiforme, etc.).",
     "Dermatologia — complementado com fontes de referência: MSD Manuals (profissional), DynaMed/UpToDate, EAACI (urticária), guias de acne (terapêutica tópica/oral e isotretinoína) e classificação europeia de potência dos corticosteroides tópicos (Prontuário Terapêutico/Infarmed). Doses orientativas — confirmar sempre no https://www.infarmed.pt. Isotretinoína oral, metotrexato e biológicos são de prescrição especializada."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -96,7 +97,7 @@
 .ap-rodape { margin-top: 24px; }
 .ap-painel .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 18px; margin: 0 0 14px; }
 .ap-painel .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
-.ap-painel .card-title .icon { width: 26px; height: 26px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 13px; font-weight: 500; }
+.ap-painel .card-title .icon { width: 26px; height: 26px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 13px; font-weight: 700; }
 .ap-painel p { margin: 0; }
 .ap-painel .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
 
@@ -128,7 +129,7 @@
 .ap-painel .dc-box p, .ap-painel .dc-box ul { font-size: 15px; line-height: 1.5; margin: 0; }
 .ap-painel .dc-box ul { padding-left: 18px; }
 .ap-painel .dc-box li { margin-bottom: 3px; }
-.ap-painel .dcb-lbl { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; }
+.ap-painel .dcb-lbl { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
 .ap-painel .dc-box.adv { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
 .ap-painel .dc-box.adv .dcb-lbl { color: var(--clin-normal); }
 .ap-painel .dc-box.dis { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
@@ -141,7 +142,7 @@
 /* Tabelas */
 .ap-painel .tbl-wrap { overflow-x: auto; margin: 0 0 4px; }
 .ap-painel .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.ap-painel .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; white-space: nowrap; }
+.ap-painel .data-table th { background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; white-space: nowrap; }
 .ap-painel .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; }
 .ap-painel .data-table tr:last-child td { border-bottom: 0; }
 .ap-painel .data-table tr:nth-child(even) td { background: var(--cor-papel); }
@@ -150,7 +151,7 @@
 /* Blocos de informação */
 .ap-painel .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid; font-size: 15px; line-height: 1.55; }
 .ap-painel .info-block p { font-size: 15px; line-height: 1.55; }
-.ap-painel .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+.ap-painel .ib-title { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
 .ap-painel .info-block.navy { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
 .ap-painel .info-block.navy .ib-title { color: var(--cor-verde-fundo); }
 .ap-painel .info-block.blue { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
@@ -199,14 +200,14 @@
 .ap-painel .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
 .ap-painel .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
 .ap-painel .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
-.ap-painel .rr-icon { font-family: var(--letra-mono); font-weight: 500; font-size: 16px; line-height: 1.4; }
+.ap-painel .rr-icon { font-family: inherit; font-weight: 700; font-size: 16px; line-height: 1.4; }
 .ap-painel .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
 .ap-painel .rr-text { font-size: 15px; line-height: 1.5; }
-.ap-painel .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+.ap-painel .big-num { font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-verde-fundo); }
 
 /* Fármacos por classe (diabetes, inaladores) */
 .ap-painel .dm-spd { margin-top: 12px; border-top: 1px dashed var(--cor-linha); padding-top: 12px; }
-.ap-painel .dm-spd-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--cor-verde-fundo); margin-bottom: 8px; }
+.ap-painel .dm-spd-title { font-family: inherit; font-size: 14px; font-weight: 700; color: var(--cor-verde-fundo); margin-bottom: 8px; }
 .ap-painel .dm-mech { font-size: 14px; color: var(--cor-texto-2); font-style: italic; margin-bottom: 8px; }
 .ap-painel .dm-attrs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
 .ap-painel .dm-chip { font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 99px; border: 1.5px solid var(--cor-linha); color: var(--cor-texto-2); background: var(--cor-branco); white-space: nowrap; }
@@ -217,13 +218,13 @@
 .ap-painel .dm-drug { border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-p); padding: 10px 12px; margin-bottom: 8px; background: var(--cor-papel); }
 .ap-painel .dm-drug-head { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 5px; }
 .ap-painel .dm-drug-name { font-weight: 700; font-size: 15px; }
-.ap-painel .dm-trial { font-family: var(--letra-mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; background: var(--cor-texto-3); color: var(--cor-branco); padding: 2px 7px; border-radius: 99px; }
+.ap-painel .dm-trial { font-family: inherit; font-size: 14px; background: var(--cor-texto-3); color: var(--cor-branco); padding: 2px 7px; border-radius: 99px; font-weight: 700;}
 .ap-painel .dm-tfg { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1.5px solid var(--clin-normal-borda); color: var(--clin-normal); white-space: nowrap; }
 .ap-painel .dm-tfg.warn { border-color: var(--clin-atencao-borda); color: var(--clin-atencao); }
 .ap-painel .dm-doses-lbl { display: block; font-size: 13px; color: var(--cor-texto-3); margin: 4px 0 3px; }
 .ap-painel .dm-doses { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
 .ap-painel .dm-pill { display: inline-flex; border-radius: 99px; overflow: hidden; font-size: 13px; font-weight: 700; border: 1px solid var(--cor-linha); }
-.ap-painel .dm-pill .pv { color: var(--cor-branco); padding: 2px 9px; font-family: var(--letra-mono); font-weight: 500; }
+.ap-painel .dm-pill .pv { color: var(--cor-branco); padding: 2px 9px; font-family: inherit; font-weight: 700; }
 .ap-painel .dm-pill .pu { background: var(--cor-branco); color: var(--cor-texto-2); padding: 2px 9px; }
 .ap-painel .dm-poso { font-size: 14px; color: var(--cor-texto-2); margin-top: 5px; }
 .ap-painel .dm-brands { font-size: 14px; color: var(--cor-ambar-texto); margin-top: 4px; }
@@ -242,7 +243,8 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Analgesia, anti-hipertensores, antidiabéticos, antidislipidémicos, sintomas gastrointestinais, doença respiratória e ORL (asma, DPOC, rinite) e dermatologia: fármacos, doses, equivalências e custo.</p>
   <div class="mgf-separadores ap-separadores" role="tablist" aria-label="Capítulos">
     <button type="button" class="mgf-separador" role="tab" id="sep-dor" aria-controls="tab-dor" aria-selected="true">Controlo da Dor</button>
@@ -253,6 +255,8 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-resp" aria-controls="tab-resp" aria-selected="false">Asma · DPOC · Rinite</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-derm" aria-controls="tab-derm" aria-selected="false">Dermatologia</button>
   </div>
+  </div>
+  <div class="mgf-resposta">
   <p class="mgf-nota" data-nivel="atencao" id="dor-disclaimer"><strong>Ferramenta de apoio à decisão clínica.</strong> Doses e equivalências são <strong>orientativas</strong> e variam entre fontes e indivíduos. As tabelas de equianalgesia são estimativas de dose única, com <strong>tolerância cruzada incompleta</strong> — ao trocar de opióide, reduzir a dose calculada (tipicamente 25–50%) e titular. Confirmar sempre com o RCM/Prontuário (Infarmed) e individualizar. Não substitui o julgamento clínico.</p>
   <section class="mgf-painel ap-painel" id="tab-dor" role="tabpanel" aria-labelledby="sep-dor"></section>
   <section class="mgf-painel ap-painel" id="tab-hta" role="tabpanel" aria-labelledby="sep-hta" hidden></section>
@@ -265,7 +269,8 @@
   <div class="mgf-botoes ap-sem-impressao">
     <button type="button" class="mgf-botao" id="ap-imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir ou guardar em PDF</button>
   </div>
-
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">

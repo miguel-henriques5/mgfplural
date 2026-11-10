@@ -43,7 +43,8 @@
     "Therapeutic Goods Administration (TGA, Austrália). Prescribing medicines in pregnancy database — categorias de risco.",
     "UpToDate, 2025. DynaMed, 2025.",
     "Bernardes AM. Universidade de Lisboa, 2025."
-  ]
+  ],
+  "corpo": "bancada"
 }
 </script>
 
@@ -69,8 +70,23 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Segurança, categorias TGA e recomendações por trimestre (T1, T2, T3). Escolhe uma classe ou pesquisa por fármaco, classe ou patologia; carrega num cartão para ver a tabela.</p>
+  <div class="mgf-guia-controlos">
+    <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar nos fármacos na gravidez</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gr-pesquisa" placeholder="Pesquisar fármaco, classe, patologia…" autocomplete="off"></label>
+    <div class="mgf-filtros" id="gr-filtros" role="group" aria-label="Filtrar por classe">
+      <button type="button" data-cat="all" aria-pressed="true">Todas</button>
+      <button type="button" data-cat="antihipertensores" aria-pressed="false">Anti-HTA</button>
+      <button type="button" data-cat="antidiabeticos" aria-pressed="false">Antidiabéticos</button>
+      <button type="button" data-cat="respiratorio" aria-pressed="false">Respiratório</button>
+      <button type="button" data-cat="psicofármacos" aria-pressed="false">Psicofármacos</button>
+      <button type="button" data-cat="analgesicos" aria-pressed="false">Analgésicos</button>
+      <button type="button" data-cat="gi" aria-pressed="false">GI</button>
+      <button type="button" data-cat="antibioticos" aria-pressed="false">Antibióticos</button>
+      <button type="button" data-cat="outros" aria-pressed="false">Outros</button>
+    </div>
+  </div>
   <ul class="preg-legenda" aria-label="Categorias TGA">
     <li><span class="mgf-etiqueta" data-nivel="normal">A</span> Seguro</li>
     <li><span class="mgf-etiqueta" data-nivel="info">B1 · B2 · B3</span> Dados limitados</li>
@@ -90,21 +106,8 @@
     <p class="mgf-refs">Nota: A FDA substituiu as categorias A–X pelo sistema PLLR (2015) com descrições narrativas de risco. A classificação TGA australiana mantém-se como referência prática amplamente usada. Doxiciclina e Levofloxacina são sempre contraindicadas na gravidez.</p>
   </details>
   <p class="mgf-nota" data-nivel="info"><strong>Princípios gerais:</strong> Quando possível, diferir para depois do 1º trimestre · Usar a dose eficaz mais baixa pelo menor tempo possível · Preferir fármacos com perfil de segurança conhecido · A não-tratação também comporta riscos maternos e fetais.</p>
-  <div class="mgf-guia-controlos">
-    <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar nos fármacos na gravidez</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gr-pesquisa" placeholder="Pesquisar fármaco, classe, patologia…" autocomplete="off"></label>
-    <div class="mgf-filtros" id="gr-filtros" role="group" aria-label="Filtrar por classe">
-      <button type="button" data-cat="all" aria-pressed="true">Todas</button>
-      <button type="button" data-cat="antihipertensores" aria-pressed="false">Anti-HTA</button>
-      <button type="button" data-cat="antidiabeticos" aria-pressed="false">Antidiabéticos</button>
-      <button type="button" data-cat="respiratorio" aria-pressed="false">Respiratório</button>
-      <button type="button" data-cat="psicofármacos" aria-pressed="false">Psicofármacos</button>
-      <button type="button" data-cat="analgesicos" aria-pressed="false">Analgésicos</button>
-      <button type="button" data-cat="gi" aria-pressed="false">GI</button>
-      <button type="button" data-cat="antibioticos" aria-pressed="false">Antibióticos</button>
-      <button type="button" data-cat="outros" aria-pressed="false">Outros</button>
-    </div>
   </div>
-
+  <div class="mgf-resposta">
   <section class="mgf-seccao" data-cat="antihipertensores">
     <div class="mgf-seccao-titulo"><h3>Anti-hipertensores</h3><span>5 classes</span></div>
     <div class="mgf-grelha">
@@ -1218,10 +1221,10 @@
       </div>
     </div>
   </section>
-
   <div class="mgf-vazio" id="gr-vazio" hidden>Nenhum resultado encontrado.</div>
   <p class="mgf-nota" id="gr-nota-final"><strong>Nota:</strong> Esta ferramenta é de apoio clínico e não substitui o julgamento individualizado. A não-tratação também comporta riscos. Para cada caso, pesar risco-benefício com a doente.</p>
-
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">
