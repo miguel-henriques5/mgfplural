@@ -17,7 +17,7 @@
 .atb-pista { display: block; font-size: 13px; color: var(--cor-texto-3); }
 .atb-entrada { padding: 10px 0; border-bottom: 1px solid var(--cor-linha-suave); font-size: 15px; }
 .atb-entrada:last-child { border-bottom: 0; }
-.atb-entrada-rotulo { display: block; font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 2px; }
+.atb-entrada-rotulo { display: block; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--cor-texto-3); margin-bottom: 2px; }
 .atb-entrada-farmaco { display: block; font-weight: 700; }
 .atb-entrada-alt { display: block; font-size: 14px; color: var(--cor-texto-2); }
 #atb-nota-final { margin-top: 20px; }
@@ -34,41 +34,32 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Ferramentas de prescrição</a></li>
-<li aria-current="page">Guia de antibioterapia</li>
+<li><details class="grupo-menu"><summary>Ferramentas de prescrição <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
+<ul><li><a href="guia-antibioterapia.html" aria-current="page">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html">Guia terapêutico</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-ambar" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/bacteria.svg" alt="">
 <div class="ficha-titulo">
 <h1>Guia de antibioterapia</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
-</div>
-</div>
-</div>
-<div class="ficha-base">
+<p class="ficha-meta">Criado por <strong>Miguel Henriques</strong> · v1.0 · revisto a 08/11/2026 · <a href="#bib-titulo">bibliografia</a></p>
 <p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
+</div>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/guia-antibioterapia.html" download="guia-antibioterapia.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/guia-antibioterapia.html" download="guia-antibioterapia.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-ambar" aria-label="Ferramentas de prescrição">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
-<ul><li><a href="guia-antibioterapia.html" aria-current="page">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html">Guia terapêutico</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Indicações e doses em situações clínicas infeciosas comuns em ambulatório · edição de novembro de 2025. Escolhe uma área ou pesquisa por patologia ou antibiótico; carrega num cartão para ver as doses.</p>
   <div class="mgf-guia-controlos">
     <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar no guia de antibioterapia</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="atb-pesquisa" placeholder="Pesquisar patologia, antibiótico…" autocomplete="off"></label>
@@ -82,7 +73,8 @@
       <button type="button" data-cat="outras" aria-pressed="false">Outras</button>
     </div>
   </div>
-
+  </div>
+  <div class="mgf-resposta">
   <section class="mgf-seccao" data-cat="respiratório">
     <div class="mgf-seccao-titulo"><h3>Respiratório</h3><span>6 patologias</span></div>
     <div class="mgf-grelha">
@@ -793,20 +785,20 @@
       </div>
     </div>
   </section>
-
   <div class="mgf-vazio" id="atb-vazio" hidden>Nenhum resultado encontrado.</div>
   <p class="mgf-nota" id="atb-nota-final"><strong>Nota:</strong> Este guia destina-se a uso clínico em ambulatório e não substitui o julgamento clínico individualizado. As doses e indicações devem ser sempre confirmadas face ao contexto clínico, alergias e antibiograma quando disponível.</p>
-
+  </div>
+  </div>
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Guia de antibioterapia em ambulatório, edição de novembro de 2025 (compilação do autor a partir das normas da DGS e das fichas técnicas).</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório (amigdalite, otite média aguda, sinusite, pneumonia adquirida na comunidade, infeção urinária).</li><li>INFARMED. Resumo das Características do Medicamento (RCM) dos antibióticos referidos.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Guia de antibioterapia em ambulatório, edição de novembro de 2025 (compilação do autor a partir das normas da DGS e das fichas técnicas).</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório (amigdalite, otite média aguda, sinusite, pneumonia adquirida na comunidade, infeção urinária).</li><li>INFARMED. Resumo das Características do Medicamento (RCM) dos antibióticos referidos.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 08/11/2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20de%20antibioterapia%20%28v1.0%29&body=Ferramenta%3A%20Guia%20de%20antibioterapia%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="apoio-a-prescricao.html"><span>Seguinte →</span><strong>Apoio à prescrição</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="apoio-a-prescricao.html">Apoio à prescrição →</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -826,7 +818,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>

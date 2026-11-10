@@ -24,7 +24,7 @@
 .ponto[data-estado="current"] { background: var(--clin-atencao-borda); }
 .ponto[data-estado="future"] { background: var(--clin-normal-borda); }
 .ponto[data-estado="past"] { background: var(--cor-campo); }
-.semana { display: inline-block; font-family: var(--letra-mono); font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.semana { display: inline-block; font-family: inherit; font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
 .semana[data-t="1t"] { background: var(--cor-menta-clara); }
 .semana[data-t="2t"] { background: var(--cor-ambar-claro); }
 .semana[data-t="3t"] { background: var(--cor-areia); }
@@ -76,41 +76,32 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-menta">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Escalas e calculadoras</a></li>
-<li aria-current="page">Planificação da vigilância da gravidez</li>
+<li><details class="grupo-menu"><summary>Escalas e calculadoras <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a>
+<ul><li><a href="planificacao-vigilancia-gravidez.html" aria-current="page">Planificação da vigilância da gravidez</a></li><li><a href="escalas-cardiovasculares.html">Escalas cardiovasculares</a></li><li><a href="escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a></li><li><a href="escalas-saude-mental.html">Escalas de saúde mental</a></li><li><a href="escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-menta" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/gravidez.svg" alt="">
 <div class="ficha-titulo">
 <h1>Planificação da vigilância da gravidez</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
-</div>
-</div>
-</div>
-<div class="ficha-base">
+<p class="ficha-meta">Criado por <strong>Miguel Henriques</strong> · v1.0 · revisto a 08/11/2026 · <a href="#bib-titulo">bibliografia</a></p>
 <p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
+</div>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/planificacao-vigilancia-gravidez.html" download="planificacao-vigilancia-gravidez.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/planificacao-vigilancia-gravidez.html" download="planificacao-vigilancia-gravidez.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-menta" aria-label="Escalas e calculadoras">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a>
-<ul><li><a href="planificacao-vigilancia-gravidez.html" aria-current="page">Planificação da vigilância da gravidez</a></li><li><a href="escalas-cardiovasculares.html">Escalas cardiovasculares</a></li><li><a href="escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a></li><li><a href="escalas-saude-mental.html">Escalas de saúde mental</a></li><li><a href="escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <form class="mgf-cartao" id="dados" novalidate>
     <div class="mgf-cartao-titulo">Dados da grávida</div>
     <div class="mgf-cartao-corpo" style="gap:16px">
@@ -139,7 +130,8 @@
       <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular plano de vigilância</button></div>
     </div>
   </form>
-
+  </div>
+  <div class="mgf-resposta">
   <div id="plano" hidden>
     <p class="so-imprimir plano-impressao"><strong id="imprimir-nome"></strong><span id="imprimir-data"></span></p>
     <div class="mgf-resumo" id="resumo">
@@ -217,17 +209,19 @@
       <button type="button" class="mgf-botao mgf-botao-principal" id="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resumo</button>
     </div>
   </div>
-
+  <div class="mgf-espera">O resultado aparece aqui depois de preencheres os dados.</div>
+  </div>
+  </div>
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>DGS. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: Direção-Geral da Saúde; 2015.</li><li>DGS. Normas de Orientação Clínica — Vigilância da Gravidez de Baixo Risco.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>DGS. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: Direção-Geral da Saúde; 2015.</li><li>DGS. Normas de Orientação Clínica — Vigilância da Gravidez de Baixo Risco.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 08/11/2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20Planifica%C3%A7%C3%A3o%20da%20vigil%C3%A2ncia%20da%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="escalas-cardiovasculares.html"><span>Seguinte →</span><strong>Escalas cardiovasculares</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="escalas-cardiovasculares.html">Escalas cardiovasculares →</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -247,7 +241,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>
