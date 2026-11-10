@@ -32,7 +32,10 @@ Não ponhas cabeçalho com o nome da ferramenta, autor ou bibliografia dentro do
 
 Todas as páginas de ferramenta seguem a mesma arrumação (aprovada a 10/11/2026):
 
-- **Cabeçalho compacto**, gerado pelo site: migalhas com o menu das outras ferramentas do grupo, ilustração, título, autoria, versão e data, e os botões Descarregar e Feedback, discretos.
+- **Cabeçalho compacto**, gerado pelo site: migalhas com o menu das outras ferramentas do grupo, ilustração, título e uma linha com o resumo (campo `resumo` da ficha, até ~50 caracteres), autor, versão e data; os botões Descarregar e Feedback, discretos. O aviso «Apoia, não substitui, o juízo clínico» é posto pelo site no fim da coluna dos comandos.
+- **Bibliografia** no fim da página; com mais de 5 referências fica fechada e abre ao carregar.
+- **Folha para o doente:** se o que se imprime é para o doente, põe `"impressao": "doente"` na ficha e a impressão sai sem cabeçalho, autoria nem bibliografia.
+- **Caixas de seleção:** o estilo comum (linha leve, uma só seta para baixo) aplica-se sozinho; não lhes dês bordas nem setas próprias.
 - **A ferramenta assenta no fundo da página**, sem caixa à volta. Uma caixa, não caixas dentro de caixas.
 - **Bancada** (por defeito): comandos à esquerda, resposta à direita. A resposta fica sempre à vista enquanto se preenche. No telemóvel passa a uma só coluna.
 
@@ -123,7 +126,7 @@ Usa o ficheiro modelo-ferramenta.html em anexo como base e segue estas regras:
 - Escreve a ferramenta dentro de <main class="mgf-ferramenta" id="ferramenta">, usando as classes mgf- do modelo (mgf-cartao, mgf-opcao, mgf-resultado, mgf-interp com data-nivel="normal|atencao|alerta|info", mgf-tabela, mgf-nota, mgf-botao).
 - Arruma a ferramenta em bancada, como no modelo: perguntas e campos em <div class="mgf-comandos">, resultado em <div class="mgf-resposta">, os dois dentro de <div class="mgf-bancada">. Num guia de consulta usa <div class="mgf-bancada mgf-bancada-guia"> com a pesquisa e os filtros à esquerda. Se a bancada não fizer sentido, põe "corpo": "coluna" na ficha e começa por uma pergunta (<h2 class="mgf-pergunta">). Sem caixas dentro de caixas.
 - Estilos próprios só no bloco <style data-mgf="ferramenta">; JavaScript só no bloco <script data-mgf="ferramenta">, sem bibliotecas externas.
-- Preenche a ficha JSON (id, titulo, descricao, area, grupo, autor, versao, revisto, layout, palavras, bibliografia completa). Opcional: `icone`, o nome de uma ilustração de `assets/img/icones/` (sem `.svg`) que aparece no cabeçalho e nos cartões da ferramenta; sem ele, usa-se a do grupo.
+- Preenche a ficha JSON (id, titulo, descricao, resumo com até 50 caracteres, area, grupo, autor, versao, revisto, layout, palavras, bibliografia completa). Opcional: `icone`, o nome de uma ilustração de `assets/img/icones/` (sem `.svg`) que aparece no cabeçalho e nos cartões da ferramenta; sem ele, usa-se a do grupo.
 - Português de Portugal com o Acordo Ortográfico; decimais com vírgula.
 - Sem emojis. A cor nunca é o único sinal: escreve sempre o nível em texto.
 - Não envies dados para a internet e não guardes dados que identifiquem doentes.
