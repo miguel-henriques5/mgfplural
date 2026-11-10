@@ -27,11 +27,14 @@
         if (p) p.hidden = !ativo;
       });
     }
+    // Na bancada (proposta B) os separadores ficam numa lista vertical à esquerda
+    var lista = seps.length && seps[0].closest("[role=tablist]");
+    if (lista && lista.closest(".mgf-comandos")) lista.setAttribute("aria-orientation", "vertical");
     seps.forEach(function (s, i) {
       s.tabIndex = s.getAttribute("aria-selected") === "true" ? 0 : -1;
       s.addEventListener("click", function () { mostrar(s); });
       s.addEventListener("keydown", function (e) {
-        var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        var d = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : (e.key === "ArrowLeft" || e.key === "ArrowUp") ? -1 : 0;
         if (!d) return;
         var n = seps[(i + d + seps.length) % seps.length];
         n.focus(); mostrar(n); e.preventDefault();

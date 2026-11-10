@@ -13,16 +13,15 @@
     try { return JSON.parse(localStorage.getItem("mgf:recentes") || "[]"); } catch (e) { return []; }
   }
 
-  /* ---------- Menu Ferramentas: fechar ao clicar fora ou com Esc ---------- */
-  var menu = document.querySelector(".menu-ferramentas");
-  if (menu) {
+  /* ---------- Menus (Ferramentas e grupo da ferramenta): fechar ao clicar fora ou com Esc ---------- */
+  document.querySelectorAll(".menu-ferramentas, .grupo-menu").forEach(function (menu) {
     document.addEventListener("click", function (e) {
       if (menu.open && !menu.contains(e.target)) menu.open = false;
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
     });
-  }
+  });
 
   /* ---------- Pesquisa instantânea ---------- */
   document.querySelectorAll("[data-pesquisa]").forEach(function (caixa) {

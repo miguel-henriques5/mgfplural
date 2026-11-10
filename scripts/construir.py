@@ -252,7 +252,7 @@ def bibliografia_html(f, titulo_tag="h2"):
     itens = "".join(f"<li>{e(r)}</li>" for r in f["bibliografia"])
     return (f'<section class="bibliografia" aria-labelledby="bib-titulo"><{titulo_tag} id="bib-titulo">Bibliografia</{titulo_tag}>'
             f'<ol>{itens}</ol>'
-            f'<p>Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto em {e(f["revisto"])}</p></section>')
+            f'<p>Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])}</p></section>')
 
 
 AVISO_CLINICO = "Apoia, não substitui, o juízo clínico."
@@ -266,6 +266,20 @@ def tem_estilo(f):
 
 
 # ---------------------------------------------------------------- página da ferramenta no site
+
+def data_pt(iso):
+    """2026-11-08 → 08/11/2026 (formato das datas no site)."""
+    a, m, d = iso.split("-")
+    return f"{d}/{m}/{a}"
+
+
+def classe_corpo(f):
+    """Proposta B («bancada», por defeito) ou C («coluna») para o corpo da ferramenta."""
+    corpo = f.get("corpo", "bancada")
+    if corpo not in ("bancada", "coluna"):
+        erro(f"{f['id']}: o campo «corpo» da ficha só pode ser «bancada» ou «coluna»")
+    return "corpo-" + corpo
+
 
 def pagina_ferramenta(f, ferramentas):
     prefixo = "../../../"
@@ -282,9 +296,9 @@ def pagina_ferramenta(f, ferramentas):
     if ant or seg:
         nav_as = '<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo">'
         if ant:
-            nav_as += f'<a href="{ant["id"]}.html"><span>← Anterior</span><strong>{e(ant["titulo"])}</strong></a>'
+            nav_as += f'<a href="{ant["id"]}.html">← {e(ant["titulo"])}</a>'
         if seg:
-            nav_as += f'<a class="seguinte" href="{seg["id"]}.html"><span>Seguinte →</span><strong>{e(seg["titulo"])}</strong></a>'
+            nav_as += f'<a class="seguinte" href="{seg["id"]}.html">{e(seg["titulo"])} →</a>'
         nav_as += '</nav>'
     estilo = f'<link rel="stylesheet" href="{prefixo}assets/css/ferramenta.css">\n'
     if tem_estilo(f):
@@ -293,48 +307,38 @@ def pagina_ferramenta(f, ferramentas):
     return f"""{cabeca(f["titulo"] + " · MGF no Plural", prefixo, f["descricao"], extra=estilo)}
 <body data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}">
 {topo(prefixo, ferramentas, "ferramentas")}
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-{tom}">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="{prefixo}index.html">Início</a></li>
 <li><a href="../index.html">{e(area["nome"])}</a></li>
-<li><a href="index.html">{e(grupo["nome"])}</a></li>
-<li aria-current="page">{e(f["titulo"])}</li>
+<li><details class="grupo-menu"><summary>{e(grupo["nome"])} <span>· {len(irmas)}</span>{SVG_SETA_BAIXO}</summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="{icone(prefixo, grupo["icone"])}" alt="">{e(grupo["nome"])}</a>
+<ul>{lista}</ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha {tom}" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="{icone(prefixo, icone_ferramenta(f))}" alt="">
 <div class="ficha-titulo">
 <h1>{e(f["titulo"])}</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">{e(iniciais(f["autor"]))}</span>Criado por <strong>{e(f["autor"])}</strong></span>
-<span class="ficha-versao">v{e(f["versao"])} · revisto em {e(f["revisto"])} · <a href="#bib-titulo">bibliografia</a></span>
-</div>
-</div>
-</div>
-<div class="ficha-base">
+<p class="ficha-meta">Criado por <strong>{e(f["autor"])}</strong> · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · <a href="#bib-titulo">bibliografia</a></p>
 <p class="aviso-clinico"><img src="{icone(prefixo, "privacidade")}" alt="">{AVISO_CLINICO}</p>
+</div>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}Descarregar HTML</a>
-<a class="botao" href="{assunto_feedback(f)}">{SVG_MENSAGEM}Enviar feedback</a>
+<a class="botao" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}Descarregar</a>
+<a class="botao" href="{assunto_feedback(f)}">{SVG_MENSAGEM}Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas {tom}" aria-label="{e(grupo["nome"])}">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="{icone(prefixo, grupo["icone"])}" alt="">{e(grupo["nome"])}</a>
-<ul>{lista}</ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta {classe_corpo(f)}">
 {f["conteudo"]}
 </div>
-<div class="ferramenta-pe">
+<footer class="ferramenta-pe">
 {bibliografia_html(f)}
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="{assunto_feedback(f)}">Enviar feedback por email</a><code>{SITE["email"]}</code><button type="button" class="botao-texto" data-copiar="{SITE["email"]}">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="{assunto_feedback(f)}">Enviar feedback por email</a> · <span class="mono">{SITE["email"]}</span> <button type="button" class="botao-texto" data-copiar="{SITE["email"]}">Copiar endereço</button></div>
 </div>
-</div>
+</footer>
 {nav_as}
 </div>
 {rodape(prefixo)}
@@ -359,30 +363,30 @@ def css_autonomo():
     tokens = re.sub(r'url\("\.\./fonts/([^"]+)"\)', embutir, tokens)
     ferr = (ASSETS / "css" / "ferramenta.css").read_text(encoding="utf-8")
     pagina = """
-body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); }
-.autonomo { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 16px; }
-.autonomo-topo { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
-.autonomo-marca { display: flex; align-items: center; gap: 10px; font-family: var(--letra-titulo); font-size: 18px; letter-spacing: -0.02em; color: var(--cor-tinta); }
-.autonomo-marca svg { width: 40px; height: 28px; }
-.autonomo-topo h1 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 32px; letter-spacing: -0.03em; line-height: 1.05; }
-.autonomo-meta { font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); }
-.autonomo-aviso { background: var(--cor-menta-clara); border-radius: 12px; padding: 10px 14px; font-size: 15px; }
-.autonomo-ferramenta { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 22px; }
-.bibliografia { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 16px 20px; font-size: 13px; color: var(--cor-texto-3); }
-.bibliografia h2 { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-verde); margin: 0 0 8px; }
-.bibliografia ol { margin: 0 0 8px; padding-left: 18px; }
-.bibliografia p, .autonomo-rodape { margin: 0; font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
+body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); line-height: 1.55; }
+.autonomo { max-width: 1200px; margin: 0 auto; padding: 20px 24px 48px; display: flex; flex-direction: column; gap: 20px; }
+.autonomo-topo { display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--cor-linha); }
+.autonomo-marca { display: flex; align-items: center; gap: 8px; font-family: var(--letra-titulo); font-size: 16px; letter-spacing: -0.02em; color: var(--cor-tinta); margin-bottom: 6px; }
+.autonomo-marca svg { width: 34px; height: 24px; }
+.autonomo-topo h1 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 30px; letter-spacing: -0.03em; line-height: 1.1; }
+.autonomo-meta { font-size: 15px; color: var(--cor-texto-3); margin: 0; }
+.autonomo-meta strong { color: var(--cor-texto-2); }
+.autonomo-pe { display: flex; flex-wrap: wrap; gap: 16px 40px; border-top: 1px solid var(--cor-linha); padding-top: 18px; }
+.bibliografia { flex: 1 1 420px; font-size: 14px; color: var(--cor-texto-3); }
+.bibliografia h2 { font-family: var(--letra-texto); font-size: 15px; font-weight: 700; color: var(--cor-tinta); margin: 0 0 6px; }
+.bibliografia ol { margin: 0 0 8px; padding-left: 18px; line-height: 1.5; }
+.bibliografia p, .autonomo-rodape { margin: 0; font-size: 14px; color: var(--cor-texto-3); }
+.autonomo-avisos { flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px; }
 .autonomo a { color: var(--cor-verde); }
 @media print {
   body { background: #fff; }
   .autonomo { padding: 0; gap: 6px; }
-  .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 6px; }
-  .autonomo-topo { gap: 2px; }
-  .autonomo-marca { font-size: 12px; } .autonomo-marca svg { width: 24px; height: 17px; }
+  .autonomo-topo { gap: 2px; padding-bottom: 6px; }
+  .autonomo-marca { font-size: 12px; margin: 0; } .autonomo-marca svg { width: 24px; height: 17px; }
   .autonomo-topo h1 { font-size: 20px; }
   .autonomo-meta, .autonomo-rodape, .bibliografia p { font-size: 9px; }
-  .autonomo-aviso { background: none; padding: 0; font-size: 10px; }
-  .bibliografia { font-size: 9px; }
+  .autonomo-pe { padding-top: 6px; }
+  .bibliografia, .bibliografia h2 { font-size: 9px; }
   .autonomo-rodape a { text-decoration: none; }
 }
 """
@@ -414,15 +418,18 @@ def pagina_autonoma(f, css):
 <header class="autonomo-topo">
 <span class="autonomo-marca">{simbolo(14)}<span><span style="font-weight:400">mgf no </span><b>plural</b></span></span>
 <h1>{e(f["titulo"])}</h1>
-<span class="autonomo-meta">Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto em {e(f["revisto"])}</span>
-<span class="autonomo-aviso">{AVISO_CLINICO}</span>
+<p class="autonomo-meta">Criado por <strong>{e(f["autor"])}</strong> · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · {AVISO_CLINICO}</p>
 </header>
-<div class="autonomo-ferramenta">
+<div class="autonomo-ferramenta {classe_corpo(f)}">
 {f["conteudo"]}
 </div>
+<div class="autonomo-pe">
 {bibliografia_html(f)}
+<div class="autonomo-avisos">
 <p class="autonomo-rodape">{AVISO_PRIVACIDADE}</p>
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="{url}">{e(url)}</a> · Feedback: {SITE["email"]} · Licença MIT</p>
+</div>
+</div>
 </div>
 <script>
 {JS_FERRAMENTA}

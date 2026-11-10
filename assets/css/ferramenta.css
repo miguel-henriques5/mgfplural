@@ -6,7 +6,7 @@
 
 .mgf-ferramenta {
   font-family: var(--letra-texto);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.55;
   color: var(--cor-tinta);
 }
@@ -41,7 +41,7 @@
 }
 .mgf-separador:hover { border-color: var(--cor-verde); transform: translateY(-1px); }
 .mgf-separador[aria-selected="true"] {
-  background: var(--cor-tinta); border-color: var(--cor-tinta); color: var(--cor-papel);
+  background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco);
 }
 .mgf-painel[hidden] { display: none; }
 
@@ -56,9 +56,8 @@
   border-radius: var(--raio); margin: 0 0 12px; overflow: hidden;
 }
 .mgf-cartao-titulo {
-  font-family: var(--letra-texto); font-weight: 700; font-size: 15px;
-  padding: 11px 18px; background: var(--cor-menta-clara); color: var(--cor-verde-fundo);
-  border-bottom: 1px solid var(--cor-linha-suave);
+  font-family: var(--letra-titulo); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; line-height: 1.25;
+  padding: 14px 18px 4px; background: none; color: var(--cor-tinta);
 }
 .mgf-cartao-corpo { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
 
@@ -90,10 +89,10 @@
   content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cor-branco);
 }
 .mgf-opcao.marcada { background: var(--cor-menta-clara); border-color: var(--cor-menta); }
-.mgf-opcao-texto { flex: 1; font-size: 16px; line-height: 1.45; }
+.mgf-opcao-texto { flex: 1; font-size: 17px; line-height: 1.45; }
 .mgf-opcao-pontos {
-  flex: 0 0 auto; font-family: var(--letra-mono); font-size: 13px; font-weight: 500;
-  color: var(--cor-verde); padding-top: 2px;
+  flex: 0 0 auto; font-size: 15px; font-weight: 700;
+  color: var(--cor-verde); padding-top: 2px; white-space: nowrap;
 }
 .mgf-opcao-negativa .mgf-opcao-pontos { color: var(--clin-alerta); }
 .mgf-opcao-negativa { border-color: var(--cor-linha); }
@@ -101,16 +100,16 @@
 
 /* ---------- Resultado ---------- */
 .mgf-resultado {
-  background: var(--cor-branco); border: 1px solid var(--cor-linha-suave);
-  border-radius: var(--raio); margin-top: 8px; overflow: hidden;
+  background: var(--cor-branco); border: 2px solid var(--cor-verde);
+  border-radius: var(--raio-g); margin-top: 8px; overflow: hidden;
 }
 .mgf-resultado-topo {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 16px 20px; background: var(--cor-tinta); color: var(--cor-papel);
+  padding: 18px 20px 4px; background: none; color: var(--cor-tinta);
 }
-.mgf-resultado-topo h3 { color: var(--cor-papel); font-size: 19px; font-weight: 800; }
-.mgf-pontuacao { font-family: var(--letra-mono); font-size: 40px; font-weight: 500; line-height: 1; color: var(--cor-papel); }
-.mgf-pontuacao small { font-size: 18px; color: var(--cor-menta); margin-left: 4px; }
+.mgf-resultado-topo h3 { color: var(--cor-tinta); font-size: 20px; font-weight: 800; }
+.mgf-pontuacao { font-family: var(--letra-texto); font-size: 40px; font-weight: 700; line-height: 1; color: var(--cor-tinta); }
+.mgf-pontuacao small { font-size: 17px; font-weight: 400; color: var(--cor-texto-3); margin-left: 4px; }
 .mgf-resultado-corpo { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
 .mgf-barra { height: 8px; background: var(--cor-linha-suave); border-radius: 99px; overflow: hidden; }
 .mgf-barra > span { display: block; height: 100%; width: 0; background: var(--cor-verde-medio); border-radius: 99px; transition: width .4s var(--mola); }
@@ -150,7 +149,7 @@
 
 /* ---------- Referências dentro de uma escala ---------- */
 .mgf-refs { font-size: 13px; color: var(--cor-texto-3); line-height: 1.5; }
-.mgf-refs h4 { font-family: var(--letra-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
+.mgf-refs h4 { font-family: var(--letra-texto); font-size: 13px; font-weight: 700; color: var(--cor-texto-3); margin-bottom: 4px; }
 .mgf-refs ol { margin: 0; padding-left: 18px; }
 
 /* ---------- Botões ---------- */
@@ -178,7 +177,9 @@
 }
 
 @media print {
-  .mgf-separadores, .mgf-botoes { display: none !important; }
+  .mgf-separadores, .mgf-botoes, .mgf-espera { display: none !important; }
+  .mgf-bancada { display: block !important; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
   .mgf-painel[hidden] { display: none !important; }
   .mgf-cartao, .mgf-resultado { break-inside: avoid; }
   .mgf-opcao:not(.marcada) { color: var(--cor-texto-3); }
@@ -195,7 +196,7 @@
 /* Opções lado a lado (p. ex. pontuações 0–3 de um item) */
 .mgf-cartao-corpo.mgf-em-linha { flex-direction: row; flex-wrap: wrap; gap: 6px; }
 .mgf-em-linha .mgf-opcao { flex: 1 1 52px; gap: 8px; padding: 10px 8px; justify-content: center; align-items: center; border-color: var(--cor-linha); }
-.mgf-em-linha .mgf-opcao-texto { flex: 0 0 auto; font-family: var(--letra-mono); font-weight: 500; }
+.mgf-em-linha .mgf-opcao-texto { flex: 0 0 auto; font-weight: 700; }
 
 /* Aviso de direitos de autor dentro de uma escala */
 .mgf-direitos { background: var(--clin-info-fundo); color: var(--clin-info); border-radius: var(--raio-p); padding: 12px 14px; font-size: 15px; line-height: 1.5; margin: 0 0 12px; }
@@ -226,8 +227,8 @@
 .mgf-resumo > div[data-nivel="atencao"] { border-left-color: var(--clin-atencao-borda); }
 .mgf-resumo > div[data-nivel="elevado"] { border-left-color: var(--clin-elevado-borda); }
 .mgf-resumo > div[data-nivel="alerta"]  { border-left-color: var(--clin-alerta-borda); }
-.mgf-resumo-rotulo { font-family: var(--letra-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); }
-.mgf-resumo-valor { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; line-height: 1.1; }
+.mgf-resumo-rotulo { font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+.mgf-resumo-valor { font-size: 26px; font-weight: 700; line-height: 1.15; }
 .mgf-resumo-sub { font-size: 14px; color: var(--cor-texto-2); }
 
 /* Grupo de botões de escolha (filtros) */
@@ -244,7 +245,7 @@
    Guias de consulta (antibioterapia, prescrição, exames…)
    Pesquisa, filtros, secções, cartões que abrem e fecham, notas e rótulos.
    ===================================================================== */
-.mgf-guia-intro { color: var(--cor-texto-2); font-size: 16px; margin: 0 0 14px; }
+.mgf-guia-intro { color: var(--cor-texto-2); font-size: 17px; margin: 0 0 14px; }
 .mgf-guia-controlos { display: flex; flex-direction: column; gap: 10px; margin: 0 0 20px; }
 
 /* Caixa de pesquisa com lupa */
@@ -261,8 +262,8 @@
 .mgf-seccao { margin: 0 0 24px; }
 .mgf-seccao[hidden] { display: none; }
 .mgf-seccao-titulo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--cor-linha); }
-.mgf-seccao-titulo h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
-.mgf-seccao-titulo span { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .04em; color: var(--cor-texto-3); }
+.mgf-seccao-titulo h3 { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; }
+.mgf-seccao-titulo span { font-size: 15px; color: var(--cor-texto-3); }
 .mgf-grelha { display: grid; grid-template-columns: 1fr; gap: 10px; }
 
 /* Cartão que abre e fecha (botão com aria-expanded + corpo com hidden) */
@@ -274,10 +275,11 @@
   font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s;
 }
 .mgf-dobra-topo:hover { background: var(--cor-papel); }
-.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-menta-clara); }
+.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-papel); }
+.mgf-dobra:has(> .mgf-dobra-topo[aria-expanded="true"]) { border-color: var(--cor-menta); }
 .mgf-dobra-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 800; font-size: 18px; letter-spacing: -0.015em; line-height: 1.2; }
-.mgf-dobra-sub { font-size: 14px; color: var(--cor-texto-2); line-height: 1.4; }
+.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; line-height: 1.2; }
+.mgf-dobra-sub { font-size: 15px; color: var(--cor-texto-3); line-height: 1.4; }
 .mgf-dobra-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
 .mgf-dobra-topo[aria-expanded="true"] .mgf-dobra-seta { transform: rotate(180deg); }
 .mgf-dobra-corpo { padding: 14px 18px 18px; border-top: 1px solid var(--cor-linha-suave); display: flex; flex-direction: column; gap: 12px; }
@@ -311,4 +313,63 @@
   .mgf-guia-controlos, .mgf-vazio { display: none !important; }
   .mgf-dobra { break-inside: avoid; }
   .mgf-dobra-seta { display: none; }
+}
+
+
+/* =====================================================================
+   Bancada (proposta B, aprovada a 2026-11-10): comandos à esquerda, resposta à direita.
+   <div class="mgf-bancada">            calculadora: perguntas largas, resultado estreito e sempre à vista
+   <div class="mgf-bancada mgf-bancada-guia">   guia: pesquisa, filtros ou capítulos numa coluna estreita
+     <div class="mgf-comandos"> … </div>
+     <div class="mgf-resposta"> … </div>
+   </div>
+   No telemóvel passa a uma só coluna. Quando a bancada não faz sentido, a ferramenta usa
+   "corpo": "coluna" na ficha (proposta C: uma coluna, uma pergunta de cada vez).
+   ===================================================================== */
+.mgf-bancada {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: 28px; align-items: start;
+}
+.mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.mgf-bancada > .mgf-comandos > *, .mgf-bancada > .mgf-resposta > * { margin-top: 0; margin-bottom: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-resultado { margin-top: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-botoes { margin-top: 0; }
+
+.mgf-bancada-guia { grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); }
+.mgf-bancada-guia > .mgf-comandos {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-intro { font-size: 15px; color: var(--cor-texto-3); }
+.mgf-bancada-guia > .mgf-comandos .mgf-nota { font-size: 14px; }
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-controlos { gap: 14px; }
+
+/* Separadores e filtros na coluna da esquerda: lista vertical */
+.mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: column; flex-wrap: nowrap; gap: 2px; margin: 0; }
+.mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button {
+  justify-content: flex-start; text-align: left; width: 100%; min-height: 42px; padding: 8px 12px;
+  border: 0; border-radius: 10px; background: none; font-size: 16px; font-weight: 400; color: var(--cor-tinta);
+}
+.mgf-comandos .mgf-separador:hover, .mgf-comandos .mgf-filtros button:hover { background: var(--cor-branco); transform: none; }
+.mgf-comandos .mgf-separador[aria-selected="true"], .mgf-comandos .mgf-filtros button[aria-pressed="true"] {
+  background: var(--cor-verde); color: var(--cor-branco); font-weight: 700;
+}
+
+/* Lugar do resultado antes de haver resultado (fica escondido quando o elemento anterior aparece) */
+.mgf-espera { display: none; }
+[hidden] + .mgf-espera {
+  display: block; text-align: center; padding: 28px 16px; color: var(--cor-texto-3); font-size: 16px;
+  border: 1.5px dashed var(--cor-linha); border-radius: var(--raio);
+}
+
+/* Pergunta grande (proposta C) */
+.mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 0 0 14px; }
+
+@media (max-width: 900px) {
+  .mgf-bancada, .mgf-bancada-guia { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
+  .mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button { width: auto; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); font-size: 15px; }
 }
