@@ -283,7 +283,8 @@
 .mgf-campo { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 700; }
 .mgf-campo input, .mgf-campo select {
   font-family: var(--letra-texto); font-size: 16px; font-weight: 400; color: var(--cor-tinta);
-  min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco);
+  min-height: 48px; padding: 8px 14px; border: 1.5px solid var(--cor-campo); border-radius: 12px; background: var(--cor-branco);
+  font-size: 17px; box-sizing: border-box;
 }
 .mgf-campo input:focus, .mgf-campo select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
 .mgf-campo small { font-weight: 400; color: var(--cor-texto-3); font-size: 13px; }
@@ -442,7 +443,7 @@
 }
 
 /* Pergunta grande (proposta C) */
-.mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 0 0 14px; }
+.mgf-ferramenta .mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 8px 0 24px; }
 
 @media (max-width: 900px) {
   .mgf-bancada, .mgf-bancada-guia { grid-template-columns: minmax(0, 1fr); gap: 18px; }
@@ -450,6 +451,23 @@
   .mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button { width: auto; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); font-size: 15px; }
 }
+
+/* Aviso clínico: no fim da coluna dos comandos (proposta B) */
+.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; font-family: var(--letra-texto); font-size: 14px; line-height: 1.35; color: var(--cor-texto-3); }
+.aviso-clinico svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+.mgf-ferramenta > .aviso-clinico { margin: 0 0 14px; }
+
+/* Caixas de seleção como no mockup: linha leve e uma só seta para baixo */
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]) {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  min-height: 48px; padding: 0 44px 0 14px; box-sizing: border-box;
+  border: 1.5px solid var(--cor-campo); border-radius: 12px;
+  background: var(--cor-branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2313201E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px 18px;
+  font-family: var(--letra-texto); font-size: 17px; font-weight: 400; line-height: 1.3; color: var(--cor-tinta); cursor: pointer;
+}
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):hover { border-color: var(--cor-verde-medio); }
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):focus { outline: 3px solid var(--cor-menta); outline-offset: 0; border-color: var(--cor-verde); }
+html #ferramenta.mgf-ferramenta select:disabled { background-color: var(--cor-papel); color: var(--cor-texto-3); cursor: not-allowed; }
 
 
 body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); line-height: 1.55; }
@@ -477,6 +495,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
   .autonomo-pe { padding-top: 6px; }
   .bibliografia, .bibliografia h2 { font-size: 9px; }
   .autonomo-rodape a { text-decoration: none; }
+  body[data-impressao="doente"] .autonomo-topo, body[data-impressao="doente"] .autonomo-pe,
+  body[data-impressao="doente"] .aviso-clinico { display: none !important; }
 }
 
 /* Itens da calculadora lado a lado em ecrãs largos. */
@@ -499,7 +519,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 <header class="autonomo-topo">
 <span class="autonomo-marca"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="14" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="14" stroke-linejoin="round"/></svg><span><span style="font-weight:400">mgf no </span><b>plural</b></span></span>
 <h1>Escalas de saúde mental</h1>
-<p class="autonomo-meta">Criado por <strong>Miguel Henriques</strong> · v1.0 · revisto a 08/11/2026 · Apoia, não substitui, o juízo clínico.</p>
+<p class="autonomo-meta">EPDS, HADS, GPCOG e Mini-Cog · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </header>
 <div class="autonomo-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
@@ -612,7 +632,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
       </div>
     </fieldset>
     </div>
-    </div>
+    <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
     <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
@@ -782,7 +803,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
       </div>
     </fieldset>
     </div>
-    </div>
+    <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
     <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
@@ -917,7 +939,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
       </div>
     </fieldset>
     </div>
-    </div>
+    <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
     <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
@@ -977,7 +1000,8 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
         <label class="mgf-opcao"><input type="radio" name="mc2" value="0"><span class="mgf-opcao-marca" aria-hidden="true"></span><span class="mgf-opcao-texto">Anormal, ou não consegue ou recusa desenhar</span><span class="mgf-opcao-pontos">0 pts</span></label>
       </div>
     </fieldset>
-    </div>
+    <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
     <div class="mgf-resposta">
     <div class="mgf-resultado">
       <div class="mgf-resultado-topo">
@@ -1012,7 +1036,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 </main>
 </div>
 <div class="autonomo-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>EPDS: Cox JL, Holden JM, Sagovsky R. Detection of postnatal depression. Development of the 10-item Edinburgh Postnatal Depression Scale. Br J Psychiatry. 1987;150:782–786.</li><li>EPDS: Augusto A, et al. Post-natal depression in an urban area of Portugal: comparison of childbearing women and matched controls. Psychol Med. 1996;26(1):135–141.</li><li>EPDS: Cepêda T, Brito I, Heitor MJ. Promoção da Saúde Mental na Gravidez e Primeira Infância: manual de orientação para profissionais de saúde. DGS; 2005.</li><li>HADS: Zigmond AS, Snaith RP. The Hospital Anxiety and Depression Scale. Acta Psychiatr Scand. 1983;67(6):361–370.</li><li>HADS: Pais-Ribeiro J, et al. Validation study of a Portuguese version of the Hospital Anxiety and Depression Scale. Psychol Health Med. 2007;12(2):225–237.</li><li>GPCOG: Brodaty H, et al. The GPCOG: a new screening test for dementia designed for general practice. J Am Geriatr Soc. 2002;50(3):530–534.</li><li>Mini-Cog: Borson S, et al. The Mini-Cog: a cognitive &#x27;vital signs&#x27; measure for dementia screening in multi-lingual elderly. Int J Geriatr Psychiatry. 2000;15(11):1021–1027.</li><li>Mini-Cog: Borson S, et al. Simplifying detection of cognitive impairment: comparison of the Mini-Cog and Mini-Mental State Examination in a multiethnic sample. J Am Geriatr Soc. 2005;53(5):871–874.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 08/11/2026</p></section>
+<section class="bibliografia bibliografia-longa"><details id="bib"><summary><h2 id="bib-titulo">Bibliografia <span>· 8 referências</span></h2></summary><ol><li>EPDS: Cox JL, Holden JM, Sagovsky R. Detection of postnatal depression. Development of the 10-item Edinburgh Postnatal Depression Scale. Br J Psychiatry. 1987;150:782–786.</li><li>EPDS: Augusto A, et al. Post-natal depression in an urban area of Portugal: comparison of childbearing women and matched controls. Psychol Med. 1996;26(1):135–141.</li><li>EPDS: Cepêda T, Brito I, Heitor MJ. Promoção da Saúde Mental na Gravidez e Primeira Infância: manual de orientação para profissionais de saúde. DGS; 2005.</li><li>HADS: Zigmond AS, Snaith RP. The Hospital Anxiety and Depression Scale. Acta Psychiatr Scand. 1983;67(6):361–370.</li><li>HADS: Pais-Ribeiro J, et al. Validation study of a Portuguese version of the Hospital Anxiety and Depression Scale. Psychol Health Med. 2007;12(2):225–237.</li><li>GPCOG: Brodaty H, et al. The GPCOG: a new screening test for dementia designed for general practice. J Am Geriatr Soc. 2002;50(3):530–534.</li><li>Mini-Cog: Borson S, et al. The Mini-Cog: a cognitive &#x27;vital signs&#x27; measure for dementia screening in multi-lingual elderly. Int J Geriatr Psychiatry. 2000;15(11):1021–1027.</li><li>Mini-Cog: Borson S, et al. Simplifying detection of cognitive impairment: comparison of the Mini-Cog and Mini-Mental State Examination in a multiethnic sample. J Am Geriatr Soc. 2005;53(5):871–874.</li></ol></details><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="autonomo-avisos">
 <p class="autonomo-rodape">O que escreves nesta ferramenta não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</p>
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html</a> · Feedback: mgfplural@gmail.com · Licença MIT</p>

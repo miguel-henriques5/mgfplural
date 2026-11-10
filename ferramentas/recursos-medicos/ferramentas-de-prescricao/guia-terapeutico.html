@@ -45,8 +45,9 @@
 .gt-tabela th:first-child { text-align: left; }
 .gt-tabela th .gt-ic { display: block; margin: 0 auto 4px; width: 20px; height: 20px; }
 .gt-linha-grupo td { background: var(--cor-papel); padding: 8px 12px; }
-.td-name { min-width: 170px; }
-.td-name-main { font-weight: 700; }
+.td-name { min-width: 170px; vertical-align: middle; }
+.td-name-main { font-family: var(--letra-titulo); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; line-height: 1.25; }
+.td-name-dose { font-family: var(--letra-texto); font-weight: 400; font-size: 16px; letter-spacing: 0; color: var(--cor-texto-2); white-space: nowrap; }
 .td-name-trade { font-size: 14px; font-style: italic; color: var(--cor-texto-2); }
 .td-name-cat { margin-top: 4px; }
 .td-dose { text-align: center; }
@@ -131,8 +132,7 @@
 <img class="ficha-ilustracao" src="../../../assets/img/icones/livro.svg" alt="">
 <div class="ficha-titulo">
 <h1>Guia terapêutico</h1>
-<p class="ficha-meta">Criado por <strong>Miguel Henriques</strong> · v1.0 · revisto a 08/11/2026 · <a href="#bib-titulo">bibliografia</a></p>
-<p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
+<p class="ficha-meta">Esquema de medicação por refeição, para o doente · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </div>
 <div class="ficha-acoes">
 <a class="botao" href="../../../descarregar/guia-terapeutico.html" download="guia-terapeutico.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
@@ -140,6 +140,7 @@
 </div>
 </header>
 <div class="area-ferramenta corpo-coluna">
+<p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
 <main class="mgf-ferramenta" id="ferramenta">
 
   <p class="mgf-guia-intro">Base INFOMED · 1667 substâncias ativas. Pesquisa e acrescenta os medicamentos, indica as unidades em cada refeição e imprime a folha para o doente. Nada do que escreves sai deste computador.</p>
@@ -296,7 +297,7 @@
 </main>
 </div>
 <footer class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 08/11/2026</p></section>
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
 <div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29&body=Ferramenta%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
@@ -665,9 +666,9 @@ function render(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="td-name">
-        <div class="td-name-main">${escHtml(dn.main)}</div>
+        <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
         ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-        <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
+        ${groupView?'':`<span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>`}
       </td>
       ${MEAL_KEYS.map(k=>{
         const v=m[k]||0;
@@ -1083,9 +1084,8 @@ function renderSosRow(m){
   const tr=document.createElement('tr'); tr.className='gt-linha-med-sos';
   tr.innerHTML=`
     <td class="td-name">
-      <div class="td-name-main">${escHtml(dn.main)}</div>
+      <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
       ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-      ${m.dose?`<div class="td-name-trade">${escHtml(m.dose)}</div>`:''}
       <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
     </td>
     <td colspan="5" class="td-sos">${escHtml(sosTexto(m))}</td>
