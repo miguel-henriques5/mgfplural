@@ -426,14 +426,21 @@ def pagina_ferramenta(f, ferramentas):
 
 # ---------------------------------------------------------------- versão autónoma (descarregar)
 
-def css_autonomo():
+def tokens_css(fontes=None):
+    """tokens.css com as letras embutidas (fontes=None) ou ligadas a partir de <fontes>assets/fonts/."""
     tokens = (ASSETS / "css" / "tokens.css").read_text(encoding="utf-8")
 
     def embutir(m):
         nome = m.group(1)
+        if fontes is not None:
+            return f'url("{fontes}assets/fonts/{nome}")'
         dados = base64.b64encode((ASSETS / "fonts" / nome).read_bytes()).decode("ascii")
         return f'url("data:font/woff2;base64,{dados}")'
-    tokens = re.sub(r'url\("\.\./fonts/([^"]+)"\)', embutir, tokens)
+    return re.sub(r'url\("\.\./fonts/([^"]+)"\)', embutir, tokens)
+
+
+def css_autonomo(fontes=None):
+    tokens = tokens_css(fontes)
     ferr = (ASSETS / "css" / "ferramenta.css").read_text(encoding="utf-8")
     pagina = """
 body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); line-height: 1.55; }
@@ -468,7 +475,7 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
     return tokens + "\n" + ferr + "\n" + pagina
 
 
-def pagina_autonoma(f, css):
+def pagina_autonoma(f, css, csp=CSP_AUTONOMO):
     url = SITE["url"] + f["caminho"]
     estilo_proprio = f"\n{f['estilo']}\n" if tem_estilo(f) else ""
     return f"""<!doctype html>
@@ -476,7 +483,7 @@ def pagina_autonoma(f, css):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="{CSP_AUTONOMO}">
+<meta http-equiv="Content-Security-Policy" content="{csp}">
 <title>{e(f["titulo"])} · MGF no Plural</title>
 <!--
   {f["titulo"]} — versão {f["versao"]}, revista em {f["revisto"]}
@@ -511,6 +518,157 @@ def pagina_autonoma(f, css):
 </script>
 <script>
 {f["script"]}
+</script>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------- página completa (programas, mapas, plataformas)
+#
+# "layout": "completa" na ficha: abre num separador novo, sem o menu do site, com uma barra flutuante pequena
+# (símbolo, autor e versão, Descarregar, Feedback e × para a esconder). Na barra, «autor · versão» abre um painel
+# com os avisos, a bibliografia e o contacto.
+#  · "imagens_externas": ["https://..."] — únicos servidores de onde a ferramenta pode mostrar imagens (ex.: fotografias
+#    do Wikimedia Commons). Não abre mais nada: os pedidos de dados continuam bloqueados (connect-src 'none').
+#  · "{{FERRAMENTA:<id>}}" (com as aspas) no script é trocado pela versão descarregável atual dessa ferramenta, como
+#    texto JavaScript, para a embutir num <iframe srcdoc>. Assim os programas levam sempre a versão mais recente.
+
+def hosts_imagens(f):
+    hs = f.get("imagens_externas", [])
+    for h in hs:
+        if not re.fullmatch(r"https://[a-z0-9.-]+\.[a-z]{2,}", h):
+            erro(f"{f['id']}: servidor de imagens inválido em «imagens_externas»: {h}")
+    return hs
+
+
+def csp_com_imagens(csp, hs):
+    return re.sub(r"img-src ([^;]*)", lambda m: "img-src " + m.group(1) + "".join(" " + h for h in hs), csp, count=1) if hs else csp
+
+
+def texto_js(h):
+    """HTML como texto JavaScript que pode ficar dentro de <script> sem o fechar nem confundir o leitor de HTML."""
+    s = json.dumps(h, ensure_ascii=False)
+    s = s.replace("</", "<\\/").replace("<!--", "\\u003c!--")
+    return re.sub(r"<(script)", r"\\u003c\1", s, flags=re.I)
+
+
+def embutir_ferramentas(f, ferramentas, css, fontes=None):
+    def troca(m):
+        alvo = [x for x in ferramentas if x["id"] == m.group(1)]
+        if not alvo or alvo[0]["layout"] == "completa":
+            erro(f"{f['id']}: não há ferramenta normal com o id «{m.group(1)}» para embutir")
+        csp = CSP_AUTONOMO if fontes is None else CSP_AUTONOMO.replace("font-src data:", "font-src 'self' data:")
+        return texto_js(pagina_autonoma(alvo[0], css, csp))
+    return re.sub(r'"\{\{FERRAMENTA:([a-z0-9-]+)\}\}"', troca, f["script"])
+
+
+def barra_completa(f, prefixo, autonomo):
+    url = SITE["url"] + f["caminho"]
+    inicio = SITE["url"] if autonomo else f"{prefixo}index.html"
+    if autonomo:
+        principal = f'<a class="bc-botao" href="{url}" target="_blank" rel="noopener">{SVG_SETA_FORA}<span>Versão mais recente</span></a>'
+    else:
+        principal = f'<a class="bc-botao" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}<span>Descarregar</span></a>'
+    refs = "".join(f"<li>{e(r)}</li>" for r in f["bibliografia"])
+    fotos = ""
+    if hosts_imagens(f):
+        fotos = ("<h3>Fotografias</h3><p>As fotografias vêm do Wikimedia Commons, com o autor e a licença na legenda de cada uma. "
+                 "Precisam de internet: sem ligação, aparece só a legenda com a ligação para a fotografia.</p>")
+    return f"""<aside class="barra-completa" aria-label="MGF no Plural">
+<a class="bc-simbolo" href="{inicio}" title="MGF no Plural — todas as ferramentas"{' target="_blank" rel="noopener"' if autonomo else ''}>{simbolo(14)}<span class="so-leitor">MGF no Plural — todas as ferramentas</span></a>
+<button type="button" class="bc-info" aria-expanded="false" aria-controls="bc-painel"><span class="bc-info-texto"><strong>{e(f["autor"])}</strong> · v{e(f["versao"])}</span><span class="so-leitor"> — sobre esta ferramenta</span> ⓘ</button>
+{principal}
+<a class="bc-botao" href="{assunto_feedback(f)}">{SVG_MENSAGEM}<span>Feedback</span></a>
+<button type="button" class="bc-fechar" aria-label="Esconder esta barra">×</button>
+<div class="bc-painel" id="bc-painel" hidden>
+<h2>{e(f["titulo"])}</h2>
+<p class="bc-meta">Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · licença MIT</p>
+<p class="bc-aviso">{AVISO_CLINICO} {AVISO_PRIVACIDADE}</p>
+{fotos}<details><summary>Bibliografia · {len(f["bibliografia"])} referências</summary><ol>{refs}</ol></details>
+<h3>Encontraste um erro?</h3>
+<p>Escreve-nos e corrigimos juntos: <a href="{assunto_feedback(f)}">{SITE["email"]}</a> · <button type="button" class="bc-copiar" data-copiar="{SITE["email"]}">Copiar endereço</button></p>
+<p><a href="{inicio}"{' target="_blank" rel="noopener"' if autonomo else ''}>Todas as ferramentas do MGF no Plural</a></p>
+</div>
+</aside>
+<button type="button" class="bc-mostrar" hidden aria-label="Mostrar a barra do MGF no Plural">{simbolo(14)}</button>"""
+
+
+JS_BARRA = r"""(function () {
+  var b = document.querySelector(".barra-completa"), m = document.querySelector(".bc-mostrar");
+  var i = b.querySelector(".bc-info"), p = document.getElementById("bc-painel");
+  function painel(abrir) { i.setAttribute("aria-expanded", String(abrir)); p.hidden = !abrir; }
+  i.addEventListener("click", function () { painel(p.hidden); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !p.hidden) painel(false); });
+  document.addEventListener("click", function (e) { if (!p.hidden && !b.contains(e.target)) painel(false); });
+  b.querySelector(".bc-fechar").addEventListener("click", function () { painel(false); b.hidden = true; m.hidden = false; m.focus(); });
+  m.addEventListener("click", function () { m.hidden = true; b.hidden = false; i.focus(); });
+  var c = b.querySelector("[data-copiar]");
+  c.addEventListener("click", function () {
+    var t = c.getAttribute("data-copiar"), ok = function () { c.textContent = "Copiado"; setTimeout(function () { c.textContent = "Copiar endereço"; }, 1500); };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).then(ok, function () {}); return; }
+    var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); ok(); } catch (x) { /* sem acesso: o endereço está escrito ao lado */ } a.remove();
+  });
+  var id = document.body.getAttribute("data-ferramenta");
+  if (id && document.body.hasAttribute("data-recentes")) {
+    try {
+      var r = JSON.parse(localStorage.getItem("mgf:recentes") || "[]").filter(function (x) { return x.id !== id; });
+      r.unshift({ id: id }); localStorage.setItem("mgf:recentes", JSON.stringify(r.slice(0, 5)));
+    } catch (x) { /* armazenamento indisponível: ignorar */ }
+  }
+})();"""
+
+SVG_SETA_FORA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
+
+
+def pagina_completa(f, ferramentas, css=None):
+    """Página completa: no site (css=None) ou a versão autónoma para descarregar (css = CSS com as letras embutidas)."""
+    autonomo = css is not None
+    prefixo = "../../../"
+    hs = hosts_imagens(f)
+    estilo = f"\n{f['estilo']}\n" if tem_estilo(f) else ""
+    completa = (ASSETS / "css" / "completa.css").read_text(encoding="utf-8")
+    if autonomo:
+        csp = csp_com_imagens(CSP_AUTONOMO, hs)
+        cabeca_css = f"<style>\n{tokens_css()}\n{completa}{estilo}</style>"
+        script = embutir_ferramentas(f, ferramentas, css)
+        url = SITE["url"] + f["caminho"]
+        comentario = f"""<!--
+  {f["titulo"]} — versão {f["versao"]}, revista em {f["revisto"]}
+  Criado por {f["autor"]} para o projeto MGF no Plural.
+  Versão mais recente: {url}
+  Licença MIT. Podes usar, adaptar e partilhar, mantendo o nome de quem criou.
+  Este ficheiro funciona sem internet e não envia dados para lado nenhum.
+-->
+"""
+    else:
+        csp = csp_com_imagens(CSP_SITE, hs)
+        cabeca_css = (f'<link rel="icon" href="{prefixo}assets/img/favicon.svg" type="image/svg+xml">\n'
+                      f'<link rel="stylesheet" href="{prefixo}assets/css/tokens.css">\n'
+                      f'<link rel="stylesheet" href="{prefixo}assets/css/completa.css">'
+                      + (f"\n<style>{estilo}</style>" if estilo else ""))
+        script = embutir_ferramentas(f, ferramentas, css_autonomo(fontes=prefixo), fontes=prefixo)
+        comentario = ""
+    return f"""<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{csp}">
+<meta name="referrer" content="no-referrer">
+<title>{e(f["titulo"])} · MGF no Plural</title>
+<meta name="description" content="{e(f["descricao"])}">
+{comentario}{cabeca_css}
+</head>
+<body class="pagina-completa" data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}"{'' if autonomo else ' data-recentes'}>
+{f["conteudo"]}
+{barra_completa(f, prefixo, autonomo)}
+{"".join(("<script>" + chr(10) + (VENDOR / n).read_text(encoding="utf-8") + chr(10) + "</script>" + chr(10)) if autonomo else f'<script src="{prefixo}assets/vendor/{n}"></script>' + chr(10) for n in bibliotecas(f))}<script>
+{JS_BARRA}
+</script>
+<script>
+{script}
 </script>
 </body>
 </html>
@@ -702,7 +860,7 @@ ESCALAS_NAO_INCLUIDAS = [
     ("STOP-Bang", "Só a calculadora de pontuação. O uso precisa de autorização dos autores.", "https://www.stopbang.ca/", "Site oficial"),
     ("GPCOG", "Só a calculadora de pontuação. É gratuito para clínicos, mas não pode ser alterado e não tem versão portuguesa no site oficial.", "https://gpcog.com.au/", "Site oficial"),
     ("Mini-Cog", "Só a calculadora de pontuação. Uso clínico livre, mas não pode ser modificado.", "https://mini-cog.com/", "Site oficial"),
-    ("M-CHAT", "Só a indicação de quando aplicar. A reprodução eletrónica precisa de autorização.", "https://mchatscreen.com/", "Site oficial (versão M-CHAT-R/F)"),
+    ("M-CHAT", "Só a indicação de quando aplicar e a contagem das falhas (por número de item, na Saúde infantil e juvenil). O texto das perguntas não é reproduzido: a reprodução eletrónica precisa de autorização.", "https://mchatscreen.com/", "Site oficial (versão M-CHAT-R/F)"),
 ]
 
 
@@ -822,6 +980,10 @@ def main():
 
     css = css_autonomo()
     for f in ferramentas:
+        if f["layout"] == "completa":
+            escrever(RAIZ / f["caminho"], pagina_completa(f, ferramentas))
+            escrever(RAIZ / "descarregar" / f"{f['id']}.html", pagina_completa(f, ferramentas, css))
+            continue
         escrever(RAIZ / f["caminho"], pagina_ferramenta(f, ferramentas))
         escrever(RAIZ / "descarregar" / f"{f['id']}.html", pagina_autonoma(f, css))
     for a in ESTRUTURA["areas"]:
