@@ -563,10 +563,11 @@
       });
       glLayer.on('error', addRasterFallback);
       glLayer.addTo(map);
+      var glEstilo = false, glMapa = glLayer.getMaplibreMap && glLayer.getMaplibreMap();
+      if(glMapa) glMapa.once('styledata', function(){ glEstilo = true; });
       /* se em 6s não houver canvas WebGL desenhado, assume falha e usa raster */
       setTimeout(function(){
-        var glMapa = glLayer.getMaplibreMap && glLayer.getMaplibreMap();
-        if(!usedFallback && (!document.getElementById('rcmapCanvas').querySelector('canvas') || (glMapa && !glMapa.isStyleLoaded()))){
+        if(!usedFallback && (!document.getElementById('rcmapCanvas').querySelector('canvas') || (glMapa && !glEstilo))){
           addRasterFallback();
         }
       }, 6000);
