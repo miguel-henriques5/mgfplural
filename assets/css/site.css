@@ -330,3 +330,39 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .tabela-simples th { background: var(--cor-papel); border-bottom: 1.5px solid var(--cor-linha); }
 .tabela-simples td { padding: 10px 14px; border-top: 1px solid var(--cor-linha-suave); vertical-align: top; }
 .grupo-titulo { background: none; }
+
+/* Mapa de recursos: escolher a zona e o modelo para outras zonas */
+.mapa-passo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 26px; margin: 8px 0 18px; }
+.mapa-passo span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--cor-tinta); color: var(--cor-papel); font-size: 17px; flex: none; }
+.seccao .mapa-passo + .grupo .grupo-cabeca h2 { font-size: 18px; font-family: var(--letra-texto); color: var(--cor-texto-2); font-weight: 700; }
+.grelha-zonas { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.cartao-zona { display: grid; grid-template-columns: 72px 1fr; gap: 6px 16px; align-items: start; background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 18px; text-decoration: none; color: var(--cor-tinta); transition: transform .3s var(--mola), box-shadow .3s, border-color .3s; }
+.cartao-zona:hover { transform: translateY(-2px); border-color: var(--cor-verde); box-shadow: var(--sombra-alta); }
+.cartao-zona-mapa { grid-row: span 2; width: 72px; height: 72px; border-radius: var(--raio-forma); background: var(--cor-menta-clara); display: grid; place-items: center; }
+.cartao-zona-mapa img { width: 52px; height: 52px; }
+.cartao-zona-texto { display: flex; flex-direction: column; gap: 4px; }
+.cartao-zona-texto strong { font-family: var(--letra-titulo); font-size: 24px; letter-spacing: -0.02em; line-height: 1.1; }
+.cartao-zona-texto span { font-size: 15px; color: var(--cor-texto-2); }
+.cartao-zona-texto small { font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
+.cartao-zona .etiqueta-completa { justify-self: start; }
+.cartao-modelo { display: flex; align-items: center; gap: 18px; max-width: 760px; background: var(--cor-ambar-claro); border-radius: 18px; padding: 18px 20px; text-decoration: none; color: var(--cor-tinta); border: 1px solid transparent; transition: border-color .3s, transform .3s var(--mola); }
+.cartao-modelo:hover { border-color: var(--cor-ambar-texto); transform: translateY(-2px); }
+.cartao-modelo img { width: 56px; height: 56px; flex: none; }
+.cartao-modelo > span:not(.cartao-modelo-seta) { display: flex; flex-direction: column; gap: 4px; }
+.cartao-modelo strong { font-family: var(--letra-titulo); font-size: 21px; letter-spacing: -0.015em; }
+.cartao-modelo span span { font-size: 15px; color: var(--cor-texto-2); }
+.cartao-modelo-seta { margin-left: auto; font-size: 22px; font-weight: 700; }
+.modelo-mapa > * { max-width: 820px; }
+.modelo-mapa-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
+.botao-claro { display: inline-flex; align-items: center; gap: 8px; background: var(--cor-branco); color: var(--cor-tinta); text-decoration: none; padding: 9px 15px; border-radius: 10px; font-weight: 700; font-size: 15px; border: 1.5px solid var(--cor-tinta); }
+.botao-claro:hover { background: var(--cor-menta-clara); }
+.modelo-passos { margin: 0 0 28px; padding-left: 24px; font-size: 17px; line-height: 1.55; }
+.modelo-passos li { margin-bottom: 10px; padding-left: 4px; }
+.modelo-passos code, .modelo-mapa-ajuda code { font-family: var(--letra-mono); font-size: 14px; background: var(--cor-linha-suave); border-radius: 5px; padding: 1px 5px; }
+.modelo-mapa-ajuda { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 16px; padding: 18px 20px; }
+.modelo-mapa-ajuda h2 { font-size: 19px; font-weight: 800; margin: 4px 0 6px; }
+.modelo-mapa-ajuda p { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+.modelo-mapa-ajuda pre { margin: 0 0 12px; padding: 12px 14px; background: var(--cor-papel); border-radius: 10px; overflow-x: auto; }
+.modelo-mapa-ajuda pre code { background: none; padding: 0; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+.mono-nota { font-size: 14px !important; color: var(--cor-ambar-texto) !important; font-weight: 700; }
+@media (max-width: 640px) { .cartao-zona { grid-template-columns: 56px 1fr; } .cartao-zona-mapa { width: 56px; height: 56px; } .cartao-zona-mapa img { width: 40px; height: 40px; } .mapa-passo { font-size: 22px; } }
