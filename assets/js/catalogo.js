@@ -481,5 +481,166 @@ window.MGF_CATALOGO = [
    "densidade",
    "Hounsfield"
   ]
+ },
+ {
+  "id": "menopausa",
+  "titulo": "Menopausa",
+  "descricao": "Abordagem clínica integrada da menopausa: diagnóstico, sintomas, terapêutica hormonal e alternativas, riscos e seguimento, com base no Consenso Nacional sobre Menopausa 2021.",
+  "area": "Recursos médicos",
+  "grupo": "Cábulas",
+  "icone": "mulher",
+  "url": "ferramentas/recursos-medicos/cabulas/menopausa.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "menopausa",
+   "climatério",
+   "perimenopausa",
+   "afrontamentos",
+   "terapêutica hormonal",
+   "THS",
+   "estrogénios",
+   "progestativo",
+   "tibolona",
+   "síndrome geniturinária",
+   "insuficiência ovárica prematura",
+   "SPG"
+  ]
+ },
+ {
+  "id": "osteoporose",
+  "titulo": "Osteoporose",
+  "descricao": "Interpretação da densitometria, risco de fratura (FRAX), prescrição e seguimento da osteoporose em Medicina Geral e Familiar.",
+  "area": "Recursos médicos",
+  "grupo": "Cábulas",
+  "icone": "osso",
+  "url": "ferramentas/recursos-medicos/cabulas/osteoporose.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "osteoporose",
+   "densitometria",
+   "DXA",
+   "T-score",
+   "Z-score",
+   "FRAX",
+   "fratura",
+   "bifosfonatos",
+   "alendronato",
+   "denosumab",
+   "vitamina D",
+   "cálcio"
+  ]
+ },
+ {
+  "id": "pesquisa-icpc2",
+  "titulo": "Pesquisa de códigos ICPC-2",
+  "descricao": "Encontra o código ICPC-2 por sintoma, diagnóstico ou termo aproximado.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "codificacao",
+  "url": "ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "ICPC-2",
+   "ICPC",
+   "codificação",
+   "códigos",
+   "diagnóstico",
+   "sintoma",
+   "procedimento",
+   "classificação internacional de cuidados primários",
+   "SClínico"
+  ]
+ },
+ {
+  "id": "consulta-resultados-exames",
+  "titulo": "Consulta rápida de resultados",
+  "descricao": "Cola a lista de resultados de exames uma vez por dia e pesquisa por número de utente durante a consulta.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "pesquisa",
+  "url": "ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "resultados",
+   "exames",
+   "análises",
+   "lista",
+   "Excel",
+   "número de utente",
+   "consulta",
+   "colar",
+   "SOAP"
+  ]
+ },
+ {
+  "id": "formulario-referenciacao",
+  "titulo": "Formulário de referenciação",
+  "descricao": "Preenche a referenciação por campos, com contagem de caracteres, e copia o texto integral para o SClínico.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "referenciacao",
+  "url": "ferramentas/recursos-medicos/canivete/formulario-referenciacao.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "referenciação",
+   "SClínico",
+   "pedido de consulta",
+   "hospital",
+   "encaminhamento",
+   "caracteres",
+   "carta"
+  ]
+ },
+ {
+  "id": "construir-horario",
+  "titulo": "Construir horário",
+  "descricao": "Monta o horário semanal médico em grelha, com atividades assistenciais e não assistenciais, totais por semana, alerta das 6 horas seguidas e exportação para PDF, Excel ou CSV.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "horario",
+  "url": "ferramentas/recursos-medicos/canivete/construir-horario.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "horário",
+   "horário semanal",
+   "grelha",
+   "atividade assistencial",
+   "não assistencial",
+   "carga horária",
+   "PDF",
+   "Excel",
+   "mapa de horário"
+  ]
+ },
+ {
+  "id": "vacinacao",
+  "titulo": "Vacinação (PNV)",
+  "descricao": "Programa Nacional de Vacinação: mapa, esquemas gerais e de recurso, critérios para vacinar e vacinação sazonal.",
+  "area": "Recursos de enfermagem",
+  "grupo": "Recursos de enfermagem",
+  "icone": "vacina",
+  "url": "ferramentas/recursos-de-enfermagem/geral/vacinacao.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "vacinação",
+   "vacinas",
+   "PNV",
+   "Programa Nacional de Vacinação",
+   "esquema de recurso",
+   "HPV",
+   "gripe",
+   "COVID-19",
+   "VSR",
+   "tétano",
+   "Livro Azul",
+   "DGS"
+  ]
  }
 ];

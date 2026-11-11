@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Construir horário · MGF no Plural</title>
+<meta name="description" content="Monta o horário semanal médico em grelha, com atividades assistenciais e não assistenciais, totais por semana, alerta das 6 horas seguidas e exportação para PDF, Excel ou CSV.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* CSS do original, limitado a #ferramenta, com as cores e a letra da marca (sem tema escuro próprio) */
+#ferramenta{--bg:var(--cor-papel);--surface:var(--cor-branco);--surface-2:var(--cor-papel);--ink:var(--cor-tinta);--ink-2:var(--cor-texto-2);--line:var(--cor-linha);--line-strong:var(--cor-campo);--accent:var(--cor-verde);--accent-ink:var(--cor-verde-fundo);--gold:var(--cor-ambar);--danger:var(--clin-alerta);--radius:12px;--font-ui:var(--letra-texto);--font-num:var(--letra-texto);}
+#ferramenta *{box-sizing:border-box}
+#ferramenta{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-ui);
+  font-size:14px;
+  line-height:1.45;
+  -webkit-text-size-adjust:100%;
+}
+#ferramenta .wrap{
+  max-width:1360px;
+  margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 48px;
+}
+#ferramenta h1, #ferramenta h2, #ferramenta h3{margin:0;text-wrap:balance;letter-spacing:-0.015em}
+#ferramenta button{font-family:inherit;font-size:inherit;color:inherit}
+#ferramenta input, #ferramenta select, #ferramenta textarea{font-family:inherit;font-size:inherit}
+#ferramenta :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+#ferramenta .card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+#ferramenta .card-head{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;border-bottom:1px solid var(--line);
+}
+#ferramenta .card-head h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);font-weight:600}
+#ferramenta .card-head .hint{font-size:12px;color:var(--ink-2);opacity:.85}
+#ferramenta .ident{padding:14px 16px 16px;display:grid;gap:12px 18px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+#ferramenta .field{display:flex;flex-direction:column;gap:4px;min-width:0}
+#ferramenta .field label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);font-weight:600}
+#ferramenta .field input, #ferramenta .field select, #ferramenta .field textarea{
+  background:transparent;color:var(--ink);
+  border:0;border-bottom:1.5px solid var(--line-strong);
+  padding:4px 2px;width:100%;border-radius:0;
+}
+#ferramenta .field input:focus, #ferramenta .field select:focus, #ferramenta .field textarea:focus{outline:none;border-bottom-color:var(--accent)}
+#ferramenta .field.wide{grid-column:span 2}
+@media(max-width:560px) {
+  #ferramenta .field.wide{grid-column:span 1}
+}
+#ferramenta .bench{display:grid;grid-template-columns:272px minmax(0,1fr);gap:18px;margin-top:18px;align-items:start}
+@media(max-width:980px) {
+  #ferramenta .bench{grid-template-columns:minmax(0,1fr)}
+}
+#ferramenta .rail{position:sticky;top:12px}
+@media(max-width:980px) {
+  #ferramenta .rail{position:static}
+}
+#ferramenta .rail-scroll{max-height:none}
+#ferramenta .cat-label{
+  font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;
+  color:var(--ink-2);padding:12px 14px 6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+}
+#ferramenta .cat-label .cat-h{font-family:var(--font-num);font-size:11px;color:var(--ink);font-variant-numeric:tabular-nums}
+#ferramenta .chips{display:flex;flex-direction:column;gap:3px;padding:0 10px 10px}
+#ferramenta .chip{
+  display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;gap:9px;
+  padding:6px 8px;border-radius:7px;border:1px solid transparent;background:transparent;
+  cursor:pointer;text-align:left;width:100%;
+}
+#ferramenta .chip:hover{background:var(--surface-2)}
+#ferramenta .chip[aria-pressed="true"]{border-color:var(--line-strong);background:var(--surface-2);box-shadow:inset 2px 0 0 var(--sw)}
+#ferramenta .chip .sw{width:14px;height:14px;border-radius:4px;background:var(--sw);border:1px solid rgba(0,0,0,.18)}
+#ferramenta .chip .nm{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ferramenta .chip .hh{font-family:var(--font-num);font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+#ferramenta .chip[aria-pressed="true"] .hh{color:var(--ink)}
+#ferramenta .chip .del{display:none}
+#ferramenta .chip.custom{grid-template-columns:14px minmax(0,1fr) auto 16px}
+#ferramenta .chip.custom .del{display:inline;visibility:hidden;background:none;border:0;cursor:pointer;color:var(--ink-2);font-size:15px;line-height:1;padding:0 2px}
+#ferramenta .chip.custom:hover .del, #ferramenta .chip.custom:focus-within .del{visibility:visible}
+#ferramenta .tool-row{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line);flex-wrap:wrap}
+#ferramenta .btn{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:7px;
+  padding:6px 11px;cursor:pointer;font-size:12.5px;
+}
+#ferramenta .btn:hover{border-color:var(--line-strong)}
+#ferramenta .btn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+#ferramenta .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+#ferramenta .btn.primary:hover{filter:brightness(1.06)}
+#ferramenta .btn.ghost{background:transparent}
+#ferramenta .btn:disabled{opacity:.45;cursor:not-allowed}
+#ferramenta .grid-shell{overflow-x:auto;padding:0 0 2px}
+#ferramenta table.sched{border-collapse:separate;border-spacing:0;width:100%;min-width:640px}
+#ferramenta table.sched th, #ferramenta table.sched td{padding:0;border:0}
+#ferramenta table.sched thead th{
+  position:sticky;top:0;z-index:3;background:var(--surface);
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);font-weight:700;
+  padding:9px 6px;border-bottom:1px solid var(--line-strong);
+}
+#ferramenta table.sched thead th.t{width:62px;text-align:right;padding-right:10px}
+#ferramenta col.day{width:auto}
+#ferramenta td.time{
+  font-family:var(--font-num);font-size:11px;color:var(--ink-2);
+  text-align:right;padding:0 10px 0 4px;vertical-align:top;
+  width:62px;white-space:nowrap;font-variant-numeric:tabular-nums;
+  border-right:1px solid var(--line);
+  transform:translateY(-7px);
+}
+#ferramenta td.time.half{opacity:.42;font-size:10px}
+#ferramenta td.slot{
+  height:21px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+  cursor:crosshair;position:relative;background:var(--surface);
+}
+#ferramenta td.slot.hourline{border-bottom-color:var(--line-strong)}
+#ferramenta td.slot.lunch:not(.filled){background:repeating-linear-gradient(45deg,transparent,transparent 5px,var(--surface-2) 5px,var(--surface-2) 10px)}
+#ferramenta td.slot:hover:not(.filled){background:var(--surface-2)}
+#ferramenta td.slot.filled{background:var(--c);color:var(--fgc);cursor:pointer}
+#ferramenta td.slot.filled.cont{border-top:0}
+#ferramenta td.slot.filled:not(.cont){border-top:1px solid rgba(255,255,255,.35)}
+#ferramenta td.slot .lbl{
+  position:absolute;inset:1px 4px auto 5px;font-size:10px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.005em;pointer-events:none;
+}
+#ferramenta tr.daytotal td{
+  font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:600;font-size:12.5px;
+  text-align:center;padding:9px 4px;border-top:2px solid var(--line-strong);
+}
+#ferramenta tr.daytotal td.time{text-align:right;font-weight:600;color:var(--ink-2);transform:none;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-family:var(--font-ui)}
+#ferramenta .grid-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line)}
+#ferramenta .grid-top .mini{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2)}
+#ferramenta .grid-top select{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-family:var(--font-num);font-size:12px}
+#ferramenta .sw-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);cursor:pointer}
+#ferramenta .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border-radius:var(--radius);overflow:hidden;margin-top:18px;border:1px solid var(--line)}
+#ferramenta .stat{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+#ferramenta .stat .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);font-weight:600}
+#ferramenta .stat .v{font-family:var(--font-num);font-size:25px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+#ferramenta .stat .m{font-size:11.5px;color:var(--ink-2)}
+#ferramenta .stat.total{background:var(--surface-2)}
+#ferramenta .stat .bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:7px}
+#ferramenta .stat .bar i{display:block;height:100%;background:var(--accent)}
+#ferramenta .stat.proj .v{color:var(--gold)}
+#ferramenta .alerts{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+#ferramenta .alert{
+  display:flex;gap:9px;align-items:flex-start;padding:10px 13px;border-radius:8px;
+  font-size:12.5px;border:1px solid;
+}
+#ferramenta .alert.warn{border-color:color-mix(in srgb,var(--danger) 45%,var(--line));background:color-mix(in srgb,var(--danger) 9%,var(--surface));color:var(--ink)}
+#ferramenta .alert.ok{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--surface));color:var(--ink)}
+#ferramenta .alert b{font-weight:600}
+#ferramenta .foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px;margin-top:26px;padding-top:4px}
+#ferramenta .sig{border-top:1px solid var(--line-strong);padding-top:7px;font-size:11px;color:var(--ink-2);text-align:center;letter-spacing:.04em}
+#ferramenta .note{margin-top:22px;font-size:11.5px;color:var(--ink-2);border-left:2px solid var(--line-strong);padding-left:11px}
+#ferramenta .exports{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:20px}
+#ferramenta .exports .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);font-weight:600;margin-right:4px}
+#ferramenta .toast{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;
+  z-index:50;box-shadow:0 6px 24px rgba(0,0,0,.22);max-width:90vw;text-align:center;
+}
+#ferramenta .toast[hidden]{display:none!important}
+#ferramenta dialog.sheet{
+  border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);
+  padding:0;max-width:360px;width:calc(100% - 32px);
+}
+#ferramenta dialog.sheet::backdrop{background:rgba(0,0,0,.42)}
+#ferramenta dialog.sheet form{padding:16px;display:flex;flex-direction:column;gap:13px}
+#ferramenta dialog.sheet h3{font-size:15px}
+#ferramenta dialog.sheet .row{display:flex;gap:9px;justify-content:flex-end}
+#ferramenta dialog.sheet .dlg-info{font-size:12.5px;color:var(--ink-2);margin:0;line-height:1.5}
+#ferramenta dialog.sheet .unk{display:flex;flex-direction:column;gap:9px;max-height:40vh;overflow:auto}
+#ferramenta dialog.sheet .unk .u{display:grid;grid-template-columns:minmax(0,1fr) 108px 34px;gap:7px;align-items:center}
+#ferramenta dialog.sheet .unk .u .nm{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ferramenta dialog.sheet .unk select, #ferramenta dialog.sheet .unk input[type=color]{
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:3px 4px;font-size:11.5px;height:28px}
+#ferramenta dialog.sheet .unk .hd{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);font-weight:600}
+@media (prefers-reduced-motion:reduce) {
+  #ferramenta *{transition:none!important;animation:none!important}
+}
+@media print {
+  #ferramenta{background:#fff}
+  #ferramenta .rail, #ferramenta .exports, #ferramenta .theme-btn, #ferramenta .grid-top{display:none!important}
+  #ferramenta .bench{grid-template-columns:1fr}
+  #ferramenta .card{border-color:#999}
+  #ferramenta td.slot{height:18px}
+}
+/* ajustes da página do MGF no Plural */
+#ferramenta .wrap { max-width: none; margin: 0; padding: 0; }
+#ferramenta .wrap > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .mgf-nota { background: var(--cor-menta-clara); }
+</style>
+</head>
+<body data-ferramenta="construir-horario" data-titulo="Construir horário">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Canivete <span>· 4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a>
+<ul><li><a href="pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a></li><li><a href="consulta-resultados-exames.html">Consulta rápida de resultados</a></li><li><a href="formulario-referenciacao.html">Formulário de referenciação</a></li><li><a href="construir-horario.html" aria-current="page">Construir horário</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/horario.svg" alt="">
+<div class="ficha-titulo">
+<h1>Construir horário</h1>
+<p class="ficha-meta">Grelha semanal, totais e exportação para PDF ou Excel · <strong>Miguel Henriques</strong> · v1.0 · 11 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/construir-horario.html" download="construir-horario.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Construir%20hor%C3%A1rio%20%28v1.0%29&body=Ferramenta%3A%20Construir%20hor%C3%A1rio%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+
+<div class="wrap">
+  <p class="mgf-nota" data-tom="menta"><strong>Privacidade.</strong> O horário fica guardado só neste browser, neste computador, para continuares mais tarde. Não é enviado para a internet. Usa «Guardar trabalho» para teres uma cópia em ficheiro, e não partilhes o ficheiro em locais sem segurança.</p>
+
+  <section class="card">
+    <div class="card-head"><h2>Identificação</h2></div>
+    <div class="ident" id="ident">
+      <div class="field"><label for="f_uf">Unidade Funcional</label><input id="f_uf" data-meta="uf" placeholder="Ex.: USF ou UCSP"></div>
+      <div class="field wide"><label for="f_nome">Nome</label><input id="f_nome" data-meta="nome" placeholder="Nome do profissional"></div>
+      <div class="field"><label for="f_mec">N.º Mecanográfico</label><input id="f_mec" data-meta="mec" inputmode="numeric" placeholder="—"></div>
+      <div class="field"><label for="f_carreira">Carreira</label><input id="f_carreira" data-meta="carreira" value="Médico"></div>
+      <div class="field"><label for="f_cat">Categoria</label><input id="f_cat" data-meta="categoria" value="Médico Assistente"></div>
+      <div class="field"><label for="f_esp">Especialidade</label><input id="f_esp" data-meta="especialidade" value="Medicina Geral e Familiar"></div>
+      <div class="field"><label for="f_vinc">Vínculo</label><input id="f_vinc" data-meta="vinculo" placeholder="—"></div>
+      <div class="field"><label for="f_tipo">Tipo de Horário</label><input id="f_tipo" data-meta="tipo" placeholder="—"></div>
+      <div class="field"><label for="f_regime">Regime de Trabalho</label><input id="f_regime" data-meta="regime" placeholder="—"></div>
+      <div class="field"><label for="f_carga">Carga Horária (h/semana)</label><input id="f_carga" data-meta="carga" type="number" min="0" max="60" step="1" value="40"></div>
+      <div class="field"><label for="f_inicio">Início de vigência</label><input id="f_inicio" data-meta="vigencia" type="date"></div>
+    </div>
+  </section>
+
+  <div class="bench">
+
+    <aside class="rail">
+      <div class="card">
+        <div class="card-head"><h2>Atividades</h2><span class="hint">clica e arrasta na grelha</span></div>
+        <div class="rail-scroll" id="rail"></div>
+        <div class="tool-row">
+          <button type="button" class="btn" id="eraser" type="button" aria-pressed="false">Borracha</button>
+          <button type="button" class="btn ghost" id="addAct" type="button">+ Atividade</button>
+          <button type="button" class="btn ghost" id="clearAll" type="button">Limpar grelha</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="horario-grelha">
+      <section class="card">
+        <div class="grid-top">
+          <span class="mini">Das
+            <select id="startSel"></select>
+            às
+            <select id="endSel"></select>
+          </span>
+          <span class="mini">Intervalos de
+            <select id="slotSel">
+              <option value="20">20 min</option>
+              <option value="30">30 min</option>
+            </select>
+          </span>
+          <label class="sw-label"><input type="checkbox" id="satToggle"> Incluir sábado</label>
+          <label class="sw-label"><input type="checkbox" id="lunchToggle" checked> Marcar intervalo 13h–14h</label>
+        </div>
+        <div class="grid-shell">
+          <table class="sched" id="sched"></table>
+        </div>
+      </section>
+
+      <div class="summary" id="summary"></div>
+      <div class="alerts" id="alerts"></div>
+
+      <section class="card" style="margin-top:18px">
+        <div class="card-head"><h2>Observações</h2></div>
+        <div style="padding:12px 16px">
+          <textarea id="f_obs" data-meta="obs" rows="3" style="width:100%;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px;resize:vertical" placeholder="Notas sobre este horário…"></textarea>
+        </div>
+      </section>
+
+      <div class="exports">
+        <span class="lbl">Exportar</span>
+        <button type="button" class="btn primary" id="expPdf" type="button">PDF</button>
+        <button type="button" class="btn" id="expXlsx" type="button">Excel (.xlsx)</button>
+        <button type="button" class="btn" id="expCsv" type="button">CSV</button>
+        <span class="lbl" style="margin-left:10px">Ficheiro</span>
+        <button type="button" class="btn" id="saveJson" type="button">Guardar trabalho</button>
+        <button type="button" class="btn" id="openFile" type="button">Abrir ficheiro…</button>
+        <input type="file" id="fileInput" accept=".json,.xlsx,.xls,.csv" hidden>
+      </div>
+
+      <div class="foot">
+        <div class="sig">O Profissional<br>___ / ___ / _____</div>
+        <div class="sig">O Orientador<br>___ / ___ / _____</div>
+        <div class="sig">O Coordenador da UF<br>___ / ___ / _____</div>
+        <div class="sig">O Presidente do CCS<br>___ / ___ / _____</div>
+      </div>
+
+      <p class="note">Nota regulamentar: não pode haver mais de 6 horas de trabalho consecutivo. A grelha assinala automaticamente os dias em que esse limite é ultrapassado.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<dialog class="sheet" id="actDlg">
+  <form method="dialog" id="actForm">
+    <h3>Nova atividade</h3>
+    <div class="field"><label for="na_nome">Designação</label><input id="na_nome" maxlength="48" placeholder="Ex.: Projeto Dor Crónica"></div>
+    <div class="field"><label for="na_cat">Categoria</label>
+      <select id="na_cat">
+        <option value="proj">Projeto</option>
+        <option value="assist">Assistencial</option>
+        <option value="nao">Não assistencial</option>
+      </select>
+    </div>
+    <div class="field"><label for="na_cor">Cor</label><input id="na_cor" type="color" value="#C9A227" style="height:34px;padding:2px"></div>
+    <div class="row">
+      <button class="btn ghost" value="cancel" type="submit">Cancelar</button>
+      <button class="btn primary" value="ok" type="submit" id="na_ok">Adicionar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="sheet" id="impDlg">
+  <form method="dialog" id="impForm">
+    <h3>Importar horário</h3>
+    <p id="impInfo" class="dlg-info"></p>
+    <div id="impUnknown"></div>
+    <div class="row">
+      <button class="btn ghost" value="cancel" type="submit">Cancelar</button>
+      <button class="btn primary" value="ok" type="submit">Substituir horário</button>
+    </div>
+  </form>
+</dialog>
+
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Ferramenta de organização: não usa fontes clínicas. Bibliotecas incluídas: jsPDF 2.5.1 e jsPDF-AutoTable 3.8.2 (licença MIT), SheetJS 0.18.5 (licença Apache 2.0).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 11 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Construir%20hor%C3%A1rio%20%28v1.0%29&body=Ferramenta%3A%20Construir%20hor%C3%A1rio%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="formulario-referenciacao.html">← Formulário de referenciação</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-11</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/vendor/jspdf.umd.min.js"></script>
+<script src="../../../assets/vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="../../../assets/vendor/xlsx.full.min.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------------- dados base ---------------- */
+var BASE = [
+  {id:"sa_iu", nome:"Saúde Adulto — Iniciativa Utente", curto:"SA · Ini. Utente", cat:"assist", cor:"#2E9E6B"},
+  {id:"sa_im", nome:"Saúde Adulto — Iniciativa Médica", curto:"SA · Ini. Médica", cat:"assist", cor:"#176B4A"},
+  {id:"sa_n",  nome:"Saúde Adulto — Consulta a 10 e 15 dias", curto:"SA · 10 e 15 dias", cat:"assist", cor:"#8FD3B0"},
+  {id:"grav",  nome:"Vigilância da Gravidez",           curto:"Gravidez",         cat:"assist", cor:"#E2739E"},
+  {id:"si",    nome:"Saúde Infantil",                   curto:"S. Infantil",      cat:"assist", cor:"#3FA3DC"},
+  {id:"pf",    nome:"Planeamento Familiar",             curto:"Plan. Familiar",   cat:"assist", cor:"#9A74D6"},
+  {id:"dm",    nome:"Diabetes",                         curto:"Diabetes",         cat:"assist", cor:"#EF9A32"},
+  {id:"dom",   nome:"Domicílio",                        curto:"Domicílio",        cat:"assist", cor:"#8C6B4F"},
+  {id:"da",    nome:"Doença Aguda",                     curto:"Doença Aguda",     cat:"assist", cor:"#D8484C"},
+  {id:"cnp",   nome:"Consulta Não Presencial",          curto:"Não Presencial",   cat:"assist", cor:"#3EB8B8"},
+  {id:"val",   nome:"Valências",                        curto:"Valências",        cat:"assist", cor:"#6B8E2F"},
+  {id:"rec",   nome:"Receituário",                      curto:"Receituário",      cat:"assist", cor:"#B07AA1"},
+  {id:"reu",   nome:"Reunião",                          curto:"Reunião",          cat:"nao",    cor:"#5A6B8C"},
+  {id:"gl",    nome:"Gestão de Lista",                  curto:"Gestão de Lista",  cat:"nao",    cor:"#8A8F99"},
+  {id:"proj",  nome:"Projeto",                          curto:"Projeto",          cat:"proj",   cor:"#C9A227"}
+];
+var CATS = [
+  {id:"assist", nome:"Assistencial"},
+  {id:"nao",    nome:"Não assistencial"},
+  {id:"proj",   nome:"Projeto"}
+];
+var DIAS = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+var SLOT = 30;            // minutos por célula (espelha state.slot)
+var STORE = "usf-horario-medico-v1";
+
+var state = {
+  cells:{},               // "dia:minutos" -> idAtividade
+  custom:[],
+  meta:{},
+  slot:30,
+  start:8*60,
+  end:20*60,
+  sat:false,
+  lunch:true
+};
+
+/* ---------------- utilitários ---------------- */
+function acts(){ return BASE.concat(state.custom); }
+function actById(id){ var a=acts(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
+function hhmm(m){ var h=Math.floor(m/60), x=m%60; return (h<10?"0":"")+h+":"+(x<10?"0":"")+x; }
+function nDays(){ return state.sat?6:5; }
+function slots(){ var out=[],m=state.start; while(m<state.end){ out.push(m); m+=SLOT; } return out; }
+function key(d,m){ return d+":"+m; }
+function fmtH(h){
+  var mins=Math.round(h*60);
+  if(!mins) return "0h";
+  var hh=Math.floor(mins/60), mm=mins%60;
+  if(!hh) return mm+"min";
+  if(!mm) return hh+"h";
+  return hh+"h"+(mm<10?"0":"")+mm;
+}
+function fgFor(hex){
+  var c=hex.replace("#","");
+  if(c.length===3) c=c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
+  var r=parseInt(c.substr(0,2),16)/255, g=parseInt(c.substr(2,2),16)/255, b=parseInt(c.substr(4,2),16)/255;
+  function lin(v){ return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4); }
+  var L=0.2126*lin(r)+0.7152*lin(g)+0.0722*lin(b);
+  return L>0.48 ? "#10241B" : "#FFFFFF";
+}
+function toast(msg){
+  var t=document.getElementById("toast");
+  t.textContent=msg; t.hidden=false;
+  clearTimeout(toast._t);
+  toast._t=setTimeout(function(){ t.hidden=true; },2600);
+}
+
+/* ---------------- persistência local ---------------- */
+function save(){
+  try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){}
+}
+function load(){
+  try{
+    var raw=localStorage.getItem(STORE);
+    if(!raw) return;
+    var o=JSON.parse(raw);
+    if(o && typeof o==="object"){
+      state.cells  = o.cells  || {};
+      state.custom = Array.isArray(o.custom)? o.custom : [];
+      state.meta   = o.meta   || {};
+      state.slot   = (o.slot===20||o.slot===30)? o.slot : 30;
+      SLOT = state.slot;
+      state.start  = typeof o.start==="number"? o.start : state.start;
+      state.end    = typeof o.end==="number"? o.end : state.end;
+      state.sat    = !!o.sat;
+      state.lunch  = o.lunch!==false;
+    }
+  }catch(e){}
+}
+
+/* ---------------- cálculos ---------------- */
+function totals(){
+  var perAct={}, perDay=[], perCat={assist:0,nao:0,proj:0}, total=0;
+  var a=acts(); for(var i=0;i<a.length;i++) perAct[a[i].id]=0;
+  for(var d=0; d<6; d++) perDay[d]=0;
+  var S=slots();
+  for(var di=0; di<nDays(); di++){
+    for(var si=0; si<S.length; si++){
+      var id=state.cells[key(di,S[si])];
+      if(!id) continue;
+      var act=actById(id);
+      if(!act) continue;
+      var inc=SLOT/60;
+      perAct[id]+=inc; perDay[di]+=inc; perCat[act.cat]+=inc; total+=inc;
+    }
+  }
+  return {perAct:perAct, perDay:perDay, perCat:perCat, total:total};
+}
+
+function consecutiveBreaches(){
+  var S=slots(), out=[];
+  for(var d=0; d<nDays(); d++){
+    var run=0, best=0;
+    for(var i=0;i<S.length;i++){
+      var filled=!!state.cells[key(d,S[i])];
+      // uma pausa só quebra a sequência se existir uma célula vazia
+      if(filled){ run++; if(run>best) best=run; } else { run=0; }
+    }
+    if(best*SLOT > 360) out.push({dia:DIAS[d], horas:best*SLOT/60});
+  }
+  return out;
+}
+
+/* ---------------- interface: rail ---------------- */
+var selected = BASE[0].id;
+var erasing = false;
+
+function buildRail(){
+  var rail=document.getElementById("rail");
+  var t=totals();
+  rail.textContent="";
+  CATS.forEach(function(cat){
+    var list=acts().filter(function(a){ return a.cat===cat.id; });
+    var catH=0; list.forEach(function(a){ catH+=t.perAct[a.id]||0; });
+
+    var head=document.createElement("div");
+    head.className="cat-label";
+    var sp=document.createElement("span"); sp.textContent=cat.nome;
+    var hh=document.createElement("span"); hh.className="cat-h"; hh.textContent=fmtH(catH);
+    head.appendChild(sp); head.appendChild(hh);
+    rail.appendChild(head);
+
+    var box=document.createElement("div"); box.className="chips";
+    list.forEach(function(a){
+      var b=document.createElement("button");
+      b.type="button"; b.className="chip"+(a.custom?" custom":"");
+      b.style.setProperty("--sw", a.cor);
+      b.setAttribute("aria-pressed", String(!erasing && selected===a.id));
+      b.title=a.nome;
+
+      var sw=document.createElement("span"); sw.className="sw";
+      var nm=document.createElement("span"); nm.className="nm"; nm.textContent=a.nome;
+      var hs=document.createElement("span"); hs.className="hh"; hs.textContent=fmtH(t.perAct[a.id]||0);
+      b.appendChild(sw); b.appendChild(nm); b.appendChild(hs);
+
+      b.addEventListener("click", function(){ erasing=false; selected=a.id; buildRail(); syncEraser(); });
+
+      if(a.custom){
+        var del=document.createElement("button");
+        del.type="button"; del.className="del"; del.textContent="×"; del.title="Remover atividade";
+        del.addEventListener("click", function(ev){
+          ev.stopPropagation();
+          state.custom=state.custom.filter(function(x){ return x.id!==a.id; });
+          Object.keys(state.cells).forEach(function(k){ if(state.cells[k]===a.id) delete state.cells[k]; });
+          if(selected===a.id) selected=BASE[0].id;
+          render();
+        });
+        b.appendChild(del);
+      }
+      box.appendChild(b);
+    });
+    rail.appendChild(box);
+  });
+}
+function syncEraser(){
+  document.getElementById("eraser").setAttribute("aria-pressed", String(erasing));
+}
+
+/* ---------------- interface: grelha ---------------- */
+var painting=false, paintMode=null;
+
+function buildGrid(){
+  var tbl=document.getElementById("sched");
+  tbl.textContent="";
+  var S=slots(), nd=nDays();
+
+  var cg=document.createElement("colgroup");
+  var c0=document.createElement("col"); c0.style.width="62px"; cg.appendChild(c0);
+  for(var i=0;i<nd;i++){ var c=document.createElement("col"); c.className="day"; cg.appendChild(c); }
+  tbl.appendChild(cg);
+
+  var thead=document.createElement("thead"), hr=document.createElement("tr");
+  var th0=document.createElement("th"); th0.className="t"; th0.textContent="Hora"; hr.appendChild(th0);
+  for(var d=0; d<nd; d++){ var th=document.createElement("th"); th.textContent=DIAS[d]; hr.appendChild(th); }
+  thead.appendChild(hr); tbl.appendChild(thead);
+
+  var tb=document.createElement("tbody");
+  S.forEach(function(m){
+    var tr=document.createElement("tr");
+    var td=document.createElement("td");
+    td.className="time"+(m%60?" half":"");
+    td.textContent=hhmm(m);
+    tr.appendChild(td);
+
+    for(var d=0; d<nd; d++){
+      var cell=document.createElement("td");
+      cell.className="slot";
+      if((m+SLOT)%60===0) cell.classList.add("hourline");
+      if(state.lunch && m>=13*60 && m<14*60) cell.classList.add("lunch");
+      cell.dataset.d=d; cell.dataset.m=m;
+      cell.setAttribute("role","gridcell");
+      tr.appendChild(cell);
+    }
+    tb.appendChild(tr);
+  });
+
+  var tot=document.createElement("tr"); tot.className="daytotal";
+  var tl=document.createElement("td"); tl.className="time"; tl.textContent="Total"; tot.appendChild(tl);
+  for(var d2=0; d2<nd; d2++){
+    var tdx=document.createElement("td"); tdx.className="dtot"; tdx.dataset.d=d2; tot.appendChild(tdx);
+  }
+  tb.appendChild(tot);
+  tbl.appendChild(tb);
+}
+
+function paintCells(){
+  var S=slots();
+  var nodes=document.querySelectorAll("#sched td.slot");
+  for(var i=0;i<nodes.length;i++){
+    var el=nodes[i], d=+el.dataset.d, m=+el.dataset.m;
+    var id=state.cells[key(d,m)];
+    el.className="slot"+(((m+SLOT)%60===0)?" hourline":"")+((state.lunch&&m>=13*60&&m<14*60)?" lunch":"");
+    el.textContent="";
+    el.style.removeProperty("--c"); el.style.removeProperty("--fgc");
+    if(!id) { el.removeAttribute("title"); continue; }
+    var a=actById(id); if(!a){ continue; }
+    el.classList.add("filled");
+    el.style.setProperty("--c", a.cor);
+    el.style.setProperty("--fgc", fgFor(a.cor));
+    el.title=a.nome+" · "+hhmm(m)+"–"+hhmm(m+SLOT);
+    var prev=state.cells[key(d,m-SLOT)];
+    if(prev===id && m-SLOT>=state.start){
+      el.classList.add("cont");
+    }else{
+      var lb=document.createElement("span"); lb.className="lbl"; lb.textContent=a.curto;
+      el.appendChild(lb);
+    }
+  }
+  var t=totals();
+  var dts=document.querySelectorAll("#sched td.dtot");
+  for(var j=0;j<dts.length;j++){
+    dts[j].textContent=fmtH(t.perDay[+dts[j].dataset.d]);
+  }
+}
+
+function applyAt(el){
+  var d=+el.dataset.d, m=+el.dataset.m, k=key(d,m);
+  if(paintMode==="erase"){ delete state.cells[k]; }
+  else { state.cells[k]=selected; }
+  render(true);
+}
+
+function wireGrid(){
+  var tbl=document.getElementById("sched");
+  tbl.addEventListener("pointerdown", function(e){
+    var el=e.target.closest ? e.target.closest("td.slot") : null;
+    if(!el) return;
+    e.preventDefault();
+    var k=key(+el.dataset.d,+el.dataset.m);
+    paintMode = (erasing || state.cells[k]===selected) ? "erase" : "paint";
+    painting=true;
+    applyAt(el);
+    try{ tbl.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  tbl.addEventListener("pointermove", function(e){
+    if(!painting) return;
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    if(el && el.classList && el.classList.contains("slot")) applyAt(el);
+    else if(el && el.parentElement && el.parentElement.classList.contains("slot")) applyAt(el.parentElement);
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(function(ev){
+    tbl.addEventListener(ev, function(){ if(painting){ painting=false; save(); } });
+  });
+  window.addEventListener("pointerup", function(){ if(painting){ painting=false; save(); } });
+}
+
+/* ---------------- resumo e alertas ---------------- */
+function buildSummary(){
+  var t=totals();
+  var carga=parseFloat(state.meta.carga||"0")||0;
+  var box=document.getElementById("summary");
+  box.textContent="";
+
+  function stat(k,v,m,cls,pct){
+    var d=document.createElement("div"); d.className="stat"+(cls?" "+cls:"");
+    var a=document.createElement("div"); a.className="k"; a.textContent=k;
+    var b=document.createElement("div"); b.className="v"; b.textContent=v;
+    d.appendChild(a); d.appendChild(b);
+    if(m){ var c=document.createElement("div"); c.className="m"; c.textContent=m; d.appendChild(c); }
+    if(typeof pct==="number"){
+      var bar=document.createElement("div"); bar.className="bar";
+      var i=document.createElement("i"); i.style.width=Math.max(0,Math.min(100,pct))+"%";
+      bar.appendChild(i); d.appendChild(bar);
+    }
+    box.appendChild(d);
+  }
+
+  var pa = t.total? Math.round(t.perCat.assist/t.total*100) : 0;
+  stat("Assistencial", fmtH(t.perCat.assist), pa+"% do horário preenchido", "", pa);
+  var pn = t.total? Math.round(t.perCat.nao/t.total*100) : 0;
+  stat("Não assistencial", fmtH(t.perCat.nao), pn+"% do horário preenchido", "", pn);
+  stat("Projeto", fmtH(t.perCat.proj), "contabilizado em separado", "proj");
+
+  var dif = t.total - carga;
+  var msg = carga ? (dif===0 ? "Coincide com a carga horária"
+          : (dif>0 ? "+"+fmtH(dif)+" acima da carga" : fmtH(Math.abs(dif))+" por atribuir")) : "Defina a carga horária";
+  stat("Total semanal", fmtH(t.total), msg, "total");
+
+  var al=document.getElementById("alerts");
+  al.textContent="";
+  var br=consecutiveBreaches();
+  br.forEach(function(b){
+    var d=document.createElement("div"); d.className="alert warn";
+    var s=document.createElement("span");
+    s.innerHTML="<b>"+b.dia+"</b> tem "+fmtH(b.horas)+" de trabalho consecutivo. O limite regulamentar é de 6 horas seguidas — introduz um intervalo.";
+    d.appendChild(s); al.appendChild(d);
+  });
+  if(carga && dif>0){
+    var d2=document.createElement("div"); d2.className="alert warn";
+    d2.textContent="O horário atribuído excede a carga horária declarada em "+fmtH(dif)+".";
+    al.appendChild(d2);
+  }
+  if(!br.length && t.total>0 && (!carga || dif<=0)){
+    var d3=document.createElement("div"); d3.className="alert ok";
+    d3.textContent="Sem períodos de trabalho consecutivo acima de 6 horas.";
+    al.appendChild(d3);
+  }
+}
+
+/* ---------------- render ---------------- */
+var gridSig="";
+function render(cellsOnly){
+  var sig=state.start+"|"+state.end+"|"+nDays()+"|"+state.lunch+"|"+SLOT;
+  if(!cellsOnly || sig!==gridSig){ buildGrid(); gridSig=sig; wireGridOnce(); }
+  paintCells();
+  buildRail();
+  buildSummary();
+  syncEraser();
+  save();
+}
+var wired=false;
+function wireGridOnce(){ if(wired) return; wired=true; wireGrid(); }
+
+/* ---------------- controlos ---------------- */
+function fillTimeSelects(){
+  var s=document.getElementById("startSel"), e=document.getElementById("endSel");
+  s.textContent=""; e.textContent="";
+  var step=SLOT;
+  for(var m=6*60; m<=14*60; m+=step){
+    var o=document.createElement("option"); o.value=m; o.textContent=hhmm(m); s.appendChild(o);
+  }
+  // o fim alinha com o início, para que a última célula feche certa
+  for(var n=state.start+step; n<=24*60; n+=step){
+    var p=document.createElement("option"); p.value=n; p.textContent=(n>=24*60?"24:00":hhmm(n)); e.appendChild(p);
+  }
+  s.value=state.start; e.value=state.end;
+  if(s.selectedIndex<0){ s.value=s.options[0].value; state.start=+s.value; }
+  if(e.selectedIndex<0){ e.value=e.options[e.options.length-1].value; state.end=+e.value; }
+}
+function wireTimeSelects(){
+  var s=document.getElementById("startSel"), e=document.getElementById("endSel");
+  s.addEventListener("change", function(){
+    state.start=+s.value;
+    if(state.end<=state.start) state.end=state.start+SLOT*2;
+    fillTimeSelects();
+    render();
+  });
+  e.addEventListener("change", function(){
+    state.end=+e.value;
+    if(state.end<=state.start){ state.start=state.end-SLOT*2; }
+    fillTimeSelects();
+    render();
+  });
+}
+
+/* --- mudar o passo da grelha, preservando o que já está marcado --- */
+function setSlot(novo){
+  if(novo===SLOT) return;
+  var antigo=SLOT;
+
+  // intervalos ocupados, em minutos, por dia
+  var ocupado=[];
+  for(var d=0; d<6; d++) ocupado[d]=[];
+  Object.keys(state.cells).forEach(function(k){
+    var pr=k.split(":"), d=+pr[0], m=+pr[1];
+    ocupado[d].push({a:m, b:m+antigo, id:state.cells[k]});
+  });
+
+  state.slot=novo; SLOT=novo;
+  // o fim tem de ser um múltiplo do novo passo a contar do início
+  var dur=state.end-state.start;
+  state.end=state.start+Math.max(novo*2, Math.round(dur/novo)*novo);
+  if(state.end>24*60) state.end=state.start+Math.floor((24*60-state.start)/novo)*novo;
+
+  var novas={};
+  for(var dd=0; dd<6; dd++){
+    if(!ocupado[dd].length) continue;
+    for(var m2=state.start; m2<state.end; m2+=novo){
+      var somas={}, melhor=null, maior=0;
+      for(var i=0;i<ocupado[dd].length;i++){
+        var o=ocupado[dd][i];
+        var ov=Math.min(o.b, m2+novo)-Math.max(o.a, m2);
+        if(ov<=0) continue;
+        somas[o.id]=(somas[o.id]||0)+ov;
+        if(somas[o.id]>maior){ maior=somas[o.id]; melhor=o.id; }
+      }
+      // só preenche se a atividade ocupar pelo menos metade da célula
+      if(melhor && maior*2>=novo) novas[key(dd,m2)]=melhor;
+    }
+  }
+  state.cells=novas;
+  fillTimeSelects();
+  gridSig="";
+  render();
+}
+
+function wireMeta(){
+  var els=document.querySelectorAll("[data-meta]");
+  for(var i=0;i<els.length;i++){
+    (function(el){
+      var k=el.dataset.meta;
+      if(state.meta[k]!==undefined && state.meta[k]!=="") el.value=state.meta[k];
+      else state.meta[k]=el.value;
+      el.addEventListener("input", function(){
+        state.meta[k]=el.value;
+        if(k==="carga") buildSummary();
+        save();
+      });
+    })(els[i]);
+  }
+}
+
+function wireButtons(){
+  document.getElementById("eraser").addEventListener("click", function(){
+    erasing=!erasing; buildRail(); syncEraser();
+  });
+  document.getElementById("clearAll").addEventListener("click", function(){
+    if(!Object.keys(state.cells).length){ toast("A grelha já está vazia."); return; }
+    state.cells={}; render(); toast("Grelha limpa.");
+  });
+  document.getElementById("slotSel").addEventListener("change", function(e){
+    setSlot(+e.target.value);
+    toast("Grelha em intervalos de "+SLOT+" minutos.");
+  });
+  document.getElementById("satToggle").addEventListener("change", function(e){
+    state.sat=e.target.checked; render();
+  });
+  document.getElementById("lunchToggle").addEventListener("change", function(e){
+    state.lunch=e.target.checked; render();
+  });
+  var dlg=document.getElementById("actDlg");
+  document.getElementById("addAct").addEventListener("click", function(){
+    document.getElementById("na_nome").value="";
+    dlg.showModal();
+  });
+  dlg.addEventListener("close", function(){
+    if(dlg.returnValue!=="ok") return;
+    var nome=document.getElementById("na_nome").value.trim();
+    if(!nome){ toast("Indique uma designação para a atividade."); return; }
+    var cat=document.getElementById("na_cat").value;
+    var cor=document.getElementById("na_cor").value;
+    var id="c"+Date.now().toString(36);
+    state.custom.push({id:id,nome:nome,curto:nome.length>18?nome.slice(0,17)+"…":nome,cat:cat,cor:cor,custom:true});
+    selected=id; erasing=false;
+    render();
+    toast("“"+nome+"” adicionada.");
+  });
+
+}
+
+/* ---------------- exportação ---------------- */
+var dl=null;
+(function(){
+  if(window.claude && typeof window.claude.use==="function"){
+    window.claude.use("downloads").then(function(d){ dl=d; }).catch(function(){ dl=null; });
+  }
+})();
+
+function deliver(filename, data, mime){
+  if(dl){
+    dl.save({filename:filename, data:data}).then(function(){
+      toast("Ficheiro guardado: "+filename);
+    }).catch(function(){ toast("Transferência cancelada."); });
+    return;
+  }
+  try{
+    var blob = (data instanceof Blob) ? data : new Blob([data], {type:mime||"application/octet-stream"});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement("a");
+    a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },1500);
+    toast("A transferir "+filename+"…");
+  }catch(err){
+    toast("Não foi possível transferir o ficheiro neste contexto.");
+  }
+}
+
+function fileBase(){
+  var n=(state.meta.nome||"horario").trim().replace(/[^\wÀ-ÿ -]/g,"").replace(/\s+/g,"_");
+  return "Horario_Medico_"+(n||"USF");
+}
+
+function matrix(){
+  var S=slots(), nd=nDays(), rows=[];
+  var head=["Hora"]; for(var d=0; d<nd; d++) head.push(DIAS[d]);
+  rows.push(head);
+  S.forEach(function(m){
+    var r=[hhmm(m)+"–"+hhmm(m+SLOT)];
+    for(var d=0; d<nd; d++){
+      var a=actById(state.cells[key(d,m)]);
+      r.push(a?a.nome:"");
+    }
+    rows.push(r);
+  });
+  var t=totals();
+  var tr=["Total diário"];
+  for(var d2=0; d2<nd; d2++) tr.push(fmtH(t.perDay[d2]));
+  rows.push(tr);
+  return rows;
+}
+
+function summaryRows(){
+  var t=totals(), rows=[];
+  rows.push(["Resumo","Horas"]);
+  CATS.forEach(function(cat){
+    acts().filter(function(a){ return a.cat===cat.id; }).forEach(function(a){
+      if(t.perAct[a.id]>0) rows.push([a.nome, t.perAct[a.id]]);
+    });
+  });
+  rows.push([]);
+  rows.push(["Total assistencial", t.perCat.assist]);
+  rows.push(["Total não assistencial", t.perCat.nao]);
+  rows.push(["Total projeto", t.perCat.proj]);
+  rows.push(["Total semanal", t.total]);
+  rows.push(["Carga horária declarada", parseFloat(state.meta.carga||0)||0]);
+  return rows;
+}
+
+var CATNOME={assist:"Assistencial",nao:"Não assistencial",proj:"Projeto"};
+function legendRows(){
+  var rows=[["LEGENDA","Categoria","Cor"]];
+  acts().forEach(function(a){ rows.push([a.nome, CATNOME[a.cat]||a.cat, a.cor]); });
+  return rows;
+}
+function metaRows(){
+  return [
+    ["Unidade Funcional", state.meta.uf||""],
+    ["Nome", state.meta.nome||""],
+    ["N.º Mecanográfico", state.meta.mec||""],
+    ["Carreira", state.meta.carreira||""],
+    ["Categoria", state.meta.categoria||""],
+    ["Especialidade", state.meta.especialidade||""],
+    ["Vínculo", state.meta.vinculo||""],
+    ["Tipo de Horário", state.meta.tipo||""],
+    ["Regime de Trabalho", state.meta.regime||""],
+    ["Carga Horária (h/semana)", state.meta.carga||""],
+    ["Início de vigência", state.meta.vigencia||""],
+    ["Observações", state.meta.obs||""]
+  ];
+}
+
+function exportCsv(){
+  var lines=[];
+  function row(arr){
+    lines.push(arr.map(function(v){
+      v = (v===undefined||v===null) ? "" : String(v);
+      return /[";\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v;
+    }).join(";"));
+  }
+  row(["HORÁRIO SEMANAL MÉDICO"]);
+  metaRows().forEach(row);
+  row([]);
+  matrix().forEach(row);
+  row([]);
+  summaryRows().forEach(row);
+  row([]);
+  legendRows().forEach(row);
+  deliver(fileBase()+".csv", "﻿"+lines.join("\r\n"), "text/csv;charset=utf-8");
+}
+
+function exportXlsx(){
+  if(typeof XLSX==="undefined"){ toast("Biblioteca Excel indisponível."); return; }
+  var wb=XLSX.utils.book_new();
+  var data=[["HORÁRIO SEMANAL MÉDICO"],[]].concat(metaRows()).concat([[]]).concat(matrix())
+             .concat([[]]).concat(legendRows());
+  var ws=XLSX.utils.aoa_to_sheet(data);
+  ws["!cols"]=[{wch:16}].concat(Array.apply(null,Array(nDays())).map(function(){ return {wch:26}; }));
+  XLSX.utils.book_append_sheet(wb, ws, "Horário");
+  var ws2=XLSX.utils.aoa_to_sheet(summaryRows());
+  ws2["!cols"]=[{wch:36},{wch:10}];
+  XLSX.utils.book_append_sheet(wb, ws2, "Resumo");
+  var ws3=XLSX.utils.aoa_to_sheet([["Não altere esta folha — guarda o horário para reabertura na ferramenta."],[snapshot()]]);
+  ws3["!cols"]=[{wch:70}];
+  XLSX.utils.book_append_sheet(wb, ws3, "_estado");
+  var out=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  deliver(fileBase()+".xlsx", new Blob([out],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+}
+
+function exportPdf(){
+  var J = window.jspdf && window.jspdf.jsPDF;
+  if(!J){ toast("Biblioteca PDF indisponível."); return; }
+  var doc=new J({orientation:"portrait",unit:"mm",format:"a4"});
+  var W=doc.internal.pageSize.getWidth();
+  var t=totals(), nd=nDays(), S=slots();
+
+
+  doc.setFont("helvetica","bold"); doc.setFontSize(14);
+  doc.text("Horário Semanal Médico", 40, 14);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(110);
+  doc.text((state.meta.uf||"")+"  ·  "+(state.meta.nome||"—")+"  ·  "+(state.meta.categoria||""), 40, 19);
+  doc.setTextColor(0);
+
+  var m=metaRows().filter(function(r){ return r[0]!=="Observações"; });
+  var ident=[];
+  for(var i=0;i<m.length;i+=3){
+    ident.push([ m[i][0], m[i][1],
+                 m[i+1]?m[i+1][0]:"", m[i+1]?m[i+1][1]:"",
+                 m[i+2]?m[i+2][0]:"", m[i+2]?m[i+2][1]:"" ]);
+  }
+  doc.autoTable({
+    startY:24, body:ident, theme:"grid",
+    styles:{fontSize:7,cellPadding:1.1,lineColor:[210,218,212],textColor:[20,32,27]},
+    columnStyles:{0:{fontStyle:"bold",fillColor:[240,245,241],cellWidth:27},
+                  2:{fontStyle:"bold",fillColor:[240,245,241],cellWidth:27},
+                  4:{fontStyle:"bold",fillColor:[240,245,241],cellWidth:27}},
+    margin:{left:12,right:12}
+  });
+
+  var head=[["Hora"].concat(DIAS.slice(0,nd))];
+  var body=S.map(function(mm){
+    var r=[hhmm(mm)];
+    for(var d=0; d<nd; d++){
+      var a=actById(state.cells[key(d,mm)]);
+      var prev=state.cells[key(d,mm-SLOT)];
+      r.push(a ? (prev===a.id ? "" : a.curto) : "");
+    }
+    return r;
+  });
+  var totRow=["Total"]; for(var d3=0; d3<nd; d3++) totRow.push(fmtH(t.perDay[d3]));
+  body.push(totRow);
+
+  function hexRgb(h){
+    h=h.replace("#",""); if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];
+  }
+
+  doc.autoTable({
+    startY: doc.lastAutoTable.finalY + 4,
+    head: head, body: body, theme:"grid",
+    styles:{fontSize: S.length>30?5.6:6.2, cellPadding: S.length>30?0.55:0.8,
+            lineColor:[205,214,208],lineWidth:0.12,
+            minCellHeight: S.length>30?3.2:4, valign:"middle",overflow:"hidden"},
+    headStyles:{fillColor:[20,32,27],textColor:[255,255,255],fontSize:7,halign:"center"},
+    columnStyles:{0:{cellWidth:14,halign:"right",fontStyle:"bold",textColor:[90,105,96]}},
+    margin:{left:12,right:12},
+    didParseCell:function(d){
+      if(d.section!=="body") return;
+      var r=d.row.index, c=d.column.index;
+      if(r===body.length-1){ d.cell.styles.fontStyle="bold"; d.cell.styles.halign="center"; d.cell.styles.fillColor=[238,243,239]; return; }
+      if(c===0) return;
+      var act=actById(state.cells[key(c-1, S[r])]);
+      if(act){
+        d.cell.styles.fillColor=hexRgb(act.cor);
+        d.cell.styles.textColor=fgFor(act.cor)==="#FFFFFF"?[255,255,255]:[16,36,27];
+        d.cell.styles.fontStyle="bold";
+        d.cell.styles.halign="left";
+      }
+    }
+  });
+
+  var sum=[], bold={};
+  CATS.forEach(function(cat){
+    var list=acts().filter(function(a){ return a.cat===cat.id && t.perAct[a.id]>0; });
+    if(!list.length) return;
+    bold[sum.length]="cat"; sum.push([cat.nome.toUpperCase(), ""]);
+    list.forEach(function(a){ sum.push(["   "+a.nome, fmtH(t.perAct[a.id])]); });
+  });
+  bold[sum.length]="rule"; sum.push(["Total assistencial", fmtH(t.perCat.assist)]);
+  bold[sum.length]="rule"; sum.push(["Total não assistencial", fmtH(t.perCat.nao)]);
+  bold[sum.length]="rule"; sum.push(["Total projeto", fmtH(t.perCat.proj)]);
+  bold[sum.length]="grand"; sum.push(["TOTAL SEMANAL", fmtH(t.total)]);
+
+  var y=doc.lastAutoTable.finalY + 5;
+  if(y > doc.internal.pageSize.getHeight()-80){ doc.addPage(); y=16; }
+  var sumTop=y;
+  doc.autoTable({
+    startY:y, head:[["Resumo de horas",""]], body:sum, theme:"plain",
+    styles:{fontSize:7.2,cellPadding:1.1,lineColor:[220,228,222],lineWidth:0.1},
+    headStyles:{fillColor:[14,154,99],textColor:[255,255,255],fontSize:7.4},
+    columnStyles:{1:{halign:"right",cellWidth:18,fontStyle:"bold"}},
+    margin:{left:12,right:12},
+    tableWidth:(W-24)/2,
+    didParseCell:function(d){
+      if(d.section!=="body") return;
+      var k=bold[d.row.index];
+      if(k==="cat"){ d.cell.styles.fontStyle="bold"; d.cell.styles.fontSize=6.4; d.cell.styles.textColor=[110,125,115]; }
+      if(k==="rule"){ d.cell.styles.fillColor=[240,245,241]; }
+      if(k==="grand"){ d.cell.styles.fontStyle="bold"; d.cell.styles.fillColor=[20,32,27]; d.cell.styles.textColor=[255,255,255]; }
+    }
+  });
+
+  var obs=(state.meta.obs||"").trim();
+  if(obs){
+    var ox=12+(W-24)/2+6, oy=sumTop;
+    doc.setFontSize(7.5); doc.setFont("helvetica","bold");
+    doc.text("Observações", ox, oy+4);
+    doc.setFont("helvetica","normal"); doc.setTextColor(70);
+    doc.text(doc.splitTextToSize(obs, (W-24)/2-6), ox, oy+9);
+    doc.setTextColor(0);
+  }
+
+  var sy=Math.max(doc.lastAutoTable.finalY+16, doc.internal.pageSize.getHeight()-22);
+  if(sy > doc.internal.pageSize.getHeight()-14){ doc.addPage(); sy=40; }
+  var names=["O Profissional","O Orientador","O Coordenador da UF","O Presidente do CCS"];
+  var cw=(W-24)/4;
+  doc.setFontSize(7); doc.setDrawColor(150);
+  names.forEach(function(n,i){
+    var x=12+i*cw;
+    doc.line(x, sy, x+cw-10, sy);
+    doc.text(n, x, sy+4);
+    doc.setTextColor(130); doc.text("___ / ___ / _____", x, sy+8); doc.setTextColor(0);
+  });
+  doc.setFontSize(6.4); doc.setTextColor(130);
+  doc.text("Não pode haver mais de 6 horas de trabalho consecutivo.", 12, doc.internal.pageSize.getHeight()-7);
+
+  deliver(fileBase()+".pdf", doc.output("blob"), "application/pdf");
+}
+
+
+/* ---------------- guardar / abrir ficheiro ---------------- */
+var EXTRA_CORES=["#5E8C6A","#B5651D","#2F6F8F","#A33E8E","#6E7F1F","#C25E5E","#4A6FA5","#8E5BA6"];
+
+function snapshot(){
+  return JSON.stringify({app:"usf-horario-medico", v:1, guardado:new Date().toISOString(), state:state});
+}
+function exportJson(){
+  deliver(fileBase()+".json", snapshot(), "application/json");
+}
+
+function adoptState(o){
+  if(!o || typeof o!=="object") throw new Error("formato");
+  state.cells  = o.cells  || {};
+  state.custom = Array.isArray(o.custom)? o.custom : [];
+  state.meta   = o.meta   || {};
+  state.slot   = (o.slot===20||o.slot===30)? o.slot : 30;
+  SLOT = state.slot;
+  state.start  = typeof o.start==="number"? o.start : 8*60;
+  state.end    = typeof o.end==="number"? o.end : 20*60;
+  state.sat    = !!o.sat;
+  state.lunch  = o.lunch!==false;
+  refreshAll();
+}
+function refreshAll(){
+  var els=document.querySelectorAll("[data-meta]");
+  for(var i=0;i<els.length;i++){ els[i].value = state.meta[els[i].dataset.meta] || ""; }
+  document.getElementById("satToggle").checked=state.sat;
+  document.getElementById("lunchToggle").checked=state.lunch;
+  document.getElementById("slotSel").value=String(SLOT);
+  fillTimeSelects();
+  if(!actById(selected)) selected=BASE[0].id;
+  gridSig="";
+  render();
+}
+
+/* --- CSV --- */
+function parseCsv(text){
+  text=text.replace(/^﻿/,"");
+  var head=text.slice(0,2000);
+  var delim = (head.split(";").length > head.split(",").length) ? ";" : ",";
+  var rows=[], row=[], cur="", q=false;
+  for(var i=0;i<text.length;i++){
+    var c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){ cur+='"'; i++; } else q=false; }
+      else cur+=c;
+    }else{
+      if(c==='"') q=true;
+      else if(c===delim){ row.push(cur); cur=""; }
+      else if(c==="\n"){ row.push(cur); rows.push(row); row=[]; cur=""; }
+      else if(c!=="\r") cur+=c;
+    }
+  }
+  row.push(cur); rows.push(row);
+  return rows;
+}
+
+/* --- leitura genérica de uma matriz exportada --- */
+var METAMAP={
+  "Unidade Funcional":"uf","Nome":"nome","N.º Mecanográfico":"mec","No Mecanográfico":"mec",
+  "Carreira":"carreira","Categoria":"categoria","Especialidade":"especialidade","Vínculo":"vinculo",
+  "Tipo de Horário":"tipo","Regime de Trabalho":"regime","Carga Horária (h/semana)":"carga",
+  "Início de vigência":"vigencia","Observações":"obs"
+};
+var CATID={"assistencial":"assist","não assistencial":"nao","nao assistencial":"nao","projeto":"proj"};
+
+function parseMatrix(rows){
+  function cel(r,c){ var v=rows[r]&&rows[r][c]; return (v===undefined||v===null)?"":String(v).trim(); }
+  var headRow=-1;
+  for(var i=0;i<rows.length;i++){ if(cel(i,0).toLowerCase()==="hora"){ headRow=i; break; } }
+  if(headRow<0) throw new Error("Não encontrei a grelha de horário neste ficheiro.");
+
+  var nd=0;
+  for(var c=1; c<(rows[headRow]||[]).length; c++){ if(cel(headRow,c)) nd++; else break; }
+  if(nd<1) throw new Error("A grelha não tem colunas de dias.");
+  var sat = nd>=6;
+
+  var legenda={};
+  for(var L=0;L<rows.length;L++){
+    if(cel(L,0).toUpperCase()==="LEGENDA"){
+      for(var k=L+1;k<rows.length;k++){
+        var nm=cel(k,0); if(!nm) break;
+        legenda[nm]={cat:CATID[cel(k,1).toLowerCase()]||null, cor:/^#[0-9a-f]{6}$/i.test(cel(k,2))?cel(k,2):null};
+      }
+      break;
+    }
+  }
+
+  var meta={};
+  for(var mI=0; mI<headRow; mI++){
+    var k2=METAMAP[cel(mI,0)];
+    if(k2 && meta[k2]===undefined) meta[k2]=cel(mI,1);
+  }
+
+  var RE=/^(\d{1,2}):(\d{2})\s*[–—-]\s*(\d{1,2}):(\d{2})$/;
+  var marks=[], mins=[], nomes={}, duracoes=[];
+  for(var r=headRow+1; r<rows.length; r++){
+    var t=cel(r,0);
+    if(!t) continue;
+    var m=RE.exec(t);
+    if(!m){
+      var t0=t.toLowerCase();
+      if(t0.indexOf("total")===0) break;
+      continue;
+    }
+    var min=(+m[1])*60+(+m[2]);
+    var fim=(+m[3])*60+(+m[4]);
+    var dur=fim-min; if(dur>0 && dur<=60) duracoes.push(dur);
+    mins.push(min);
+    for(var d=0; d<nd; d++){
+      var nome=cel(r,d+1);
+      if(!nome) continue;
+      nomes[nome]=true;
+      marks.push({d:d,m:min,nome:nome});
+    }
+  }
+  if(!mins.length) throw new Error("A grelha não tem linhas de horas legíveis.");
+
+  var slot = duracoes.length ? Math.min.apply(null,duracoes) : SLOT;
+  if(slot!==20 && slot!==30) slot = (slot<=25 ? 20 : 30);
+  var start=Math.min.apply(null,mins), end=Math.max.apply(null,mins)+slot;
+  return {meta:meta, marks:marks, nomes:Object.keys(nomes), legenda:legenda,
+          start:start, end:end, sat:sat, slot:slot, periodos:marks.length};
+}
+
+/* --- aplicar importação --- */
+var ALIAS={"Saúde Adulto — Normal":"sa_n","Saúde Adulto - Normal":"sa_n"};
+function applyParsed(P, escolhas){
+  var porNome={};
+  BASE.forEach(function(a){ porNome[a.nome]=a.id; });
+  Object.keys(ALIAS).forEach(function(n){ porNome[n]=ALIAS[n]; });
+  var novos=[];
+  P.nomes.forEach(function(nome){
+    if(porNome[nome]) return;
+    var leg=P.legenda[nome]||{};
+    var esc=(escolhas&&escolhas[nome])||{};
+    var cat=esc.cat||leg.cat||"proj";
+    var cor=esc.cor||leg.cor||EXTRA_CORES[novos.length%EXTRA_CORES.length];
+    var id="i"+(Date.now().toString(36))+novos.length.toString(36);
+    novos.push({id:id,nome:nome,curto:nome.length>18?nome.slice(0,17)+"…":nome,cat:cat,cor:cor,custom:true});
+    porNome[nome]=id;
+  });
+
+  state.cells={};
+  state.custom=novos;
+  state.meta=P.meta||{};
+  state.slot=P.slot||30; SLOT=state.slot;
+  state.start=P.start; state.end=P.end; state.sat=P.sat; state.lunch=true;
+  P.marks.forEach(function(k){ state.cells[key(k.d,k.m)]=porNome[k.nome]; });
+  refreshAll();
+}
+
+/* --- diálogo --- */
+var pendente=null;
+function proporImportacao(P, origem){
+  var desconhecidos=P.nomes.filter(function(n){
+    if(ALIAS[n]) return false;
+    for(var i=0;i<BASE.length;i++) if(BASE[i].nome===n) return false;
+    return true;
+  });
+  var semCat=desconhecidos.filter(function(n){ return !(P.legenda[n]&&P.legenda[n].cat); });
+
+  var horas=P.periodos*(P.slot||SLOT)/60;
+  var info=document.getElementById("impInfo");
+  info.textContent = origem+" · "+fmtH(horas)+" distribuídas em "+P.nomes.length+
+    " atividade"+(P.nomes.length===1?"":"s")+", das "+hhmm(P.start)+" às "+hhmm(P.end)+
+    ", em intervalos de "+(P.slot||30)+" min"+
+    (P.sat?", com sábado":"")+". O horário atual será substituído.";
+
+  var box=document.getElementById("impUnknown");
+  box.textContent="";
+  if(semCat.length){
+    var hd=document.createElement("div"); hd.className="hd";
+    hd.textContent="Atividades novas — confirme a categoria";
+    box.appendChild(hd);
+    var list=document.createElement("div"); list.className="unk";
+    semCat.forEach(function(n,i){
+      var u=document.createElement("div"); u.className="u";
+      var nm=document.createElement("span"); nm.className="nm"; nm.textContent=n; nm.title=n;
+      var sel=document.createElement("select"); sel.dataset.nome=n;
+      [["proj","Projeto"],["assist","Assistencial"],["nao","Não assistencial"]].forEach(function(o){
+        var op=document.createElement("option"); op.value=o[0]; op.textContent=o[1]; sel.appendChild(op);
+      });
+      var col=document.createElement("input"); col.type="color"; col.dataset.nome=n;
+      col.value=(P.legenda[n]&&P.legenda[n].cor)||EXTRA_CORES[i%EXTRA_CORES.length];
+      u.appendChild(nm); u.appendChild(sel); u.appendChild(col);
+      list.appendChild(u);
+    });
+    box.appendChild(list);
+  }
+  pendente=P;
+  document.getElementById("impDlg").showModal();
+}
+
+function lerFicheiro(file){
+  var nome=file.name.toLowerCase();
+  var fr=new FileReader();
+  fr.onerror=function(){ toast("Não foi possível ler o ficheiro."); };
+
+  if(/\.json$/.test(nome)){
+    fr.onload=function(){
+      try{
+        var o=JSON.parse(fr.result);
+        var st=(o&&o.state)?o.state:o;
+        if(!st||typeof st!=="object"||!st.cells) throw new Error("x");
+        adoptState(st);
+        toast("Horário reaberto a partir de "+file.name);
+      }catch(e){ toast("Este ficheiro .json não é um horário desta ferramenta."); }
+    };
+    fr.readAsText(file);
+    return;
+  }
+
+  if(/\.csv$/.test(nome)){
+    fr.onload=function(){
+      try{ proporImportacao(parseMatrix(parseCsv(fr.result)), file.name); }
+      catch(e){ toast(e.message||"Não consegui interpretar este CSV."); }
+    };
+    fr.readAsText(file);
+    return;
+  }
+
+  if(/\.xlsx?$/.test(nome)){
+    if(typeof XLSX==="undefined"){ toast("Biblioteca Excel indisponível."); return; }
+    fr.onload=function(){
+      try{
+        var wb=XLSX.read(new Uint8Array(fr.result), {type:"array"});
+        if(wb.Sheets["_estado"]){
+          var aoa=XLSX.utils.sheet_to_json(wb.Sheets["_estado"],{header:1});
+          for(var i=0;i<aoa.length;i++){
+            var v=aoa[i]&&aoa[i][0];
+            if(typeof v==="string" && v.indexOf("{")===0){
+              var o=JSON.parse(v);
+              adoptState(o.state||o);
+              toast("Horário reaberto a partir de "+file.name);
+              return;
+            }
+          }
+        }
+        var sh=wb.Sheets["Horário"]||wb.Sheets[wb.SheetNames[0]];
+        proporImportacao(parseMatrix(XLSX.utils.sheet_to_json(sh,{header:1,defval:""})), file.name);
+      }catch(e){ toast(e.message||"Não consegui interpretar este ficheiro Excel."); }
+    };
+    fr.readAsArrayBuffer(file);
+    return;
+  }
+  toast("Formato não suportado. Use .json, .xlsx ou .csv.");
+}
+
+function wireFiles(){
+  var inp=document.getElementById("fileInput");
+  document.getElementById("saveJson").addEventListener("click", exportJson);
+  document.getElementById("openFile").addEventListener("click", function(){ inp.click(); });
+  inp.addEventListener("change", function(){
+    if(inp.files && inp.files[0]) lerFicheiro(inp.files[0]);
+    inp.value="";
+  });
+
+  var dlg=document.getElementById("impDlg");
+  dlg.addEventListener("close", function(){
+    if(dlg.returnValue!=="ok" || !pendente){ pendente=null; return; }
+    var escolhas={};
+    var sels=document.querySelectorAll("#impUnknown select");
+    for(var i=0;i<sels.length;i++) escolhas[sels[i].dataset.nome]={cat:sels[i].value};
+    var cols=document.querySelectorAll("#impUnknown input[type=color]");
+    for(var j=0;j<cols.length;j++){
+      var n=cols[j].dataset.nome;
+      escolhas[n]=escolhas[n]||{}; escolhas[n].cor=cols[j].value;
+    }
+    try{
+      applyParsed(pendente, escolhas);
+      toast("Horário importado.");
+    }catch(e){ toast("Falhou a importação do horário."); }
+    pendente=null;
+  });
+
+  // largar um ficheiro em qualquer ponto da página
+  ["dragover","drop"].forEach(function(ev){
+    window.addEventListener(ev, function(e){
+      e.preventDefault();
+      if(ev==="drop" && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]){
+        lerFicheiro(e.dataTransfer.files[0]);
+      }
+    });
+  });
+}
+
+/* ---------------- exemplo inicial ---------------- */
+function seed(){
+  function fill(d,h1,h2,id){ for(var m=h1*60;m<h2*60;m+=SLOT) state.cells[key(d,m)]=id; }
+  fill(0, 8,11, "sa_im");  fill(0, 11,13, "da");    fill(0, 14,16, "si");   fill(0, 16,18, "gl");
+  fill(1, 8,11, "sa_iu");  fill(1, 11,13, "dm");    fill(1, 14,16, "grav"); fill(1, 16,18, "cnp");
+  fill(2, 8,11, "sa_n");   fill(2, 11,13, "da");    fill(2, 14,16, "reu");  fill(2, 16,18, "proj");
+  fill(3, 8,11, "sa_im");  fill(3, 11,13, "pf");    fill(3, 14,16, "dom");  fill(3, 16,18, "gl");
+  fill(4, 8,11, "sa_iu");  fill(4, 11,13, "da");    fill(4, 14,17, "sa_n");
+  state.meta.nome="(exemplo — substitua pelos seus dados)";
+}
+
+/* ---------------- arranque ---------------- */
+load();
+var hadSaved=false; try{ hadSaved=!!localStorage.getItem(STORE); }catch(e){}
+if(!Object.keys(state.cells).length && !hadSaved) seed();
+document.getElementById("satToggle").checked=state.sat;
+document.getElementById("lunchToggle").checked=state.lunch;
+document.getElementById("slotSel").value=String(SLOT);
+fillTimeSelects();
+wireTimeSelects();
+wireMeta();
+wireButtons();
+document.getElementById("expPdf").addEventListener("click", exportPdf);
+document.getElementById("expXlsx").addEventListener("click", exportXlsx);
+document.getElementById("expCsv").addEventListener("click", exportCsv);
+wireFiles();
+render();
+
+})();
+</script>
+</body>
+</html>

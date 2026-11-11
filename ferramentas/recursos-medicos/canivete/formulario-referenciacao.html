@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Formulário de referenciação · MGF no Plural</title>
+<meta name="description" content="Preenche a referenciação por campos, com contagem de caracteres, e copia o texto integral para o SClínico.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* Formulário de referenciação */
+.ref-campo { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-g); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ref-cabeca { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ref-cabeca h2 { margin: 0; font-family: var(--letra-titulo); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+.ref-meta { display: flex; align-items: center; gap: 10px; }
+.char-count { font-size: 14px; color: var(--cor-texto-3); }
+.copy-field-btn { min-height: 36px; padding: 4px 12px; font-size: 14px; }
+.ref-campo textarea { width: 100%; min-height: 96px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 10px 12px; font-family: var(--letra-texto); font-size: 16px; line-height: 1.5; resize: vertical; }
+.ref-campo textarea:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.ref-total { background: var(--cor-menta-clara); border: 1px solid #CDE7DF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.ref-total h2 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
+.ref-conta { background: var(--cor-branco); border-radius: 14px; padding: 14px 16px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.ref-conta .label { font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+#totalCount { font-size: 34px; font-weight: 700; line-height: 1; }
+#totalCount.over { color: var(--clin-alerta); }
+.ref-conta .max { width: 100%; font-size: 14px; color: var(--cor-texto-3); }
+#alertBanner { display: none; margin: 0; }
+#alertBanner.show { display: block; }
+.ref-botoes { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; }
+.ref-botoes .mgf-botao { min-height: 48px; }
+.ref-botoes .mgf-botao-principal { flex: 1 1 auto; justify-content: center; }
+.ref-previa summary { cursor: pointer; font-weight: 700; color: var(--cor-verde); font-size: 15px; }
+.ref-previa pre { margin: 8px 0 0; background: var(--cor-branco); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 14px; line-height: 1.5; white-space: pre-wrap; max-height: 360px; overflow: auto; }
+#toast { min-height: 1.3em; margin: 0; font-size: 15px; font-weight: 700; color: var(--clin-normal); }
+</style>
+</head>
+<body data-ferramenta="formulario-referenciacao" data-titulo="Formulário de referenciação">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Canivete <span>· 4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a>
+<ul><li><a href="pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a></li><li><a href="consulta-resultados-exames.html">Consulta rápida de resultados</a></li><li><a href="formulario-referenciacao.html" aria-current="page">Formulário de referenciação</a></li><li><a href="construir-horario.html">Construir horário</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/referenciacao.svg" alt="">
+<div class="ficha-titulo">
+<h1>Formulário de referenciação</h1>
+<p class="ficha-meta">Campos da referenciação, prontos para o SClínico · <strong>Miguel Henriques</strong> · v1.0 · 11 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/formulario-referenciacao.html" download="formulario-referenciacao.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Formul%C3%A1rio%20de%20referencia%C3%A7%C3%A3o%20%28v1.0%29&body=Ferramenta%3A%20Formul%C3%A1rio%20de%20referencia%C3%A7%C3%A3o%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <div id="fieldsContainer"></div>
+  <p class="mgf-nota" data-tom="menta"><strong>Privacidade.</strong> Os dados não são guardados nem enviados para qualquer servidor.</p>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <section class="ref-total" aria-labelledby="ref-total-titulo">
+    <h2 id="ref-total-titulo">Texto para o SClínico</h2>
+    <div class="ref-conta">
+      <span class="label">Total de caracteres</span>
+      <span class="count" id="totalCount" aria-live="polite">0</span>
+      <span class="max">limite orientativo: 1900</span>
+    </div>
+    <p class="mgf-aviso" id="alertBanner"><strong>Atenção:</strong> o texto excede os 1900 caracteres habitualmente permitidos no campo de referenciação do SClínico. Considera resumir antes de colar.</p>
+    <div class="ref-botoes">
+      <button type="button" class="mgf-botao mgf-botao-principal" id="copyAllBtn">Copiar texto integral</button>
+      <button type="button" class="mgf-botao" id="clearAllBtn">Limpar tudo</button>
+    </div>
+    <p id="toast" role="status"></p>
+    <details class="ref-previa"><summary>Ver o texto integral</summary><pre id="ref-previa"></pre></details>
+  </section>
+  </div>
+  </div>
+
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Ferramenta de preenchimento: não usa fontes clínicas. Limite orientativo de 1900 caracteres do campo de referenciação do SClínico.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 11 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Formul%C3%A1rio%20de%20referencia%C3%A7%C3%A3o%20%28v1.0%29&body=Ferramenta%3A%20Formul%C3%A1rio%20de%20referencia%C3%A7%C3%A3o%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="consulta-resultados-exames.html">← Consulta rápida de resultados</a><a class="seguinte" href="construir-horario.html">Construir horário →</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-11</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+  const fields = [
+    { id: "identificacao", label: "Identificação / Dados Sociais", placeholder: "Nome, idade, nº utente, contacto, situação social relevante..." },
+    { id: "antecedentes", label: "Antecedentes Pessoais", placeholder: "Doenças relevantes, cirurgias, alergias, hábitos..." },
+    { id: "medicacao", label: "Medicação Habitual", placeholder: "Fármacos, doses, posologia..." },
+    { id: "historia", label: "História Clínica", placeholder: "Evolução clínica, sintomas, exame objetivo..." },
+    { id: "mcdts", label: "MCDT's Relevantes", placeholder: "Análises, imagiologia, outros exames com data e resultado..." },
+    { id: "suspeita", label: "Suspeita Diagnóstica / Motivo de Referenciação", placeholder: "Hipótese diagnóstica e razão do encaminhamento..." }
+  ];
+
+  const container = document.getElementById("fieldsContainer");
+
+  fields.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "ref-campo";
+    div.innerHTML = `
+      <div class="ref-cabeca">
+        <h2><label for="${f.id}">${f.label}</label></h2>
+        <div class="ref-meta">
+          <span class="char-count" id="count-${f.id}">0 caracteres</span>
+          <button type="button" class="mgf-botao copy-field-btn" data-target="${f.id}">Copiar campo</button>
+        </div>
+      </div>
+      <textarea id="${f.id}" placeholder="${f.placeholder}"></textarea>
+    `;
+    container.appendChild(div);
+  });
+
+  const TOTAL_LIMIT = 1900;
+
+  function buildFullText(){
+    return fields.map(f => {
+      const val = document.getElementById(f.id).value.trim();
+      return `${f.label.toUpperCase()}:\n${val}`;
+    }).join("\n\n");
+  }
+
+  function updateCounts(){
+    let total = 0;
+    fields.forEach(f => {
+      const val = document.getElementById(f.id).value;
+      document.getElementById(`count-${f.id}`).textContent = `${val.length} caracteres`;
+    });
+    const fullText = buildFullText();
+    total = fullText.length;
+    document.getElementById("ref-previa").textContent = fullText;   /* novo: pré-visualização */
+
+    const totalEl = document.getElementById("totalCount");
+    totalEl.textContent = total;
+    const alertBanner = document.getElementById("alertBanner");
+    if(total > TOTAL_LIMIT){
+      totalEl.classList.add("over");
+      alertBanner.classList.add("show");
+    } else {
+      totalEl.classList.remove("over");
+      alertBanner.classList.remove("show");
+    }
+  }
+
+  fields.forEach(f => {
+    document.getElementById(f.id).addEventListener("input", updateCounts);
+  });
+
+  function showToast(msg){
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => { toast.textContent = ""; }, 1800);
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(e){
+      // alternativa
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try{ ok = document.execCommand("copy"); }catch(err){ ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
+  document.getElementById("copyAllBtn").addEventListener("click", async () => {
+    const text = buildFullText();
+    const ok = await copyText(text);
+    showToast(ok ? "Texto integral copiado" : "Falha ao copiar");
+  });
+
+  /* «Limpar tudo» pede confirmação no próprio botão (em vez da janela confirm() do original) */
+  const clearAllBtn = document.getElementById("clearAllBtn");
+  clearAllBtn.addEventListener("click", () => {
+    if(clearAllBtn.dataset.confirmar !== "sim"){
+      clearAllBtn.dataset.confirmar = "sim";
+      clearAllBtn.textContent = "Confirmar: limpar todos os campos";
+      clearTimeout(clearAllBtn._t);
+      clearAllBtn._t = setTimeout(() => { clearAllBtn.dataset.confirmar = ""; clearAllBtn.textContent = "Limpar tudo"; }, 4000);
+      return;
+    }
+    clearTimeout(clearAllBtn._t);
+    clearAllBtn.dataset.confirmar = ""; clearAllBtn.textContent = "Limpar tudo";
+    fields.forEach(f => document.getElementById(f.id).value = "");
+    updateCounts();
+  });
+
+  document.querySelectorAll(".copy-field-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.getAttribute("data-target");
+      const val = document.getElementById(id).value;
+      const ok = await copyText(val);
+      if(ok){
+        btn.classList.add("copiado");
+        const orig = btn.textContent;
+        btn.textContent = "Copiado";
+        setTimeout(() => { btn.classList.remove("copiado"); btn.textContent = orig; }, 1500);
+      } else {
+        showToast("Falha ao copiar campo");
+      }
+    });
+  });
+
+  updateCounts();
+</script>
+</body>
+</html>
