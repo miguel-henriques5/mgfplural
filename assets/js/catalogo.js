@@ -684,5 +684,114 @@ window.MGF_CATALOGO = [
    "Livro Azul",
    "DGS"
   ]
+ },
+ {
+  "id": "consentimento-diu",
+  "titulo": "Consentimento informado — DIU",
+  "descricao": "Folheto informativo e consentimento informado, livre e esclarecido para a colocação de DIU (cobre ou cobre e prata), com via para a utente e para o processo.",
+  "area": "Documentação",
+  "grupo": "Modelos",
+  "icone": "mulher",
+  "url": "ferramentas/documentacao/modelos/consentimento-diu.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "modelo",
+   "documento",
+   "imprimir",
+   "consentimento",
+   "contraceção",
+   "planeamento familiar"
+  ]
+ },
+ {
+  "id": "consentimento-diu-l",
+  "titulo": "Consentimento informado — DIU-L",
+  "descricao": "Folheto informativo e consentimento informado, livre e esclarecido para a colocação de DIU com levonorgestrel, com via para a utente e para o processo.",
+  "area": "Documentação",
+  "grupo": "Modelos",
+  "icone": "mulher",
+  "url": "ferramentas/documentacao/modelos/consentimento-diu-l.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "modelo",
+   "documento",
+   "imprimir",
+   "consentimento",
+   "contraceção",
+   "planeamento familiar"
+  ]
+ },
+ {
+  "id": "consentimento-implante",
+  "titulo": "Consentimento informado — implante",
+  "descricao": "Folheto informativo e consentimento informado, livre e esclarecido para a colocação de implante hormonal subcutâneo, com via para a utente e para o processo.",
+  "area": "Documentação",
+  "grupo": "Modelos",
+  "icone": "mulher",
+  "url": "ferramentas/documentacao/modelos/consentimento-implante.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "modelo",
+   "documento",
+   "imprimir",
+   "consentimento",
+   "contraceção",
+   "planeamento familiar"
+  ]
+ },
+ {
+  "id": "manual-de-procedimentos",
+  "titulo": "Manual de procedimentos",
+  "descricao": "Modelo para escrever procedimentos da unidade (objetivos, âmbito, siglas, responsabilidades, sequência lógica, indicadores, referências e assinaturas), com impressão e gravação em HTML.",
+  "area": "Documentação",
+  "grupo": "Modelos",
+  "icone": "documento",
+  "url": "ferramentas/documentacao/modelos/manual-de-procedimentos.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "modelo",
+   "documento",
+   "imprimir"
+  ]
+ },
+ {
+  "id": "modelo-de-ata",
+  "titulo": "Modelo de ata",
+  "descricao": "Agenda e ata de reunião: pontos de agenda, ata com texto formatado, tabelas, imagens e votações, presenças por grupo profissional, com impressão e gravação em HTML.",
+  "area": "Documentação",
+  "grupo": "Modelos",
+  "icone": "equipa",
+  "url": "ferramentas/documentacao/modelos/modelo-de-ata.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "modelo",
+   "documento",
+   "imprimir"
+  ]
+ },
+ {
+  "id": "amadora",
+  "titulo": "Mapa de recursos — Amadora",
+  "descricao": "Recursos da comunidade à volta do centro de saúde da Damaia: saúde (SNS, privados e convencionados), apoio social, desporto, ensino, cultura, espaços verdes e juntas de freguesia, com lista para imprimir para o utente.",
+  "area": "Mapa de recursos",
+  "grupo": "Zonas",
+  "icone": "mapa",
+  "url": "ferramentas/mapa-de-recursos/zonas/amadora.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "recursos",
+   "comunidade",
+   "apoio social",
+   "convencionados",
+   "Damaia",
+   "Amadora",
+   "mapa"
+  ]
  }
 ];
