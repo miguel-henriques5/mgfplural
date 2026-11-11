@@ -1,0 +1,1142 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Modelo de ata</title>
+<script type="application/json" id="mgf-ficha">
+{
+ "id": "modelo-de-ata",
+ "titulo": "Modelo de ata",
+ "descricao": "Agenda e ata de reunião: pontos de agenda, ata com texto formatado, tabelas, imagens e votações, presenças por grupo profissional, com impressão e gravação em HTML.",
+ "resumo": "Agenda e ata de reunião",
+ "area": "documentacao",
+ "grupo": "modelos",
+ "autor": "Miguel Henriques",
+ "versao": "1.0",
+ "revisto": "2026-11-11",
+ "layout": "completa",
+ "aviso_clinico": false,
+ "icone": "equipa",
+ "ordem": 5,
+ "palavras": [
+  "modelo",
+  "documento",
+  "imprimir"
+ ],
+ "bibliografia": [
+  "Modelo do MGF no Plural, a partir dos documentos de uma unidade de saúde familiar, sem a marca nem os nomes da unidade."
+ ]
+}
+</script>
+<style data-mgf="ferramenta">
+
+:where(#ferramenta) *, :where(#ferramenta) *::before, :where(#ferramenta) *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:where(#ferramenta) :is(h1, h2, h3, h4, h5, h6) { margin: 0 !important; padding: 0 !important; font-size: inherit; font-weight: inherit; line-height: inherit; }
+:root {
+  --green:      #0F6E64;
+  --yellow:     #E8B547;
+  --gray-dark:  #474747;
+  --gray-mid:   #6B6B6B;
+  --gray-light: #ECECEC;
+  --border:     #D4D4D4;
+  --input-bg:   #FAFAFA;
+  --section-bg: #F5F5F5;
+  --font: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+}
+body { font-family: var(--font); background: #F2F2EF; color: var(--gray-dark); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+.page { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.08); overflow: hidden; }
+.pattern-bar { height: 56px; overflow: hidden; line-height: 0; }
+.pattern-bar img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.progress-bar  { height: 3px; background: var(--gray-light); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--green); width: 30%; }
+.logo-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px 12px; border-bottom: 1px solid var(--border); }
+.logo-usf-img { height: 64px; width: auto; display: block; }
+.doc-ref { text-align: right; font-size: 11px; color: var(--gray-mid); line-height: 1.9; }
+.doc-ref input, .doc-ref select { border: none; border-bottom: 1px solid var(--border); font-size: 11px; font-family: var(--font); color: var(--gray-dark); outline: none; background: transparent; cursor: pointer; padding: 0; }
+.doc-title-bar { padding: 14px 32px 10px; border-bottom: 1px solid var(--border); }
+.doc-subtitle { font-size: 16px; font-weight: 700; color: var(--gray-dark); margin-top: 2px; }
+.form-body { padding: 0 32px 32px; }
+.section { margin-bottom: 28px; margin-top: 20px; }
+.section-header { background: var(--section-bg); padding: 7px 12px; margin-bottom: 12px; border-left: 4px solid var(--green); }
+.section-header h2 { font-size: 13px !important; font-weight: 700 !important; color: var(--green) !important; text-transform: uppercase !important; letter-spacing: .08em !important; margin: 0 !important; padding: 0 !important; line-height: 1.4 !important; }
+.meeting-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.meeting-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--gray-mid); text-transform: uppercase; letter-spacing: .05em; padding: 5px 10px; background: var(--section-bg); border: 1px solid var(--border); }
+.meeting-table td { padding: 0; border: 1px solid var(--border); }
+.meeting-table td input[type="text"] { width: 100%; border: none; background: var(--input-bg); padding: 7px 10px; font-size: 13px; font-family: var(--font); color: var(--gray-dark); outline: none; }
+.meeting-table td input:focus { background: #fff; }
+.agenda-list { list-style: none; padding: 0; }
+.agenda-item { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.agenda-item-num { font-size: 13px; color: var(--gray-mid); min-width: 56px; flex-shrink: 0; font-weight: 600; }
+.agenda-item input[type="text"] { flex: 1; border: 1px solid var(--border); border-radius: 3px; padding: 7px 10px; font-size: 13px; font-family: var(--font); color: var(--gray-dark); background: var(--input-bg); outline: none; transition: border-color .2s; }
+.agenda-item input:focus { border-color: var(--green); background: #fff; }
+.agenda-item-del { background: none; border: none; color: #ccc; cursor: pointer; font-size: 18px; padding: 0 4px; flex-shrink: 0; }
+.agenda-item-del:hover { color: #e55; }
+.ata-point { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.ata-point-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; background: var(--section-bg); border-bottom: 1px solid var(--border); }
+.ata-point-title-input { flex: 1; border: none; background: transparent; font-size: 14px; font-weight: 700; font-family: var(--font); color: var(--gray-dark); outline: none; padding: 0; }
+.ata-point-del-btn { background: none; border: none; color: #bbb; cursor: pointer; font-size: 18px; padding: 0 4px; flex-shrink: 0; }
+.ata-point-del-btn:hover { color: #e55; }
+.ata-point-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+.rte-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: var(--input-bg); }
+.rte-wrap:focus-within { border-color: var(--green); background: #fff; }
+.rte-toolbar { display: flex; gap: 2px; padding: 4px 6px; background: var(--section-bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.rte-btn { background: none; border: 1px solid transparent; border-radius: 3px; padding: 3px 7px; font-size: 12px; cursor: pointer; color: var(--gray-dark); font-family: var(--font); min-width: 26px; text-align: center; }
+.rte-btn:hover { background: #e8e8e8; border-color: var(--border); }
+.rte-sep { width: 1px; background: var(--border); margin: 2px 4px; }
+.rte-content { min-height: 80px; padding: 8px 10px; font-size: 13px; font-family: var(--font); color: var(--gray-dark); line-height: 1.6; outline: none; }
+.rte-content ul, .rte-content ol { padding-left: 20px; }
+.rte-label { font-size: 11px; font-weight: 600; color: var(--gray-mid); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; display: block; text-decoration: underline; }
+.presence-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.presence-table th { text-align: left; font-size: 11px; font-weight: 700; color: var(--gray-mid); text-transform: uppercase; letter-spacing: .05em; padding: 5px 10px; background: var(--section-bg); border: 1px solid var(--border); }
+.presence-select { width: 100%; }
+.add-btn { padding: 5px 14px; background: transparent; border: 1px dashed var(--green); border-radius: 3px; color: var(--green); font-size: 12px; font-family: var(--font); cursor: pointer; margin-top: 8px; display: inline-block; }
+.add-btn:hover { background: rgba(0,161,91,.06); }
+.action-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: var(--section-bg); border-top: 1px solid var(--border); gap: 16px; flex-wrap: wrap; }
+.action-bar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.user-input { display: flex; align-items: center; gap: 8px; }
+.user-input label { font-size: 12px; font-weight: 600; color: var(--gray-mid); white-space: nowrap; }
+.user-input input { padding: 7px 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; font-family: var(--font); background: #fff; color: var(--gray-dark); outline: none; width: 160px; }
+.btn-reset { padding: 8px 14px; background: transparent; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; font-family: var(--font); color: var(--gray-mid); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.btn-reset:hover { border-color: var(--gray-mid); color: var(--gray-dark); }
+.export-group { display: flex; gap: 8px; align-items: center; }
+.btn-export { padding: 9px 15px; border: none; border-radius: 3px; font-size: 13px; font-weight: 600; font-family: var(--font); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn-export svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-print { background: var(--section-bg); color: var(--gray-dark); border: 1px solid var(--border); }
+.btn-print:hover { background: #e8e8e8; }
+.btn-pdf   { background: #0F6E64; color: #fff; }
+.btn-pdf:hover { background: #13423D; }
+.btn-html  { background: #474747; color: #fff; }
+.btn-html:hover { background: #2e2e2e; }
+.toast { position: fixed; bottom: 28px; right: 28px; background: var(--green); color: #fff; padding: 10px 18px; border-radius: 4px; font-size: 13px; opacity: 0; transform: translateY(8px); transition: all .3s; pointer-events: none; z-index: 9999; }
+.toast.show { opacity: 1; transform: translateY(0); }
+@media print {
+  /*
+   * A4 = 210mm wide. With 12mm margins each side the content area = 186mm.
+   * We fix the .page to exactly 186mm wide and let the browser fit it.
+   * Ignora qualquer zoom da página.
+   */
+  @page {
+    size: A4 portrait;
+    margin: 15mm 12mm 15mm 12mm;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body {
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    
+    zoom: 1 !important;
+    transform: none !important;
+  }
+  /* Force the page container to exactly the A4 content width */
+  .page {
+    width: 186mm !important;
+    max-width: 186mm !important;
+    min-width: 186mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    /* font-size anchor: 1mm = 3.7795px at 96dpi — set a fixed base */
+    font-size: 10pt !important;
+  }
+  /* Hide interactive chrome */
+  .action-bar, .progress-bar, .ata-point-del-btn,
+  .agenda-item-del, .rte-toolbar, #imgResizeBar { display: none !important; }
+  /* Hide add buttons but NOT the counter box */
+  .add-btn { display: none !important; }
+  /* Counter stays visible */
+  .presence-counter-box { display: block !important; }
+  .rte-content { min-height: 0; }
+  /* Section styling */
+  .section-header { background: #F5F5F5 !important; border-left-color: #0F6E64 !important; break-after: avoid; page-break-after: avoid; }
+  .section-header h2 { color: #0F6E64 !important; }
+  .section { break-inside: auto; page-break-inside: auto; }
+  .ata-point-header { break-after: avoid; page-break-after: avoid; }
+  .ata-point-body  { break-before: avoid; page-break-before: avoid; }
+  .rte-label { break-after: avoid; page-break-after: avoid; }
+  table { break-inside: avoid; page-break-inside: avoid; }
+  .rte-content { orphans: 3; widows: 3; }
+  p, li { orphans: 2; widows: 2; }
+  .presence-select { border: none; background: transparent; -webkit-appearance: none; appearance: none; }
+}
+
+/* ── MGF no Plural: campos da unidade e logótipo escolhido por quem usa ── */
+.mgf-campo-doc { outline: 1px dashed #B9C6C2; outline-offset: 1px; border-radius: 3px; padding: 0 3px; background: #FFF8E6; cursor: text; }
+.mgf-campo-doc.mgf-vazio { color: #845406; font-style: italic; }
+.mgf-campo-doc:focus { outline: 2px solid #0F6E64; background: #fff; }
+.logo-usf-img[hidden], .mgf-logo-escolher[hidden] { display: none !important; }
+.logo-usf-img { cursor: pointer; }
+.mgf-logo-escolher { height: 64px; min-width: 190px; padding: 6px 14px; border: 1.5px dashed #B9C6C2; border-radius: 8px; background: #fff;
+  color: #4B5B58; font: inherit; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; }
+.mgf-logo-escolher small { font-weight: 400; font-size: 11px; }
+.mgf-logo-escolher:hover { border-color: #0F6E64; color: #0F6E64; }
+@media print {
+  .mgf-campo-doc { outline: 0; background: none; padding: 0; font-style: normal; color: inherit; }
+  .mgf-campo-doc.mgf-vazio { color: transparent; border-bottom: 1px solid #999; display: inline-block; min-width: 4cm; }
+  .mgf-logo-escolher { visibility: hidden; }
+  #imgPreview:not([src]), #imgPreview[src=""] { display: none; }   /* sem imagem da sequência lógica: não imprime o ícone partido */
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+<div class="page" id="formPage">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="logo-bar">
+    <img src="" alt="Logótipo da unidade" class="logo-usf-img" hidden title="Carrega para mudar o logótipo"><button type="button" class="mgf-logo-escolher" data-logo>Logótipo da unidade<small>Carrega para escolher uma imagem (opcional)</small></button>
+    <div class="doc-ref">
+      <div>
+        <select id="docType" style="border:none;border-bottom:1px solid #D4D4D4;font-size:12px;font-family:Atkinson Hyperlegible,sans-serif;color:#474747;outline:none;background:transparent;cursor:pointer;font-weight:700;">
+          <option value="ATACG">ATACG</option>
+          <option value="ATAMD">ATAMD</option>
+          <option value="ATAENF">ATAENF</option>
+          <option value="ATASC">ATASC</option>
+          <option value="ATACT">ATACT</option>
+        </select>.<input type="text" id="docNum" placeholder="001" style="width:34px;">.<input type="text" id="docYear" placeholder="2025" style="width:42px;">/<span class="mgf-campo-doc mgf-vazio" data-campo="sigla" contenteditable="true" spellcheck="false" title="Escreve aqui">SIGLA</span>
+      </div>
+      <div>Elaborada por: <input type="text" id="docAuthor" placeholder="Nome" style="width:120px;"></div>
+      <div>Data: <input type="text" id="docElabDate" placeholder="DD/MM/AAAA" style="width:90px;"></div>
+    </div>
+  </div>
+
+  <div class="doc-title-bar">
+    <div style="font-size:11px;color:#6B6B6B;"><span class="mgf-campo-doc mgf-vazio" data-campo="unidade" contenteditable="true" spellcheck="false" title="Escreve aqui">Nome da unidade</span></div>
+    <div class="doc-subtitle">Agenda e Ata de Reunião</div>
+    <div id="docCodePreview" style="font-size:12px;font-weight:700;color:#474747;margin-top:3px;"></div>
+  </div>
+
+  <div class="form-body">
+
+    <div class="section">
+      <div class="section-header"><h2>1. Reunião</h2></div>
+      <table class="meeting-table">
+        <thead><tr><th>Tipologia da Reunião</th></tr></thead>
+        <tbody><tr><td><input type="text" id="meetType" placeholder="ex: Conselho Geral"></td></tr></tbody>
+      </table>
+      <table class="meeting-table" style="margin-top:4px;">
+        <thead><tr><th style="width:130px">Data</th><th style="width:100px">Hora</th><th>Local</th></tr></thead>
+        <tbody><tr>
+          <td><input type="text" id="meetDate" placeholder="DD/MM/AAAA"></td>
+          <td><input type="text" id="meetTime" placeholder="HH:MM"></td>
+          <td><input type="text" id="meetPlace" placeholder="Local da reunião"></td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><h2>2. Agenda</h2></div>
+      <ul class="agenda-list" id="agendaList">
+        <li class="agenda-item">
+          <span class="agenda-item-num">Ponto 1.</span>
+          <input type="text" placeholder="Descrição do ponto de agenda...">
+          <button class="agenda-item-del" title="Remover" onclick="delAgendaItem(this)">&times;</button>
+        </li>
+      </ul>
+      <button class="add-btn" onclick="addAgendaItem()">+ Adicionar ponto de agenda</button>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><h2>3. Ata</h2></div>
+      <div id="ataPoints"></div>
+      <button class="add-btn" id="addAtaBtn" onclick="addAtaPoint(null,null,null)">+ Adicionar ponto de ata</button>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><h2>4. Presenças</h2></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+        <button class="add-btn mark-all-btn" style="margin-top:0;border-style:solid;background:#0F6E64;color:#fff;border-color:#0F6E64;font-weight:600;" onclick="markAllPresent()">&#10003; Marcar todos como Presente</button>
+        <div class="presence-counter-box" style="font-size:13px;font-weight:600;color:#474747;background:#F5F5F5;border:1px solid #D4D4D4;border-radius:4px;padding:6px 14px;text-align:center;display:flex;flex-direction:column;gap:2px;min-width:220px;">
+          <div>Presentes (total): <span id="presenceCount" style="color:#0F6E64;font-size:15px;">0</span><span style="color:#6B6B6B;font-weight:400;"> / <span id="presenceTotal">0</span></span></div>
+          <div style="font-size:11px;color:#6B6B6B;font-weight:400;">Sem internos: <span id="presenceCountNoIntern" style="color:#0F6E64;font-size:13px;font-weight:700;">0</span><span> / <span id="presenceTotalNoIntern">0</span></span></div>
+        </div>
+      </div>
+      <table class="presence-table">
+        <thead><tr>
+          <th style="width:43%">Nome</th>
+          <th style="width:33%">Função</th>
+          <th style="width:18%">Presença</th>
+          <th style="width:6%"></th>
+        </tr></thead>
+        <tbody id="presenceBody">
+<tr class="presence-group-header" data-group="Médico/a"><td colspan="4" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#0F6E64;text-transform:uppercase;letter-spacing:.06em;border:1px solid #D4D4D4;">Médico/as</td></tr>
+<tr class="presence-add-row" data-group="Médico/a"><td colspan="4" style="padding:3px 6px;border:1px solid #D4D4D4;background:#FAFAFA;"><button class="add-btn" style="margin:2px 0;padding:3px 10px;font-size:11px;border-style:dashed;" onclick="addPresenceMember('Médico/a')">+ Adicionar membro</button></td></tr>
+<tr class="presence-group-header" data-group="Enfermeiro/a"><td colspan="4" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#0F6E64;text-transform:uppercase;letter-spacing:.06em;border:1px solid #D4D4D4;">Enfermeiro/as</td></tr>
+<tr class="presence-add-row" data-group="Enfermeiro/a"><td colspan="4" style="padding:3px 6px;border:1px solid #D4D4D4;background:#FAFAFA;"><button class="add-btn" style="margin:2px 0;padding:3px 10px;font-size:11px;border-style:dashed;" onclick="addPresenceMember('Enfermeiro/a')">+ Adicionar membro</button></td></tr>
+<tr class="presence-group-header" data-group="Assistente Técnico/a"><td colspan="4" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#0F6E64;text-transform:uppercase;letter-spacing:.06em;border:1px solid #D4D4D4;">Assistente Técnico/as</td></tr>
+<tr class="presence-add-row" data-group="Assistente Técnico/a"><td colspan="4" style="padding:3px 6px;border:1px solid #D4D4D4;background:#FAFAFA;"><button class="add-btn" style="margin:2px 0;padding:3px 10px;font-size:11px;border-style:dashed;" onclick="addPresenceMember('Assistente Técnico/a')">+ Adicionar membro</button></td></tr>
+<tr class="presence-group-header" data-group="Médico/a Interno/a"><td colspan="4" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#0F6E64;text-transform:uppercase;letter-spacing:.06em;border:1px solid #D4D4D4;">Médico/a Interno/as</td></tr>
+<tr class="presence-add-row" data-group="Médico/a Interno/a"><td colspan="4" style="padding:3px 6px;border:1px solid #D4D4D4;background:#FAFAFA;"><button class="add-btn" style="margin:2px 0;padding:3px 10px;font-size:11px;border-style:dashed;" onclick="addPresenceMember('Médico/a Interno/a')">+ Adicionar membro</button></td></tr>
+
+        </tbody>
+      </table>
+      <div style="margin-top:16px;">
+        <div class="section-header" style="margin-bottom:8px;"><h2>Outros Elementos</h2></div>
+        <table class="presence-table">
+          <thead><tr><th style="width:38%">Nome</th><th style="width:35%">Função/Motivo</th><th style="width:20%">Presença</th><th style="width:7%"></th></tr></thead>
+          <tbody id="othersBody"></tbody>
+        </table>
+        <button class="add-btn" onclick="addOtherRow()">+ Adicionar elemento</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="action-bar">
+    <div class="action-bar-left">
+      <div class="user-input">
+        <label>Preenchido por:</label>
+        <input type="text" id="filledBy" placeholder="Nome">
+      </div>
+      <button class="btn-reset" onclick="resetForm()">Limpar</button>
+      <button class="btn-reset" onclick="document.getElementById('importFileInput').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="5" x2="12" y2="15"/>
+        </svg>
+        Abrir HTML
+      </button>
+      <input type="file" id="importFileInput" accept=".html,text/html" style="display:none" onchange="doImportHTML(event)">
+    </div>
+    <div class="export-group">
+      <button class="btn-export btn-print" onclick="doPrint()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir
+      </button>
+      <button class="btn-export btn-pdf" onclick="doPrint()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 17 15 14"/></svg>
+        Exportar PDF
+      </button>
+      <button class="btn-export btn-html" onclick="doSaveHTML()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Guardar HTML
+      </button>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+</main>
+<script data-mgf="ferramenta">
+
+var ataCount = 0;
+var agendaCount = 1;
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+function updateDocCode() {
+  var type = document.getElementById('docType').value;
+  var num  = document.getElementById('docNum').value   || '001';
+  var year = document.getElementById('docYear').value  || '2025';
+  document.getElementById('docCodePreview').textContent = type + '.' + num + '.' + year + '/' + (mgfCampo('sigla') || 'SIGLA');
+}
+document.getElementById('docType').addEventListener('change', updateDocCode);
+document.getElementById('docNum').addEventListener('input', updateDocCode);
+document.getElementById('docYear').addEventListener('input', updateDocCode);
+updateDocCode();
+
+/* ── AGENDA ── */
+function addAgendaItem() {
+  agendaCount++;
+  var ul = document.getElementById('agendaList');
+  var li = document.createElement('li');
+  li.className = 'agenda-item';
+  li.innerHTML =
+    '<span class="agenda-item-num">Ponto ' + agendaCount + '.</span>' +
+    '<input type="text" placeholder="Descrição do ponto de agenda...">' +
+    '<button class="agenda-item-del" onclick="delAgendaItem(this)">&times;</button>';
+  ul.appendChild(li);
+  li.querySelector('input').focus();
+}
+
+function delAgendaItem(btn) {
+  var ul = document.getElementById('agendaList');
+  if (ul.querySelectorAll('.agenda-item').length > 1) {
+    btn.closest('.agenda-item').remove();
+    renumberAgenda();
+  }
+}
+
+function renumberAgenda() {
+  var items = document.querySelectorAll('#agendaList .agenda-item');
+  items.forEach(function(li, i) {
+    li.querySelector('.agenda-item-num').textContent = 'Ponto ' + (i + 1) + '.';
+  });
+  agendaCount = items.length;
+}
+
+/* ── RTE ── */
+function createRTE(idAss, idConc) {
+  function toolbar(targetId) {
+    return '<div class="rte-toolbar" data-target="' + targetId + '">' +
+      '<button class="rte-btn" onclick="rteCmd(this,\'bold\')"><b>N</b></button>' +
+      '<button class="rte-btn" onclick="rteCmd(this,\'italic\')"><i>I</i></button>' +
+      '<button class="rte-btn" onclick="rteCmd(this,\'underline\')"><u>S</u></button>' +
+      '<span class="rte-sep"></span>' +
+      '<button class="rte-btn" onclick="rteCmd(this,\'insertUnorderedList\')">&#x2022; Lista</button>' +
+      '<button class="rte-btn" onclick="rteCmd(this,\'insertOrderedList\')">1. Lista</button>' +
+      '<span class="rte-sep"></span>' +
+      '<button class="rte-btn" onclick="insertTable(this)">&#x229E; Tabela</button>' +
+      '<button class="rte-btn" onclick="insertImg(this)">Imagem</button>' +
+      '<span class="rte-sep"></span>' +
+      '<button class="rte-btn" onclick="insertVote(this)" title="Inserir resultado de votação" style="color:#474747;">Votação</button>' +
+      '</div>';
+  }
+  return (
+    '<div><span class="rte-label">Assuntos Debatidos</span>' +
+    '<div class="rte-wrap">' + toolbar(idAss) +
+    '<div class="rte-content" id="' + idAss + '" contenteditable="true"></div>' +
+    '</div></div>' +
+    '<div><span class="rte-label">Conclusões, Ações e Responsáveis</span>' +
+    '<div class="rte-wrap">' + toolbar(idConc) +
+    '<div class="rte-content" id="' + idConc + '" contenteditable="true"></div>' +
+    '</div></div>'
+  );
+}
+
+function rteCmd(btn, cmd) {
+  var toolbar = btn.closest('.rte-toolbar');
+  var targetId = toolbar ? toolbar.dataset.target : null;
+  var editor = targetId ? document.getElementById(targetId) : btn.closest('.rte-wrap').querySelector('.rte-content');
+  if (editor) { editor.focus(); document.execCommand(cmd, false, null); }
+}
+
+function insertTable(btn) {
+  var rows = parseInt(prompt('Numero de linhas (excluindo cabeçalho):', '3') || '3');
+  var cols = parseInt(prompt('Numero de colunas:', '3') || '3');
+  if (isNaN(rows) || isNaN(cols)) return;
+  var html = '<table style="width:100%;border-collapse:collapse;margin:6px 0;font-size:13px;">';
+  html += '<tr>';
+  for (var c = 0; c < cols; c++) {
+    html += '<th contenteditable="true" style="border:1px solid #D4D4D4;padding:6px 8px;background:#F5F5F5;font-size:12px;text-align:left;">Col ' + (c+1) + '</th>';
+  }
+  html += '</tr>';
+  for (var r = 0; r < rows; r++) {
+    html += '<tr>';
+    for (var cc = 0; cc < cols; cc++) {
+      html += '<td contenteditable="true" style="border:1px solid #D4D4D4;padding:6px 8px;min-width:40px;"></td>';
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  var toolbar = btn.closest('.rte-toolbar');
+  var targetId = toolbar ? toolbar.dataset.target : null;
+  var editor = targetId ? document.getElementById(targetId) : btn.closest('.rte-wrap').querySelector('.rte-content');
+  if (editor) { editor.focus(); document.execCommand('insertHTML', false, html); }
+}
+
+function insertImg(btn) {
+  var toolbar = btn.closest('.rte-toolbar');
+  var targetId = toolbar ? toolbar.dataset.target : null;
+  var editor = targetId ? document.getElementById(targetId) : btn.closest('.rte-wrap').querySelector('.rte-content');
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/png,image/jpeg,image/jpg';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      if (editor) {
+        editor.focus();
+        document.execCommand('insertHTML', false, '<img src="' + ev.target.result + '" style="max-width:100%;height:auto;display:block;margin:4px 0;">');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function insertVote(btn) {
+  var toolbar = btn.closest('.rte-toolbar');
+  var targetId = toolbar ? toolbar.dataset.target : null;
+  var editor = targetId ? document.getElementById(targetId) : btn.closest('.rte-wrap').querySelector('.rte-content');
+  if (!editor) return;
+  var voteHtml =
+    '<p style="margin:6px 0;"><strong>Resultado da votação:</strong></p>' +
+    '<ul style="margin:4px 0;padding-left:20px;">' +
+      '<li>A favor: <strong>___</strong></li>' +
+      '<li>Contra: <strong>___</strong></li>' +
+      '<li>Abstenções: <strong>___</strong></li>' +
+    '</ul>';
+  editor.focus();
+  document.execCommand('insertHTML', false, voteHtml);
+}
+
+/* ── ATA POINTS ── */
+function addAtaPoint(title, assHTML, concHTML) {
+  ataCount++;
+  var container = document.getElementById('ataPoints');
+  var div = document.createElement('div');
+  div.className = 'ata-point';
+  div.dataset.idx = ataCount;
+  var idAss  = 'rte-ass-' + ataCount;
+  var idConc = 'rte-conc-' + ataCount;
+  var titleVal = title || '';
+  div.innerHTML =
+    '<div class="ata-point-header">' +
+      '<input class="ata-point-title-input" type="text" placeholder="Ponto ' + ataCount + '. Título..." value="' + titleVal.replace(/"/g, '&quot;') + '">' +
+      '<button class="ata-point-del-btn" onclick="delAtaPoint(this)">&times;</button>' +
+    '</div>' +
+    '<div class="ata-point-body">' + createRTE(idAss, idConc) + '</div>';
+  // Insert before the add button
+  var addBtn = document.getElementById('addAtaBtn');
+  container.parentNode.insertBefore(div, addBtn);
+  if (assHTML)  { var el = document.getElementById(idAss);  if (el) el.innerHTML = assHTML; }
+  if (concHTML) { var el2 = document.getElementById(idConc); if (el2) el2.innerHTML = concHTML; }
+  // Enable image resize on both editors
+  var edAss = document.getElementById(idAss);
+  var edConc = document.getElementById(idConc);
+  if (edAss)  enableImgResize(edAss);
+  if (edConc) enableImgResize(edConc);
+}
+
+function delAtaPoint(btn) {
+  btn.closest('.ata-point').remove();
+  renumberAta();
+}
+
+function renumberAta() {
+  document.querySelectorAll('.ata-point').forEach(function(p, i) {
+    p.dataset.idx = i + 1;
+    var inp = p.querySelector('.ata-point-title-input');
+    if (!inp.value) inp.placeholder = 'Ponto ' + (i+1) + '. Título...';
+  });
+  ataCount = document.querySelectorAll('.ata-point').length;
+}
+
+// Init with one ata point
+addAtaPoint(null, null, null);
+
+/* ── OTHERS ── */
+/* ── PRESENCE COUNTER & MARK ALL ── */
+function updatePresenceCounter() {
+  var present = 0, total = 0, presentNoIntern = 0, totalNoIntern = 0;
+  document.querySelectorAll('#presenceBody tr[data-member]').forEach(function(row) {
+    var sel = row.querySelector('.presence-select');
+    if (!sel) return;
+    var isIntern = (row.dataset.role === 'Médico/a Interno/a');
+    total++;
+    if (sel.value === 'X') present++;
+    if (!isIntern) {
+      totalNoIntern++;
+      if (sel.value === 'X') presentNoIntern++;
+    }
+  });
+  // Others
+  document.querySelectorAll('#othersBody select').forEach(function(sel) {
+    if (sel.value) { total++; if (sel.value === 'X') present++; }
+    // Others never counted as interns
+    if (sel.value) { totalNoIntern++; if (sel.value === 'X') presentNoIntern++; }
+  });
+  document.getElementById('presenceCount').textContent = present;
+  document.getElementById('presenceTotal').textContent = total;
+  document.getElementById('presenceCountNoIntern').textContent = presentNoIntern;
+  document.getElementById('presenceTotalNoIntern').textContent = totalNoIntern;
+}
+
+function markAllPresent() {
+  document.querySelectorAll('#presenceBody .presence-select').forEach(function(sel) {
+    sel.value = 'X';
+  });
+  updatePresenceCounter();
+}
+
+function delPresenceRow(btn) {
+  btn.closest('tr').remove();
+  updatePresenceCounter();
+}
+
+function addPresenceMember(group) {
+  // Find the add-row for this group
+  var addRow = null;
+  document.querySelectorAll('#presenceBody .presence-add-row').forEach(function(r) {
+    if (r.dataset.group === group) addRow = r;
+  });
+  if (!addRow) return;
+  var name = prompt('Nome do membro a adicionar (' + group + '):');
+  if (!name || !name.trim()) return;
+  name = name.trim();
+  var tr = document.createElement('tr');
+  tr.dataset.member = name;
+  tr.dataset.role = group;
+  tr.innerHTML =
+    '<td style="padding:6px 10px;border:1px solid #D4D4D4;font-size:13px;">' + name + '</td>' +
+    '<td style="padding:6px 10px;border:1px solid #D4D4D4;font-size:13px;color:#6B6B6B;">' + group + '</td>' +
+    '<td style="text-align:center;border:1px solid #D4D4D4;padding:4px;">' +
+      '<select class="presence-select" style="border:1px solid #D4D4D4;border-radius:3px;font-size:12px;font-family:Atkinson Hyperlegible,sans-serif;padding:3px 6px;background:#FAFAFA;cursor:pointer;">' +
+        '<option value="">&#x2014;</option>' +
+        '<option value="X">Presente</option>' +
+        '<option value="Falta">Falta</option>' +
+        '<option value="CIT">CIT</option>' +
+        '<option value="Juri">J\u00FAri</option>' +
+        '<option value="Estagio">Est\u00E1gio</option>' +
+        '<option value="Just">Just.</option>' +
+      '</select>' +
+    '</td>' +
+    '<td style="text-align:center;border:1px solid #D4D4D4;padding:0 4px;width:32px;">' +
+      '<button class="row-del-btn" onclick="delPresenceRow(this)" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:16px;padding:0 4px;" title="Remover">&times;</button>' +
+    '</td>';
+  addRow.parentNode.insertBefore(tr, addRow);
+  var newSel = tr.querySelector('.presence-select');
+  if (newSel) newSel.addEventListener('change', updatePresenceCounter);
+  updatePresenceCounter();
+}
+
+// Wire counter to all static presence selects
+document.querySelectorAll('#presenceBody .presence-select').forEach(function(sel) {
+  sel.addEventListener('change', updatePresenceCounter);
+});
+updatePresenceCounter();
+
+/* ── IMAGE RESIZE IN RTE ── */
+function enableImgResize(editor) {
+  editor.addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+      var img = e.target;
+      // Remove any existing resize UI
+      var old = document.getElementById('imgResizeBar');
+      if (old) old.remove();
+
+      var bar = document.createElement('div');
+      bar.id = 'imgResizeBar';
+      bar.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #D4D4D4;border-radius:6px;padding:8px 14px;display:flex;align-items:center;gap:10px;font-size:12px;font-family:Atkinson Hyperlegible,sans-serif;color:#474747;box-shadow:0 2px 12px rgba(0,0,0,.15);z-index:9999;';
+      bar.innerHTML =
+        '<span style="font-weight:600;">Largura da imagem:</span>' +
+        '<input type="range" id="imgResizeSlider" min="10" max="100" value="100" style="width:120px;accent-color:#0F6E64;">' +
+        '<span id="imgResizeVal" style="min-width:36px;text-align:right;font-weight:600;color:#0F6E64;">100%</span>' +
+        '<button onclick="applyImgResize()" style="padding:4px 10px;background:#0F6E64;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-family:Atkinson Hyperlegible,sans-serif;">OK</button>' +
+        '<button onclick="document.getElementById(\'imgResizeBar\').remove()" style="padding:4px 8px;background:none;border:1px solid #D4D4D4;border-radius:3px;cursor:pointer;font-size:12px;font-family:Atkinson Hyperlegible,sans-serif;">&#10005;</button>';
+      document.body.appendChild(bar);
+
+      // Store reference to image
+      bar._targetImg = img;
+      // Set slider to current width %
+      var curW = img.style.width ? parseInt(img.style.width) : 100;
+      document.getElementById('imgResizeSlider').value = curW;
+      document.getElementById('imgResizeVal').textContent = curW + '%';
+
+      document.getElementById('imgResizeSlider').addEventListener('input', function() {
+        document.getElementById('imgResizeVal').textContent = this.value + '%';
+        bar._targetImg.style.width = this.value + '%';
+        bar._targetImg.style.height = 'auto';
+      });
+    } else {
+      var bar = document.getElementById('imgResizeBar');
+      if (bar && !bar.contains(e.target)) bar.remove();
+    }
+  });
+}
+
+function applyImgResize() {
+  var bar = document.getElementById('imgResizeBar');
+  if (!bar) return;
+  var val = document.getElementById('imgResizeSlider').value;
+  if (bar._targetImg) {
+    bar._targetImg.style.width = val + '%';
+    bar._targetImg.style.height = 'auto';
+  }
+  bar.remove();
+}
+
+function addOtherRow() {
+  var tbody = document.getElementById('othersBody');
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" placeholder="Nome" style="width:100%;border:none;background:#FAFAFA;padding:7px 8px;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;outline:none;"></td>' +
+    '<td><input type="text" placeholder="Função/Motivo" style="width:100%;border:none;background:#FAFAFA;padding:7px 8px;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;outline:none;"></td>' +
+    '<td><select style="width:100%;border:1px solid #D4D4D4;border-radius:3px;font-size:12px;padding:3px 6px;background:#FAFAFA;cursor:pointer;">' +
+      '<option value="">&#x2014;</option><option value="X">Presente</option><option value="Falta">Falta</option>' +
+      '<option value="CIT">CIT</option><option value="Juri">J\u00fari</option><option value="Estagio">Est\u00e1gio</option><option value="Just">Just.</option>' +
+    '</select></td>' +
+    '<td style="text-align:center;border:1px solid #D4D4D4;padding:0 4px;">' +
+      '<button onclick="delOtherRow(this)" style="background:none;border:none;color:#bbb;cursor:pointer;font-size:18px;padding:0 4px;">&times;</button>' +
+    '</td>';
+  tbody.appendChild(tr);
+  // Wire counter on new other-row select
+  var newSel = tr.querySelector('select');
+  if (newSel) newSel.addEventListener('change', updatePresenceCounter);
+  updatePresenceCounter();
+}
+function delOtherRow(btn) {
+  var tbody = document.getElementById('othersBody');
+  if (tbody.rows.length > 0) { btn.closest('tr').remove(); updatePresenceCounter(); }
+}
+// Init with one other row
+addOtherRow();
+
+/* ── RESET ── */
+function resetForm() {
+  if (!mgfSegundoClique('resetForm')) return;
+  ['docNum','docYear','docAuthor','docElabDate','meetType','meetDate','meetTime','meetPlace','filledBy'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('docType').value = 'ATACG';
+  document.querySelectorAll('#agendaList .agenda-item input').forEach(function(i) { i.value = ''; });
+  document.querySelectorAll('#ataPoints .ata-point').forEach(function(p) { p.remove(); });
+  ataCount = 0; agendaCount = 1;
+  addAtaPoint(null, null, null);
+  document.querySelectorAll('#presenceBody .presence-select').forEach(function(s) { s.value = ''; });
+  document.getElementById('othersBody').innerHTML = '';
+  addOtherRow();
+  updateDocCode();
+  showToast('Formulario limpo.');
+}
+
+/* ── ESC ── */
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── BUILD PRINT HTML ── */
+function buildPrintHTML() {
+  function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+  var docType     = document.getElementById('docType').value;
+  var docNum      = val('docNum')      || '001';
+  var docYear     = val('docYear')     || '2025';
+  var docCode     = docType + '.' + docNum + '.' + docYear + (mgfCampo('sigla') ? '/' + mgfCampo('sigla') : '');
+  var docAuthor   = val('docAuthor');
+  var docElabDate = val('docElabDate');
+  var meetType    = val('meetType');
+  var meetDate    = val('meetDate');
+  var meetTime    = val('meetTime');
+  var meetPlace   = val('meetPlace');
+  var filledBy    = val('filledBy');
+
+  var logoEl   = document.querySelector('.logo-usf-img');
+  var logoSrc  = logoEl && logoEl.getAttribute('src') ? logoEl.src : '';
+  var frisoEl  = document.querySelector('.pattern-bar img');
+  var frisoSrc = frisoEl ? frisoEl.src : '';
+
+  // Agenda
+  var agendaItems = [];
+  document.querySelectorAll('#agendaList .agenda-item').forEach(function(li, i) {
+    agendaItems.push({ num: i + 1, text: li.querySelector('input').value.trim() });
+  });
+
+  // Ata points
+  var ataPoints = [];
+  document.querySelectorAll('.ata-point').forEach(function(pt, i) {
+    var rtes = pt.querySelectorAll('.rte-content');
+    ataPoints.push({
+      num:        i + 1,
+      title:      pt.querySelector('.ata-point-title-input').value.trim() || ('Ponto ' + (i+1)),
+      assuntos:   rtes[0] ? rtes[0].innerHTML : '',
+      conclusoes: rtes[1] ? rtes[1].innerHTML : ''
+    });
+  });
+
+  // Presence
+  var presGroups = {};
+  document.querySelectorAll('#presenceBody tr[data-member]').forEach(function(row) {
+    var sel = row.querySelector('.presence-select');
+    if (sel && sel.value) {
+      var grp = row.dataset.role;
+      if (!presGroups[grp]) presGroups[grp] = [];
+      presGroups[grp].push({ name: row.dataset.member, pres: sel.value });
+    }
+  });
+  var othersRows = [];
+  document.querySelectorAll('#othersBody tr').forEach(function(row) {
+    var inputs = row.querySelectorAll('input[type="text"]');
+    var sel = row.querySelector('select');
+    var name = inputs[0] ? inputs[0].value.trim() : '';
+    var role = inputs[1] ? inputs[1].value.trim() : '';
+    var pres = sel ? sel.value : '';
+    if (name) othersRows.push({ name: name, role: role, pres: pres });
+  });
+
+  var hdr = 'background:#F5F5F5;padding:7px 12px;margin-bottom:10px;border-left:4px solid #0F6E64;';
+  var hdrT = 'font-size:13px;font-weight:700;color:#0F6E64;text-transform:uppercase;letter-spacing:.08em;font-family:Atkinson Hyperlegible,"Segoe UI",sans-serif;';
+  var th = 'text-align:left;font-size:11px;font-weight:700;color:#6B6B6B;text-transform:uppercase;padding:5px 10px;background:#F5F5F5;border:1px solid #D4D4D4;font-family:Atkinson Hyperlegible,sans-serif;';
+  var td = 'padding:6px 10px;border:1px solid #D4D4D4;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;color:#474747;';
+
+  // Presence table HTML
+  var presHTML = '<table style="width:100%;border-collapse:collapse;font-size:13px;break-inside:avoid;page-break-inside:avoid;"><thead><tr><th style="' + th + 'width:45%">Nome</th><th style="' + th + 'width:35%">Função</th><th style="' + th + '">Presença</th></tr></thead><tbody>';
+  Object.keys(presGroups).forEach(function(grp) {
+    presHTML += '<tr><td colspan="3" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#0F6E64;text-transform:uppercase;border:1px solid #D4D4D4;">' + esc(grp) + 's</td></tr>';
+    presGroups[grp].forEach(function(r) {
+      presHTML += '<tr><td style="' + td + '">' + esc(r.name) + '</td><td style="' + td + '">' + esc(grp) + '</td><td style="' + td + 'text-align:center;">' + esc(r.pres) + '</td></tr>';
+    });
+  });
+  if (othersRows.length) {
+    presHTML += '<tr><td colspan="3" style="background:#F5F5F5;padding:6px 10px;font-size:11px;font-weight:700;color:#474747;text-transform:uppercase;border:1px solid #D4D4D4;">Outros Elementos</td></tr>';
+    othersRows.forEach(function(r) {
+      presHTML += '<tr><td style="' + td + '">' + esc(r.name) + '</td><td style="' + td + '">' + esc(r.role) + '</td><td style="' + td + 'text-align:center;">' + esc(r.pres) + '</td></tr>';
+    });
+  }
+  presHTML += '</tbody></table>';
+
+  // Count presences for the print counter
+  var countPresent = 0, countTotal = 0, countPresentNoIntern = 0, countTotalNoIntern = 0;
+  document.querySelectorAll('#presenceBody tr[data-member]').forEach(function(row) {
+    var sel = row.querySelector('.presence-select');
+    if (!sel) return;
+    var isIntern = (row.dataset.role === 'Médico/a Interno/a');
+    countTotal++;
+    if (sel.value === 'X') countPresent++;
+    if (!isIntern) { countTotalNoIntern++; if (sel.value === 'X') countPresentNoIntern++; }
+  });
+  document.querySelectorAll('#othersBody select').forEach(function(sel) {
+    if (sel.value) {
+      countTotal++; if (sel.value === 'X') countPresent++;
+      countTotalNoIntern++; if (sel.value === 'X') countPresentNoIntern++;
+    }
+  });
+
+  var css = [
+    '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}',
+    '@page{size:A4 portrait;margin:15mm 12mm 15mm 12mm;}',
+    /* A4 content width = 210mm - 12mm*2 = 186mm */
+    'html,body{width:210mm!important;margin:0!important;padding:0!important;background:#fff!important;zoom:1!important;transform:none!important;}',
+    '.print-page{width:186mm!important;max-width:186mm!important;min-width:186mm!important;margin:0!important;padding:0!important;font-size:10pt!important;font-family:Atkinson Hyperlegible,"Segoe UI",sans-serif;color:#474747;line-height:1.5;}',
+    '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}',
+    'table{border-collapse:collapse;break-inside:avoid;page-break-inside:avoid;}',
+    'td,th{word-break:break-word;}',
+    'ul,ol{padding-left:20px;}',
+    'p,li{orphans:2;widows:2;}',
+  ].join('');
+
+  var body =
+    '<div class="print-page">' +
+    
+    '<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px 12px;border-bottom:1px solid #D4D4D4;">' +
+      (logoSrc ? '<img src="' + logoSrc + '" style="height:64px;width:auto;" alt="">' : '<div></div>') +
+      '<div style="text-align:right;font-size:11px;color:#6B6B6B;line-height:1.9;font-family:Atkinson Hyperlegible,sans-serif;">' +
+        '<div><strong>' + esc(docCode) + '</strong></div>' +
+        '<div>Elaborada por: ' + esc(docAuthor) + '</div>' +
+        '<div>Data: ' + esc(docElabDate) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="padding:14px 32px 10px;border-bottom:1px solid #D4D4D4;">' +
+      (mgfCampo('unidade') ? '<div style="font-size:11px;color:#6B6B6B;">' + esc(mgfCampo('unidade')) + '</div>' : '') +
+      '<div style="font-size:16px;font-weight:700;color:#474747;">Agenda e Ata de Reunião</div>' +
+    '</div>' +
+    '<div style="padding:0 32px 32px;">' +
+    // 1. Reunião
+    '<div style="margin-top:20px;margin-bottom:20px;">' +
+      '<div style="' + hdr + 'break-after:avoid;page-break-after:avoid;"><span style="' + hdrT + '">1. Reunião</span></div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:4px;break-inside:avoid;page-break-inside:avoid;"><thead><tr><th style="' + th + '">Tipologia da Reunião</th></tr></thead><tbody><tr><td style="' + td + '">' + esc(meetType) + '</td></tr></tbody></table>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;break-inside:avoid;page-break-inside:avoid;"><thead><tr><th style="' + th + 'width:130px">Data</th><th style="' + th + 'width:100px">Hora</th><th style="' + th + '">Local</th></tr></thead><tbody><tr><td style="' + td + '">' + esc(meetDate) + '</td><td style="' + td + '">' + esc(meetTime) + '</td><td style="' + td + '">' + esc(meetPlace) + '</td></tr></tbody></table>' +
+    '</div>' +
+    // 2. Agenda
+    (agendaItems.filter(function(a) { return a.text; }).length > 0 ?
+      '<div style="margin-bottom:20px;">' +
+        '<div style="' + hdr + 'break-after:avoid;page-break-after:avoid;"><span style="' + hdrT + '">2. Agenda</span></div>' +
+        agendaItems.filter(function(a) { return a.text; }).map(function(a) {
+          return '<div style="padding:4px 0;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;color:#474747;"><strong>Ponto ' + a.num + '.</strong> ' + esc(a.text) + '</div>';
+        }).join('') +
+      '</div>' : '') +
+    // 3. Ata
+    '<div style="margin-bottom:20px;">' +
+      '<div style="' + hdr + 'break-after:avoid;page-break-after:avoid;"><span style="' + hdrT + '">3. Ata</span></div>' +
+      ataPoints.map(function(pt) {
+        return '<div style="margin-bottom:18px;">' +
+          '<div style="font-size:14px;font-weight:700;color:#474747;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee;break-after:avoid;page-break-after:avoid;">' + esc(pt.title) + '</div>' +
+          (pt.assuntos && pt.assuntos.replace(/<[^>]+>/g,'').trim() ?
+            '<div style="margin-bottom:8px;">' +
+              '<div style="font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;text-decoration:underline;letter-spacing:.05em;margin-bottom:4px;break-after:avoid;page-break-after:avoid;">Assuntos Debatidos</div>' +
+              '<div style="font-size:13px;color:#474747;line-height:1.6;">' + pt.assuntos + '</div>' +
+            '</div>' : '') +
+          (pt.conclusoes && pt.conclusoes.replace(/<[^>]+>/g,'').trim() ?
+            '<div>' +
+              '<div style="font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;text-decoration:underline;letter-spacing:.05em;margin-bottom:4px;break-after:avoid;page-break-after:avoid;">Conclusões, Ações e Responsáveis</div>' +
+              '<div style="font-size:13px;color:#474747;line-height:1.6;">' + pt.conclusoes + '</div>' +
+            '</div>' : '') +
+        '</div>';
+      }).join('') +
+    '</div>' +
+    // 4. Presenças
+    '<div style="margin-bottom:20px;">' +
+      '<div style="' + hdr + 'break-after:avoid;page-break-after:avoid;"><span style="' + hdrT + '">4. Presenças</span></div>' +
+      presHTML +
+      '<div style="display:flex;justify-content:flex-end;margin-top:8px;">' +
+        '<div style="font-size:13px;font-weight:600;color:#474747;background:#F5F5F5;border:1px solid #D4D4D4;border-radius:4px;padding:6px 14px;text-align:center;">' +
+          '<div>Presentes (total): <span style="color:#0F6E64;font-size:15px;">' + countPresent + '</span><span style="color:#6B6B6B;font-weight:400;"> / ' + countTotal + '</span></div>' +
+          '<div style="font-size:11px;color:#6B6B6B;margin-top:2px;">Sem internos: <span style="color:#0F6E64;font-weight:700;">' + countPresentNoIntern + '</span> / ' + countTotalNoIntern + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    (filledBy ? '<div style="font-size:11px;color:#6B6B6B;margin-top:8px;">Preenchido por: ' + esc(filledBy) + '</div>' : '') +
+    '</div>' +
+    '</div>';
+
+  return '<!DOCTYPE html><html lang="pt"><head><meta charset="UTF-8"><title>' + esc(docCode) + '</title><style>' + css + '</style></head><body>' + body + '</body></html>';
+}
+
+/* ── PRINT ── */
+function doPrint() {
+  var html = buildPrintHTML();
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;opacity:0;pointer-events:none;';
+  document.body.appendChild(iframe);
+  var iDoc = iframe.contentDocument || iframe.contentWindow.document;
+  iDoc.open(); iDoc.write(html); iDoc.close();
+  setTimeout(function() {
+    try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+    catch(e) { window.print(); }
+    setTimeout(function() { if (document.body.contains(iframe)) document.body.removeChild(iframe); }, 3000);
+  }, 500);
+}
+
+/* ── SAVE HTML ── */
+function doSaveHTML() {
+  var clone = document.documentElement.cloneNode(true);
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  // Simple inputs
+  document.querySelectorAll('input[type="text"]').forEach(function(orig) {
+    if (!orig.id) return;
+    var c = clone.querySelector('#' + orig.id);
+    if (c) c.setAttribute('value', orig.value);
+  });
+  // docType select
+  var origDT = document.getElementById('docType');
+  var cloneDT = clone.querySelector('#docType');
+  if (origDT && cloneDT) {
+    Array.from(cloneDT.options).forEach(function(opt) { opt.selected = (opt.value === origDT.value); });
+  }
+  // Agenda
+  var origAg = document.querySelectorAll('#agendaList .agenda-item input');
+  clone.querySelectorAll('#agendaList .agenda-item input').forEach(function(el, i) {
+    if (origAg[i]) el.setAttribute('value', origAg[i].value);
+  });
+  // Ata points: copy title and rte innerHTML
+  document.querySelectorAll('.ata-point').forEach(function(pt) {
+    var id = pt.dataset.idx;
+    var clonePt = clone.querySelector('.ata-point[data-idx="' + id + '"]');
+    if (!clonePt) return;
+    var titleOrig = pt.querySelector('.ata-point-title-input');
+    var titleClone = clonePt.querySelector('.ata-point-title-input');
+    if (titleOrig && titleClone) titleClone.setAttribute('value', titleOrig.value);
+    pt.querySelectorAll('.rte-content').forEach(function(rte) {
+      if (!rte.id) return;
+      var cr = clonePt.querySelector('#' + rte.id);
+      if (cr) cr.innerHTML = rte.innerHTML;
+    });
+  });
+  // Presence rows — rebuild in clone to capture dynamic additions/deletions
+  var clonePb = clone.querySelector('#presenceBody');
+  if (clonePb) {
+    clonePb.innerHTML = '';
+    document.querySelectorAll('#presenceBody tr').forEach(function(row) {
+      var tr = row.cloneNode(true);
+      // Copy select value
+      var origSel = row.querySelector('.presence-select');
+      var cloneSel = tr.querySelector('.presence-select');
+      if (origSel && cloneSel) {
+        Array.from(cloneSel.options).forEach(function(opt) { opt.selected = (opt.value === origSel.value); });
+      }
+      clonePb.appendChild(tr);
+    });
+  }
+  // Others
+  var origOth = document.querySelectorAll('#othersBody tr');
+  var cloneOthTb = clone.querySelector('#othersBody');
+  if (cloneOthTb) {
+    cloneOthTb.innerHTML = '';
+    origOth.forEach(function(row) {
+      var tr = row.cloneNode(true);
+      var inputs = row.querySelectorAll('input[type="text"]');
+      tr.querySelectorAll('input[type="text"]').forEach(function(inp, i) {
+        if (inputs[i]) inp.setAttribute('value', inputs[i].value);
+      });
+      var sel = row.querySelector('select');
+      var trSel = tr.querySelector('select');
+      if (sel && trSel) Array.from(trSel.options).forEach(function(opt) { opt.selected = (opt.value === sel.value); });
+      cloneOthTb.appendChild(tr);
+    });
+  }
+
+  var blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  var docCode = document.getElementById('docType').value + '.' +
+    (document.getElementById('docNum').value || '001') + '.' +
+    (document.getElementById('docYear').value || '2025') + (mgfCampo('sigla') ? '_' + mgfCampo('sigla') : '');
+  a.download = docCode + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('HTML guardado.');
+}
+
+/* ── IMPORT HTML ── */
+function doImportHTML(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(e.target.result, 'text/html');
+      // Text inputs
+      document.querySelectorAll('input[type="text"]').forEach(function(dest) {
+        if (!dest.id) return;
+        var src = doc.getElementById(dest.id);
+        if (src) { var v = src.getAttribute('value') || ''; if (v) dest.value = v; }
+      });
+      // docType
+      var srcDT = doc.getElementById('docType');
+      var destDT = document.getElementById('docType');
+      if (srcDT && destDT) {
+        var sel = Array.from(srcDT.options).find(function(o) { return o.selected; });
+        if (sel) destDT.value = sel.value;
+      }
+      // Agenda
+      var srcAg = doc.querySelectorAll('#agendaList .agenda-item input');
+      if (srcAg.length) {
+        var destList = document.getElementById('agendaList');
+        destList.innerHTML = '';
+        agendaCount = 0;
+        srcAg.forEach(function(inp) {
+          agendaCount++;
+          var li = document.createElement('li');
+          li.className = 'agenda-item';
+          li.innerHTML = '<span class="agenda-item-num">Ponto ' + agendaCount + '.</span>' +
+            '<input type="text" value="' + (inp.getAttribute('value') || '').replace(/"/g,'&quot;') + '" placeholder="Descrição...">' +
+            '<button class="agenda-item-del" onclick="delAgendaItem(this)">&times;</button>';
+          destList.appendChild(li);
+        });
+      }
+      // Ata points
+      var srcPts = doc.querySelectorAll('.ata-point');
+      if (srcPts.length) {
+        document.querySelectorAll('.ata-point').forEach(function(p) { p.remove(); });
+        ataCount = 0;
+        srcPts.forEach(function(pt) {
+          var titleEl = pt.querySelector('.ata-point-title-input');
+          var rtes = pt.querySelectorAll('.rte-content');
+          addAtaPoint(
+            titleEl ? (titleEl.getAttribute('value') || titleEl.value || '') : '',
+            rtes[0] ? rtes[0].innerHTML : '',
+            rtes[1] ? rtes[1].innerHTML : ''
+          );
+        });
+      }
+      // Presence rows — restore full row structure (includes dynamic additions)
+      var srcPb = doc.querySelector('#presenceBody');
+      var destPb = document.getElementById('presenceBody');
+      if (srcPb && destPb) {
+        destPb.innerHTML = '';
+        srcPb.querySelectorAll('tr').forEach(function(row) {
+          var tr = row.cloneNode(true);
+          // Restore select value
+          var srcSel = row.querySelector('.presence-select');
+          var destSel = tr.querySelector('.presence-select');
+          if (srcSel && destSel) {
+            var selOpt = Array.from(srcSel.options).find(function(o) { return o.selected; });
+            if (selOpt) destSel.value = selOpt.value;
+          }
+          // Re-wire events
+          var newSel = tr.querySelector('.presence-select');
+          if (newSel) newSel.addEventListener('change', updatePresenceCounter);
+          destPb.appendChild(tr);
+        });
+        updatePresenceCounter();
+      }
+      // Others
+      var srcOth = doc.querySelectorAll('#othersBody tr');
+      if (srcOth.length) {
+        document.getElementById('othersBody').innerHTML = '';
+        srcOth.forEach(function(row) {
+          var inputs = row.querySelectorAll('input[type="text"]');
+          var sel = row.querySelector('select');
+          var n = inputs[0] ? (inputs[0].getAttribute('value') || '') : '';
+          var r2 = inputs[1] ? (inputs[1].getAttribute('value') || '') : '';
+          var p = sel ? (Array.from(sel.options).find(function(o) { return o.selected; }) || {value:''}).value : '';
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td><input type="text" value="' + n.replace(/"/g,'&quot;') + '" placeholder="Nome" style="width:100%;border:none;background:#FAFAFA;padding:7px 8px;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;outline:none;"></td>' +
+            '<td><input type="text" value="' + r2.replace(/"/g,'&quot;') + '" placeholder="Função" style="width:100%;border:none;background:#FAFAFA;padding:7px 8px;font-size:13px;font-family:Atkinson Hyperlegible,sans-serif;outline:none;"></td>' +
+            '<td><select style="width:100%;border:1px solid #D4D4D4;border-radius:3px;font-size:12px;padding:3px 6px;background:#FAFAFA;cursor:pointer;"><option value="">&#x2014;</option><option value="X">Presente</option><option value="Falta">Falta</option><option value="CIT">CIT</option><option value="Juri">J\u00fari</option><option value="Estagio">Est\u00e1gio</option><option value="Just">Just.</option></select></td>' +
+            '<td style="text-align:center;border:1px solid #D4D4D4;padding:0 4px;"><button onclick="delOtherRow(this)" style="background:none;border:none;color:#bbb;cursor:pointer;font-size:18px;padding:0 4px;">&times;</button></td>';
+          var newSel = tr.querySelector('select');
+          if (p && newSel) newSel.value = p;
+          document.getElementById('othersBody').appendChild(tr);
+        });
+      }
+      updateDocCode();
+      showToast('Importado com sucesso.');
+    } catch(err) { showToast('Erro ao importar.'); console.error(err); }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+document.addEventListener('input', function (e) { if (e.target.closest && e.target.closest('[data-campo="sigla"]') && typeof updateDocCode === 'function') updateDocCode(); });
+
+/* ── MGF no Plural: modelo sem marca ───────────────────────────────────────
+   O nome e a sigla da unidade e da ULS escrevem-se no próprio documento (todos os sítios
+   ficam iguais) e o logótipo escolhe-se no computador. Nada sai deste computador.
+   Em «Guardar HTML», o ficheiro guardado já leva a unidade e o logótipo. */
+function mgfVazio(k) { return ({"unidade": "Nome da unidade", "sigla": "SIGLA", "uls": "Nome da ULS", "siglauls": "SIGLA ULS"})[k]; }
+function mgfCampo(k) {
+  var o = document.querySelector('[data-campo="' + k + '"]');
+  var v = o ? o.textContent.trim() : '';
+  return v && v !== mgfVazio(k) ? v : '';
+}
+function mgfMarcarCampos() {
+  document.querySelectorAll('[data-campo]').forEach(function (o) {
+    var v = o.textContent.trim();
+    o.classList.toggle('mgf-vazio', !v || v === mgfVazio(o.getAttribute('data-campo')));
+  });
+}
+/* «Limpar»: em vez da janela do browser, pede um segundo clique no mesmo botão. */
+function mgfSegundoClique(nome) {
+  var b = document.querySelector('[onclick^="' + nome + '"]');
+  if (!b) return true;
+  if (b._armado) { clearTimeout(b._armado); b._armado = null; b.innerHTML = b._txt; return true; }
+  b._txt = b.innerHTML; b.textContent = 'Carrega outra vez para limpar';
+  b._armado = setTimeout(function () { b._armado = null; b.innerHTML = b._txt; }, 4000);
+  return false;
+}
+(function () {
+  document.addEventListener('input', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-campo]') : null;
+    if (!el) return;
+    document.querySelectorAll('[data-campo="' + el.getAttribute('data-campo') + '"]').forEach(function (o) { if (o !== el) o.textContent = el.textContent; });
+    mgfMarcarCampos();
+  });
+  document.addEventListener('focusin', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-campo]') : null;
+    if (el && el.classList.contains('mgf-vazio')) { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.closest && e.target.closest('[data-campo]')) { e.preventDefault(); e.target.blur(); }
+  });
+  document.addEventListener('focusout', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-campo]') : null;
+    if (el && !el.textContent.trim()) { document.querySelectorAll('[data-campo="' + el.getAttribute('data-campo') + '"]').forEach(function (o) { o.textContent = mgfVazio(o.getAttribute('data-campo')); }); mgfMarcarCampos(); }
+  });
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'image/png,image/jpeg,image/svg+xml,image/webp'; inp.hidden = true; inp.id = 'mgfLogoFicheiro';
+  document.body.appendChild(inp);
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-logo], .logo-usf-img') : null;
+    if (!b) return;
+    inp.value = ''; inp.click();
+  });
+  inp.addEventListener('change', function () {
+    var f = inp.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      document.querySelectorAll('.logo-usf-img').forEach(function (i) { i.src = r.result; i.hidden = false; i.removeAttribute('hidden'); });
+      document.querySelectorAll('[data-logo]').forEach(function (b) { b.hidden = true; b.setAttribute('hidden', ''); });
+    };
+    r.readAsDataURL(f);
+  });
+  mgfMarcarCampos();
+})();
+
+</script>
+</body>
+</html>
