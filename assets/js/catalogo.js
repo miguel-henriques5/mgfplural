@@ -483,6 +483,48 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "saude-infantil",
+  "titulo": "Saúde infantil e juvenil",
+  "descricao": "Consultas de vigilância dos 0 aos 18 anos (PNSIJ): guia S-O-A-P com registo para o SClínico, desenvolvimento, crescimento com percentis OMS, vacinação, doses, patologias frequentes e referenciação.",
+  "area": "Recursos médicos",
+  "grupo": "Programas e valências",
+  "icone": "crianca",
+  "url": "ferramentas/recursos-medicos/programas-e-valencias/saude-infantil.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "PNSIJ",
+   "pediatria",
+   "criança",
+   "percentis",
+   "M-CHAT",
+   "Mary Sheridan",
+   "exantemas",
+   "Tanner"
+  ]
+ },
+ {
+  "id": "vigilancia-gravidez",
+  "titulo": "Vigilância da gravidez",
+  "descricao": "Pré-conceção, gravidez e puerpério: guia S-O-A-P de cada consulta com registo para o SClínico, datação, rastreio do 1.º trimestre, exames, suplementos, fármacos, ensinos, amamentação e planificação.",
+  "area": "Recursos médicos",
+  "grupo": "Programas e valências",
+  "icone": "gravidez",
+  "url": "ferramentas/recursos-medicos/programas-e-valencias/vigilancia-gravidez.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "grávida",
+   "obstetrícia",
+   "DUM",
+   "PTGO",
+   "anti-D",
+   "EPDS",
+   "amamentação",
+   "puerpério"
+  ]
+ },
+ {
   "id": "menopausa",
   "titulo": "Menopausa",
   "descricao": "Abordagem clínica integrada da menopausa: diagnóstico, sintomas, terapêutica hormonal e alternativas, riscos e seguimento, com base no Consenso Nacional sobre Menopausa 2021.",

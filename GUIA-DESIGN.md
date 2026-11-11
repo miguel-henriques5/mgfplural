@@ -4,7 +4,7 @@ Este guia serve para que qualquer ferramenta nova entre no MGF no Plural sem ter
 
 ## Regras essenciais
 
-1. **Um único ficheiro HTML**, sem nada carregado da internet: nem letras do Google Fonts, nem bibliotecas de CDN, nem imagens externas. Imagens pequenas vão embutidas no ficheiro.
+1. **Um único ficheiro HTML**, sem nada carregado da internet: nem letras do Google Fonts, nem bibliotecas de CDN, nem imagens externas. Imagens pequenas vão embutidas no ficheiro. As únicas exceções são as imagens dos mapas e as fotografias com licença aberta das ferramentas em página completa (ver «Página completa»).
 2. **Sem dados de doentes.** A ferramenta não envia nada para a internet e não guarda nomes, números de utente ou datas de nascimento, a não ser que essa seja a função da ferramenta e o Miguel o aprove.
 3. **Português de Portugal**, com o Acordo Ortográfico. "Descarregar", não "fazer download". Decimais com vírgula (1,5), datas como 08/11/2026.
 4. **Ficha completa:** título, descrição, autor, versão, data de revisão e bibliografia.
@@ -57,6 +57,15 @@ Todas as páginas de ferramenta seguem a mesma arrumação (aprovada a 10/11/202
 - **Coluna** (quando a bancada não faz sentido, por exemplo uma lista larga que se vai construindo): põe `"corpo": "coluna"` na ficha. A ferramenta fica numa só coluna e começa por uma pergunta grande (`<h2 class="mgf-pergunta">`).
 - **O resultado aparece uma vez.** Uma frase ou número grande com o que interessa; detalhes repetidos ficam num `<details>` fechado.
 - **O que se usa em cada consulta vem primeiro.** Legendas, princípios e notas longas ficam abaixo ou na coluna da esquerda.
+
+### Página completa (programas, mapas, plataformas)
+
+Ferramentas grandes, que ocupam o ecrã todo, levam `"layout": "completa"` na ficha (decidido a 08/11/2026). Abrem num separador novo, sem o menu do site, e o `<main>` fica só com a aplicação. O site junta uma **barra pequena no canto inferior direito**: símbolo (volta ao site), autor e versão (abre um painel com os avisos, a bibliografia e o contacto), Descarregar, Feedback e × para a esconder. Na impressão a barra não aparece.
+
+- **Letras e cores:** as letras da marca são obrigatórias; a cor de destaque tem alguma liberdade, com bom contraste. As cores clínicas são as de sempre.
+- **Ferramentas do site dentro de um programa:** em vez de copiar o HTML de outra ferramenta, escreve `"{{FERRAMENTA:<id>}}"` (com as aspas) no JavaScript. O site troca-o pela versão para descarregar atual dessa ferramenta, como texto, para pôr num `<iframe srcdoc>`. Para esconder o cabeçalho dela dentro do programa, usa `.autonomo-topo{display:none}`. Exemplo: a Saúde infantil e juvenil leva a Vacinação e as Doses pediátricas; a Vigilância da gravidez leva a Planificação e os Fármacos na gravidez.
+- **Imagens de fora** (só quando não podem ir no ficheiro, por exemplo fotografias do Wikimedia Commons): lista os servidores em `"imagens_externas": ["https://upload.wikimedia.org"]`. Cada imagem leva autor, licença e ligação para a origem na legenda, e a ferramenta tem de continuar a funcionar sem internet (mostra a legenda com a ligação). Os pedidos de dados continuam bloqueados.
+- **Sem `alert()` nem `confirm()`:** para limpar tudo, pede um segundo clique no mesmo botão.
 
 ## Cores
 
