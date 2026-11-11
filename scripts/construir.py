@@ -114,7 +114,7 @@ def ler_ferramentas():
                 erro(f"{f.name}: falta o campo '{c}' na ficha")
         if ficha["id"] != f.stem:
             erro(f"{f.name}: o id da ficha ({ficha['id']}) tem de ser igual ao nome do ficheiro")
-        if re.search(r'https?://[^"\'\s]+\.(js|css|woff2?|ttf)', t) or "fonts.googleapis" in t:
+        if re.search(r'https?://[^"\'\s]+\.(js|css|woff2?|ttf)\b', t) or "fonts.googleapis" in t:
             erro(f"{f.name}: carrega scripts, estilos ou letras de fora do site")
         ficha["estilo"] = extrair(r'<style data-mgf="ferramenta">(.*?)</style>', t, f.name, False)
         ficha["conteudo"] = extrair(r'(<main class="mgf-ferramenta" id="ferramenta">.*?</main>)', t, f.name)
@@ -306,9 +306,11 @@ def fim_div(t, i):
     erro("div sem fecho")
 
 
-def com_aviso(conteudo):
+def com_aviso(conteudo, f=None):
     """O aviso clínico fica junto dos comandos (fim da coluna da esquerda), como no mockup B;
     numa ferramenta em coluna, logo no início."""
+    if f is not None and f.get("aviso_clinico") is False:   # ferramentas que não são clínicas (ex.: horário)
+        return conteudo
     aviso = f'<p class="aviso-clinico">{SVG_ESCUDO}{AVISO_CLINICO}</p>'
     marca = '<div class="mgf-comandos">'
     if marca not in conteudo:
@@ -323,6 +325,19 @@ def com_aviso(conteudo):
         i = k - len("</div>")
     partes.append(conteudo[i:])
     return "".join(partes)
+
+
+VENDOR = Path(__file__).resolve().parent.parent / "assets" / "vendor"
+
+
+def bibliotecas(f):
+    """"bibliotecas" na ficha: ficheiros de assets/vendor/ de que a ferramenta precisa (ex.: jspdf.umd.min.js).
+    Ficam dentro do site (nada vem da internet); a versão descarregável leva-os embutidos."""
+    nomes = f.get("bibliotecas", [])
+    for n in nomes:
+        if not (VENDOR / n).is_file():
+            erro(f"{f['id']}: biblioteca em falta em assets/vendor/: {n}")
+    return nomes
 
 
 def impressao(f):
@@ -388,7 +403,7 @@ def pagina_ferramenta(f, ferramentas):
 </div>
 </header>
 <div class="area-ferramenta {classe_corpo(f)}">
-{com_aviso(f["conteudo"])}
+{com_aviso(f["conteudo"], f)}
 </div>
 <footer class="ferramenta-pe">
 {bibliografia_html(f)}
@@ -400,7 +415,7 @@ def pagina_ferramenta(f, ferramentas):
 {nav_as}
 </div>
 {rodape(prefixo)}
-<script src="{prefixo}assets/js/ferramenta.js"></script>
+{"".join(f'<script src="{prefixo}assets/vendor/{n}"></script>' + chr(10) for n in bibliotecas(f))}<script src="{prefixo}assets/js/ferramenta.js"></script>
 <script>
 {f["script"]}
 </script>
@@ -481,7 +496,7 @@ def pagina_autonoma(f, css):
 <p class="autonomo-meta">{meta_ficha(f)}</p>
 </header>
 <div class="autonomo-ferramenta {classe_corpo(f)}">
-{com_aviso(f["conteudo"])}
+{com_aviso(f["conteudo"], f)}
 </div>
 <div class="autonomo-pe">
 {bibliografia_html(f)}
@@ -491,7 +506,7 @@ def pagina_autonoma(f, css):
 </div>
 </div>
 </div>
-<script>
+{"".join("<script>" + chr(10) + (VENDOR / n).read_text(encoding="utf-8") + chr(10) + "</script>" + chr(10) for n in bibliotecas(f))}<script>
 {JS_FERRAMENTA}
 </script>
 <script>
