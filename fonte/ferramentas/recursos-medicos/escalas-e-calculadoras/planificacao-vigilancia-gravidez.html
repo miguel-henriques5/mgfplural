@@ -37,7 +37,10 @@
   "bibliografia": [
     "DGS. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: Direção-Geral da Saúde; 2015.",
     "DGS. Normas de Orientação Clínica — Vigilância da Gravidez de Baixo Risco."
-  ]
+  ],
+  "corpo": "bancada",
+  "resumo": "Datas da vigilância a partir da DUM ou da ecografia",
+  "impressao": "doente"
 }
 </script>
 
@@ -59,7 +62,7 @@
 .ponto[data-estado="current"] { background: var(--clin-atencao-borda); }
 .ponto[data-estado="future"] { background: var(--clin-normal-borda); }
 .ponto[data-estado="past"] { background: var(--cor-campo); }
-.semana { display: inline-block; font-family: var(--letra-mono); font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.semana { display: inline-block; font-family: inherit; font-size: 13px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
 .semana[data-t="1t"] { background: var(--cor-menta-clara); }
 .semana[data-t="2t"] { background: var(--cor-ambar-claro); }
 .semana[data-t="3t"] { background: var(--cor-areia); }
@@ -102,7 +105,8 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <form class="mgf-cartao" id="dados" novalidate>
     <div class="mgf-cartao-titulo">Dados da grávida</div>
     <div class="mgf-cartao-corpo" style="gap:16px">
@@ -131,7 +135,8 @@
       <div><button type="submit" class="mgf-botao mgf-botao-principal">Calcular plano de vigilância</button></div>
     </div>
   </form>
-
+  </div>
+  <div class="mgf-resposta">
   <div id="plano" hidden>
     <p class="so-imprimir plano-impressao"><strong id="imprimir-nome"></strong><span id="imprimir-data"></span></p>
     <div class="mgf-resumo" id="resumo">
@@ -209,7 +214,9 @@
       <button type="button" class="mgf-botao mgf-botao-principal" id="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar resumo</button>
     </div>
   </div>
-
+  <div class="mgf-espera">O resultado aparece aqui depois de preencheres os dados.</div>
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">

@@ -191,32 +191,6 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .etiqueta-completa { font-size: 12px; font-weight: 700; color: var(--cor-ambar-texto); background: var(--cor-ambar-claro); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
 .aviso-migracao { background: var(--cor-ambar-claro); border-radius: 14px; padding: 14px 16px; font-size: 15px; }
 
-/* ---------- Página de ferramenta ----------
-   Em cima: cabeçalho (com a cor do grupo) e navegação do grupo lado a lado, com a mesma altura.
-   Em baixo: a ferramenta a toda a largura. */
-.tom-menta { --tom-fundo: #EDF7F3; --tom-borda: #CDE7DF; }
-.tom-ambar { --tom-fundo: #FCF3E2; --tom-borda: #F0DDB4; }
-.tom-areia { --tom-fundo: #F3F0E8; --tom-borda: #E2DCCD; }
-.ferramenta-pagina { display: flex; flex-direction: column; gap: 16px; padding-top: 22px; padding-bottom: 64px; }
-.ferramenta-topo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 16px; align-items: stretch; }
-.ficha { background: var(--tom-fundo, var(--cor-branco)); border: 1px solid var(--tom-borda, var(--cor-linha-suave)); border-radius: 22px; padding: 20px 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
-.ficha-cabeca { display: flex; align-items: center; gap: 16px; }
-.ficha-ilustracao { width: 72px; height: 72px; flex: 0 0 auto; background: var(--cor-branco); border-radius: var(--raio-forma); padding: 6px; }
-.ficha-titulo { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.ficha h1 { font-weight: 800; font-size: clamp(1.8rem, 3.2vw, 2.4rem); letter-spacing: -0.03em; line-height: 1.02; }
-.ficha .autor { background: var(--cor-branco); }
-.ficha-base { display: flex; justify-content: space-between; align-items: center; gap: 10px 16px; flex-wrap: wrap; }
-.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; line-height: 1.3; color: var(--cor-texto-2); }
-.aviso-clinico img { width: 26px; height: 26px; flex: 0 0 auto; }
-.ferramenta-irmas { background: var(--cor-branco); border: 1px solid var(--tom-borda, var(--cor-linha-suave)); border-radius: 22px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
-.ferramenta-irmas-grupo { display: flex; align-items: center; gap: 8px; padding: 4px 6px 6px; font-family: var(--letra-titulo); font-weight: 800; font-size: 17px; color: var(--cor-tinta); text-decoration: none; border-bottom: 1px solid var(--cor-linha-suave); }
-.ferramenta-irmas-grupo img { width: 30px; height: 30px; background: var(--tom-fundo); border-radius: var(--raio-forma); }
-.ferramenta-irmas-grupo:hover { color: var(--cor-verde); }
-.ferramenta-irmas ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
-.ferramenta-irmas li a { display: block; font-size: 14px; line-height: 1.25; color: var(--cor-texto-2); text-decoration: none; padding: 5px 8px; border-radius: 8px; transition: background .2s; }
-.ferramenta-irmas li a:hover { background: var(--tom-fundo); color: var(--cor-tinta); }
-.ferramenta-irmas li a[aria-current="page"] { background: var(--cor-verde); color: var(--cor-branco); font-weight: 700; }
-@media (min-width: 1100px) { .ferramenta-irmas ul { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 4px; } .ferramenta-topo { grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); } }
 /* cartões de ferramenta com ilustração */
 .cartao-ferramenta-cabeca { display: flex; align-items: center; gap: 12px; }
 .cartao-ferramenta-cabeca img { width: 52px; height: 52px; flex: 0 0 auto; background: var(--cor-papel); border-radius: var(--raio-forma); padding: 4px; }
@@ -231,39 +205,82 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .grupo-cabeca h2 a:hover { color: var(--cor-verde); }
 .rodape-aviso { max-width: 760px; }
 .grupos-chips + .seccao { padding-top: 24px; }
-.ficha .autor { white-space: nowrap; flex: 0 0 auto; }
-@media (max-width: 560px) {
-  .ficha-cabeca { align-items: flex-start; }
-  .ficha-ilustracao { width: 48px; height: 48px; padding: 4px; }
-  .ficha .autor { font-size: 14px; }
-}
-.ficha-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .autor { display: inline-flex; align-items: center; gap: 8px; background: var(--cor-menta-clara); border-radius: 999px; padding: 4px 14px 4px 4px; font-size: 15px; }
 .autor-iniciais { width: 28px; height: 28px; border-radius: 50%; background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
-.ficha-versao { font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); }
-.ficha-acoes { display: flex; gap: 10px; flex-wrap: wrap; }
 .botao { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; text-decoration: none; font-weight: 700; font-size: 16px; padding: 10px 16px; border-radius: 12px; border: 2px solid var(--cor-tinta); background: var(--cor-branco); color: var(--cor-tinta); cursor: pointer; font-family: inherit; transition: transform .25s var(--mola), box-shadow .25s; }
 .botao:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -12px rgba(19,32,30,.5); color: var(--cor-tinta); }
 .botao svg { width: 18px; height: 18px; transition: transform .3s var(--mola); }
 .botao-principal { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
 .botao-principal:hover { color: var(--cor-branco); background: var(--cor-verde-fundo); }
 .botao-principal:hover svg { transform: translateY(3px); }
-.area-ferramenta { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 24px; }
-.ferramenta-pe { display: flex; flex-wrap: wrap; gap: 16px; }
-.bibliografia { flex: 1 1 320px; background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 18px 20px; font-size: 13px; color: var(--cor-texto-3); }
-.bibliografia h2 { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-verde); margin-bottom: 8px; }
-.bibliografia ol { margin: 0 0 8px; padding-left: 18px; line-height: 1.5; }
-.bibliografia p { margin: 0; font-family: var(--letra-mono); font-size: 12px; }
-.feedback { flex: 1 1 320px; background: var(--cor-ambar-claro); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.feedback { background: var(--cor-ambar-claro); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
 .feedback strong { font-family: var(--letra-titulo); font-size: 20px; letter-spacing: -0.015em; line-height: 1.15; }
 .feedback-linha { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 15px; }
 .feedback-linha code { font-family: var(--letra-mono); background: var(--cor-branco); border-radius: 8px; padding: 4px 8px; }
 .botao-texto { background: none; border: 0; padding: 4px 0; font: inherit; font-weight: 700; color: var(--cor-ambar-texto); cursor: pointer; text-decoration: underline; }
-.anterior-seguinte { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.anterior-seguinte a { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 16px; padding: 16px 18px; text-decoration: none; color: var(--cor-tinta); display: flex; flex-direction: column; gap: 4px; transition: transform .3s var(--mola), border-color .3s; }
-.anterior-seguinte a:hover { transform: translateY(-3px); border-color: var(--cor-menta); }
-.anterior-seguinte a.seguinte { align-items: flex-end; text-align: right; grid-column: 2; }
-.anterior-seguinte span { font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
+
+/* ---------- Página de ferramenta (proposta B, aprovada a 2026-11-10) ----------
+   Migalhas com o menu do grupo; cabeçalho compacto (ilustração, título, autoria, ações discretas);
+   a ferramenta assenta no fundo da página, sem caixa à volta; bibliografia e feedback discretos no fim.
+   O corpo da ferramenta é «bancada» (comandos à esquerda, resposta à direita) ou «coluna» (proposta C). */
+.tom-menta, .pagina-tom-menta { --tom-fundo: #EDF7F3; --tom-borda: #CDE7DF; }
+.tom-ambar, .pagina-tom-ambar { --tom-fundo: #FCF3E2; --tom-borda: #F0DDB4; }
+.tom-areia, .pagina-tom-areia { --tom-fundo: #F3F0E8; --tom-borda: #E2DCCD; }
+.ferramenta-pagina { display: flex; flex-direction: column; gap: 18px; padding-top: 18px; padding-bottom: 56px; }
+.migalhas-ferramenta .migalhas { align-items: center; }
+.migalhas-ferramenta .migalhas li { display: inline-flex; align-items: center; }
+.grupo-menu { position: relative; }
+.grupo-menu > summary { list-style: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: var(--tom-fundo); border: 1px solid var(--tom-borda); border-radius: 999px; padding: 3px 12px; color: var(--cor-tinta); }
+.grupo-menu > summary::-webkit-details-marker { display: none; }
+.grupo-menu > summary span { color: var(--cor-texto-3); }
+.grupo-menu > summary svg { width: 14px; height: 14px; transition: transform .25s var(--mola); }
+.grupo-menu[open] > summary svg { transform: rotate(180deg); }
+.grupo-menu > summary:hover { border-color: var(--cor-verde); }
+.grupo-menu-painel { position: absolute; z-index: 25; top: calc(100% + 8px); left: 0; width: 300px; max-width: calc(100vw - 32px); background: var(--cor-branco); border: 1px solid var(--cor-linha); border-radius: 16px; box-shadow: var(--sombra-alta); padding: 10px; display: flex; flex-direction: column; gap: 4px; animation: abrir .2s var(--mola); }
+.grupo-menu-titulo { display: flex; align-items: center; gap: 8px; padding: 4px 8px 8px; font-family: var(--letra-titulo); font-weight: 800; font-size: 17px; color: var(--cor-tinta); text-decoration: none; border-bottom: 1px solid var(--cor-linha-suave); }
+.grupo-menu-titulo img { width: 30px; height: 30px; background: var(--tom-fundo); border-radius: var(--raio-forma); }
+.grupo-menu-painel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.grupo-menu-painel li + li::before { content: none; }
+.grupo-menu-painel li a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--cor-texto-2); text-decoration: none; font-size: 15px; }
+.grupo-menu-painel li a:hover { background: var(--tom-fundo); color: var(--cor-tinta); }
+.grupo-menu-painel li a[aria-current="page"] { background: var(--cor-verde); color: var(--cor-branco); font-weight: 700; }
+
+.ficha { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--cor-linha); }
+.ficha-ilustracao { width: 56px; height: 56px; flex: 0 0 auto; background: var(--tom-fundo, var(--cor-menta-clara)); border-radius: var(--raio-forma); padding: 4px; }
+.ficha-titulo { flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ficha h1 { font-weight: 800; font-size: 30px; letter-spacing: -0.03em; line-height: 1.1; }
+.ficha-meta { margin: 0; font-size: 15px; line-height: 1.45; color: var(--cor-texto-3); }
+.ficha-meta strong { color: var(--cor-texto-2); }
+.ficha-acoes { display: flex; gap: 6px; flex-wrap: wrap; }
+.ficha-acoes .botao { min-height: 44px; height: 44px; font-size: 15px; padding: 0 14px; gap: 8px; border: 1.5px solid var(--cor-linha); border-radius: 12px; }
+.ficha-acoes .botao svg { width: 16px; height: 16px; }
+.ficha-acoes .botao:hover { border-color: var(--cor-verde); transform: none; box-shadow: none; }
+.ficha-acoes .botao:hover svg { transform: none; }
+
+.area-ferramenta { min-width: 0; }
+.area-ferramenta.corpo-coluna > .mgf-ferramenta { max-width: 980px; margin: 0 auto; }
+
+.ferramenta-pe { display: flex; flex-wrap: wrap; gap: 16px 48px; align-items: flex-start; margin-top: 12px; border-top: 1px solid var(--cor-linha); padding-top: 20px; }
+.ferramenta-pe .bibliografia { flex: 1 1 460px; font-size: 14px; color: var(--cor-texto-3); }
+.ferramenta-pe .bibliografia h2 { font-family: var(--letra-texto); font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--cor-tinta); margin: 0 0 6px; }
+.ferramenta-pe .bibliografia ol { margin: 0 0 6px; padding-left: 18px; line-height: 1.5; }
+.ferramenta-pe .bibliografia p { margin: 0; font-size: 14px; }
+.bibliografia-longa summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.bibliografia-longa summary::-webkit-details-marker { display: none; }
+.bibliografia-longa summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--cor-verde); border-bottom: 2px solid var(--cor-verde); transform: rotate(-45deg); transition: transform .2s; margin-right: 4px; }
+.bibliografia-longa details[open] summary::before { transform: rotate(45deg); }
+.ferramenta-pe .bibliografia-longa summary h2 { margin: 0; }
+.bibliografia-longa summary h2 span { font-weight: 400; color: var(--cor-texto-3); }
+.bibliografia-longa summary:hover h2 { color: var(--cor-verde); }
+.ferramenta-pe .feedback { flex: 1 1 320px; background: none; border-radius: 0; padding: 0; gap: 6px; }
+.ferramenta-pe .feedback strong { font-family: var(--letra-texto); font-size: 15px; letter-spacing: 0; }
+.ferramenta-pe .feedback-linha { color: var(--cor-texto-3); gap: 4px 8px; }
+.ferramenta-pe .feedback-linha .mono { font-size: 14px; }
+.ferramenta-pe .botao-texto { color: var(--cor-verde); }
+.anterior-seguinte { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-weight: 700; font-size: 16px; }
+.anterior-seguinte a { text-decoration: none; padding: 6px 0; }
+.anterior-seguinte a:hover { text-decoration: underline; }
+.anterior-seguinte a.seguinte { margin-left: auto; }
 
 /* ---------- Página de texto (Acerca) ---------- */
 .texto-longo { max-width: 720px; font-size: 19px; line-height: 1.6; color: var(--cor-texto-2); display: flex; flex-direction: column; gap: 14px; }
@@ -276,8 +293,6 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
   .area-titulo h1 { font-size: 36px; }
   .heroi { padding-top: 32px; }
   .heroi-simbolo { display: none; }
-  .anterior-seguinte { grid-template-columns: 1fr; }
-  .anterior-seguinte a.seguinte { grid-column: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -288,34 +303,25 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 /* ---------- Impressão: só a ferramenta ---------- */
 @media print {
   body { background: #fff; }
-  .topo, .rodape, .ferramenta-irmas, .ficha-acoes, .feedback, .anterior-seguinte, .migalhas, .saltar { display: none !important; }
+  .topo, .rodape, .migalhas-ferramenta, .ficha-acoes, .feedback, .anterior-seguinte, .saltar { display: none !important; }
   .ferramenta-pagina { padding: 0; display: block; }
-  .ferramenta-topo { display: block; }
-  .ficha, .area-ferramenta, .bibliografia { border: 0; padding: 0 0 12px; background: none; }
-  .ficha-ilustracao { width: 34px; height: 34px; padding: 0; }
-  .ficha { gap: 4px; padding: 0 0 8px; }
-  .ficha-cabeca { gap: 10px; }
+  .ficha { gap: 8px; padding: 0 0 8px; margin-bottom: 8px; }
+  .ficha-ilustracao { width: 34px; height: 34px; padding: 0; background: none; }
   .ficha h1 { font-size: 20px; }
-  .ficha-titulo { gap: 2px; }
-  .ficha .autor { padding: 0; font-size: 11px; background: none; }
-  .ficha .autor-iniciais { display: none; }
-  .ficha-versao { font-size: 10px; }
-  .aviso-clinico { font-size: 10px; }
-  .aviso-clinico img { width: 14px; height: 14px; }
-  .bibliografia { font-size: 9px; padding: 6px 0 0; }
+  .ficha-titulo { gap: 0; }
+  .ficha-meta, .aviso-clinico { font-size: 10px; }
+  .aviso-clinico svg { width: 12px; height: 12px; }
+  body[data-impressao="doente"] .ficha, body[data-impressao="doente"] .ferramenta-pe,
+  body[data-impressao="doente"] .aviso-clinico { display: none !important; }
+  .ferramenta-pe { border: 0; padding: 6px 0 0; margin: 0; }
+  .ferramenta-pe .bibliografia, .ferramenta-pe .bibliografia h2, .ferramenta-pe .bibliografia p { font-size: 9px; }
 }
 
 /* ---------- Ajustes ---------- */
 .nav-principal > a.botao-escuro { padding: 10px 16px; }
-.ferramenta-pe { align-items: flex-start; }
 .cartao-grupo-rodape span, .em-breve-texto { white-space: nowrap; }
-@media (max-width: 860px) {
-  .ferramenta-topo { display: contents; }
-  .ferramenta-irmas { order: 1; }
-}
 @media (max-width: 760px) {
-  .ficha, .area-ferramenta { padding: 16px; border-radius: 18px; }
-  .ficha-ilustracao { width: 56px; height: 56px; }
+  .ficha-ilustracao { width: 48px; height: 48px; padding: 4px; }
   .topo .contentor { gap: 8px; }
   .nav-principal { gap: 4px 16px; font-size: 15px; }
   .contentor { padding: 0 16px; }

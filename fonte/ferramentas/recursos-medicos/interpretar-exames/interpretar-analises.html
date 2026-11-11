@@ -52,7 +52,9 @@
     "WHO. HBV serological markers (training module). https://cdn.who.int/media/docs/default-source/searo/hiv-hepatitis/training-modules/08-hbv-serological-markers.pdf",
     "Medscape eMedicine. Urinalysis, Hepatitis B Test, Iron Deficiency Anemia Workup, Serum Protein Electrophoresis. https://emedicine.medscape.com/article/2074001-overview",
     "Merck Manual. Urinalysis and Urine Culture. https://www.merckmanuals.com/home/kidney-and-urinary-tract-disorders/diagnosis-of-kidney-and-urinary-tract-disorders/urinalysis-and-urine-culture"
-  ]
+  ],
+  "corpo": "bancada",
+  "resumo": "Valores de referência e significado clínico"
 }
 </script>
 
@@ -149,7 +151,7 @@
 #ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
 #ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
 #ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
-#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .ib-title { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--cor-verde-fundo); }
 #ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
 #ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
 #ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
@@ -164,7 +166,7 @@
 #ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
 #ferramenta .tbl-wrap { overflow-x: auto; }
 #ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table th { background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
 #ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
 #ferramenta .data-table tr:last-child td { border-bottom: 0; }
 #ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
@@ -192,14 +194,14 @@
 #ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
 #ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
 #ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
-#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .rr-icon::before { content: "•"; font-family: inherit; font-size: 16px; font-weight: 700; }
 #ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
 #ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
 #ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
 #ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
 #ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
 #ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
-#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .big-num { font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-verde-fundo); }
 #ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
 #ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
 #ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
@@ -207,7 +209,7 @@
 #ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
 #ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 #ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
-#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 14px; font-weight: 700; }
 #ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
 #ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
 /* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
@@ -226,7 +228,8 @@
 </head>
 <body>
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Valores de referência e significado clínico — hemograma, bioquímica, coagulação, urina e mais.</p>
   <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
     <button type="button" class="mgf-separador" role="tab" id="sep-hemograma" aria-controls="tab-hemograma" aria-selected="true">Hemograma</button>
@@ -239,6 +242,8 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-serologias" aria-controls="tab-serologias" aria-selected="false">Serologias</button>
   </div>
   <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os intervalos de referência são <strong>orientativos</strong> e variam consoante o laboratório, o método, a idade, o sexo e o estado fisiológico (ex: gravidez). <strong>Usa sempre os intervalos do laboratório que emitiu o resultado</strong> e interpreta no contexto clínico. As unidades apresentadas são as mais comuns em Portugal/Europa (SI), com equivalências quando útil.</p>
+  </div>
+  <div class="mgf-resposta">
   <div class="mgf-painel mk-painel" id="tab-hemograma" role="tabpanel" aria-labelledby="sep-hemograma"></div>
   <div class="mgf-painel mk-painel" id="tab-bioquimica" role="tabpanel" aria-labelledby="sep-bioquimica" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-ionograma" role="tabpanel" aria-labelledby="sep-ionograma" hidden></div>
@@ -247,13 +252,13 @@
   <div class="mgf-painel mk-painel" id="tab-anemia" role="tabpanel" aria-labelledby="sep-anemia" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-proteinas" role="tabpanel" aria-labelledby="sep-proteinas" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-serologias" role="tabpanel" aria-labelledby="sep-serologias" hidden></div>
-  
   <div class="tool-footer">
     Intervalos de referência orientativos; confirmar sempre com os valores do laboratório emissor.<br>
     <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico.</em>
     <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
   </div>
-
+  </div>
+  </div>
 </main>
 
 <script data-mgf="ferramenta">

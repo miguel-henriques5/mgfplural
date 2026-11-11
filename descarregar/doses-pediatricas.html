@@ -83,7 +83,7 @@
 
 .mgf-ferramenta {
   font-family: var(--letra-texto);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.55;
   color: var(--cor-tinta);
 }
@@ -118,7 +118,7 @@
 }
 .mgf-separador:hover { border-color: var(--cor-verde); transform: translateY(-1px); }
 .mgf-separador[aria-selected="true"] {
-  background: var(--cor-tinta); border-color: var(--cor-tinta); color: var(--cor-papel);
+  background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco);
 }
 .mgf-painel[hidden] { display: none; }
 
@@ -133,9 +133,8 @@
   border-radius: var(--raio); margin: 0 0 12px; overflow: hidden;
 }
 .mgf-cartao-titulo {
-  font-family: var(--letra-texto); font-weight: 700; font-size: 15px;
-  padding: 11px 18px; background: var(--cor-menta-clara); color: var(--cor-verde-fundo);
-  border-bottom: 1px solid var(--cor-linha-suave);
+  font-family: var(--letra-titulo); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; line-height: 1.25;
+  padding: 14px 18px 4px; background: none; color: var(--cor-tinta);
 }
 .mgf-cartao-corpo { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
 
@@ -167,10 +166,10 @@
   content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cor-branco);
 }
 .mgf-opcao.marcada { background: var(--cor-menta-clara); border-color: var(--cor-menta); }
-.mgf-opcao-texto { flex: 1; font-size: 16px; line-height: 1.45; }
+.mgf-opcao-texto { flex: 1; font-size: 17px; line-height: 1.45; }
 .mgf-opcao-pontos {
-  flex: 0 0 auto; font-family: var(--letra-mono); font-size: 13px; font-weight: 500;
-  color: var(--cor-verde); padding-top: 2px;
+  flex: 0 0 auto; font-size: 15px; font-weight: 700;
+  color: var(--cor-verde); padding-top: 2px; white-space: nowrap;
 }
 .mgf-opcao-negativa .mgf-opcao-pontos { color: var(--clin-alerta); }
 .mgf-opcao-negativa { border-color: var(--cor-linha); }
@@ -178,16 +177,16 @@
 
 /* ---------- Resultado ---------- */
 .mgf-resultado {
-  background: var(--cor-branco); border: 1px solid var(--cor-linha-suave);
-  border-radius: var(--raio); margin-top: 8px; overflow: hidden;
+  background: var(--cor-branco); border: 2px solid var(--cor-verde);
+  border-radius: var(--raio-g); margin-top: 8px; overflow: hidden;
 }
 .mgf-resultado-topo {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 16px 20px; background: var(--cor-tinta); color: var(--cor-papel);
+  padding: 18px 20px 4px; background: none; color: var(--cor-tinta);
 }
-.mgf-resultado-topo h3 { color: var(--cor-papel); font-size: 19px; font-weight: 800; }
-.mgf-pontuacao { font-family: var(--letra-mono); font-size: 40px; font-weight: 500; line-height: 1; color: var(--cor-papel); }
-.mgf-pontuacao small { font-size: 18px; color: var(--cor-menta); margin-left: 4px; }
+.mgf-resultado-topo h3 { color: var(--cor-tinta); font-size: 20px; font-weight: 800; }
+.mgf-pontuacao { font-family: var(--letra-texto); font-size: 40px; font-weight: 700; line-height: 1; color: var(--cor-tinta); }
+.mgf-pontuacao small { font-size: 17px; font-weight: 400; color: var(--cor-texto-3); margin-left: 4px; }
 .mgf-resultado-corpo { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
 .mgf-barra { height: 8px; background: var(--cor-linha-suave); border-radius: 99px; overflow: hidden; }
 .mgf-barra > span { display: block; height: 100%; width: 0; background: var(--cor-verde-medio); border-radius: 99px; transition: width .4s var(--mola); }
@@ -227,7 +226,7 @@
 
 /* ---------- Referências dentro de uma escala ---------- */
 .mgf-refs { font-size: 13px; color: var(--cor-texto-3); line-height: 1.5; }
-.mgf-refs h4 { font-family: var(--letra-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
+.mgf-refs h4 { font-family: var(--letra-texto); font-size: 13px; font-weight: 700; color: var(--cor-texto-3); margin-bottom: 4px; }
 .mgf-refs ol { margin: 0; padding-left: 18px; }
 
 /* ---------- Botões ---------- */
@@ -255,7 +254,9 @@
 }
 
 @media print {
-  .mgf-separadores, .mgf-botoes { display: none !important; }
+  .mgf-separadores, .mgf-botoes, .mgf-espera { display: none !important; }
+  .mgf-bancada { display: block !important; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
   .mgf-painel[hidden] { display: none !important; }
   .mgf-cartao, .mgf-resultado { break-inside: avoid; }
   .mgf-opcao:not(.marcada) { color: var(--cor-texto-3); }
@@ -272,7 +273,7 @@
 /* Opções lado a lado (p. ex. pontuações 0–3 de um item) */
 .mgf-cartao-corpo.mgf-em-linha { flex-direction: row; flex-wrap: wrap; gap: 6px; }
 .mgf-em-linha .mgf-opcao { flex: 1 1 52px; gap: 8px; padding: 10px 8px; justify-content: center; align-items: center; border-color: var(--cor-linha); }
-.mgf-em-linha .mgf-opcao-texto { flex: 0 0 auto; font-family: var(--letra-mono); font-weight: 500; }
+.mgf-em-linha .mgf-opcao-texto { flex: 0 0 auto; font-weight: 700; }
 
 /* Aviso de direitos de autor dentro de uma escala */
 .mgf-direitos { background: var(--clin-info-fundo); color: var(--clin-info); border-radius: var(--raio-p); padding: 12px 14px; font-size: 15px; line-height: 1.5; margin: 0 0 12px; }
@@ -282,7 +283,8 @@
 .mgf-campo { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 700; }
 .mgf-campo input, .mgf-campo select {
   font-family: var(--letra-texto); font-size: 16px; font-weight: 400; color: var(--cor-tinta);
-  min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco);
+  min-height: 48px; padding: 8px 14px; border: 1.5px solid var(--cor-campo); border-radius: 12px; background: var(--cor-branco);
+  font-size: 17px; box-sizing: border-box;
 }
 .mgf-campo input:focus, .mgf-campo select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
 .mgf-campo small { font-weight: 400; color: var(--cor-texto-3); font-size: 13px; }
@@ -303,8 +305,8 @@
 .mgf-resumo > div[data-nivel="atencao"] { border-left-color: var(--clin-atencao-borda); }
 .mgf-resumo > div[data-nivel="elevado"] { border-left-color: var(--clin-elevado-borda); }
 .mgf-resumo > div[data-nivel="alerta"]  { border-left-color: var(--clin-alerta-borda); }
-.mgf-resumo-rotulo { font-family: var(--letra-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); }
-.mgf-resumo-valor { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; line-height: 1.1; }
+.mgf-resumo-rotulo { font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+.mgf-resumo-valor { font-size: 26px; font-weight: 700; line-height: 1.15; }
 .mgf-resumo-sub { font-size: 14px; color: var(--cor-texto-2); }
 
 /* Grupo de botões de escolha (filtros) */
@@ -321,7 +323,7 @@
    Guias de consulta (antibioterapia, prescrição, exames…)
    Pesquisa, filtros, secções, cartões que abrem e fecham, notas e rótulos.
    ===================================================================== */
-.mgf-guia-intro { color: var(--cor-texto-2); font-size: 16px; margin: 0 0 14px; }
+.mgf-guia-intro { color: var(--cor-texto-2); font-size: 17px; margin: 0 0 14px; }
 .mgf-guia-controlos { display: flex; flex-direction: column; gap: 10px; margin: 0 0 20px; }
 
 /* Caixa de pesquisa com lupa */
@@ -338,8 +340,8 @@
 .mgf-seccao { margin: 0 0 24px; }
 .mgf-seccao[hidden] { display: none; }
 .mgf-seccao-titulo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--cor-linha); }
-.mgf-seccao-titulo h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
-.mgf-seccao-titulo span { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .04em; color: var(--cor-texto-3); }
+.mgf-seccao-titulo h3 { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; }
+.mgf-seccao-titulo span { font-size: 15px; color: var(--cor-texto-3); }
 .mgf-grelha { display: grid; grid-template-columns: 1fr; gap: 10px; }
 
 /* Cartão que abre e fecha (botão com aria-expanded + corpo com hidden) */
@@ -351,10 +353,11 @@
   font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s;
 }
 .mgf-dobra-topo:hover { background: var(--cor-papel); }
-.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-menta-clara); }
+.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-papel); }
+.mgf-dobra:has(> .mgf-dobra-topo[aria-expanded="true"]) { border-color: var(--cor-menta); }
 .mgf-dobra-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 800; font-size: 18px; letter-spacing: -0.015em; line-height: 1.2; }
-.mgf-dobra-sub { font-size: 14px; color: var(--cor-texto-2); line-height: 1.4; }
+.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; line-height: 1.2; }
+.mgf-dobra-sub { font-size: 15px; color: var(--cor-texto-3); line-height: 1.4; }
 .mgf-dobra-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
 .mgf-dobra-topo[aria-expanded="true"] .mgf-dobra-seta { transform: rotate(180deg); }
 .mgf-dobra-corpo { padding: 14px 18px 18px; border-top: 1px solid var(--cor-linha-suave); display: flex; flex-direction: column; gap: 12px; }
@@ -391,77 +394,182 @@
 }
 
 
-body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); }
-.autonomo { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 16px; }
-.autonomo-topo { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
-.autonomo-marca { display: flex; align-items: center; gap: 10px; font-family: var(--letra-titulo); font-size: 18px; letter-spacing: -0.02em; color: var(--cor-tinta); }
-.autonomo-marca svg { width: 40px; height: 28px; }
-.autonomo-topo h1 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 32px; letter-spacing: -0.03em; line-height: 1.05; }
-.autonomo-meta { font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); }
-.autonomo-aviso { background: var(--cor-menta-clara); border-radius: 12px; padding: 10px 14px; font-size: 15px; }
-.autonomo-ferramenta { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 22px; padding: 22px; }
-.bibliografia { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: 18px; padding: 16px 20px; font-size: 13px; color: var(--cor-texto-3); }
-.bibliografia h2 { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-verde); margin: 0 0 8px; }
-.bibliografia ol { margin: 0 0 8px; padding-left: 18px; }
-.bibliografia p, .autonomo-rodape { margin: 0; font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
+/* =====================================================================
+   Bancada (proposta B, aprovada a 2026-11-10): comandos à esquerda, resposta à direita.
+   <div class="mgf-bancada">            calculadora: perguntas largas, resultado estreito e sempre à vista
+   <div class="mgf-bancada mgf-bancada-guia">   guia: pesquisa, filtros ou capítulos numa coluna estreita
+     <div class="mgf-comandos"> … </div>
+     <div class="mgf-resposta"> … </div>
+   </div>
+   No telemóvel passa a uma só coluna. Quando a bancada não faz sentido, a ferramenta usa
+   "corpo": "coluna" na ficha (proposta C: uma coluna, uma pergunta de cada vez).
+   ===================================================================== */
+.mgf-bancada {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: 28px; align-items: start;
+}
+.mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.mgf-bancada > .mgf-comandos > *, .mgf-bancada > .mgf-resposta > * { margin-top: 0; margin-bottom: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-resultado { margin-top: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-botoes { margin-top: 0; }
+
+.mgf-bancada-guia { grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); }
+.mgf-bancada-guia > .mgf-comandos {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-intro { font-size: 15px; color: var(--cor-texto-3); }
+.mgf-bancada-guia > .mgf-comandos .mgf-nota { font-size: 14px; }
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-controlos { gap: 14px; }
+
+/* Separadores e filtros na coluna da esquerda: lista vertical */
+.mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: column; flex-wrap: nowrap; gap: 2px; margin: 0; }
+.mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button {
+  justify-content: flex-start; text-align: left; width: 100%; min-height: 42px; padding: 8px 12px;
+  border: 0; border-radius: 10px; background: none; font-size: 16px; font-weight: 400; color: var(--cor-tinta);
+}
+.mgf-comandos .mgf-separador:hover, .mgf-comandos .mgf-filtros button:hover { background: var(--cor-branco); transform: none; }
+.mgf-comandos .mgf-separador[aria-selected="true"], .mgf-comandos .mgf-filtros button[aria-pressed="true"] {
+  background: var(--cor-verde); color: var(--cor-branco); font-weight: 700;
+}
+
+/* Lugar do resultado antes de haver resultado (fica escondido quando o elemento anterior aparece) */
+.mgf-espera { display: none; }
+[hidden] + .mgf-espera {
+  display: block; text-align: center; padding: 28px 16px; color: var(--cor-texto-3); font-size: 16px;
+  border: 1.5px dashed var(--cor-linha); border-radius: var(--raio);
+}
+
+/* Pergunta grande (proposta C) */
+.mgf-ferramenta .mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 8px 0 24px; }
+
+@media (max-width: 900px) {
+  .mgf-bancada, .mgf-bancada-guia { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
+  .mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button { width: auto; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); font-size: 15px; }
+}
+
+/* Aviso clínico: no fim da coluna dos comandos (proposta B) */
+.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; font-family: var(--letra-texto); font-size: 14px; line-height: 1.35; color: var(--cor-texto-3); }
+.aviso-clinico svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+.mgf-ferramenta > .aviso-clinico { margin: 0 0 14px; }
+
+/* Caixas de seleção como no mockup: linha leve e uma só seta para baixo */
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]) {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  min-height: 48px; padding: 0 44px 0 14px; box-sizing: border-box;
+  border: 1.5px solid var(--cor-campo); border-radius: 12px;
+  background: var(--cor-branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2313201E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px 18px;
+  font-family: var(--letra-texto); font-size: 17px; font-weight: 400; line-height: 1.3; color: var(--cor-tinta); cursor: pointer;
+}
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):hover { border-color: var(--cor-verde-medio); }
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):focus { outline: 3px solid var(--cor-menta); outline-offset: 0; border-color: var(--cor-verde); }
+html #ferramenta.mgf-ferramenta select:disabled { background-color: var(--cor-papel); color: var(--cor-texto-3); cursor: not-allowed; }
+
+
+body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); line-height: 1.55; }
+.autonomo { max-width: 1200px; margin: 0 auto; padding: 20px 24px 48px; display: flex; flex-direction: column; gap: 20px; }
+.autonomo-topo { display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--cor-linha); }
+.autonomo-marca { display: flex; align-items: center; gap: 8px; font-family: var(--letra-titulo); font-size: 16px; letter-spacing: -0.02em; color: var(--cor-tinta); margin-bottom: 6px; }
+.autonomo-marca svg { width: 34px; height: 24px; }
+.autonomo-topo h1 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 30px; letter-spacing: -0.03em; line-height: 1.1; }
+.autonomo-meta { font-size: 15px; color: var(--cor-texto-3); margin: 0; }
+.autonomo-meta strong { color: var(--cor-texto-2); }
+.autonomo-pe { display: flex; flex-wrap: wrap; gap: 16px 40px; border-top: 1px solid var(--cor-linha); padding-top: 18px; }
+.bibliografia { flex: 1 1 420px; font-size: 14px; color: var(--cor-texto-3); }
+.bibliografia h2 { font-family: var(--letra-texto); font-size: 15px; font-weight: 700; color: var(--cor-tinta); margin: 0 0 6px; }
+.bibliografia ol { margin: 0 0 8px; padding-left: 18px; line-height: 1.5; }
+.bibliografia p, .autonomo-rodape { margin: 0; font-size: 14px; color: var(--cor-texto-3); }
+.autonomo-avisos { flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px; }
 .autonomo a { color: var(--cor-verde); }
 @media print {
   body { background: #fff; }
   .autonomo { padding: 0; gap: 6px; }
-  .autonomo-topo, .autonomo-ferramenta, .bibliografia { border: 0; padding: 0 0 6px; }
-  .autonomo-topo { gap: 2px; }
-  .autonomo-marca { font-size: 12px; } .autonomo-marca svg { width: 24px; height: 17px; }
+  .autonomo-topo { gap: 2px; padding-bottom: 6px; }
+  .autonomo-marca { font-size: 12px; margin: 0; } .autonomo-marca svg { width: 24px; height: 17px; }
   .autonomo-topo h1 { font-size: 20px; }
   .autonomo-meta, .autonomo-rodape, .bibliografia p { font-size: 9px; }
-  .autonomo-aviso { background: none; padding: 0; font-size: 10px; }
-  .bibliografia { font-size: 9px; }
+  .autonomo-pe { padding-top: 6px; }
+  .bibliografia, .bibliografia h2 { font-size: 9px; }
   .autonomo-rodape a { text-decoration: none; }
+  body[data-impressao="doente"] .autonomo-topo, body[data-impressao="doente"] .autonomo-pe,
+  body[data-impressao="doente"] .aviso-clinico { display: none !important; }
 }
 
-.ped-peso { max-width: 260px; }
-.ped-peso-caixa { display: flex; align-items: center; gap: 10px; background: var(--cor-ambar-claro); border: 1.5px solid var(--cor-mostarda); border-radius: var(--raio-p); padding: 8px 14px; }
+/* Proposta B (mockup aprovado a 2026-11-10): formulário à esquerda, receita à direita */
+.ped-formulario { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+.ped-linha-1 { display: grid; grid-template-columns: minmax(140px, 180px) minmax(0, 1fr); gap: 16px; align-items: end; }
+.ped-linha-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ped-peso-caixa { display: flex; align-items: center; gap: 8px; height: 56px; box-sizing: border-box; background: var(--cor-branco); border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 0 14px; }
 .ped-peso-caixa:focus-within { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
-.ped-peso-caixa input { flex: 1; min-width: 0; border: 0; background: transparent; font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-tinta); padding: 0; min-height: 0; }
+.mgf-ferramenta .ped-peso-caixa input { flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 24px; font-weight: 700; color: var(--cor-tinta); padding: 0; min-height: 0; height: auto; -moz-appearance: textfield; }
+.ped-peso-caixa input::-webkit-inner-spin-button, .ped-peso-caixa input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .ped-peso-caixa input:focus { outline: 0; }
-.ped-peso-caixa span { font-family: var(--letra-mono); font-weight: 500; color: var(--cor-ambar-texto); }
-.mgf-ferramenta .ped-peso-caixa input { border: 0; }
-.ped-rotulo { display: block; font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin: 0 0 8px; }
-.ped-deslizador { display: none; background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 14px 16px; }
-.ped-deslizador.visible { display: block; }
-.ped-deslizador-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
-.ped-deslizador-topo label { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); }
-.ped-deslizador-valor { font-family: var(--letra-mono); font-size: 22px; font-weight: 500; color: var(--cor-verde); }
-.ped-deslizador-unidade { font-size: 14px; color: var(--cor-texto-2); margin-left: 4px; }
-.ped-deslizador-linha { display: flex; align-items: center; gap: 10px; font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); white-space: nowrap; }
-.ped-deslizador-linha input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1; height: 6px; border-radius: 99px; background: var(--cor-linha); cursor: pointer; margin: 0; }
-.ped-deslizador-linha input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--cor-verde); border: 3px solid var(--cor-branco); box-shadow: 0 1px 4px rgba(19, 32, 30, .3); }
-.ped-deslizador-linha input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--cor-verde); border: 3px solid var(--cor-branco); box-shadow: 0 1px 4px rgba(19, 32, 30, .3); }
-.ped-pilulas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.ped-pilulas .spill { display: inline-flex; gap: 4px; align-items: center; background: var(--cor-branco); border: 1px solid var(--cor-linha); border-radius: 99px; padding: 3px 10px; font-size: 14px; color: var(--cor-texto-2); }
+.ped-peso-caixa > span, .ped-sufixo > span { font-weight: 400; color: var(--cor-texto-3); }
+.ped-linha-1 select { height: 56px; }
+.ped-sufixo { position: relative; display: block; }
+.mgf-ferramenta .ped-sufixo input { width: 100%; box-sizing: border-box; padding-right: 52px; }
+.ped-sufixo > span { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.ped-rotulo { display: block; font-size: 15px; font-weight: 700; color: var(--cor-tinta); margin: 0 0 8px; }
+.ped-deslizador { display: none; }
+.ped-deslizador.visible { display: flex; flex-direction: column; gap: 8px; }
+.ped-deslizador-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.ped-deslizador-topo label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+.ped-deslizador-valor { font-size: 20px; font-weight: 700; color: var(--cor-verde); }
+.ped-deslizador-unidade { font-size: 15px; color: var(--cor-texto-2); margin-left: 5px; }
+.ped-deslizador input[type="range"] { width: 100%; margin: 0; accent-color: var(--cor-verde); cursor: pointer; }
+.ped-deslizador-linha { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--cor-texto-3); }
+.ped-pilulas { display: flex; flex-wrap: wrap; gap: 6px; }
+.ped-pilulas .spill { display: inline-flex; gap: 4px; align-items: center; background: var(--cor-papel); border-radius: 99px; padding: 2px 10px; font-size: 14px; color: var(--cor-texto-2); }
 .ped-pilulas .spill strong { color: var(--cor-tinta); }
-.ped-pilulas .spill.capped { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); color: var(--clin-alerta); }
+.ped-pilulas .spill.capped { background: var(--clin-alerta-fundo); color: var(--clin-alerta); }
 .ped-pilulas .spill.capped strong { color: var(--clin-alerta); }
-.ped-tomas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.ped-toma { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; min-height: 56px; border: 1.5px solid var(--cor-linha); border-radius: var(--raio-p); background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); cursor: pointer; transition: border-color .15s, background .15s; }
-.ped-toma strong { font-family: var(--letra-mono); font-size: 20px; font-weight: 500; line-height: 1.1; }
-.ped-toma span { font-size: 13px; color: var(--cor-texto-2); }
-.ped-toma:hover { border-color: var(--cor-verde); }
-.ped-toma[aria-pressed="true"] { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
+.ped-tomas { display: flex; border: 1.5px solid var(--cor-linha); border-radius: 12px; overflow: hidden; }
+.ped-toma { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 52px; padding: 6px; border: 0; border-right: 1.5px solid var(--cor-linha); background: var(--cor-branco); color: var(--cor-tinta); font-family: inherit; cursor: pointer; }
+.ped-toma:last-child { border-right: 0; }
+.ped-toma strong { font-size: 16px; font-weight: 700; line-height: 1.2; }
+.ped-toma span { font-size: 13px; color: var(--cor-texto-3); }
+.ped-toma:hover { background: var(--cor-papel); }
+.ped-toma[aria-pressed="true"] { background: var(--cor-verde); color: var(--cor-branco); }
 .ped-toma[aria-pressed="true"] span { color: var(--cor-menta-clara); }
-.ped-tomas[aria-invalid="true"] .ped-toma, .mgf-campo [aria-invalid="true"] { border-color: var(--clin-alerta-borda); }
-.ped-peso-caixa:has(input[aria-invalid="true"]) { border-color: var(--clin-alerta-borda); }
+.ped-tomas[aria-invalid="true"], .mgf-campo [aria-invalid="true"] { border-color: var(--clin-alerta-borda); }
 #ped-alert-max:not(.visible) { display: none; }
 #ped-obs-box:not(.visible) { display: none; }
-.ped-resumo .ped-chip.highlight { border-left-color: var(--cor-verde); background: var(--cor-menta-clara); }
-.ped-resumo .mgf-resumo-valor { font-size: 22px; }
-.ped-receita { margin: 0; background: var(--cor-papel); border: 1.5px solid var(--cor-verde-medio); border-radius: var(--raio-p); padding: 14px 16px; font-family: var(--letra-mono); font-size: 15px; line-height: 1.8; white-space: pre-wrap; color: var(--cor-tinta); }
-.ped-detalhes { list-style: none; margin: 0; padding: 0; }
-.ped-detalhes li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--cor-linha-suave); font-size: 15px; }
+.ped-receita-painel { background: var(--cor-menta-clara); border: 1px solid #CDE7DF; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.ped-receita-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ped-receita-topo h2 { font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 0; }
+.ped-receita-topo span { font-size: 14px; color: var(--cor-texto-2); }
+.ped-vazio { background: var(--cor-branco); border-radius: 14px; padding: 20px 18px; color: var(--cor-texto-2); font-size: 16px; }
+.ped-resultado { display: flex; flex-direction: column; gap: 14px; }
+.ped-frase { background: var(--cor-branco); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.ped-frase-med { font-size: 15px; color: var(--cor-texto-3); }
+.ped-frase-dose { font-family: var(--letra-titulo); font-weight: 800; font-size: 32px; letter-spacing: -0.03em; line-height: 1.1; }
+.ped-frase-dur { font-size: 18px; }
+.ped-figuras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ped-figura { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; background: var(--cor-branco); border-radius: 12px; }
+.ped-figura span { font-size: 13px; font-weight: 700; color: var(--cor-texto-3); }
+.ped-figura b { font-size: 22px; }
+.ped-figura small { font-size: 14px; font-weight: 400; color: var(--cor-texto-3); }
+.ped-figura[data-nivel="atencao"] { background: var(--clin-atencao-fundo); }
+.ped-nota { background: var(--cor-branco); color: var(--clin-info); border-radius: 12px; padding: 12px 14px; font-size: 15px; }
+.ped-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.ped-botoes .mgf-botao { min-height: 48px; }
+.ped-botoes .ped-copiar { flex: 1 1 auto; justify-content: center; }
+.ped-mais summary { cursor: pointer; font-weight: 700; color: var(--cor-verde); font-size: 15px; }
+.ped-receita { margin: 10px 0 0; background: var(--cor-branco); border-radius: 12px; padding: 12px 14px; font-family: inherit; font-size: 16px; line-height: 1.6; white-space: pre-wrap; color: var(--cor-tinta); }
+.ped-detalhes { list-style: none; margin: 8px 0 0; padding: 0; }
+.ped-detalhes li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #CDE7DF; font-size: 15px; }
 .ped-detalhes li:last-child { border-bottom: 0; }
 .ped-detalhes li span:first-child { color: var(--cor-texto-2); }
-.ped-detalhes li span:last-child { font-family: var(--letra-mono); font-size: 14px; text-align: right; }
-@media (max-width: 420px) { .ped-tomas { grid-template-columns: repeat(2, 1fr); } }
-@media print { #ped-dados, .ped-deslizador, .ped-tomas-bloco, #ped-calcular { display: none !important; } }
+.ped-detalhes li span:last-child { text-align: right; }
+@media (max-width: 520px) { .ped-linha-1, .ped-linha-3 { grid-template-columns: minmax(0, 1fr); } .ped-toma span { font-size: 12px; } }
+@media print {
+  .mgf-comandos, .ped-receita-topo span, .ped-botoes, .ped-mais { display: none !important; }
+  .ped-receita-painel { background: none; border: 0; padding: 0; }
+}
 </style>
 </head>
 <body>
@@ -469,20 +577,18 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
 <header class="autonomo-topo">
 <span class="autonomo-marca"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="14" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="14" stroke-linejoin="round"/></svg><span><span style="font-weight:400">mgf no </span><b>plural</b></span></span>
 <h1>Doses pediátricas</h1>
-<span class="autonomo-meta">Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</span>
-<span class="autonomo-aviso">Apoia, não substitui, o juízo clínico.</span>
+<p class="autonomo-meta">Dose por peso e receita das suspensões orais · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </header>
-<div class="autonomo-ferramenta">
+<div class="autonomo-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
-  <form class="mgf-cartao" id="ped-dados" novalidate>
-    <div class="mgf-cartao-titulo">Dados do doente</div>
-    <div class="mgf-cartao-corpo" style="gap:14px">
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <form class="mgf-cartao ped-formulario" id="ped-dados" novalidate>
+    <div class="ped-linha-1">
       <label class="mgf-campo ped-peso">Peso
         <span class="ped-peso-caixa"><input type="number" id="ped-peso" min="1" max="80" step="0.1" inputmode="decimal" placeholder="0,0"><span>kg</span></span>
       </label>
-      <div class="mgf-campos">
-        <label class="mgf-campo">Medicamento
+      <label class="mgf-campo">Medicamento
           <select id="ped-medicamento">
             <option value="">Escolhe o medicamento</option>
             <optgroup label="Antibióticos">
@@ -511,82 +617,89 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
             <option value="salbutamol_oral">Salbutamol (oral)</option>
             </optgroup>
           </select>
-        </label>
-        <label class="mgf-campo">Indicação
-          <select id="ped-indicacao"><option value="">Escolhe a indicação</option></select>
-        </label>
+      </label>
+    </div>
+    <label class="mgf-campo">Indicação
+      <select id="ped-indicacao"><option value="">Escolhe a indicação</option></select>
+    </label>
+
+    <div class="ped-deslizador" id="ped-slider-block">
+      <div class="ped-deslizador-topo">
+        <label for="ped-dose-slider">Dose</label>
+        <span><span class="ped-deslizador-valor" id="ped-slider-display">—</span><span class="ped-deslizador-unidade" id="ped-slider-unit"></span></span>
+      </div>
+      <input type="range" id="ped-dose-slider" min="0" max="100" step="1">
+      <div class="ped-deslizador-linha">
+        <span id="ped-slider-min-label"></span>
+        <span class="ped-deslizador-meio">intervalo recomendado</span>
+        <span id="ped-slider-max-label"></span>
+      </div>
+      <div class="ped-pilulas" id="ped-slider-pills" aria-live="polite"></div>
+    </div>
+
+    <div class="ped-tomas-bloco">
+      <span class="ped-rotulo" id="ped-tomas-rotulo">Tomas por dia</span>
+      <div class="ped-tomas" id="ped-tomas-grid" role="group" aria-labelledby="ped-tomas-rotulo">
+        <button type="button" class="ped-toma" data-n="1" aria-pressed="false"><strong>1×</strong><span>24/24 h</span></button>
+        <button type="button" class="ped-toma" data-n="2" aria-pressed="false"><strong>2×</strong><span>12/12 h</span></button>
+        <button type="button" class="ped-toma" data-n="3" aria-pressed="false"><strong>3×</strong><span>8/8 h</span></button>
+        <button type="button" class="ped-toma" data-n="4" aria-pressed="false"><strong>4×</strong><span>6/6 h</span></button>
       </div>
     </div>
+
+    <div class="ped-linha-3">
+      <label class="mgf-campo">Concentração<select id="ped-concentracao"><option value="">—</option></select></label>
+      <label class="mgf-campo">Frasco
+        <select id="ped-volume">
+          <option value="100">100 ml</option>
+          <option value="150">150 ml</option>
+          <option value="200" selected>200 ml</option>
+        </select>
+      </label>
+      <label class="mgf-campo">Duração
+        <span class="ped-sufixo"><input type="number" id="ped-duracao" min="1" max="30" value="7" step="1" inputmode="numeric"><span>dias</span></span>
+      </label>
+    </div>
+
+    <p class="mgf-aviso" id="ped-alert-max"><strong>Atenção:</strong> a dose calculada ultrapassa o teto máximo. Foi aplicada a dose máxima permitida.</p>
+    <p class="mgf-mensagem" id="ped-mensagem" role="alert"></p>
   </form>
-
-  <div class="mgf-cartao">
-    <div class="mgf-cartao-titulo">Posologia</div>
-    <div class="mgf-cartao-corpo" style="gap:16px">
-      <div class="ped-deslizador" id="ped-slider-block">
-        <div class="ped-deslizador-topo">
-          <label for="ped-dose-slider">Dose por kg</label>
-          <span><span class="ped-deslizador-valor" id="ped-slider-display">—</span><span class="ped-deslizador-unidade" id="ped-slider-unit"></span></span>
-        </div>
-        <div class="ped-deslizador-linha">
-          <span id="ped-slider-min-label"></span>
-          <input type="range" id="ped-dose-slider" min="0" max="100" step="1">
-          <span id="ped-slider-max-label"></span>
-        </div>
-        <div class="ped-pilulas" id="ped-slider-pills" aria-live="polite"></div>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <section class="ped-receita-painel" aria-labelledby="ped-receita-titulo">
+    <div class="ped-receita-topo"><h2 id="ped-receita-titulo">Receita</h2><span>atualiza enquanto preenches</span></div>
+    <div class="ped-vazio" id="ped-card-empty" aria-live="polite">Preenche o peso, o medicamento e a indicação.</div>
+    <div class="ped-resultado" id="ped-card-resultado" style="display:none">
+      <div class="ped-frase">
+        <span class="ped-frase-med" id="ped-frase-med"></span>
+        <span class="ped-frase-dose" id="ped-frase-dose"></span>
+        <span class="ped-frase-dur" id="ped-frase-dur"></span>
       </div>
-
-      <div class="ped-tomas-bloco">
-        <span class="ped-rotulo" id="ped-tomas-rotulo">Tomas diárias</span>
-        <div class="ped-tomas" id="ped-tomas-grid" role="group" aria-labelledby="ped-tomas-rotulo">
-          <button type="button" class="ped-toma" data-n="1" aria-pressed="false"><strong>1×</strong><span>cada 24 h</span></button>
-          <button type="button" class="ped-toma" data-n="2" aria-pressed="false"><strong>2×</strong><span>cada 12 h</span></button>
-          <button type="button" class="ped-toma" data-n="3" aria-pressed="false"><strong>3×</strong><span>cada 8 h</span></button>
-          <button type="button" class="ped-toma" data-n="4" aria-pressed="false"><strong>4×</strong><span>cada 6 h</span></button>
-        </div>
-      </div>
-
-      <div class="mgf-campos">
-        <label class="mgf-campo">Concentração (mg/ml)<select id="ped-concentracao"><option value="">—</option></select></label>
-        <label class="mgf-campo">Volume do frasco (ml)
-          <select id="ped-volume">
-            <option value="100">100 ml</option>
-            <option value="150">150 ml</option>
-            <option value="200" selected>200 ml</option>
-          </select>
-        </label>
-        <label class="mgf-campo">Duração (dias)<input type="number" id="ped-duracao" min="1" max="30" value="7" step="1" inputmode="numeric"></label>
-      </div>
-
-      <p class="mgf-aviso" id="ped-alert-max"><strong>Atenção:</strong> a dose calculada ultrapassa o teto máximo. Foi aplicada a dose máxima permitida.</p>
-      <p class="mgf-mensagem" id="ped-mensagem" role="alert"></p>
-      <div><button type="button" class="mgf-botao mgf-botao-principal" id="ped-calcular">Calcular prescrição</button></div>
-    </div>
-  </div>
-
-  <div class="mgf-resultado" id="ped-card-resultado" style="display:none">
-    <div class="mgf-resultado-topo"><h3>Prescrição</h3></div>
-    <div class="mgf-resultado-corpo">
-      <div class="mgf-resumo ped-resumo" id="ped-chips-row"></div>
-      <pre class="ped-receita" id="ped-rx-box"></pre>
-      <div class="mgf-nota" data-nivel="atencao" id="ped-obs-box"></div>
-      <div>
-        <h4 class="ped-rotulo">Detalhes do cálculo</h4>
-        <ul class="ped-detalhes" id="ped-detail-list"></ul>
-      </div>
-      <div class="mgf-botoes" style="margin:0">
-        <button type="button" class="mgf-botao mgf-botao-principal" id="ped-btn-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar prescrição</button>
+      <div class="ped-figuras" id="ped-chips-row"></div>
+      <div class="ped-nota" id="ped-obs-box"></div>
+      <div class="ped-botoes">
+        <button type="button" class="mgf-botao mgf-botao-principal ped-copiar" id="ped-btn-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar receita</button>
         <button type="button" class="mgf-botao" id="ped-imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
       </div>
+      <details class="ped-mais">
+        <summary>Detalhes do cálculo</summary>
+        <pre class="ped-receita" id="ped-rx-box"></pre>
+        <ul class="ped-detalhes" id="ped-detail-list"></ul>
+      </details>
     </div>
+  </section>
   </div>
-
-  <div class="mgf-vazio" id="ped-card-empty">Preenche os dados e carrega em <strong>Calcular prescrição</strong> para gerar a receita.</div>
-
+  </div>
 </main>
 </div>
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. Resumo das Características do Medicamento (RCM) das suspensões orais referidas.</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório em idade pediátrica.</li><li>BNF for Children (BNFc), edição em vigor.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<div class="autonomo-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. Resumo das Características do Medicamento (RCM) das suspensões orais referidas.</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório em idade pediátrica.</li><li>BNF for Children (BNFc), edição em vigor.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
+<div class="autonomo-avisos">
 <p class="autonomo-rodape">O que escreves nesta ferramenta não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</p>
 <p class="autonomo-rodape">Versão mais recente e outras ferramentas: <a href="https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">https://miguel-henriques5.github.io/mgfplural/ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html</a> · Feedback: mgfplural@gmail.com · Licença MIT</p>
+</div>
+</div>
 </div>
 <script>
 /* =====================================================================
@@ -618,11 +731,14 @@ body { margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-fa
         if (p) p.hidden = !ativo;
       });
     }
+    // Na bancada (proposta B) os separadores ficam numa lista vertical à esquerda
+    var lista = seps.length && seps[0].closest("[role=tablist]");
+    if (lista && lista.closest(".mgf-comandos")) lista.setAttribute("aria-orientation", "vertical");
     seps.forEach(function (s, i) {
       s.tabIndex = s.getAttribute("aria-selected") === "true" ? 0 : -1;
       s.addEventListener("click", function () { mostrar(s); });
       s.addEventListener("keydown", function (e) {
-        var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        var d = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : (e.key === "ArrowLeft" || e.key === "ArrowUp") ? -1 : 0;
         if (!d) return;
         var n = seps[(i + d + seps.length) % seps.length];
         n.focus(); mostrar(n); e.preventDefault();
@@ -1125,6 +1241,8 @@ let indActual    = null;   // objecto indicação
 // ─── HELPERS ─────────────────────────────────
 const r1 = n => Math.round(n * 10) / 10;
 const r2 = n => Math.round(n * 100) / 100;
+// vírgula decimal no que se mostra (os cálculos usam os números)
+const vg = n => String(n).replace('.', ',');
 
 // Converte o valor do slider (na unidade de doseUnit) para mg/kg/toma
 function toMgKgToma(val, unit, tomas) {
@@ -1158,8 +1276,8 @@ function initSlider(ind) {
 
   // Labels dos extremos com a unidade simplificada
   const unitShort = ind.doseUnit.replace('mg/kg/', '').replace(' (TMP)', '');
-  document.getElementById('ped-slider-min-label').textContent = r2(ind.doseMin) + ' ' + unitShort;
-  document.getElementById('ped-slider-max-label').textContent = r2(ind.doseMax) + ' ' + unitShort;
+  document.getElementById('ped-slider-min-label').textContent = vg(r2(ind.doseMin)) + ' ' + unitShort;
+  document.getElementById('ped-slider-max-label').textContent = vg(r2(ind.doseMax)) + ' ' + unitShort;
   document.getElementById('ped-slider-unit').textContent = ' ' + ind.doseUnit;
 
   updateSliderTrack(slider, ind);
@@ -1169,7 +1287,7 @@ function initSlider(ind) {
 function onSliderChange() {
   const slider = document.getElementById('ped-dose-slider');
   doseActual = parseFloat(slider.value);
-  document.getElementById('ped-slider-display').textContent = r2(doseActual);
+  document.getElementById('ped-slider-display').textContent = vg(r2(doseActual));
   updateSliderTrack(slider, indActual);
   renderSliderPills(indActual);
 }
@@ -1178,7 +1296,7 @@ function updateSliderTrack(slider, ind) {
   if (!ind) return;
   const pct = ((parseFloat(slider.value) - ind.doseMin) / (ind.doseMax - ind.doseMin)) * 100;
   slider.style.background = `linear-gradient(to right, var(--cor-verde-medio) ${pct}%, var(--cor-linha) ${pct}%)`;
-  document.getElementById('ped-slider-display').textContent = r2(parseFloat(slider.value));
+  document.getElementById('ped-slider-display').textContent = vg(r2(parseFloat(slider.value)));
 }
 
 function renderSliderPills(ind) {
@@ -1193,7 +1311,7 @@ function renderSliderPills(ind) {
   if (!peso || peso <= 0) {
     // Sem peso: mostra só o contexto mg/kg
     const mgKgDia = mgKgToma * tomas;
-    el.innerHTML = `<span class="spill"><strong>${r2(mgKgToma)} mg/kg/toma</strong>&nbsp;·&nbsp;${r2(mgKgDia)} mg/kg/dia</span>`;
+    el.innerHTML = `<span class="spill"><strong>${vg(r2(mgKgToma))} mg/kg/toma</strong>&nbsp;·&nbsp;${vg(r2(mgKgDia))} mg/kg/dia</span>`;
     return;
   }
 
@@ -1202,9 +1320,9 @@ function renderSliderPills(ind) {
   const doseTomaMg = doseDiaMg / tomas;
   const capped     = maxDia && (doseDia * peso) > maxDia;
 
-  let html = `<span class="spill"><strong>${r2(mgKgToma)} mg/kg/toma</strong>&nbsp;·&nbsp;${r2(mgKgToma * tomas)} mg/kg/dia</span>`;
-  html += `<span class="spill${capped ? ' capped' : ''}"><strong>${r1(doseTomaMg)} mg/toma</strong> (${peso} kg)${capped ? ' (teto)' : ''}</span>`;
-  if (maxDia) html += `<span class="spill">teto: ${r1(maxDia)} mg/dia</span>`;
+  let html = `<span class="spill"><strong>${vg(r2(mgKgToma))} mg/kg/toma</strong>&nbsp;·&nbsp;${vg(r2(mgKgToma * tomas))} mg/kg/dia</span>`;
+  html += `<span class="spill${capped ? ' capped' : ''}"><strong>${vg(r1(doseTomaMg))} mg/toma</strong> (${vg(peso)} kg)${capped ? ' (teto)' : ''}</span>`;
+  if (maxDia) html += `<span class="spill">teto: ${vg(r1(maxDia))} mg/dia</span>`;
   el.innerHTML = html;
 }
 
@@ -1282,13 +1400,11 @@ function calcular() {
   const duracao   = parseInt(document.getElementById('ped-duracao').value);
   const peso      = parseFloat(pesoEl.value);
 
-  if (!peso || peso <= 0) { aviso(pesoEl, 'Indica o peso da criança.'); return; }
-  if (!medKey)            { aviso(document.getElementById('ped-medicamento'), 'Escolhe o medicamento.'); return; }
-  if (!indKey)            { aviso(document.getElementById('ped-indicacao'), 'Escolhe a indicação.'); return; }
-  if (!tomasActivas)      { aviso(document.getElementById('ped-tomas-grid'), 'Escolhe o número de tomas diárias.'); return; }
-  if (!concVal)           { aviso(document.getElementById('ped-concentracao'), 'Escolhe a concentração.'); return; }
-
-  aviso(null, '');
+  if (!peso || peso <= 0) return falta('Indica o peso da criança.');
+  if (!medKey)            return falta('Escolhe o medicamento.');
+  if (!indKey)            return falta('Escolhe a indicação.');
+  if (!tomasActivas)      return falta('Escolhe o número de tomas por dia.');
+  if (!concVal)           return falta('Escolhe a concentração.');
   const med  = MEDS[medKey];
   const ind  = med.indicacoes[indKey];
   const val  = doseActual ?? ind.doseDefault;
@@ -1314,58 +1430,59 @@ function calcular() {
   const duracaoFrasco = mgFrasco / doseDiaMg;
   const nrFrascos     = Math.ceil(duracao / duracaoFrasco);
   const intervalo     = {1:'24/24h',2:'12/12h',3:'8/8h',4:'6/6h'}[tomasActivas];
-  const volStr        = volToma    % 1 === 0 ? volToma.toFixed(0)    : volToma.toFixed(1);
-  const mgStr         = doseTomaMg % 1 === 0 ? doseTomaMg.toFixed(0) : doseTomaMg.toFixed(1);
+  const volStr        = vg(volToma    % 1 === 0 ? volToma.toFixed(0)    : volToma.toFixed(1));
+  const mgStr         = vg(doseTomaMg % 1 === 0 ? doseTomaMg.toFixed(0) : doseTomaMg.toFixed(1));
 
   // Descrição da dose usada
   const doseLabel = ind.doseUnit.includes('/dia')
-    ? `${r2(val)} ${ind.doseUnit} → ${r2(mgKgToma)} mg/kg/toma`
-    : `${r2(val)} ${ind.doseUnit}`;
+    ? `${vg(r2(val))} ${ind.doseUnit} → ${vg(r2(mgKgToma))} mg/kg/toma`
+    : `${vg(r2(val))} ${ind.doseUnit}`;
 
   // Prescrição
   const rxLines = [
     'Rp/',
     med.nome,
-    `  ${med.apresentacao} ${concVal} ${med.unidade}`,
-    `  ${nrFrascos > 1 ? nrFrascos + ' frascos de ' : ''}${volFrasco} ml`,
+    `  ${med.apresentacao} ${vg(concVal)} ${med.unidade}`,
+    `  ${nrFrascos > 1 ? nrFrascos + ' frascos de ' : ''}${vg(volFrasco)} ml`,
     '',
     `  ${volStr} ml (${mgStr} mg) de ${intervalo}`,
     `  durante ${duracao} dia${duracao>1?'s':''}`
   ];
 
-  // Chips
-  const chips = [
-    { label:'Dose/toma',    value:`${mgStr} mg`,          cls:'highlight' },
-    { label:'Volume/toma',  value:`${volStr} ml`,          cls:'highlight' },
-    { label:'mg/kg/toma',   value:`${r2(mgKgToma)}`,       cls:'' },
-    { label:'Dose diária',  value:`${r1(doseDiaMg)} mg`,   cls:'' },
-    { label:'Dur. 1 frasco',value:`${r1(duracaoFrasco)} d`, cls:'' },
-    { label:'Frascos',      value:`${nrFrascos}`,           cls: nrFrascos > 1 ? 'warn' : 'ok' }
+  // Figuras do painel (os mesmos valores, arrumados como no mockup)
+  const figuras = [
+    { label:'Por toma',      value:`${mgStr} mg` },
+    { label:'Por dia',       value:`${vg(r1(doseDiaMg))} mg` },
+    { label:'Por kg e toma', value:`${vg(r2(mgKgToma))} mg` },
+    { label:'Frascos',       value:`${nrFrascos}`, extra:`1 frasco dura ${vg(r1(duracaoFrasco))} dias`, nivel: nrFrascos > 1 ? 'atencao' : '' }
   ];
 
   // Detalhes
   const details = [
-    { l:'Peso',                 v:`${peso} kg` },
+    { l:'Peso',                 v:`${vg(peso)} kg` },
     { l:'Dose utilizada',       v: doseLabel },
-    { l:'mg/kg/toma efetivo',  v:`${r2(mgKgToma)} mg/kg/toma` },
-    { l:'mg/kg/dia efetivo',   v:`${r2(mgKgToma * tomasActivas)} mg/kg/dia` },
+    { l:'mg/kg/toma efetivo',  v:`${vg(r2(mgKgToma))} mg/kg/toma` },
+    { l:'mg/kg/dia efetivo',   v:`${vg(r2(mgKgToma * tomasActivas))} mg/kg/dia` },
     { l:'Dose por toma',        v:`${mgStr} mg` },
-    { l:'Dose diária total',    v:`${r1(doseDiaMg)} mg/dia` },
+    { l:'Dose diária total',    v:`${vg(r1(doseDiaMg))} mg/dia` },
   ];
-  if (limitada) details.push({ l:'Teto aplicado', v:`${r1(maxDia)} mg/dia` });
+  if (limitada) details.push({ l:'Teto aplicado', v:`${vg(r1(maxDia))} mg/dia` });
   details.push(
-    { l:'Concentração',         v:`${concVal} ${med.unidade}` },
+    { l:'Concentração',         v:`${vg(concVal)} ${med.unidade}` },
     { l:'Tomas diárias',        v:`${tomasActivas}× (${intervalo})` },
     { l:'Duração',              v:`${duracao} dias` },
-    { l:'Duração 1 frasco',     v:`${r1(duracaoFrasco)} dias` },
+    { l:'Duração 1 frasco',     v:`${vg(r1(duracaoFrasco))} dias` },
     { l:'Frascos necessários',  v:`${nrFrascos}` }
   );
 
   // Render
   document.getElementById('ped-rx-box').textContent = rxLines.join('\n');
-  document.getElementById('ped-chips-row').innerHTML = chips.map(c =>
-    `<div${c.cls === 'warn' ? ' data-nivel="atencao"' : ''} class="ped-chip ${c.cls}"><span class="mgf-resumo-rotulo">${c.label}</span><span class="mgf-resumo-valor">${c.value}</span></div>`
+  document.getElementById('ped-chips-row').innerHTML = figuras.map(c =>
+    `<div class="ped-figura"${c.nivel ? ' data-nivel="' + c.nivel + '"' : ''}><span>${c.label}</span><b>${c.value}</b>${c.extra ? '<small>' + c.extra + '</small>' : ''}</div>`
   ).join('');
+  document.getElementById('ped-frase-med').textContent = `${med.nome} · ${med.apresentacao.toLowerCase()} ${vg(concVal)} ${med.unidade} · ${nrFrascos > 1 ? nrFrascos + ' frascos de ' : ''}${vg(volFrasco)} ml`;
+  document.getElementById('ped-frase-dose').textContent = `${volStr} ml de ${intervalo.replace('h', ' h')}`;
+  document.getElementById('ped-frase-dur').textContent = `durante ${duracao} dia${duracao>1?'s':''}`;
   document.getElementById('ped-detail-list').innerHTML = details.map(d =>
     `<li><span>${d.l}</span><span>${d.v}</span></li>`
   ).join('');
@@ -1377,12 +1494,19 @@ function calcular() {
   document.getElementById('ped-card-empty').style.display = 'none';
   const cardRes = document.getElementById('ped-card-resultado');
   cardRes.style.display = '';
-  cardRes.scrollIntoView({ block:'nearest' });
   rxTexto = rxLines.join('\n');
 }
 
 // ─── LIGAR À PÁGINA ─────────────────────────
 let rxTexto = '';
+function falta(msg) {
+  rxTexto = '';
+  document.getElementById('ped-alert-max').classList.remove('visible');
+  document.getElementById('ped-card-resultado').style.display = 'none';
+  const vazio = document.getElementById('ped-card-empty');
+  vazio.textContent = msg;
+  vazio.style.display = '';
+}
 function aviso(el, msg) {
   document.querySelectorAll('#ferramenta [aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
   if (el) el.setAttribute('aria-invalid', 'true');
@@ -1394,7 +1518,7 @@ document.getElementById('ped-medicamento').addEventListener('change', onMedChang
 document.getElementById('ped-indicacao').addEventListener('change', onIndicacaoChange);
 document.getElementById('ped-dose-slider').addEventListener('input', onSliderChange);
 document.querySelectorAll('.ped-toma').forEach(b => b.addEventListener('click', () => setToma(parseInt(b.dataset.n))));
-document.getElementById('ped-calcular').addEventListener('click', calcular);
+['input', 'change', 'click'].forEach(ev => document.getElementById('ped-dados').addEventListener(ev, () => calcular()));
 document.getElementById('ped-dados').addEventListener('submit', e => { e.preventDefault(); calcular(); });
 document.getElementById('ped-btn-copy').addEventListener('click', function () { if (rxTexto) MGF.copiar(rxTexto, this); });
 document.getElementById('ped-imprimir').addEventListener('click', () => window.print());

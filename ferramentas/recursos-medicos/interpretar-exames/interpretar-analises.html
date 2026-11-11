@@ -99,7 +99,7 @@
 #ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
 #ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
 #ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
-#ferramenta .ib-title { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .ib-title { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--cor-verde-fundo); }
 #ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
 #ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
 #ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
@@ -114,7 +114,7 @@
 #ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
 #ferramenta .tbl-wrap { overflow-x: auto; }
 #ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-#ferramenta .data-table th { background: var(--cor-verde-fundo); color: var(--cor-branco); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table th { background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
 #ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
 #ferramenta .data-table tr:last-child td { border-bottom: 0; }
 #ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
@@ -142,14 +142,14 @@
 #ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
 #ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
 #ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
-#ferramenta .rr-icon::before { content: "•"; font-family: var(--letra-mono); font-size: 16px; font-weight: 500; }
+#ferramenta .rr-icon::before { content: "•"; font-family: inherit; font-size: 16px; font-weight: 700; }
 #ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
 #ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
 #ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
 #ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
 #ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
 #ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
-#ferramenta .big-num { font-family: var(--letra-mono); font-size: 28px; font-weight: 500; color: var(--cor-verde-fundo); }
+#ferramenta .big-num { font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-verde-fundo); }
 #ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
 #ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
 #ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
@@ -157,7 +157,7 @@
 #ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
 #ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 #ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
-#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: var(--letra-mono); font-size: 14px; font-weight: 500; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 14px; font-weight: 700; }
 #ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
 #ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
 /* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
@@ -184,41 +184,31 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-areia">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Interpretar exames</a></li>
-<li aria-current="page">Análises clínicas</li>
+<li><details class="grupo-menu"><summary>Interpretar exames <span>· 7</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a>
+<ul><li><a href="interpretar-analises.html" aria-current="page">Análises clínicas</a></li><li><a href="ecg-e-holter.html">ECG e Holter</a></li><li><a href="espirometria.html">Espirometria</a></li><li><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a></li><li><a href="ecocardiograma.html">Ecocardiograma</a></li><li><a href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a></li><li><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-areia" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/analises.svg" alt="">
 <div class="ficha-titulo">
 <h1>Análises clínicas</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+<p class="ficha-meta">Valores de referência e significado clínico · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </div>
-</div>
-</div>
-<div class="ficha-base">
-<p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/interpretar-analises.html" download="interpretar-analises.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29&body=Ferramenta%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/interpretar-analises.html" download="interpretar-analises.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29&body=Ferramenta%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-areia" aria-label="Interpretar exames">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a>
-<ul><li><a href="interpretar-analises.html" aria-current="page">Análises clínicas</a></li><li><a href="ecg-e-holter.html">ECG e Holter</a></li><li><a href="espirometria.html">Espirometria</a></li><li><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a></li><li><a href="ecocardiograma.html">Ecocardiograma</a></li><li><a href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a></li><li><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Valores de referência e significado clínico — hemograma, bioquímica, coagulação, urina e mais.</p>
   <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
     <button type="button" class="mgf-separador" role="tab" id="sep-hemograma" aria-controls="tab-hemograma" aria-selected="true">Hemograma</button>
@@ -231,6 +221,9 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-serologias" aria-controls="tab-serologias" aria-selected="false">Serologias</button>
   </div>
   <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica.</strong> Os intervalos de referência são <strong>orientativos</strong> e variam consoante o laboratório, o método, a idade, o sexo e o estado fisiológico (ex: gravidez). <strong>Usa sempre os intervalos do laboratório que emitiu o resultado</strong> e interpreta no contexto clínico. As unidades apresentadas são as mais comuns em Portugal/Europa (SI), com equivalências quando útil.</p>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
   <div class="mgf-painel mk-painel" id="tab-hemograma" role="tabpanel" aria-labelledby="sep-hemograma"></div>
   <div class="mgf-painel mk-painel" id="tab-bioquimica" role="tabpanel" aria-labelledby="sep-bioquimica" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-ionograma" role="tabpanel" aria-labelledby="sep-ionograma" hidden></div>
@@ -239,23 +232,23 @@
   <div class="mgf-painel mk-painel" id="tab-anemia" role="tabpanel" aria-labelledby="sep-anemia" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-proteinas" role="tabpanel" aria-labelledby="sep-proteinas" hidden></div>
   <div class="mgf-painel mk-painel" id="tab-serologias" role="tabpanel" aria-labelledby="sep-serologias" hidden></div>
-  
   <div class="tool-footer">
     Intervalos de referência orientativos; confirmar sempre com os valores do laboratório emissor.<br>
     <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico.</em>
     <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
   </div>
-
+  </div>
+  </div>
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>StatPearls / NCBI Bookshelf. Normal and Abnormal Complete Blood Count With Differential. https://www.ncbi.nlm.nih.gov/books/NBK604207/</li><li>MedlinePlus. Comprehensive Metabolic Panel e Basic Metabolic Panel. https://medlineplus.gov/ency/article/003468.htm</li><li>Cleveland Clinic. Basic / Comprehensive Metabolic Panel. https://my.clevelandclinic.org/health/diagnostics/22020-basic-metabolic-panel-bmp</li><li>Merck Manual Professional. Evaluation of Anemia. https://www.merckmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia</li><li>UCSF Hospital Handbook. Approach to Anemia e Urinalysis Interpretation. https://hospitalhandbook.ucsf.edu/02-approach-anemia/02-approach-anemia</li><li>Siemens Healthineers. Clinical Significance of Anemia Tests. https://www.siemens-healthineers.com/laboratory-diagnostics/assays-by-diseases-conditions/anemia/clinical-significance-of-anemia-tests</li><li>StatPearls / NCBI. Interpretation of Blood Clotting Studies (PT, PTT, aPTT, INR, D-Dimer). https://www.ncbi.nlm.nih.gov/books/NBK604215/</li><li>American Family Physician (AFP). Understanding and Interpreting Serum Protein Electrophoresis. https://www.aafp.org/pubs/afp/issues/2005/0101/p105.html</li><li>ClinLab Navigator. Serum Protein Electrophoresis e Urinalysis. https://www.clinlabnavigator.com/test-interpretations/test-interpretations-1/protein-electrophoresis-serum.html</li><li>CDC. Clinical Testing and Diagnosis for Hepatitis B e tabela de interpretação serológica. https://www.cdc.gov/hepatitis-b/hcp/diagnosis-testing/index.html</li><li>WHO. HBV serological markers (training module). https://cdn.who.int/media/docs/default-source/searo/hiv-hepatitis/training-modules/08-hbv-serological-markers.pdf</li><li>Medscape eMedicine. Urinalysis, Hepatitis B Test, Iron Deficiency Anemia Workup, Serum Protein Electrophoresis. https://emedicine.medscape.com/article/2074001-overview</li><li>Merck Manual. Urinalysis and Urine Culture. https://www.merckmanuals.com/home/kidney-and-urinary-tract-disorders/diagnosis-of-kidney-and-urinary-tract-disorders/urinalysis-and-urine-culture</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia bibliografia-longa"><details id="bib"><summary><h2 id="bib-titulo">Bibliografia <span>· 13 referências</span></h2></summary><ol><li>StatPearls / NCBI Bookshelf. Normal and Abnormal Complete Blood Count With Differential. https://www.ncbi.nlm.nih.gov/books/NBK604207/</li><li>MedlinePlus. Comprehensive Metabolic Panel e Basic Metabolic Panel. https://medlineplus.gov/ency/article/003468.htm</li><li>Cleveland Clinic. Basic / Comprehensive Metabolic Panel. https://my.clevelandclinic.org/health/diagnostics/22020-basic-metabolic-panel-bmp</li><li>Merck Manual Professional. Evaluation of Anemia. https://www.merckmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia</li><li>UCSF Hospital Handbook. Approach to Anemia e Urinalysis Interpretation. https://hospitalhandbook.ucsf.edu/02-approach-anemia/02-approach-anemia</li><li>Siemens Healthineers. Clinical Significance of Anemia Tests. https://www.siemens-healthineers.com/laboratory-diagnostics/assays-by-diseases-conditions/anemia/clinical-significance-of-anemia-tests</li><li>StatPearls / NCBI. Interpretation of Blood Clotting Studies (PT, PTT, aPTT, INR, D-Dimer). https://www.ncbi.nlm.nih.gov/books/NBK604215/</li><li>American Family Physician (AFP). Understanding and Interpreting Serum Protein Electrophoresis. https://www.aafp.org/pubs/afp/issues/2005/0101/p105.html</li><li>ClinLab Navigator. Serum Protein Electrophoresis e Urinalysis. https://www.clinlabnavigator.com/test-interpretations/test-interpretations-1/protein-electrophoresis-serum.html</li><li>CDC. Clinical Testing and Diagnosis for Hepatitis B e tabela de interpretação serológica. https://www.cdc.gov/hepatitis-b/hcp/diagnosis-testing/index.html</li><li>WHO. HBV serological markers (training module). https://cdn.who.int/media/docs/default-source/searo/hiv-hepatitis/training-modules/08-hbv-serological-markers.pdf</li><li>Medscape eMedicine. Urinalysis, Hepatitis B Test, Iron Deficiency Anemia Workup, Serum Protein Electrophoresis. https://emedicine.medscape.com/article/2074001-overview</li><li>Merck Manual. Urinalysis and Urine Culture. https://www.merckmanuals.com/home/kidney-and-urinary-tract-disorders/diagnosis-of-kidney-and-urinary-tract-disorders/urinalysis-and-urine-culture</li></ol></details><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29&body=Ferramenta%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29&body=Ferramenta%3A%20An%C3%A1lises%20cl%C3%ADnicas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="ecg-e-holter.html"><span>Seguinte →</span><strong>ECG e Holter</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a class="seguinte" href="ecg-e-holter.html">ECG e Holter →</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -275,7 +268,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>

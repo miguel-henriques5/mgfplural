@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="../../../assets/css/site.css">
 <link rel="stylesheet" href="../../../assets/css/ferramenta.css">
 <style>
+/* proposta B: na coluna da esquerda a legenda fica em lista */
+.mgf-comandos .preg-legenda { flex-direction: column; align-items: flex-start; gap: 8px; }
+
 .preg-legenda { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; color: var(--cor-texto-2); }
 .preg-legenda li { display: flex; align-items: center; gap: 6px; }
 .preg-tga { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 12px 16px; margin: 0 0 12px; }
@@ -37,42 +40,45 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Ferramentas de prescrição</a></li>
-<li aria-current="page">Fármacos na gravidez</li>
+<li><details class="grupo-menu"><summary>Ferramentas de prescrição <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
+<ul><li><a href="guia-antibioterapia.html">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html" aria-current="page">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html">Guia terapêutico</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-ambar" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/frasco.svg" alt="">
 <div class="ficha-titulo">
 <h1>Fármacos na gravidez</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+<p class="ficha-meta">Categoria TGA e recomendação por trimestre · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </div>
-</div>
-</div>
-<div class="ficha-base">
-<p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/farmacos-na-gravidez.html" download="farmacos-na-gravidez.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/farmacos-na-gravidez.html" download="farmacos-na-gravidez.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-ambar" aria-label="Ferramentas de prescrição">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
-<ul><li><a href="guia-antibioterapia.html">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html" aria-current="page">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html">Guia terapêutico</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
-  <p class="mgf-guia-intro">Segurança, categorias TGA e recomendações por trimestre (T1, T2, T3). Escolhe uma classe ou pesquisa por fármaco, classe ou patologia; carrega num cartão para ver a tabela.</p>
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
+  <div class="mgf-guia-controlos">
+    <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar nos fármacos na gravidez</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gr-pesquisa" placeholder="Pesquisar fármaco, classe, patologia…" autocomplete="off"></label>
+    <div class="mgf-filtros" id="gr-filtros" role="group" aria-label="Filtrar por classe">
+      <button type="button" data-cat="all" aria-pressed="true">Todas</button>
+      <button type="button" data-cat="antihipertensores" aria-pressed="false">Anti-HTA</button>
+      <button type="button" data-cat="antidiabeticos" aria-pressed="false">Antidiabéticos</button>
+      <button type="button" data-cat="respiratorio" aria-pressed="false">Respiratório</button>
+      <button type="button" data-cat="psicofármacos" aria-pressed="false">Psicofármacos</button>
+      <button type="button" data-cat="analgesicos" aria-pressed="false">Analgésicos</button>
+      <button type="button" data-cat="gi" aria-pressed="false">GI</button>
+      <button type="button" data-cat="antibioticos" aria-pressed="false">Antibióticos</button>
+      <button type="button" data-cat="outros" aria-pressed="false">Outros</button>
+    </div>
+  </div>
   <ul class="preg-legenda" aria-label="Categorias TGA">
     <li><span class="mgf-etiqueta" data-nivel="normal">A</span> Seguro</li>
     <li><span class="mgf-etiqueta" data-nivel="info">B1 · B2 · B3</span> Dados limitados</li>
@@ -92,21 +98,10 @@
     <p class="mgf-refs">Nota: A FDA substituiu as categorias A–X pelo sistema PLLR (2015) com descrições narrativas de risco. A classificação TGA australiana mantém-se como referência prática amplamente usada. Doxiciclina e Levofloxacina são sempre contraindicadas na gravidez.</p>
   </details>
   <p class="mgf-nota" data-nivel="info"><strong>Princípios gerais:</strong> Quando possível, diferir para depois do 1º trimestre · Usar a dose eficaz mais baixa pelo menor tempo possível · Preferir fármacos com perfil de segurança conhecido · A não-tratação também comporta riscos maternos e fetais.</p>
-  <div class="mgf-guia-controlos">
-    <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar nos fármacos na gravidez</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gr-pesquisa" placeholder="Pesquisar fármaco, classe, patologia…" autocomplete="off"></label>
-    <div class="mgf-filtros" id="gr-filtros" role="group" aria-label="Filtrar por classe">
-      <button type="button" data-cat="all" aria-pressed="true">Todas</button>
-      <button type="button" data-cat="antihipertensores" aria-pressed="false">Anti-HTA</button>
-      <button type="button" data-cat="antidiabeticos" aria-pressed="false">Antidiabéticos</button>
-      <button type="button" data-cat="respiratorio" aria-pressed="false">Respiratório</button>
-      <button type="button" data-cat="psicofármacos" aria-pressed="false">Psicofármacos</button>
-      <button type="button" data-cat="analgesicos" aria-pressed="false">Analgésicos</button>
-      <button type="button" data-cat="gi" aria-pressed="false">GI</button>
-      <button type="button" data-cat="antibioticos" aria-pressed="false">Antibióticos</button>
-      <button type="button" data-cat="outros" aria-pressed="false">Outros</button>
-    </div>
-  </div>
-
+  <p class="mgf-guia-intro">Segurança, categorias TGA e recomendações por trimestre (T1, T2, T3). Escolhe uma classe ou pesquisa por fármaco, classe ou patologia; carrega num cartão para ver a tabela.</p>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
   <section class="mgf-seccao" data-cat="antihipertensores">
     <div class="mgf-seccao-titulo"><h3>Anti-hipertensores</h3><span>5 classes</span></div>
     <div class="mgf-grelha">
@@ -1220,20 +1215,20 @@
       </div>
     </div>
   </section>
-
   <div class="mgf-vazio" id="gr-vazio" hidden>Nenhum resultado encontrado.</div>
   <p class="mgf-nota" id="gr-nota-final"><strong>Nota:</strong> Esta ferramenta é de apoio clínico e não substitui o julgamento individualizado. A não-tratação também comporta riscos. Para cada caso, pesar risco-benefício com a doente.</p>
-
+  </div>
+  </div>
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Adaptado do documento de Raquel Domingos Gonçalves, USF S. Marcos.</li><li>Therapeutic Goods Administration (TGA, Austrália). Prescribing medicines in pregnancy database — categorias de risco.</li><li>UpToDate, 2025. DynaMed, 2025.</li><li>Bernardes AM. Universidade de Lisboa, 2025.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Adaptado do documento de Raquel Domingos Gonçalves, USF S. Marcos.</li><li>Therapeutic Goods Administration (TGA, Austrália). Prescribing medicines in pregnancy database — categorias de risco.</li><li>UpToDate, 2025. DynaMed, 2025.</li><li>Bernardes AM. Universidade de Lisboa, 2025.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29&body=Ferramenta%3A%20F%C3%A1rmacos%20na%20gravidez%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="doses-pediatricas.html"><span>← Anterior</span><strong>Doses pediátricas</strong></a><a class="seguinte" href="guia-terapeutico.html"><span>Seguinte →</span><strong>Guia terapêutico</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="doses-pediatricas.html">← Doses pediátricas</a><a class="seguinte" href="guia-terapeutico.html">Guia terapêutico →</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -1253,7 +1248,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>

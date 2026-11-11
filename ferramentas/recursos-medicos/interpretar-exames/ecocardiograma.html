@@ -21,14 +21,14 @@
 .eco-visao h3 { font-size: 18px; font-weight: 800; }
 .eco-visao p { font-size: 15px; color: var(--cor-texto-2); }
 .eco-modos { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); padding: 16px; }
-.eco-modos-titulo { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-ambar-texto); margin-bottom: 10px; }
+.eco-modos-titulo { font-family: inherit; font-size: 14px; color: var(--cor-ambar-texto); margin-bottom: 10px; font-weight: 700;}
 .eco-modos-grelha { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 15px; }
 .eco-modo { color: var(--cor-verde); }
 .eco-legenda { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
-.eco-param { font-family: var(--letra-mono); font-weight: 500; flex: 0 0 auto; }
+.eco-param { font-family: inherit; font-weight: 700; flex: 0 0 auto; }
 .eco-tabela { margin: 0; }
-.eco-tabela th { font-family: var(--letra-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
-.eco-formula { background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 10px 14px; font-family: var(--letra-mono); font-size: 14px; color: var(--cor-verde-fundo); }
+.eco-tabela th { font-family: inherit; font-size: 14px; font-weight: 700; }
+.eco-formula { background: var(--cor-papel); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--cor-verde-fundo); }
 .eco-formula-rotulo { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); margin-bottom: 4px; }
 .eco-forte { color: var(--cor-tinta); }
 .eco-pequeno { font-size: 14px; color: var(--cor-texto-2); }
@@ -46,43 +46,33 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-areia">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Interpretar exames</a></li>
-<li aria-current="page">Ecocardiograma</li>
+<li><details class="grupo-menu"><summary>Interpretar exames <span>· 7</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a>
+<ul><li><a href="interpretar-analises.html">Análises clínicas</a></li><li><a href="ecg-e-holter.html">ECG e Holter</a></li><li><a href="espirometria.html">Espirometria</a></li><li><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a></li><li><a href="ecocardiograma.html" aria-current="page">Ecocardiograma</a></li><li><a href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a></li><li><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-areia" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/ecografia.svg" alt="">
 <div class="ficha-titulo">
 <h1>Ecocardiograma</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+<p class="ficha-meta">Parâmetros, valores de referência e significado · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </div>
-</div>
-</div>
-<div class="ficha-base">
-<p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/ecocardiograma.html" download="ecocardiograma.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecocardiograma%20%28v1.0%29&body=Ferramenta%3A%20Ecocardiograma%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/ecocardiograma.html" download="ecocardiograma.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecocardiograma%20%28v1.0%29&body=Ferramenta%3A%20Ecocardiograma%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-areia" aria-label="Interpretar exames">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a>
-<ul><li><a href="interpretar-analises.html">Análises clínicas</a></li><li><a href="ecg-e-holter.html">ECG e Holter</a></li><li><a href="espirometria.html">Espirometria</a></li><li><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a></li><li><a href="ecocardiograma.html" aria-current="page">Ecocardiograma</a></li><li><a href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a></li><li><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-bancada">
 <main class="mgf-ferramenta" id="ferramenta">
-
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
   <p class="mgf-guia-intro">Parâmetros avaliados, valores de referência e significado clínico — guia estruturado para uso clínico diário.</p>
-<div class="mgf-separadores" role="tablist" aria-label="Secções do ecocardiograma">
+  <div class="mgf-separadores" role="tablist" aria-label="Secções do ecocardiograma">
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-overview" aria-controls="eco-overview" aria-selected="true">Visão Geral</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-estrutura" aria-controls="eco-estrutura" aria-selected="false">Estrutura</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-sistolica" aria-controls="eco-sistolica" aria-selected="false">Função Sistólica</button>
@@ -91,7 +81,10 @@
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-pressoes" aria-controls="eco-pressoes" aria-selected="false">Pressões</button>
     <button type="button" class="mgf-separador" role="tab" id="sep-eco-outros" aria-controls="eco-outros" aria-selected="false">Outros</button>
   </div>
-<div class="mgf-painel" id="eco-overview" role="tabpanel" aria-labelledby="sep-eco-overview">
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <div class="mgf-painel" id="eco-overview" role="tabpanel" aria-labelledby="sep-eco-overview">
   <div class="mgf-titulo-escala">
     <h2>O que avalia um Ecocardiograma Formal?</h2>
     <p>O eco transtorácico (ETT) 2D/Doppler é o pilar da avaliação cardíaca não invasiva. Combina imagem morfológica com hemodinâmica funcional.</p>
@@ -134,7 +127,7 @@
     </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-estrutura" role="tabpanel" aria-labelledby="sep-eco-estrutura" hidden>
+  <div class="mgf-painel" id="eco-estrutura" role="tabpanel" aria-labelledby="sep-eco-estrutura" hidden>
   <div class="mgf-titulo-escala">
     <h2>Dimensões e Estrutura</h2>
     <p>Avaliação morfológica das câmaras cardíacas e paredes — base para diagnóstico de hipertrofia, dilatação e remodelagem.</p>
@@ -204,7 +197,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-sistolica" role="tabpanel" aria-labelledby="sep-eco-sistolica" hidden>
+  <div class="mgf-painel" id="eco-sistolica" role="tabpanel" aria-labelledby="sep-eco-sistolica" hidden>
   <div class="mgf-titulo-escala">
     <h2>Função Sistólica do VE</h2>
     <p>Avalia a capacidade de ejecção do ventrículo esquerdo — a FEVE é o parâmetro central, mas não é o único.</p>
@@ -277,7 +270,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-diastolica" role="tabpanel" aria-labelledby="sep-eco-diastolica" hidden>
+  <div class="mgf-painel" id="eco-diastolica" role="tabpanel" aria-labelledby="sep-eco-diastolica" hidden>
   <div class="mgf-titulo-escala">
     <h2>Função Diastólica</h2>
     <p>Avalia o relaxamento e a rigidez do VE. Parâmetros obtidos por Doppler transmitral (PW) e Doppler tecidular (TDI). Classificação pela ASE/EACVI 2016.</p>
@@ -366,7 +359,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-valvulas" role="tabpanel" aria-labelledby="sep-eco-valvulas" hidden>
+  <div class="mgf-painel" id="eco-valvulas" role="tabpanel" aria-labelledby="sep-eco-valvulas" hidden>
   <div class="mgf-titulo-escala">
     <h2>Doença Valvular</h2>
     <p>Avaliação das quatro válvulas — gradientes por Doppler CW, áreas por equação de continuidade/PHT, e quantificação de regurgitações por Doppler cor e volumetria.</p>
@@ -440,7 +433,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-pressoes" role="tabpanel" aria-labelledby="sep-eco-pressoes" hidden>
+  <div class="mgf-painel" id="eco-pressoes" role="tabpanel" aria-labelledby="sep-eco-pressoes" hidden>
   <div class="mgf-titulo-escala">
     <h2>Estimativa de Pressões</h2>
     <p>O eco-Doppler permite estimar de forma não invasiva as pressões pulmonares e de enchimento — fundamentais na avaliação de IC e hipertensão pulmonar.</p>
@@ -482,7 +475,7 @@
 </div>
   </div>
 </div>
-<div class="mgf-painel" id="eco-outros" role="tabpanel" aria-labelledby="sep-eco-outros" hidden>
+  <div class="mgf-painel" id="eco-outros" role="tabpanel" aria-labelledby="sep-eco-outros" hidden>
   <div class="mgf-titulo-escala">
     <h2>Outros Parâmetros Relevantes</h2>
     <p>Avaliação do ventrículo direito, aorta, pericárdio e parâmetros adicionais de rotina.</p>
@@ -546,17 +539,18 @@
 </div>
   </div>
 </div>
-
+  </div>
+  </div>
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Lang RM, et al. Recommendations for cardiac chamber quantification by echocardiography in adults: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2015;28(1):1–39.</li><li>Nagueh SF, et al. Recommendations for the evaluation of left ventricular diastolic function by echocardiography: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2016;29(4):277–314.</li><li>Baumgartner H, et al. Recommendations on the echocardiographic assessment of aortic valve stenosis (EACVI/ASE). J Am Soc Echocardiogr. 2017;30(4):372–392.</li><li>Zoghbi WA, et al. Recommendations for noninvasive evaluation of native valvular regurgitation (ASE/SCMR). J Am Soc Echocardiogr. 2017;30(4):303–371.</li><li>Rudski LG, et al. Guidelines for the echocardiographic assessment of the right heart in adults (ASE). J Am Soc Echocardiogr. 2010;23(7):685–713.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Lang RM, et al. Recommendations for cardiac chamber quantification by echocardiography in adults: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2015;28(1):1–39.</li><li>Nagueh SF, et al. Recommendations for the evaluation of left ventricular diastolic function by echocardiography: an update from the ASE and the EACVI. J Am Soc Echocardiogr. 2016;29(4):277–314.</li><li>Baumgartner H, et al. Recommendations on the echocardiographic assessment of aortic valve stenosis (EACVI/ASE). J Am Soc Echocardiogr. 2017;30(4):372–392.</li><li>Zoghbi WA, et al. Recommendations for noninvasive evaluation of native valvular regurgitation (ASE/SCMR). J Am Soc Echocardiogr. 2017;30(4):303–371.</li><li>Rudski LG, et al. Guidelines for the echocardiographic assessment of the right heart in adults (ASE). J Am Soc Echocardiogr. 2010;23(7):685–713.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecocardiograma%20%28v1.0%29&body=Ferramenta%3A%20Ecocardiograma%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Ecocardiograma%20%28v1.0%29&body=Ferramenta%3A%20Ecocardiograma%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="audiograma-e-timpanograma.html"><span>← Anterior</span><strong>Audiograma e timpanograma</strong></a><a class="seguinte" href="ecografia-renal-vesical-urofluxometria.html"><span>Seguinte →</span><strong>Ecografia renal e vesical e urofluxometria</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="audiograma-e-timpanograma.html">← Audiograma e timpanograma</a><a class="seguinte" href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria →</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -576,7 +570,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>

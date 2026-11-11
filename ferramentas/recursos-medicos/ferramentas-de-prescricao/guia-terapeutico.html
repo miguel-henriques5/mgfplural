@@ -16,27 +16,27 @@
 .gt-pequeno { font-size: 14px; color: var(--cor-texto-3); }
 .gt-pesquisa { position: relative; margin: 0 0 18px; }
 .gt-lista { display: none; position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 6px); background: var(--cor-branco); border: 1px solid var(--cor-linha); border-radius: var(--raio); box-shadow: var(--sombra-alta); max-height: 420px; overflow-y: auto; }
-.gt-drop-section { font-family: var(--letra-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); padding: 10px 14px 4px; background: var(--cor-papel); }
+.gt-drop-section { font-family: inherit; font-size: 14px; color: var(--cor-texto-3); padding: 10px 14px 4px; background: var(--cor-papel); font-weight: 700;}
 .gt-drop-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--cor-linha-suave); display: flex; flex-direction: column; gap: 3px; }
 .gt-drop-item:hover { background: var(--cor-menta-clara); }
 .drop-dci { font-weight: 700; }
 .drop-trade { font-size: 14px; font-style: italic; color: var(--cor-texto-2); }
 .drop-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .drop-cat, .td-name-cat, .ip-badge, .gt-grupo { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
-.drop-doses-hint { font-family: var(--letra-mono); font-size: 12px; color: var(--cor-texto-3); }
+.drop-doses-hint { font-family: inherit; font-size: 12px; color: var(--cor-texto-3); }
 .gt-drop-empty { padding: 12px 14px; color: var(--cor-texto-3); }
 .drop-divider { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; color: var(--cor-verde); font-weight: 700; }
 .drop-divider:hover { background: var(--cor-papel); }
 .drop-divider svg, .btn-icon-sm svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .gt-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 12px; }
 .gt-barra h3 { font-size: 20px; font-weight: 800; flex: 1 1 auto; }
-.gt-barra h3 span { font-family: var(--letra-mono); font-size: 14px; font-weight: 500; color: var(--cor-texto-3); }
+.gt-barra h3 span { font-family: inherit; font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
 .mgf-filtros button.active { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
 .mgf-botao[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
 .gt-totais { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
-.gt-totais-rotulo { font-family: var(--letra-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-texto-3); }
+.gt-totais-rotulo { font-family: inherit; font-size: 14px; color: var(--cor-texto-3); font-weight: 700;}
 .gt-total { display: inline-flex; align-items: center; gap: 6px; background: var(--cor-branco); border: 1px solid var(--cor-linha); border-radius: 99px; padding: 4px 12px 4px 8px; font-size: 14px; color: var(--cor-texto-2); }
-.gt-total-val { font-family: var(--letra-mono); font-weight: 500; font-size: 16px; color: var(--cor-tinta); }
+.gt-total-val { font-family: inherit; font-weight: 700; font-size: 16px; color: var(--cor-tinta); }
 .gt-ic { width: 18px; height: 18px; color: var(--cor-verde); flex: 0 0 auto; }
 .gt-tabela { min-width: 720px; }
 .gt-tabela td.td-dose { padding: 8px 4px; }
@@ -45,15 +45,16 @@
 .gt-tabela th:first-child { text-align: left; }
 .gt-tabela th .gt-ic { display: block; margin: 0 auto 4px; width: 20px; height: 20px; }
 .gt-linha-grupo td { background: var(--cor-papel); padding: 8px 12px; }
-.td-name { min-width: 170px; }
-.td-name-main { font-weight: 700; }
+.td-name { min-width: 170px; vertical-align: middle; }
+.td-name-main { font-family: var(--letra-titulo); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; line-height: 1.25; }
+.td-name-dose { font-family: var(--letra-texto); font-weight: 400; font-size: 16px; letter-spacing: 0; color: var(--cor-texto-2); white-space: nowrap; }
 .td-name-trade { font-size: 14px; font-style: italic; color: var(--cor-texto-2); }
 .td-name-cat { margin-top: 4px; }
 .td-dose { text-align: center; }
 .dose-input-wrap, .gt-passo { display: inline-flex; align-items: center; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); overflow: hidden; background: var(--cor-branco); }
 .dose-btn, .gt-passo button { width: 26px; min-height: 40px; border: 0; background: var(--cor-papel); color: var(--cor-tinta); font-size: 18px; font-weight: 700; cursor: pointer; }
 .dose-btn:hover, .gt-passo button:hover { background: var(--cor-menta-clara); }
-.dose-val, .gt-passo input { width: 38px; min-height: 40px; border: 0; text-align: center; font-family: var(--letra-mono); font-size: 16px; color: var(--cor-tinta); background: var(--cor-branco); -moz-appearance: textfield; }
+.dose-val, .gt-passo input { width: 38px; min-height: 40px; border: 0; text-align: center; font-family: inherit; font-size: 16px; color: var(--cor-tinta); background: var(--cor-branco); -moz-appearance: textfield; }
 .dose-val::-webkit-inner-spin-button, .gt-passo input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .dose-val.dose-zero { color: var(--cor-campo); }
 .td-actions { white-space: nowrap; text-align: right; }
@@ -64,7 +65,7 @@
 .notes-input { width: 100%; font-family: var(--letra-texto); font-size: 14px; color: var(--cor-texto-2); border: 1px dashed var(--cor-linha); border-radius: var(--raio-p); padding: 6px 10px; background: transparent; }
 .notes-input:focus { outline: 3px solid var(--cor-menta); border-style: solid; }
 .gt-texto { margin-top: 16px; }
-.gt-area { width: 100%; min-height: 120px; font-family: var(--letra-mono); font-size: 14px; line-height: 1.6; color: var(--cor-tinta); border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); padding: 10px 12px; background: var(--cor-papel); resize: vertical; }
+.gt-area { width: 100%; min-height: 120px; font-family: inherit; font-size: 14px; line-height: 1.6; color: var(--cor-tinta); border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); padding: 10px 12px; background: var(--cor-papel); resize: vertical; }
 .gt-importar { min-height: 180px; background: var(--cor-branco); font-weight: 400; }
 .gt-ajuda { font-size: 15px; color: var(--cor-texto-2); line-height: 1.6; }
 .gt-ajuda code { font-family: var(--letra-mono); font-size: 13px; background: var(--cor-papel); border: 1px solid var(--cor-linha-suave); border-radius: 5px; padding: 1px 6px; }
@@ -74,7 +75,7 @@
 .ip-marca { font-weight: 700; width: 18px; text-align: center; }
 .ip-ok { color: var(--clin-normal); }
 .ip-nao { color: var(--clin-alerta); }
-.ip-dose { font-family: var(--letra-mono); font-size: 13px; color: var(--cor-texto-3); }
+.ip-dose { font-family: inherit; font-size: 13px; color: var(--cor-texto-3); }
 .ip-refeicoes { margin-left: auto; font-size: 13px; color: var(--cor-texto-3); }
 .ip-linha { color: var(--cor-texto-2); font-size: 14px; }
 .ip-pesquisar { margin-left: auto; min-height: 36px; padding: 6px 12px; font-size: 14px; }
@@ -88,7 +89,7 @@
 .gt-so-dci { border-color: var(--cor-linha); }
 .gt-so-dci small { display: block; font-size: 13px; color: var(--cor-texto-3); }
 .gt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.dose-chip { font-family: var(--letra-mono); font-size: 13px; font-weight: 500; padding: 6px 10px; border-radius: 99px; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); cursor: pointer; }
+.dose-chip { font-family: inherit; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 99px; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); cursor: pointer; }
 .dose-chip:hover { border-color: var(--cor-verde); }
 .dose-chip.selected { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
 .gt-mdoses { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 10px; }
@@ -117,39 +118,29 @@
 <a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
 </nav>
 </div></header>
-<div class="contentor ferramenta-pagina">
-<ol class="migalhas" aria-label="Estás aqui">
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
 <li><a href="../../../index.html">Início</a></li>
 <li><a href="../index.html">Recursos médicos</a></li>
-<li><a href="index.html">Ferramentas de prescrição</a></li>
-<li aria-current="page">Guia terapêutico</li>
+<li><details class="grupo-menu"><summary>Ferramentas de prescrição <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
+<ul><li><a href="guia-antibioterapia.html">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html" aria-current="page">Guia terapêutico</a></li></ul></div></details></li>
 </ol>
-<div class="ferramenta-topo">
-<div class="ficha tom-ambar" id="conteudo">
-<div class="ficha-cabeca">
+</nav>
+<header class="ficha" id="conteudo">
 <img class="ficha-ilustracao" src="../../../assets/img/icones/livro.svg" alt="">
 <div class="ficha-titulo">
 <h1>Guia terapêutico</h1>
-<div class="ficha-meta">
-<span class="autor"><span class="autor-iniciais" aria-hidden="true">MH</span>Criado por <strong>Miguel Henriques</strong></span>
-<span class="ficha-versao">v1.0 · revisto em 2026-11-08 · <a href="#bib-titulo">bibliografia</a></span>
+<p class="ficha-meta">Esquema de medicação por refeição, para o doente · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
 </div>
-</div>
-</div>
-<div class="ficha-base">
-<p class="aviso-clinico"><img src="../../../assets/img/icones/privacidade.svg" alt="">Apoia, não substitui, o juízo clínico.</p>
 <div class="ficha-acoes">
-<a class="botao botao-principal" href="../../../descarregar/guia-terapeutico.html" download="guia-terapeutico.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar HTML</a>
-<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29&body=Ferramenta%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Enviar feedback</a>
+<a class="botao" href="../../../descarregar/guia-terapeutico.html" download="guia-terapeutico.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29&body=Ferramenta%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
 </div>
-</div>
-</div>
-<nav class="ferramenta-irmas tom-ambar" aria-label="Ferramentas de prescrição">
-<a class="ferramenta-irmas-grupo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
-<ul><li><a href="guia-antibioterapia.html">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html" aria-current="page">Guia terapêutico</a></li></ul>
-</nav>
-</div>
-<div class="area-ferramenta">
+</header>
+<div class="area-ferramenta corpo-coluna">
+<p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
 <main class="mgf-ferramenta" id="ferramenta">
 
   <p class="mgf-guia-intro">Base INFOMED · 1667 substâncias ativas. Pesquisa e acrescenta os medicamentos, indica as unidades em cada refeição e imprime a folha para o doente. Nada do que escreves sai deste computador.</p>
@@ -159,6 +150,7 @@
   </div>
 
   <section class="mgf-painel" id="gt-tabMeds" role="tabpanel" aria-labelledby="sep-tabMeds">
+    <h2 class="mgf-pergunta">Que medicamentos queres pôr na guia?</h2>
     <div class="gt-pesquisa">
       <label class="mgf-pesquisa"><span class="mgf-so-leitor">Pesquisar substância ativa ou nome comercial</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></svg><input type="search" id="gt-searchInput" placeholder="Pesquisar substância ativa ou nome comercial…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="gt-dropdown" aria-autocomplete="list"></label>
       <div class="gt-lista" id="gt-dropdown" role="listbox" aria-label="Resultados"></div>
@@ -304,14 +296,14 @@
 
 </main>
 </div>
-<div class="ferramenta-pe">
-<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto em 2026-11-08</p></section>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. INFOMED — base de dados de medicamentos de uso humano (1667 substâncias ativas, com dosagens, formas farmacêuticas e nomes comerciais).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
 <div class="feedback">
 <strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
-<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29&body=Ferramenta%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a><code>mgfplural@gmail.com</code><button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29&body=Ferramenta%3A%20Guia%20terap%C3%AAutico%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
 </div>
-</div>
-<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="farmacos-na-gravidez.html"><span>← Anterior</span><strong>Fármacos na gravidez</strong></a></nav>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="farmacos-na-gravidez.html">← Fármacos na gravidez</a></nav>
 </div>
 <footer class="rodape"><div class="contentor">
 <div class="rodape-linha">
@@ -331,7 +323,7 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v0.1 · 2026-11-09</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-10</span>
 </div>
 </div></footer>
 <script src="../../../assets/js/catalogo.js"></script>
@@ -674,9 +666,9 @@ function render(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="td-name">
-        <div class="td-name-main">${escHtml(dn.main)}</div>
+        <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
         ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-        <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
+        ${groupView?'':`<span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>`}
       </td>
       ${MEAL_KEYS.map(k=>{
         const v=m[k]||0;
@@ -1092,9 +1084,8 @@ function renderSosRow(m){
   const tr=document.createElement('tr'); tr.className='gt-linha-med-sos';
   tr.innerHTML=`
     <td class="td-name">
-      <div class="td-name-main">${escHtml(dn.main)}</div>
+      <div class="td-name-main">${escHtml(dn.main)}${m.dose?` <span class="td-name-dose">${escHtml(m.dose)}</span>`:''}</div>
       ${dn.trade?`<div class="td-name-trade">${escHtml(dn.trade)}</div>`:''}
-      ${m.dose?`<div class="td-name-trade">${escHtml(m.dose)}</div>`:''}
       <span class="td-name-cat" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
     </td>
     <td colspan="5" class="td-sos">${escHtml(sosTexto(m))}</td>
