@@ -24,6 +24,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from urllib.parse import quote
 
 RAIZ = Path(__file__).resolve().parent.parent
 FONTE = RAIZ / "fonte"
@@ -340,6 +341,21 @@ def bibliotecas(f):
     return nomes
 
 
+def bibliotecas_css(f, prefixo, autonomo):
+    """Folhas de estilo de assets/vendor/ (ex.: leaflet.css): ligadas no site, embutidas na versão descarregável."""
+    css = [n for n in bibliotecas(f) if n.endswith(".css")]
+    if autonomo:
+        return "".join((VENDOR / n).read_text(encoding="utf-8") + "\n" for n in css)
+    return "".join(f'<link rel="stylesheet" href="{prefixo}assets/vendor/{n}">\n' for n in css)
+
+
+def bibliotecas_js(f, prefixo, autonomo):
+    js = [n for n in bibliotecas(f) if n.endswith(".js")]
+    if autonomo:
+        return "".join("<script>\n" + (VENDOR / n).read_text(encoding="utf-8") + "\n</script>\n" for n in js)
+    return "".join(f'<script src="{prefixo}assets/vendor/{n}"></script>\n' for n in js)
+
+
 def impressao(f):
     """"impressao": "doente" na ficha: a folha impressa é para o doente, sem cabeçalho, autoria nem bibliografia."""
     if f.get("impressao") not in (None, "doente"):
@@ -415,7 +431,7 @@ def pagina_ferramenta(f, ferramentas):
 {nav_as}
 </div>
 {rodape(prefixo)}
-{"".join(f'<script src="{prefixo}assets/vendor/{n}"></script>' + chr(10) for n in bibliotecas(f))}<script src="{prefixo}assets/js/ferramenta.js"></script>
+{bibliotecas_js(f, prefixo, False)}<script src="{prefixo}assets/js/ferramenta.js"></script>
 <script>
 {f["script"]}
 </script>
@@ -513,7 +529,7 @@ def pagina_autonoma(f, css, csp=CSP_AUTONOMO):
 </div>
 </div>
 </div>
-{"".join("<script>" + chr(10) + (VENDOR / n).read_text(encoding="utf-8") + chr(10) + "</script>" + chr(10) for n in bibliotecas(f))}<script>
+{bibliotecas_js(f, "", True)}<script>
 {JS_FERRAMENTA}
 </script>
 <script>
@@ -546,6 +562,24 @@ def csp_com_imagens(csp, hs):
     return re.sub(r"img-src ([^;]*)", lambda m: "img-src " + m.group(1) + "".join(" " + h for h in hs), csp, count=1) if hs else csp
 
 
+def csp_ferramenta(csp, f):
+    """CSP de uma página completa. Por defeito nada sai da página (connect-src 'none'). Exceções da ficha:
+     · "imagens_externas": servidores de imagens (fotografias, mosaicos do mapa);
+     · "dados_externos": servidores a que a página pode pedir dados (só o mapa de fundo do Mapa de recursos);
+     · "workers": true — a biblioteca do mapa desenha num worker criado a partir de um blob."""
+    csp = csp_com_imagens(csp, hosts_imagens(f))
+    dados = f.get("dados_externos", [])
+    for h in dados:
+        if not re.fullmatch(r"https://[a-z0-9.-]+\.[a-z]{2,}", h):
+            erro(f"{f['id']}: servidor inválido em «dados_externos»: {h}")
+    if dados:
+        csp = csp.replace("connect-src 'none'", "connect-src " + " ".join(dados))
+    if f.get("workers"):
+        csp = re.sub(r"img-src ([^;]*)", r"img-src \1 blob:", csp, count=1)
+        csp += "; worker-src blob:; child-src blob:"
+    return csp
+
+
 def texto_js(h):
     """HTML como texto JavaScript que pode ficar dentro de <script> sem o fechar nem confundir o leitor de HTML."""
     s = json.dumps(h, ensure_ascii=False)
@@ -572,9 +606,12 @@ def barra_completa(f, prefixo, autonomo):
         principal = f'<a class="bc-botao" href="{prefixo}descarregar/{f["id"]}.html" download="{f["id"]}.html">{SVG_DESCARREGAR}<span>Descarregar</span></a>'
     refs = "".join(f"<li>{e(r)}</li>" for r in f["bibliografia"])
     fotos = ""
-    if hosts_imagens(f):
+    if any("wikimedia" in h for h in hosts_imagens(f)):
         fotos = ("<h3>Fotografias</h3><p>As fotografias vêm do Wikimedia Commons, com o autor e a licença na legenda de cada uma. "
                  "Precisam de internet: sem ligação, aparece só a legenda com a ligação para a fotografia.</p>")
+    if f.get("dados_externos"):
+        fotos += ("<h3>Mapa de fundo</h3><p>O mapa de fundo vem da internet (OpenFreeMap; se falhar, Esri). É o único pedido que "
+                  "esta página faz, e não leva nada do que escreves. Sem ligação, a pesquisa, as categorias e a lista de recursos funcionam.</p>")
     return f"""<aside class="barra-completa" aria-label="MGF no Plural">
 <a class="bc-simbolo" href="{inicio}" title="MGF no Plural — todas as ferramentas"{' target="_blank" rel="noopener"' if autonomo else ''}>{simbolo(14)}<span class="so-leitor">MGF no Plural — todas as ferramentas</span></a>
 <button type="button" class="bc-info" aria-expanded="false" aria-controls="bc-painel"><span class="bc-info-texto"><strong>{e(f["autor"])}</strong> · v{e(f["versao"])}</span><span class="so-leitor"> — sobre esta ferramenta</span> ⓘ</button>
@@ -584,8 +621,8 @@ def barra_completa(f, prefixo, autonomo):
 <div class="bc-painel" id="bc-painel" hidden>
 <h2>{e(f["titulo"])}</h2>
 <p class="bc-meta">Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · licença MIT</p>
-<p class="bc-aviso">{AVISO_CLINICO} {AVISO_PRIVACIDADE}</p>
-{fotos}<details><summary>Bibliografia · {len(f["bibliografia"])} referências</summary><ol>{refs}</ol></details>
+<p class="bc-aviso">{"" if f.get("aviso_clinico") is False else AVISO_CLINICO + " "}{AVISO_PRIVACIDADE}</p>
+{fotos}<details><summary>Bibliografia · {len(f["bibliografia"])} referência{"" if len(f["bibliografia"]) == 1 else "s"}</summary><ol>{refs}</ol></details>
 <h3>Encontraste um erro?</h3>
 <p>Escreve-nos e corrigimos juntos: <a href="{assunto_feedback(f)}">{SITE["email"]}</a> · <button type="button" class="bc-copiar" data-copiar="{SITE["email"]}">Copiar endereço</button></p>
 <p><a href="{inicio}"{' target="_blank" rel="noopener"' if autonomo else ''}>Todas as ferramentas do MGF no Plural</a></p>
@@ -596,6 +633,7 @@ def barra_completa(f, prefixo, autonomo):
 
 JS_BARRA = r"""(function () {
   var b = document.querySelector(".barra-completa"), m = document.querySelector(".bc-mostrar");
+  if (!b || !m) return;   /* ficheiro guardado por quem usa: já sem a barra */
   var i = b.querySelector(".bc-info"), p = document.getElementById("bc-painel");
   function painel(abrir) { i.setAttribute("aria-expanded", String(abrir)); p.hidden = !abrir; }
   i.addEventListener("click", function () { painel(p.hidden); });
@@ -626,12 +664,11 @@ def pagina_completa(f, ferramentas, css=None):
     """Página completa: no site (css=None) ou a versão autónoma para descarregar (css = CSS com as letras embutidas)."""
     autonomo = css is not None
     prefixo = "../../../"
-    hs = hosts_imagens(f)
     estilo = f"\n{f['estilo']}\n" if tem_estilo(f) else ""
     completa = (ASSETS / "css" / "completa.css").read_text(encoding="utf-8")
     if autonomo:
-        csp = csp_com_imagens(CSP_AUTONOMO, hs)
-        cabeca_css = f"<style>\n{tokens_css()}\n{completa}{estilo}</style>"
+        csp = csp_ferramenta(CSP_AUTONOMO, f)
+        cabeca_css = f"<style>\n{tokens_css()}\n{completa}{bibliotecas_css(f, prefixo, True)}{estilo}</style>"
         script = embutir_ferramentas(f, ferramentas, css)
         url = SITE["url"] + f["caminho"]
         comentario = f"""<!--
@@ -643,11 +680,12 @@ def pagina_completa(f, ferramentas, css=None):
 -->
 """
     else:
-        csp = csp_com_imagens(CSP_SITE, hs)
+        csp = csp_ferramenta(CSP_SITE, f)
         cabeca_css = (f'<link rel="icon" href="{prefixo}assets/img/favicon.svg" type="image/svg+xml">\n'
                       f'<link rel="stylesheet" href="{prefixo}assets/css/tokens.css">\n'
-                      f'<link rel="stylesheet" href="{prefixo}assets/css/completa.css">'
-                      + (f"\n<style>{estilo}</style>" if estilo else ""))
+                      f'<link rel="stylesheet" href="{prefixo}assets/css/completa.css">\n'
+                      + bibliotecas_css(f, prefixo, False)
+                      + (f"<style>{estilo}</style>" if estilo else ""))
         script = embutir_ferramentas(f, ferramentas, css_autonomo(fontes=prefixo), fontes=prefixo)
         comentario = ""
     return f"""<!doctype html>
@@ -664,12 +702,126 @@ def pagina_completa(f, ferramentas, css=None):
 <body class="pagina-completa" data-ferramenta="{e(f["id"])}" data-titulo="{e(f["titulo"])}"{'' if autonomo else ' data-recentes'}>
 {f["conteudo"]}
 {barra_completa(f, prefixo, autonomo)}
-{"".join(("<script>" + chr(10) + (VENDOR / n).read_text(encoding="utf-8") + chr(10) + "</script>" + chr(10)) if autonomo else f'<script src="{prefixo}assets/vendor/{n}"></script>' + chr(10) for n in bibliotecas(f))}<script>
+{bibliotecas_js(f, prefixo, autonomo)}<script data-mgf="barra">
 {JS_BARRA}
 </script>
 <script>
 {script}
 </script>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------- mapa de recursos: zonas e modelo
+#
+# Cada zona é uma ferramenta do grupo «zonas» (ex.: fonte/ferramentas/mapa-de-recursos/zonas/amadora.html). Tudo o
+# que é da zona está num só bloco do script, entre «/* {{ZONA}}» e «/* {{FIM-ZONA}} */». O modelo para outras zonas é
+# o mesmo mapa com esse bloco trocado pelo de fonte/modelo/mapa-de-recursos-zona.js (estrutura e categorias, sem
+# recursos). Para publicar o mapa que um colega enviar: tirar-lhe o bloco ZONA e criar uma ficha nova com ele.
+
+ZONA_RE = re.compile(r"  /\* \{\{ZONA\}\}.*?/\* \{\{FIM-ZONA\}\} \*/\n", re.S)
+PAGINA_MODELO = "ferramentas/mapa-de-recursos/modelo.html"
+
+
+def mapa_modelo(ferramentas):
+    """Ficha do modelo vazio, feita a partir do primeiro mapa de zona que tenha «modelo» na ficha."""
+    base = [f for f in ferramentas if f.get("modelo")]
+    if not base:
+        return None
+    f = base[0]
+    m = f["modelo"]
+    zona = (FONTE / m["zona"]).read_text(encoding="utf-8")
+    script, n = ZONA_RE.subn(lambda _: zona, f["script"])
+    if n != 1:
+        erro(f"{f['id']}: o script tem de ter exatamente um bloco {{{{ZONA}}}} … {{{{FIM-ZONA}}}}")
+    return dict(f, id=m["ficheiro"].removesuffix(".html"), titulo=m["titulo"], script=script, caminho=PAGINA_MODELO,
+                descricao="Estrutura do mapa de recursos (categorias, filtros, pesquisa e lista para imprimir) sem recursos, para preencheres com os da tua zona.",
+                bibliografia=[r for r in f["bibliografia"] if r.startswith(("Mapa de fundo", "Bibliotecas"))],
+                palavras=["modelo", "mapa", "recursos", "comunidade"])
+
+
+def cartao_zona(f, prefixo):
+    return (f'<a class="cartao-zona" href="zonas/{f["id"]}.html" target="_blank" rel="noopener">'
+            f'<span class="cartao-zona-mapa" aria-hidden="true"><img src="{icone(prefixo, "mapa")}" alt=""></span>'
+            f'<span class="cartao-zona-texto"><strong>{e(f.get("zona", f["titulo"]))}</strong>'
+            f'<span>{e(f.get("resumo", ""))}</span>'
+            f'<small>{e(f.get("unidade_territorial", ""))}{" · " if f.get("unidade_territorial") else ""}{e(f["autor"])} · v{e(f["versao"])}</small></span>'
+            f'<span class="etiqueta-completa">↗ abre o mapa noutra janela</span></a>')
+
+
+def pagina_area_mapa(area, ferramentas):
+    """Página de escolha: as zonas com mapa (por região) e a ligação para o modelo."""
+    prefixo = "../../"
+    zonas = [f for f in ferramentas if f["area"] == area["id"]]
+    regioes = {}
+    for f in zonas:
+        regioes.setdefault(f.get("regiao", "Outras zonas"), []).append(f)
+    blocos = "".join(f'<section class="grupo"><div class="grupo-cabeca"><h2>{e(r)}</h2><span class="mono">{len(fs)}</span></div>'
+                     f'<div class="grelha grelha-zonas">{"".join(cartao_zona(f, prefixo) for f in fs)}</div></section>'
+                     for r, fs in regioes.items())
+    return f"""{cabeca(area["nome"] + " · MGF no Plural", prefixo, area["descricao"])}
+<body>
+{topo(prefixo, ferramentas, "ferramentas")}
+<main id="conteudo">
+<div class="contentor area-topo">
+<ol class="migalhas" aria-label="Estás aqui"><li><a href="{prefixo}index.html">Início</a></li><li aria-current="page">{e(area["nome"])}</li></ol>
+<div class="area-titulo"><img src="{icone(prefixo, area["icone"])}" alt="">
+<div><h1>{e(area["nome"])}</h1><p>Recursos da comunidade num mapa: saúde, apoio social, desporto, ensino, cultura e espaços verdes, com uma lista para imprimir para o utente. Escolhe a tua zona.</p></div></div>
+</div>
+<div class="contentor seccao">
+<h2 class="mapa-passo"><span>1</span> Escolhe a zona</h2>
+{blocos}
+<h2 class="mapa-passo"><span>2</span> Não encontras a tua zona?</h2>
+<a class="cartao-modelo" href="modelo.html">
+<img src="{icone(prefixo, "pasta")}" alt="">
+<span><strong>Modelo do mapa para a tua zona</strong>
+<span>O mesmo mapa, com as categorias e a lista para imprimir, mas sem recursos. Descarrega-o, preenche-o com os recursos da tua zona e partilha-o connosco para o pormos no site.</span></span>
+<span class="cartao-modelo-seta" aria-hidden="true">→</span></a>
+</div>
+</main>
+{rodape(prefixo)}
+</body>
+</html>
+"""
+
+
+def pagina_modelo_mapa(area, modelo, ferramentas):
+    prefixo = "../../"
+    zona = (FONTE / [f for f in ferramentas if f.get("modelo")][0]["modelo"]["zona"]).read_text(encoding="utf-8")
+    exemplo = re.search(r"Exemplo:\n\s*(\{.*?\})\n", zona).group(1)
+    return f"""{cabeca("Modelo do mapa de recursos · MGF no Plural", prefixo, modelo["descricao"])}
+<body>
+{topo(prefixo, ferramentas, "ferramentas")}
+<main id="conteudo">
+<div class="contentor area-topo">
+<ol class="migalhas" aria-label="Estás aqui"><li><a href="{prefixo}index.html">Início</a></li><li><a href="index.html">{e(area["nome"])}</a></li><li aria-current="page">Modelo para a tua zona</li></ol>
+<div class="area-titulo"><img src="{icone(prefixo, "pasta")}" alt="">
+<div><h1>Modelo do mapa para a tua zona</h1><p>A estrutura toda do mapa de recursos (categorias, filtros, pesquisa e lista para imprimir), sem recursos. Preenches tu com os da tua zona.</p></div></div>
+</div>
+<div class="contentor seccao modelo-mapa">
+<div class="modelo-mapa-acoes">
+<a class="botao-escuro" href="{prefixo}descarregar/{modelo["id"]}.html" download="{modelo["id"]}.html">{SVG_DESCARREGAR}Descarregar o modelo</a>
+<a class="botao-claro" href="{prefixo}descarregar/{modelo["id"]}.html" target="_blank" rel="noopener">Ver o modelo vazio ↗</a>
+</div>
+<ol class="modelo-passos">
+<li><strong>Descarrega o modelo.</strong> É um único ficheiro HTML. Funciona no teu computador, sem instalar nada.</li>
+<li><strong>Abre-o num editor de texto</strong> (Bloco de notas, TextEdit em texto simples, VS Code) e procura o bloco <code>ZONA</code>, no início do script. É o único sítio a mudar: o resto (categorias, cores, filtros, lista para imprimir) fica igual em todas as zonas.</li>
+<li><strong>Escreve os dados da zona:</strong> nome, concelho, descrição, centro do mapa (latitude e longitude do centro de saúde; no Google Maps, botão direito no local) e as fontes de onde tiraste os recursos.</li>
+<li><strong>Acrescenta os recursos</strong>, um por linha, no formato do exemplo. Só o nome, a categoria e as coordenadas são obrigatórios. Se preferires, cola o bloco numa IA com a tua lista de recursos e pede-lhe que o preencha.</li>
+<li><strong>Abre o ficheiro no browser</strong> para confirmares que os recursos aparecem no sítio certo.</li>
+<li><strong>Partilha-o connosco:</strong> envia o ficheiro para <a href="mailto:{SITE["email"]}?subject={quote("Mapa de recursos — nova zona")}">{SITE["email"]}</a>, com o nome com que queres aparecer como autor. Revemos e pomos a tua zona no site, para todos.</li>
+</ol>
+<div class="modelo-mapa-ajuda">
+<h2>Categorias</h2>
+<p><code>saude</code> Saúde (com <code>s</code>: SNS, Privados ou Convencionados) · <code>social</code> Apoio social · <code>desporto</code> Clubes e desporto · <code>ensino</code> Ensino · <code>verde</code> Espaços verdes e rios · <code>cultura</code> Cultura e património · <code>junta</code> Juntas de freguesia e câmara municipal.</p>
+<h2>Exemplo de um recurso</h2>
+<pre><code>{e(exemplo)}</code></pre>
+<p class="mono-nota">Não ponhas dados de utentes nem nomes de profissionais: o mapa é público.</p>
+</div>
+</div>
+</main>
+{rodape(prefixo)}
 </body>
 </html>
 """
@@ -986,9 +1138,17 @@ def main():
             continue
         escrever(RAIZ / f["caminho"], pagina_ferramenta(f, ferramentas))
         escrever(RAIZ / "descarregar" / f"{f['id']}.html", pagina_autonoma(f, css))
+    modelo = mapa_modelo(ferramentas)
+    if modelo:
+        escrever(RAIZ / "descarregar" / f"{modelo['id']}.html", pagina_completa(modelo, ferramentas, css))
     for a in ESTRUTURA["areas"]:
         if any(f["area"] == a["id"] for f in ferramentas):
-            escrever(RAIZ / "ferramentas" / a["id"] / "index.html", pagina_area(a, ferramentas))
+            if a["id"] == "mapa-de-recursos":
+                escrever(RAIZ / "ferramentas" / a["id"] / "index.html", pagina_area_mapa(a, ferramentas))
+                if modelo:
+                    escrever(RAIZ / PAGINA_MODELO, pagina_modelo_mapa(a, modelo, ferramentas))
+            else:
+                escrever(RAIZ / "ferramentas" / a["id"] / "index.html", pagina_area(a, ferramentas))
             for g in a["grupos"]:
                 if tem_ferramentas(ferramentas, a["id"], g["id"]):
                     escrever(RAIZ / "ferramentas" / a["id"] / g["id"] / "index.html", pagina_grupo(a, g, ferramentas))

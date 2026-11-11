@@ -66,6 +66,18 @@ Ferramentas grandes, que ocupam o ecrã todo, levam `"layout": "completa"` na fi
 - **Ferramentas do site dentro de um programa:** em vez de copiar o HTML de outra ferramenta, escreve `"{{FERRAMENTA:<id>}}"` (com as aspas) no JavaScript. O site troca-o pela versão para descarregar atual dessa ferramenta, como texto, para pôr num `<iframe srcdoc>`. Para esconder o cabeçalho dela dentro do programa, usa `.autonomo-topo{display:none}`. Exemplo: a Saúde infantil e juvenil leva a Vacinação e as Doses pediátricas; a Vigilância da gravidez leva a Planificação e os Fármacos na gravidez.
 - **Imagens de fora** (só quando não podem ir no ficheiro, por exemplo fotografias do Wikimedia Commons): lista os servidores em `"imagens_externas": ["https://upload.wikimedia.org"]`. Cada imagem leva autor, licença e ligação para a origem na legenda, e a ferramenta tem de continuar a funcionar sem internet (mostra a legenda com a ligação). Os pedidos de dados continuam bloqueados.
 - **Sem `alert()` nem `confirm()`:** para limpar tudo, pede um segundo clique no mesmo botão.
+- **Bibliotecas com folha de estilo** (por exemplo `leaflet.css`): lista-as em `"bibliotecas"` como os ficheiros `.js`. No site ficam ligadas; na versão para descarregar vão lá dentro.
+
+### Modelos de documentos (Documentação)
+
+- Sem logótipo, nomes ou siglas de nenhuma unidade nem nomes de profissionais. O nome e a sigla da unidade e da ULS são campos que se escrevem no próprio documento (todos os sítios ficam iguais) e o logótipo escolhe-se no computador. Em branco, imprimem como uma linha para preencher à mão.
+- «Guardar HTML» guarda o documento já com a unidade e o logótipo de quem o adaptou, sem a barra do site.
+
+### Mapa de recursos por zonas
+
+- Cada zona é uma ferramenta do grupo `zonas` (`fonte/ferramentas/mapa-de-recursos/zonas/<zona>.html`), com `zona`, `regiao` e `unidade_territorial` na ficha. A página do Mapa de recursos agrupa as zonas por região.
+- Tudo o que é da zona (nome, descrição, centro do mapa, notas, fontes e recursos) está num só bloco do script, entre `/* {{ZONA}}` e `/* {{FIM-ZONA}} */`. O modelo para outras zonas é o mesmo mapa com o bloco de `fonte/modelo/mapa-de-recursos-zona.js` (sem recursos). Para publicar o mapa que um colega enviar, tira-se o bloco ZONA do ficheiro dele e cria-se uma ficha nova.
+- O mapa é a única exceção ao «nada sai da página»: `"dados_externos": ["https://tiles.openfreemap.org"]` (mapa de fundo vetorial), `"imagens_externas": ["https://services.arcgisonline.com"]` (alternativa) e `"workers": true` (a biblioteca desenha num worker). Sem internet, a pesquisa, as categorias e a lista funcionam, e o mapa avisa que o fundo não aparece.
 
 ## Cores
 
