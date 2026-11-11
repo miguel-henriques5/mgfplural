@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Consulta rápida de resultados · MGF no Plural</title>
+<meta name="description" content="Cola a lista de resultados de exames uma vez por dia e pesquisa por número de utente durante a consulta.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* Consulta rápida de resultados: só componentes comuns e estes acertos */
+.res-colar { width: 100%; min-height: 220px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 15px; line-height: 1.5; resize: vertical; }
+.res-colar:focus, .res-nota:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.res-procura { display: flex; gap: 8px; align-items: stretch; }
+.res-procura .mgf-pesquisa { flex: 1; margin: 0; }
+.res-nova { width: 48px; height: 48px; padding: 0; justify-content: center; flex: 0 0 auto; }
+.res-contagem { margin: 0; font-size: 15px; color: var(--cor-texto-3); }
+.res-utente { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-g); padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.res-utente + .res-utente { margin-top: 12px; }
+.res-nome { margin: 0; font-family: var(--letra-titulo); font-weight: 700; font-size: 19px; }
+.res-num { margin: 0 0 6px; font-size: 14px; color: var(--cor-texto-3); }
+.res-exame { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--cor-linha-suave); }
+.res-exame p { margin: 0; }
+.res-tipo { font-size: 14px; color: var(--cor-texto-3); }
+.res-valor { font-size: 20px; font-weight: 700; }
+.res-data { font-size: 14px; color: var(--cor-texto-3); }
+.res-copiar { width: 44px; height: 44px; padding: 0; justify-content: center; flex: 0 0 auto; }
+.res-vazio { margin: 0; padding: 24px 16px; text-align: center; color: var(--cor-texto-3); border: 1.5px dashed var(--cor-linha); border-radius: var(--raio); }
+.res-nota { width: 100%; min-height: 120px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 16px; resize: vertical; }
+</style>
+</head>
+<body data-ferramenta="consulta-resultados-exames" data-titulo="Consulta rápida de resultados">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Canivete <span>· 4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a>
+<ul><li><a href="pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a></li><li><a href="consulta-resultados-exames.html" aria-current="page">Consulta rápida de resultados</a></li><li><a href="formulario-referenciacao.html">Formulário de referenciação</a></li><li><a href="construir-horario.html">Construir horário</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/pesquisa.svg" alt="">
+<div class="ficha-titulo">
+<h1>Consulta rápida de resultados</h1>
+<p class="ficha-meta">Cola a lista e pesquisa por número de utente · <strong>Miguel Henriques</strong> · v1.0 · 11 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/consulta-resultados-exames.html" download="consulta-resultados-exames.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consulta%20r%C3%A1pida%20de%20resultados%20%28v1.0%29&body=Ferramenta%3A%20Consulta%20r%C3%A1pida%20de%20resultados%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <div class="mgf-cartao" id="setup-view">
+    <div class="mgf-cartao-titulo">1. Cola a lista do dia</div>
+    <div class="mgf-cartao-corpo">
+      <label for="paste-area" class="res-contagem">Linhas do Excel (Ctrl+V): número de utente, nome, exame, resultado, data</label>
+      <textarea id="paste-area" class="res-colar" placeholder="12345&#9;João Silva&#9;Hemoglobina glicada&#9;7.2%&#9;03/07/2026
+12346&#9;Maria Santos&#9;TSH&#9;2.1&#9;05/07/2026"></textarea>
+      <div class="mgf-botoes"><button type="button" class="mgf-botao mgf-botao-principal" id="load-btn">Carregar lista</button></div>
+      <p class="mgf-mensagem" id="setup-error" role="alert"></p>
+    </div>
+  </div>
+  <div id="app-view" style="display:none">
+    <h2 class="mgf-pergunta">Que utente procuras?</h2>
+    <div class="res-procura">
+      <label class="mgf-pesquisa"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="mgf-so-leitor">Número de utente</span>
+        <input id="search-input" type="text" inputmode="numeric" placeholder="Nº de utente" autocomplete="off"></label>
+      <button type="button" class="mgf-botao res-nova" id="reset-btn" title="Carregar nova lista" aria-label="Carregar nova lista"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+    </div>
+    <p class="res-contagem" id="count-label" aria-live="polite"></p>
+  </div>
+  <p class="mgf-nota" data-tom="menta"><strong>Privacidade.</strong> A lista fica só na memória deste browser enquanto a página estiver aberta: nada é guardado nem enviado para a internet. Volta a colar a lista sempre que precisares de a atualizar.</p>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <div id="results-area" aria-live="polite" hidden></div>
+  <div class="mgf-espera" id="res-espera">Carrega a lista e escreve um número de utente.</div>
+  <div class="mgf-cartao">
+    <div class="mgf-cartao-titulo"><label for="note-area">Texto livre (ex.: para colar na nota SOAP)</label></div>
+    <div class="mgf-cartao-corpo">
+      <textarea id="note-area" class="res-nota" placeholder="Escreve aqui o texto a copiar para o processo..."></textarea>
+      <div class="mgf-botoes">
+        <button type="button" class="mgf-botao mgf-botao-principal" id="copy-note-btn"><span id="copy-note-icon" style="display:inline-flex"></span>Copiar texto</button>
+        <button type="button" class="mgf-botao" id="clear-note-btn">Limpar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Ferramenta de organização de dados: não usa fontes clínicas.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 11 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consulta%20r%C3%A1pida%20de%20resultados%20%28v1.0%29&body=Ferramenta%3A%20Consulta%20r%C3%A1pida%20de%20resultados%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="pesquisa-icpc2.html">← Pesquisa de códigos ICPC-2</a><a class="seguinte" href="formulario-referenciacao.html">Formulário de referenciação →</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-11</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+var COPIAR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+(function() {
+  var data = [];
+  var setupView = document.getElementById('setup-view');
+  var appView = document.getElementById('app-view');
+  var pasteArea = document.getElementById('paste-area');
+  var loadBtn = document.getElementById('load-btn');
+  var setupError = document.getElementById('setup-error');
+  var searchInput = document.getElementById('search-input');
+  var resultsArea = document.getElementById('results-area');
+  var countLabel = document.getElementById('count-label');
+  var resetBtn = document.getElementById('reset-btn');
+  var espera = document.getElementById('res-espera');   /* novo: lugar do resultado vazio (proposta B) */
+  function lugar() { resultsArea.hidden = !resultsArea.innerHTML; }
+
+  function norm(s) { return (s || '').toString().trim().toLowerCase(); }
+
+  function detectColumns(headerCells) {
+    var map = {};
+    headerCells.forEach(function(cell, i) {
+      var c = norm(cell);
+      if (/utente|n[uú]mero|n[ºo°]/.test(c) && map.utente === undefined) map.utente = i;
+      else if (/nome/.test(c)) map.nome = i;
+      else if (/exame|tipo|an[aá]lise/.test(c)) map.exame = i;
+      else if (/resultado|valor/.test(c)) map.resultado = i;
+      else if (/data/.test(c)) map.data = i;
+    });
+    return map;
+  }
+
+  function parsePaste(text) {
+    var lines = text.split(/\r?\n/).filter(function(l) { return l.trim().length > 0; });
+    if (lines.length === 0) return { rows: [], error: 'Não encontrei linhas com dados.' };
+
+    var rows = lines.map(function(l) { return l.split('\t'); });
+    var firstRow = rows[0];
+    var looksLikeHeader = firstRow.some(function(c) { return /utente|nome|exame|resultado|data/i.test(c); });
+    var colMap;
+    var dataRows;
+
+    if (looksLikeHeader) {
+      colMap = detectColumns(firstRow);
+      dataRows = rows.slice(1);
+    } else {
+      var n = firstRow.length;
+      if (n >= 5) colMap = { utente: 0, nome: 1, exame: 2, resultado: 3, data: 4 };
+      else if (n === 4) colMap = { utente: 0, nome: 1, resultado: 2, data: 3 };
+      else return { rows: [], error: 'Não consegui identificar as colunas. Confirma que colaste incluindo pelo menos nº de utente, resultado e data.' };
+      dataRows = rows;
+    }
+
+    if (colMap.utente === undefined || colMap.resultado === undefined) {
+      return { rows: [], error: 'Preciso pelo menos de uma coluna de nº de utente e de resultado.' };
+    }
+
+    var parsed = dataRows.map(function(cells) {
+      return {
+        utente: norm(cells[colMap.utente]).replace(/\s+/g, ''),
+        nome: colMap.nome !== undefined ? (cells[colMap.nome] || '').trim() : '',
+        exame: colMap.exame !== undefined ? (cells[colMap.exame] || '').trim() : '',
+        resultado: (cells[colMap.resultado] || '').trim(),
+        data: colMap.data !== undefined ? (cells[colMap.data] || '').trim() : ''
+      };
+    }).filter(function(r) { return r.utente.length > 0; });
+
+    return { rows: parsed, error: parsed.length === 0 ? 'Não encontrei nenhuma linha válida.' : null };
+  }
+
+  loadBtn.addEventListener('click', function() {
+    var result = parsePaste(pasteArea.value);
+    if (result.error) {
+      setupError.textContent = result.error;
+      return;
+    }
+    data = result.rows;
+    setupError.textContent = '';
+    setupView.style.display = 'none';
+    appView.style.display = 'block';
+    countLabel.textContent = data.length + (data.length === 1 ? ' exame carregado' : ' exames carregados');
+    espera.textContent = 'Escreve um número de utente.';
+    searchInput.focus();
+  });
+
+  resetBtn.addEventListener('click', function() {
+    data = [];
+    pasteArea.value = '';
+    setupError.textContent = '';
+    appView.style.display = 'none';
+    setupView.style.display = 'block';
+    resultsArea.innerHTML = '';
+    searchInput.value = '';
+    espera.textContent = 'Carrega a lista e escreve um número de utente.';
+    lugar();
+  });
+
+  function escapeHtml(s) {
+    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function render(query) {
+    var q = norm(query).replace(/\s+/g, '');
+    if (!q) { resultsArea.innerHTML = ''; lugar(); return; }
+
+    var matches = data.filter(function(r) { return r.utente.indexOf(q) !== -1; });
+
+    if (matches.length === 0) {
+      resultsArea.innerHTML = '<p class="res-vazio">Sem resultados para este número de utente.</p>';
+      lugar();
+      return;
+    }
+
+    var byUtente = {};
+    matches.forEach(function(r) {
+      if (!byUtente[r.utente]) byUtente[r.utente] = [];
+      byUtente[r.utente].push(r);
+    });
+
+    var html = '';
+    Object.keys(byUtente).forEach(function(utenteId) {
+      var rows = byUtente[utenteId];
+      var nome = rows[0].nome;
+      html += '<div class="res-utente">';
+      html += '<p class="res-nome">' + escapeHtml(nome || ('Utente ' + utenteId)) + '</p>';
+      html += '<p class="res-num">Nº ' + escapeHtml(utenteId) + '</p>';
+      rows.forEach(function(r) {
+        html += '<div class="res-exame">';
+        html += '<div style="min-width: 0;">';
+        if (r.exame) html += '<p class="res-tipo">' + escapeHtml(r.exame) + '</p>';
+        html += '<p class="res-valor">' + (escapeHtml(r.resultado) || '—') + '</p>';
+        if (r.data) html += '<p class="res-data">' + escapeHtml(r.data) + '</p>';
+        html += '</div>';
+        html += '<button type="button" class="mgf-botao res-copiar" data-copy="' + escapeHtml(r.resultado) + '" title="Copiar resultado" aria-label="Copiar resultado">' + COPIAR + '</button>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+
+    resultsArea.innerHTML = html;
+    lugar();
+    Array.prototype.forEach.call(resultsArea.querySelectorAll('.res-copiar'), function(btn) {
+      btn.addEventListener('click', function() { MGF.copiar(btn.getAttribute('data-copy'), btn); });
+    });
+  }
+
+  searchInput.addEventListener('input', function() { render(searchInput.value); });
+
+  var noteArea = document.getElementById('note-area');
+  var copyNoteBtn = document.getElementById('copy-note-btn');
+  var clearNoteBtn = document.getElementById('clear-note-btn');
+  document.getElementById('copy-note-icon').innerHTML = COPIAR;
+
+  copyNoteBtn.addEventListener('click', function() {
+    if (!noteArea.value.trim()) return;
+    MGF.copiar(noteArea.value, copyNoteBtn);
+  });
+
+  clearNoteBtn.addEventListener('click', function() {
+    noteArea.value = '';
+    noteArea.focus();
+  });
+})();
+</script>
+</body>
+</html>

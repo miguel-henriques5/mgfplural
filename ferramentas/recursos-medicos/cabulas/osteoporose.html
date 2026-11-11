@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Osteoporose · MGF no Plural</title>
+<meta name="description" content="Interpretação da densitometria, risco de fratura (FRAX), prescrição e seguimento da osteoporose em Medicina Geral e Familiar.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #4B5B58; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color:#4B5B58; font-weight:700; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #4B5B58; border: 2px solid transparent; border-radius: 8px; padding: 8px 15px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn.active { background: #4B5B58; color: #FFFFFF; border-color: #0F6E64; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .subtab-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+#ferramenta .subtab-btn { background:#D7EDE7; color:#2C3A38; border:1.5px solid #D7EDE7; border-radius:20px; padding:6px 14px; font-size: 13px; font-weight:600; cursor:pointer; }
+#ferramenta .subtab-btn.active { background:#0F6E64; color:#FFFFFF; border-color:#0F6E64; }
+#ferramenta .subpanel { display:none; }
+#ferramenta .subpanel.active { display:block; }
+#ferramenta .search-box { width:100%; border:1.5px solid #D7EDE7; border-radius:10px; padding:10px 14px; font-size: 15px; color:#13423D; background:#D7EDE7; margin-bottom:14px; }
+#ferramenta .search-box:focus { outline:none; border-color:#4B5B58; background:#FFFFFF; }
+#ferramenta .pat-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); overflow: hidden; margin-bottom: 14px; border: 1px solid #D7EDE7; }
+#ferramenta .pat-head { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .pat-head:hover { background: #D7EDE7; }
+#ferramenta .pat-name { font-size: 15px; font-weight: 700; color: #13423D; }
+#ferramenta .pat-sub { font-size: 13px; color:#2C3A38; margin-top:2px; }
+#ferramenta .pat-tag { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+#ferramenta .t-line1 { background:#E8F5EC; color:#1B6B35; }
+#ferramenta .t-line2 { background:#EAF1FA; color:#1C4A80; }
+#ferramenta .t-line3 { background:#D7EDE7; color:#4B5B58; }
+#ferramenta .t-anab { background:#F8E7C4; color:#8F3A00; }
+#ferramenta .t-supp { background:#F6F7F4; color:#2C3A38; }
+#ferramenta .pat-toggle { font-size: 18px; color: #4B5B58; transition: transform 0.2s; }
+#ferramenta .pat-card.open .pat-toggle { transform: rotate(180deg); }
+#ferramenta .pat-body { display: none; padding: 4px 18px 18px; }
+#ferramenta .pat-card.open .pat-body { display: block; }
+#ferramenta .pat-section { margin-bottom: 12px; }
+#ferramenta .pat-section .ps-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+#ferramenta .pat-section.dose .ps-label { color: #0F6E64; }
+#ferramenta .pat-section.adv .ps-label { color: #1B6B35; }
+#ferramenta .pat-section.dis .ps-label { color: #9E2318; }
+#ferramenta .pat-section.use .ps-label { color: #1C4A80; }
+#ferramenta .pat-section.ci .ps-label { color: #8F3A00; }
+#ferramenta .pat-section p, #ferramenta .pat-section li { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .pat-section ul { padding-left:18px; margin:0; }
+#ferramenta .pat-section strong { font-weight: 700; }
+#ferramenta .tbl-wrap { overflow-x:auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; }
+#ferramenta .data-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 12px; text-align: left; }
+#ferramenta .data-table td { padding: 9px 12px; font-size: 14px; color: #13423D; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .data-table td.term { font-weight:600; color:#0F6E64; }
+#ferramenta .badge-deg { border-radius: 5px; padding: 2px 8px; font-size: 13px; font-weight: 700; white-space:nowrap; }
+#ferramenta .d-normal { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .d-mild { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .d-op { background: #FDECEA; color: #9E2318; }
+#ferramenta .d-sev { background: #FDECEA; color: #9E2318; }
+#ferramenta .yes { color:#1B6B35; font-weight:700; }
+#ferramenta .no { color:#9E2318; font-weight:600; }
+#ferramenta .part { color:#8F3A00; font-weight:600; }
+#ferramenta .info-block { border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+#ferramenta .info-block.purple { background: #D7EDE7; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block.blue { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block p, #ferramenta .info-block li { font-size: 14px; color: #13423D; line-height: 1.65; }
+#ferramenta .info-block ul { padding-left:18px; margin:4px 0 0; }
+#ferramenta .info-block strong { font-weight: 700; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .info-block.blue .ib-title { color: #1C4A80; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 5px; }
+#ferramenta label { font-size: 13px; font-weight: 600; color: #2C3A38; }
+#ferramenta input[type="number"], #ferramenta select { border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 12px; font-size: 15px; color: #13423D; background: #D7EDE7; width: 100%; appearance: auto; -webkit-appearance: auto; }
+#ferramenta input:focus, #ferramenta select:focus { outline: none; border-color: #4B5B58; background: #FFFFFF; }
+#ferramenta .field-hint { font-size: 13px; color: #2C3A38; font-style: italic; }
+#ferramenta .sub-head { font-size: 13px; font-weight: 700; color: #0F6E64; text-transform: uppercase; letter-spacing: 0.8px; margin: 6px 0 4px; }
+#ferramenta .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+#ferramenta .btn-primary { background: #4B5B58; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 22px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-primary:hover { background: #0F6E64; }
+#ferramenta .btn-secondary { background: #D7EDE7; color: #4B5B58; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+#ferramenta .btn-print { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+#ferramenta .calc-result { display: none; margin-top: 18px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 9px; margin-bottom: 9px; }
+#ferramenta .result-row.ok { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .result-row.warn { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .result-row.alert { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .result-row.info { background: #EAF1FA; border-left: 4px solid #1C4A80; }
+#ferramenta .result-row .rr-icon { font-size: 18px; line-height: 1.2; }
+#ferramenta .result-row .rr-title { font-size: 14px; font-weight: 700; color: #13423D; margin-bottom: 2px; }
+#ferramenta .result-row .rr-text { font-size: 13.5px; color: #13423D; line-height: 1.5; }
+#ferramenta .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; background: #D7EDE7; border-radius: 10px; padding: 12px 14px; }
+#ferramenta .step-num { min-width: 24px; height: 24px; background: #4B5B58; border-radius: 50%; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+#ferramenta .step-text { font-size: 14px; color: #13423D; line-height: 1.5; }
+#ferramenta .step-text strong { color: #0F6E64; }
+#ferramenta .ref-list { list-style: none; counter-reset: ref; }
+#ferramenta .ref-list li { font-size: 13px; color: #2C3A38; line-height: 1.55; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid #D7EDE7; }
+#ferramenta .ref-list li:before { counter-increment: ref; content: counter(ref); position: absolute; left: 0; top: 6px; background: #D7EDE7; color: #4B5B58; font-weight: 700; font-size: 13px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+#ferramenta .ref-list a { color: #1C4A80; text-decoration: none; word-break: break-word; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #2C3A38; margin-top: 28px; padding-top: 16px; border-top: 1px solid #D7EDE7; }
+
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: inherit; font-size: 16px; font-weight: 700; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 14px; font-weight: 700; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+</style>
+</head>
+<body data-ferramenta="osteoporose" data-titulo="Osteoporose">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</span><span class="menu-em-breve">Em breve</span></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a></div><div><span class="menu-grupo-titulo"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</span><span class="menu-em-breve">Em breve</span></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos<small>Em breve</small></span></span><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-menta">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Cábulas <span>· 2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a>
+<ul><li><a href="menopausa.html">Menopausa</a></li><li><a href="osteoporose.html" aria-current="page">Osteoporose</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/osso.svg" alt="">
+<div class="ficha-titulo">
+<h1>Osteoporose</h1>
+<p class="ficha-meta">Densitometria, FRAX, prescrição e seguimento · <strong>Miguel Henriques</strong> · v1.0 · 11 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/osteoporose.html" download="osteoporose.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Osteoporose%20%28v1.0%29&body=Ferramenta%3A%20Osteoporose%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
+  <p class="mgf-guia-intro">Interpretação da densitometria, risco de fratura, prescrição e seguimento.</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-dxa" aria-controls="tab-dxa" aria-selected="true">Densitometria</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-frax" aria-controls="tab-frax" aria-selected="false">Risco (FRAX)</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-calc" aria-controls="tab-calc" aria-selected="false">Interpretador</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-trat" aria-controls="tab-trat" aria-selected="false">Tratamento</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-seg" aria-controls="tab-seg" aria-selected="false">Seguimento</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão clínica</strong>, orientada para a mulher pós-menopáusica e o adulto ≥50 anos em contexto de MGF. Os limiares e algoritmos seguem sobretudo o <strong>Consenso Nacional Menopausa 2021 (FRAX® Port)</strong> e guidelines de reumatologia/endocrinologia. Não substitui o julgamento clínico, o RCM/Prontuário (Infarmed) nem a avaliação especializada. Doses e comparticipações devem ser sempre confirmadas e individualizadas.</p>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <div class="mgf-painel mk-painel" id="tab-dxa" role="tabpanel" aria-labelledby="sep-dxa">
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Como ler uma densitometria (DXA)</div>
+      <div class="info-block purple">
+        <p>A <strong>DXA</strong> (<em>dual-energy X-ray absorptiometry</em>) mede a <strong>densidade mineral óssea (DMO)</strong> e converte-a em dois valores expressos em desvios-padrão (DP): o <strong>T-score</strong> e o <strong>Z-score</strong>. O diagnóstico usa o <strong>local com o valor mais baixo</strong> entre coluna lombar (L1–L4), anca total e colo do fémur.</p>
+      </div>
+      <div class="info-block blue">
+        <div class="ib-title">T-score vs Z-score — qual usar</div>
+        <p>▸ <strong>T-score</strong> — compara com o pico de massa óssea do adulto jovem saudável (~30 anos). É o valor que <strong>define o diagnóstico</strong> (critérios OMS) na <strong>mulher pós-menopáusica e no homem ≥50 anos</strong>.<br>
+        ▸ <strong>Z-score</strong> — compara com pessoas da <strong>mesma idade e sexo</strong>. Preferido em <strong>mulheres pré-menopáusicas, homens &lt;50 anos e crianças</strong>. Um <strong>Z-score ≤ −2,0</strong> é "abaixo do esperado para a idade" e deve motivar procura de <strong>causa secundária</strong>.</p>
+      </div>
+      <div class="info-block green" style="margin-bottom:0;">
+        <div class="ib-title">Qual local interpretar</div>
+        <p>▸ <strong>Colo do fémur</strong> — é o valor introduzido no <strong>FRAX</strong>.<br>▸ <strong>Anca total</strong> — melhor preditor de fratura da anca.<br>▸ <strong>Coluna lombar</strong> — mostra alterações mais cedo, útil para <strong>monitorizar resposta</strong> (cuidado com artefactos: escoliose, osteófitos, calcificação aórtica podem falsear para cima).</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Classificação da OMS pelo T-score</div>
+      <div class="tbl-wrap">
+        <table class="data-table">
+          <thead><tr><th>Categoria</th><th>T-score</th><th>Leitura</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge-deg d-normal">Normal</span></td><td>≥ −1,0</td><td>Massa óssea normal</td></tr>
+            <tr><td><span class="badge-deg d-mild">Osteopenia</span></td><td>−1,0 a −2,5</td><td>Massa óssea baixa (baixa massa óssea)</td></tr>
+            <tr><td><span class="badge-deg d-op">Osteoporose</span></td><td>≤ −2,5</td><td>Osteoporose densitométrica</td></tr>
+            <tr><td><span class="badge-deg d-sev">Osteoporose grave</span></td><td>≤ −2,5 <em>+ fratura</em></td><td>T ≤ −2,5 <strong>e</strong> ≥1 fratura de fragilidade</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block orange" style="margin-top:12px;margin-bottom:0;">
+        <p>O diagnóstico de osteoporose é <strong>clínico ou densitométrico</strong>: pode fazer-se pelo <strong>T-score ≤ −2,5</strong> <strong>ou</strong> pela <strong>presença de fratura de fragilidade</strong> (baixo impacto, ex. queda da própria altura) na anca ou coluna, <strong>independentemente do T-score</strong>.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Monitorização por DXA</div>
+      <div class="info-block purple">
+        <p>Repetir a DXA <strong>tipicamente a cada 1–2 anos</strong> (ou mais espaçado se estável e baixo risco), <strong>no mesmo equipamento</strong>. Uma alteração só é considerada real se ultrapassar a <strong>menor variação significativa</strong> (LSC) do centro — variações pequenas entre exames podem ser apenas erro de precisão. A coluna lombar é o local mais sensível para detetar resposta ao tratamento.</p>
+      </div>
+      <div class="info-block blue" style="margin-bottom:0;">
+        <div class="ib-title">Nota prática</div>
+        <p>No Consenso Nacional Menopausa 2021, o pedido de DXA deve ser <strong>orientado pelo FRAX</strong> (ver separador seguinte): não é um rastreio universal, mas dirige-se a doentes de <strong>risco intermédio</strong> ou com fatores de risco não captados pelo FRAX, e à avaliação da eficácia do tratamento.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-frax" role="tabpanel" aria-labelledby="sep-frax" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> FRAX® — o que é</div>
+      <div class="info-block purple">
+        <p>O <strong>FRAX®</strong> (OMS) estima a <strong>probabilidade a 10 anos</strong> de <strong>fratura osteoporótica major</strong> (coluna clínica, anca, antebraço, úmero) e de <strong>fratura da anca</strong>, a partir de fatores de risco clínicos, <strong>com ou sem</strong> a DMO do colo do fémur. Existe versão adaptada a Portugal — <strong>FRAX® Port</strong>.</p>
+        <p style="margin-top:8px;">Calcular em: <a href="https://www.shef.ac.uk/FRAX/tool.jsp?lang=pt" target="_blank" style="color:#1C4A80;">shef.ac.uk/FRAX (Portugal)</a></p>
+      </div>
+      <div class="info-block blue" style="margin-bottom:0;">
+        <div class="ib-title">Fatores de risco do FRAX</div>
+        <p>Idade, sexo, peso/altura (IMC), <strong>fratura prévia</strong> de fragilidade, <strong>história de fratura da anca nos pais</strong>, <strong>tabagismo</strong> atual, <strong>corticoterapia</strong> (≥3 meses ≥5 mg prednisolona), <strong>artrite reumatoide</strong>, <strong>osteoporose secundária</strong>, <strong>álcool</strong> (≥3 unidades/dia) e, opcionalmente, a <strong>DMO do colo do fémur</strong>. O FRAX <em>não</em> capta o número/gravidade de fraturas, quedas, dose de corticoide nem certas causas secundárias — daí a DXA complementar nalguns casos.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Decisão SEM DXA — FRAX Port (Quadro 5)</div>
+      <div class="tbl-wrap">
+        <table class="data-table">
+          <thead><tr><th>Risco a 10 anos</th><th>Major</th><th>Anca</th><th>Conduta</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge-deg d-normal">Baixo</span></td><td>≤ 7%</td><td>e ≤ 2%</td><td>Medidas de estilo de vida; <strong>sem necessidade de DXA</strong></td></tr>
+            <tr><td><span class="badge-deg d-mild">Intermédio</span></td><td>7–11%</td><td>e 2–3%</td><td><strong>Avaliação por DXA</strong> para selecionar quem tratar</td></tr>
+            <tr><td><span class="badge-deg d-op">Elevado</span></td><td>≥ 11%</td><td>ou ≥ 3%</td><td><strong>Tratamento farmacológico</strong>; sem necessidade de DXA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:#2C3A38;margin-top:10px;font-style:italic;">Reavaliar sempre o risco individual e considerar DXA se houver fatores de risco não incluídos no FRAX ou suspeita de osteoporose secundária.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Decisão COM DXA — FRAX Port com DMO (Quadro 6)</div>
+      <div class="tbl-wrap">
+        <table class="data-table">
+          <thead><tr><th>Risco (com DMO)</th><th>Major</th><th>Anca</th><th>Conduta</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge-deg d-normal">Vigilância</span></td><td>&lt; 9%</td><td>e &lt; 2,5%</td><td>Vigilância + medidas gerais</td></tr>
+            <tr><td><span class="badge-deg d-op">Tratar</span></td><td>≥ 9%</td><td>ou ≥ 2,5%</td><td>Tratamento farmacológico</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block green" style="margin-top:12px;margin-bottom:0;">
+        <div class="ib-title">Tratar independentemente do FRAX/DXA quando há</div>
+        <p>▸ <strong>≥1 fratura de fragilidade da anca</strong>, ou<br>▸ <strong>≥1 fratura clínica da coluna</strong>, ou<br>▸ <strong>≥2 fraturas de fragilidade</strong> em qualquer localização (idade &gt;50 anos).<br>Nestes casos a fratura por si só estabelece a indicação — inicia-se tratamento (1.ª linha: alendronato, risedronato, ácido zoledrónico ou denosumab).</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Resumo do algoritmo</div>
+      <ul class="steps-list">
+        <li><div class="step-num">1</div><div class="step-text">Avaliar risco aos <strong>50 anos</strong> (ou antes se fatores de risco). Excluir/tratar causas secundárias.</div></li>
+        <li><div class="step-num">2</div><div class="step-text">Calcular <strong>FRAX Port sem DMO</strong>.</div></li>
+        <li><div class="step-num">3</div><div class="step-text"><strong>Baixo</strong> → medidas gerais. <strong>Elevado</strong> → tratar. <strong>Intermédio</strong> → pedir <strong>DXA</strong>.</div></li>
+        <li><div class="step-num">4</div><div class="step-text">Recalcular <strong>FRAX com DMO</strong> e decidir (vigilância vs tratar).</div></li>
+        <li><div class="step-num">5</div><div class="step-text">Fratura da anca/coluna ou ≥2 fraturas de fragilidade → <strong>tratar</strong>, dispensando o cálculo.</div></li>
+      </ul>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-calc" role="tabpanel" aria-labelledby="sep-calc" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador de densitometria</div>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduz o <strong>valor mais baixo</strong> de T-score (ou Z-score, conforme a idade/estado) entre coluna, anca total e colo do fémur.</p>
+      <div class="input-grid" style="margin-bottom:14px;">
+        <div class="field-group">
+          <label>Perfil do doente</label>
+          <select id="d_profile">
+            <option value="post">Mulher pós-menopáusica / homem ≥50 anos</option>
+            <option value="pre">Mulher pré-menopáusica / homem &lt;50 anos</option>
+          </select>
+        </div>
+        <div class="field-group" id="fg_t">
+          <label>T-score mais baixo</label>
+          <input type="number" id="d_t" placeholder="ex: -2.7" step="0.1" min="-6" max="4">
+        </div>
+        <div class="field-group" id="fg_z" style="display:none;">
+          <label>Z-score mais baixo</label>
+          <input type="number" id="d_z" placeholder="ex: -2.3" step="0.1" min="-6" max="4">
+        </div>
+        <div class="field-group">
+          <label>Fratura de fragilidade?</label>
+          <select id="d_fx">
+            <option value="none">Não</option>
+            <option value="hipspine">Sim — anca ou coluna</option>
+            <option value="other2">Sim — ≥2 em qualquer local</option>
+            <option value="other1">Sim — 1 noutra localização</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-primary" onclick="interpretDXA()">Interpretar</button>
+        <button type="button" class="btn-secondary" onclick="resetDXA()">↺ Limpar</button>
+      </div>
+      <div id="dxa-result" class="calc-result"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Interpretador FRAX Port</div>
+      <p style="font-size:13px;color:#2C3A38;margin-bottom:14px;line-height:1.5;">Introduz os valores obtidos no <strong>FRAX® Port</strong> e indique se foram calculados com DMO. Aplica os limiares do Consenso Nacional Menopausa 2021.</p>
+      <div class="input-grid">
+        <div class="field-group">
+          <label>Fratura major a 10 anos (%)</label>
+          <input type="number" id="f_major" placeholder="ex: 9.5" step="0.1" min="0" max="100">
+        </div>
+        <div class="field-group">
+          <label>Fratura da anca a 10 anos (%)</label>
+          <input type="number" id="f_hip" placeholder="ex: 2.8" step="0.1" min="0" max="100">
+        </div>
+        <div class="field-group">
+          <label>Calculado com DMO?</label>
+          <select id="f_dmo"><option value="no">Não (sem DXA)</option><option value="yes">Sim (com DXA)</option></select>
+        </div>
+        <div class="field-group">
+          <label>Fratura de fragilidade?</label>
+          <select id="f_fx"><option value="none">Não</option><option value="yes">Sim — anca/coluna ou ≥2</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-primary" onclick="interpretFRAX()">Interpretar</button>
+        <button type="button" class="btn-secondary" onclick="resetFRAX()">↺ Limpar</button>
+        <button type="button" class="btn-print no-print" onclick="window.print()" style="margin-left:auto;">Imprimir</button>
+      </div>
+      <div id="frax-result" class="calc-result"></div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-trat" role="tabpanel" aria-labelledby="sep-trat" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Linhas de tratamento (pós-menopausa)</div>
+      <div class="info-block green"><div class="ib-title">1.ª linha</div><p><strong>Bisfosfonatos</strong> (alendronato, risedronato, ácido zoledrónico) e <strong>denosumab</strong>. O <strong>alendronato oral genérico</strong> é, em Portugal, a opção mais custo-efetiva.</p></div>
+      <div class="info-block blue"><div class="ib-title">2.ª / 3.ª linha</div><p>2.ª linha: <strong>ibandronato</strong>. 3.ª linha / opções adicionais: <strong>raloxifeno (SERM)</strong> e <strong>TSEC</strong>. O <strong>estrogénio/TH</strong> não é recomendado <em>como tratamento</em>, mas é boa opção de <strong>prevenção</strong> em mulheres com sintomas vasomotores.</p></div>
+      <div class="info-block orange" style="margin-bottom:0;"><div class="ib-title">Alto risco / falência</div><p><strong>Teriparatida</strong> (anabólico) em risco muito elevado, intolerância ou falência das outras opções (máximo 24 meses). O <strong>romosozumab</strong> está aprovado para osteoporose grave mas <strong>não está comercializado em Portugal</strong>.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Redução do risco de fratura por fármaco</div>
+      <div class="tbl-wrap">
+        <table class="data-table">
+          <thead><tr><th>Fármaco</th><th>Vertebral</th><th>Não vertebral</th><th>Anca</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Alendronato</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="yes">Sim</td></tr>
+            <tr><td class="term">Risedronato</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="yes">Sim</td></tr>
+            <tr><td class="term">Ácido zoledrónico</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="yes">Sim</td></tr>
+            <tr><td class="term">Denosumab</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="yes">Sim</td></tr>
+            <tr><td class="term">Ibandronato</td><td class="yes">Sim</td><td class="no">Não demonstrado</td><td class="part">Só se T &lt; −3</td></tr>
+            <tr><td class="term">Teriparatida</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="no">Não demonstrado</td></tr>
+            <tr><td class="term">Raloxifeno</td><td class="yes">Sim</td><td class="no">Não demonstrado</td><td class="no">Não demonstrado</td></tr>
+            <tr><td class="term">Estrogénios / TH</td><td class="yes">Sim</td><td class="yes">Sim</td><td class="yes">Sim</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:#2C3A38;margin-top:10px;font-style:italic;">Adaptado do Consenso Nacional Menopausa 2021 (base: AACE 2020). Todos reduzem fratura vertebral; a diferenciação está no efeito não vertebral e na anca.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Fármacos — dose, vantagens e cautelas</div>
+      <input type="text" class="search-box no-print" oninput="filterDrugs(this)" placeholder="Pesquisar (ex: alendronato, denosumab, teriparatida, cálcio)...">
+      <div id="drug-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Como tomar os bisfosfonatos orais</div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <p>▸ <strong>De manhã, em jejum</strong>, com um <strong>copo cheio de água simples</strong> (não outras bebidas).<br>
+        ▸ <strong>Não deitar</strong> — permanecer sentado ou de pé <strong>≥30 min</strong> (alendronato/risedronato) ou <strong>≥60 min</strong> (ibandronato mensal).<br>
+        ▸ Só depois desse intervalo tomar o pequeno-almoço, outros medicamentos, cálcio ou suplementos.<br>
+        ▸ Melhora a absorção e reduz o risco de <strong>esofagite</strong>. Suspender e reavaliar se disfagia, odinofagia ou dor retroesternal.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-seg" role="tabpanel" aria-labelledby="sep-seg" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Antes de iniciar tratamento</div>
+      <ul class="steps-list">
+        <li><div class="step-num">1</div><div class="step-text"><strong>Corrigir cálcio e vitamina D</strong> — repor antes de antirreabsortivos (risco de hipocalcemia, sobretudo com denosumab e zoledrónico).</div></li>
+        <li><div class="step-num">2</div><div class="step-text"><strong>Função renal</strong> — bisfosfonatos evitados/contraindicados em TFG baixa (ácido zoledrónico contraindicado se ClCr &lt;35; denosumab é opção na doença renal, com vigilância da calcemia).</div></li>
+        <li><div class="step-num">3</div><div class="step-text"><strong>Avaliação dentária</strong> e higiene oral — sobretudo antes de antirreabsortivos potentes/IV ou se fatores de risco de osteonecrose da mandíbula.</div></li>
+        <li><div class="step-num">4</div><div class="step-text"><strong>Excluir causas secundárias</strong> (ver abaixo), em especial se osteoporose desproporcionada para a idade ou Z-score ≤ −2,0.</div></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Estudo de osteoporose secundária</div>
+      <div class="info-block blue">
+        <div class="ib-title">Analítica base a ponderar</div>
+        <p>Hemograma, cálcio e fósforo (com albumina), creatinina/TFG, <strong>fosfatase alcalina</strong>, <strong>25-OH-vitamina D</strong>, <strong>PTH</strong>, <strong>TSH</strong>, cálcio urinário 24h. Conforme suspeita: eletroforese de proteínas (mieloma), serologia de <strong>doença celíaca</strong>, testosterona (homem), cortisol/rastreio de <strong>Cushing</strong>.</p>
+      </div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <div class="ib-title">Causas frequentes</div>
+        <p>Défice de vitamina D, <strong>hiperparatiroidismo</strong>, <strong>corticoterapia</strong>, hipertiroidismo, <strong>doença celíaca</strong>/malabsorção, hipogonadismo, mieloma, doença renal/hepática crónica, álcool, imobilização, inibidores da aromatase/privação androgénica.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Drug holiday (bisfosfonatos)</div>
+      <div class="info-block purple">
+        <p>Aplica-se <strong>apenas aos bisfosfonatos</strong> (efeito persiste no osso após suspensão). Objetivo: reduzir efeitos adversos de longo prazo mantendo o benefício.</p>
+      </div>
+      <div class="info-block green">
+        <div class="ib-title">Risco baixo/moderado</div>
+        <p>Ponderar pausa após <strong>5 anos</strong> (oral) ou <strong>3 anos</strong> (IV) se sem fraturas e T-score &gt; −2,5. Pausa habitual de <strong>1–2 anos</strong>, com reavaliação (FRAX/DXA) cada 2–3 anos.</p>
+      </div>
+      <div class="info-block orange">
+        <div class="ib-title">Risco elevado</div>
+        <p>Continuar até <strong>10 anos</strong> (oral) ou <strong>6 anos</strong> (IV) antes de considerar pausa; ou mudar para fármaco de mecanismo diferente durante a pausa.</p>
+      </div>
+      <div class="info-block red" style="margin-bottom:0;">
+        <div class="ib-title">Retomar</div>
+        <p>Qualquer <strong>nova fratura</strong> obriga a retomar tratamento de imediato. Descida significativa da DMO ou subida do risco de fratura também terminam a pausa.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Denosumab — nunca parar sem transição</div>
+      <div class="info-block red" style="margin-bottom:0;">
+        <p>O denosumab <strong>não tem drug holiday</strong>. A sua suspensão (ou mesmo o <strong>atraso de uma dose</strong>) provoca um <strong>efeito rebound</strong>: subida rápida da remodelação, perda do ganho de DMO e risco de <strong>fraturas vertebrais múltiplas espontâneas</strong> (relatadas já ~2 meses após dose falhada). Manter a periodicidade semestral rigorosa e, se for descontinuado, fazer <strong>terapêutica de transição com bisfosfonato</strong> (ex. iniciar ~6 meses após a última dose). O mesmo princípio de perda abrupta aplica-se à teriparatida e ao romosozumab — seguir sempre com um antirreabsortivo.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Segurança e sinais de alarme</div>
+      <div class="info-block orange">
+        <div class="ib-title">Efeitos adversos raros dos antirreabsortivos</div>
+        <p>▸ <strong>Osteonecrose da mandíbula</strong> (rara; risco com procedimentos dentários invasivos) — cuidados dentários antes de tratar.<br>▸ <strong>Fraturas femorais atípicas</strong> (subtrocantéricas/diáfise) — suspeitar perante <strong>dor na coxa/virilha</strong> prodrómica; investigar com imagem.</p>
+      </div>
+      <div class="info-block red" style="margin-bottom:0;">
+        <div class="ib-title">Referenciar</div>
+        <p>Osteoporose secundária complexa; risco muito elevado ou falência terapêutica (candidatos a anabólico); doença renal significativa; suspeita de fratura atípica ou osteonecrose da mandíbula; fraturas recorrentes sob tratamento.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span> Cálcio, vitamina D e medidas gerais</div>
+      <div class="info-block green">
+        <p>▸ <strong>Cálcio 1200 mg/dia</strong> na pós-menopausa, <strong>preferencialmente pela dieta</strong> (laticínios). Suplementar apenas se a dieta for insuficiente ou sob tratamento farmacológico.<br>▸ <strong>Vitamina D 800–2000 UI/dia</strong>; doseamento nos grupos de risco de défice (idoso, institucionalizado, doença renal/hepática, malabsorção).<br>▸ Todos os ensaios de fármacos garantiram cálcio/vitamina D adequados — a suplementação é a base sobre a qual assenta o tratamento.</p>
+      </div>
+      <div class="info-block purple" style="margin-bottom:0;">
+        <div class="ib-title">Não farmacológico</div>
+        <p>Exercício de baixo impacto (marcha, bicicleta, 45–60 min, 3–5×/semana) e treino de força; <strong>prevenção de quedas</strong> (revisão de fármacos, visão, calçado, ambiente); cessação tabágica; moderação alcoólica; controlo do peso; exposição solar adequada.</p>
+      </div>
+    </div>
+  </div>
+  <div class="tool-footer">
+    Limiares baseados no FRAX® Port (Consenso Nacional Menopausa 2021); doses orientativas — confirmar sempre no RCM/Prontuário (Infarmed).<br>
+    <em>Esta ferramenta é um auxílio à decisão clínica e não substitui o julgamento do médico nem a avaliação especializada.</em>
+    <div style="margin-top:10px;"><button type="button" class="btn-print no-print" onclick="window.print()">Imprimir / Guardar PDF</button></div>
+  </div>
+  </div>
+  </div>
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia bibliografia-longa"><details id="bib"><summary><h2 id="bib-titulo">Bibliografia <span>· 8 referências</span></h2></summary><ol><li>Sociedade Portuguesa de Ginecologia / Sociedade Portuguesa de Menopausa. Consenso Nacional sobre Menopausa 2021 — Capítulo 5 (Osteoporose) e FRAX® Port.</li><li>FRAX® Fracture Risk Assessment Tool (OMS) — versão Portugal. https://www.shef.ac.uk/FRAX/tool.jsp?lang=pt</li><li>Camacho PM et al. AACE/ACE Clinical Practice Guidelines for the Diagnosis and Treatment of Postmenopausal Osteoporosis — 2020 update. Endocr Pract.</li><li>International Society for Clinical Densitometry (ISCD). Official Positions — Adult (T-score / Z-score). https://iscd.org/learn/official-positions/</li><li>Adler RA et al. Managing Osteoporosis in Patients on Long-Term Bisphosphonate Treatment (ASBMR Task Force). J Bone Miner Res 2016.</li><li>European Calcified Tissue Society (ECTS). Guidance on denosumab discontinuation. 2021.</li><li>Direção-Geral da Saúde. Orientações sobre suplementação de cálcio e vitamina D. https://www.dgs.pt</li><li>Infarmed. Prontuário Terapêutico / RCM (doses, contraindicações e comparticipação). https://app10.infarmed.pt/prontuario/index.php</li></ol></details><p>Criado por Miguel Henriques · v1.0 · revisto a 11 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Osteoporose%20%28v1.0%29&body=Ferramenta%3A%20Osteoporose%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="menopausa.html">← Menopausa</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-11</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+/* Dados e regras: os da versão original. */
+function switchTab(id){ var s=document.getElementById('sep-'+id); if(s) s.click(); }
+
+  // profile toggle for DXA interpreter
+  document.getElementById('d_profile').addEventListener('change', function(){
+    var pre = this.value === 'pre';
+    document.getElementById('fg_t').style.setProperty('display', pre?'none':'flex','important');
+    document.getElementById('fg_z').style.setProperty('display', pre?'flex':'none','important');
+  });
+
+  // =========================================================
+  //  DRUG DATA
+  // =========================================================
+  var DRUGS = [
+    { name:'Alendronato', sub:'Bisfosfonato oral · 1.ª linha', tag:'1.ª linha', tagCls:'t-line1', keys:'alendronato bisfosfonato oral semanal fosamax',
+      dose:'70 mg <strong>1×/semana</strong> (ou 10 mg/dia). Existe associado a vitamina D (2800 ou 5600 UI). Tomar em jejum, com água, de pé/sentado ≥30 min.',
+      adv:'<ul><li>Reduz fraturas <strong>vertebrais, não vertebrais e da anca</strong></li><li>Genérico oral — a opção <strong>mais custo-efetiva</strong> em Portugal</li><li>Larga experiência de uso</li></ul>',
+      dis:'<ul><li>Intolerância GI, <strong>esofagite</strong> (técnica de toma essencial)</li><li>Raros: osteonecrose da mandíbula, fratura femoral atípica (uso prolongado)</li></ul>',
+      use:'Tratamento e prevenção da osteoporose pós-menopausa; base do tratamento na maioria dos casos.',
+      ci:'Anomalias/estenose esofágica, incapacidade de permanecer erguido ≥30 min, hipocalcemia (corrigir antes), TFG baixa (evitar se &lt;30–35).' },
+
+    { name:'Risedronato', sub:'Bisfosfonato oral · 1.ª linha', tag:'1.ª linha', tagCls:'t-line1', keys:'risedronato bisfosfonato oral semanal mensal actonel',
+      dose:'35 mg <strong>1×/semana</strong> (ou 5 mg/dia; existe 150 mg mensal). Mesma técnica de toma dos orais.',
+      adv:'<ul><li>Reduz fraturas <strong>vertebrais, não vertebrais e da anca</strong></li><li>Alternativa ao alendronato com bom perfil</li></ul>',
+      dis:'<ul><li>Semelhantes ao alendronato (GI, esofagite; raros ONM/fratura atípica)</li></ul>',
+      use:'Tratamento e prevenção da osteoporose pós-menopausa.',
+      ci:'Iguais aos restantes bisfosfonatos orais (esófago, hipocalcemia, TFG baixa).' },
+
+    { name:'Ácido zoledrónico', sub:'Bisfosfonato IV · 1.ª linha', tag:'1.ª linha', tagCls:'t-line1', keys:'acido zoledronico zolendronico endovenoso iv anual aclasta',
+      dose:'5 mg <strong>IV 1×/ano</strong>. Garantir hidratação e reposição de cálcio/vitamina D antes.',
+      adv:'<ul><li>Bisfosfonato <strong>mais potente</strong>; reduz fratura vertebral, não vertebral e da anca</li><li>Administração <strong>anual</strong> — excelente adesão</li><li>Útil na intolerância/contraindicação oral</li></ul>',
+      dis:'<ul><li><strong>Reação de fase aguda</strong> (febre, mialgias) nas primeiras 24–72h, sobretudo na 1.ª dose</li><li>Nefrotoxicidade; hipocalcemia; raros ONM/fratura atípica</li></ul>',
+      use:'Osteoporose pós-menopausa, sobretudo com intolerância oral ou má adesão.',
+      ci:'<strong>Contraindicado se ClCr &lt;35 mL/min</strong> (nefrotoxicidade/IRA). Hipocalcemia não corrigida.' },
+
+    { name:'Denosumab', sub:'Anticorpo anti-RANKL SC · 1.ª linha', tag:'1.ª linha', tagCls:'t-line1', keys:'denosumab prolia anti-rankl subcutaneo semestral',
+      dose:'60 mg <strong>SC a cada 6 meses</strong>. Repor cálcio/vitamina D e vigiar calcemia.',
+      adv:'<ul><li>Reduz fratura <strong>vertebral, não vertebral e da anca</strong></li><li><strong>Sem excreção renal</strong> — opção na doença renal (com vigilância da calcemia)</li><li>Administração cómoda</li></ul>',
+      dis:'<ul><li><strong>Efeito rebound na suspensão</strong> — risco de fraturas vertebrais múltiplas; nunca parar sem transição para bisfosfonato</li><li>Hipocalcemia; raros ONM/fratura atípica</li></ul>',
+      use:'Osteoporose pós-menopausa, incluindo doença renal e casos com má tolerância aos bisfosfonatos.',
+      ci:'<strong>Hipocalcemia</strong> (corrigir antes). Exige adesão rigorosa à periodicidade e plano de descontinuação.' },
+
+    { name:'Ibandronato', sub:'Bisfosfonato oral/IV · 2.ª linha', tag:'2.ª linha', tagCls:'t-line2', keys:'ibandronato bonviva bisfosfonato mensal',
+      dose:'150 mg <strong>oral 1×/mês</strong> (ou 3 mg IV cada 3 meses). Existe associado a vitamina D (22 400 UI, mensal). Oral: erguido ≥60 min.',
+      adv:'<ul><li>Reduz fratura <strong>vertebral</strong>; toma mensal cómoda</li></ul>',
+      dis:'<ul><li>Efeito não vertebral <strong>não robustamente demonstrado</strong> (apenas subgrupo T &lt; −3 para não vertebral)</li><li>Sem redução comprovada de fratura da anca</li></ul>',
+      use:'2.ª linha, quando as opções de 1.ª linha não são adequadas.',
+      ci:'Iguais aos bisfosfonatos (esófago, hipocalcemia, função renal).' },
+
+    { name:'Raloxifeno', sub:'SERM oral · 3.ª linha', tag:'3.ª linha', tagCls:'t-line3', keys:'raloxifeno serm evista',
+      dose:'60 mg <strong>oral/dia</strong>.',
+      adv:'<ul><li>Reduz fratura <strong>vertebral</strong></li><li>Reduz o risco de <strong>cancro da mama invasivo</strong></li></ul>',
+      dis:'<ul><li>Sem efeito comprovado em fratura <strong>não vertebral ou da anca</strong></li><li>Aumenta o risco de <strong>tromboembolismo venoso</strong> e agrava afrontamentos</li></ul>',
+      use:'Mulher pós-menopáusica com risco sobretudo vertebral; consideração do perfil mamário.',
+      ci:'História de TEV; mulher com potencial de gravidez; sintomas vasomotores marcados (agrava).' },
+
+    { name:'TSEC (estrogénio + bazedoxifeno)', sub:'Complexo estrogénio-SERM', tag:'3.ª linha', tagCls:'t-line3', keys:'tsec bazedoxifeno estrogenio conjugado complexo',
+      dose:'Associação de estrogénios equinos conjugados + bazedoxifeno (SERM 3.ª geração).',
+      adv:'<ul><li>Previne a perda de massa óssea e reduz fratura <strong>vertebral</strong></li><li>Alívio de sintomas vasomotores sem oposição progestativa</li></ul>',
+      dis:'<ul><li>Perfil de SERM/estrogénio (risco tromboembólico a considerar)</li></ul>',
+      use:'Mulher pós-menopáusica com risco de osteoporose e sintomas vasomotores.',
+      ci:'Semelhantes aos SERM/terapêutica estrogénica; individualizar risco tromboembólico.' },
+
+    { name:'Teriparatida', sub:'Anabólico (PTH 1-34) SC · alto risco', tag:'Anabólico', tagCls:'t-anab', keys:'teriparatida forsteo anabolico pth paratormona',
+      dose:'20 µg <strong>SC/dia</strong>, <strong>máximo 24 meses</strong> (risco de osteossarcoma acima disso). Seguir sempre com antirreabsortivo.',
+      adv:'<ul><li>Primeiro <strong>anabólico</strong> — forma osso; reduz fratura vertebral e não vertebral</li><li>Opção no risco muito elevado, falência ou intolerância</li></ul>',
+      dis:'<ul><li>Sem efeito comprovado na <strong>fratura da anca</strong></li><li>Administração diária SC; custo elevado; <strong>perda abrupta de osso</strong> ao parar</li></ul>',
+      use:'Osteoporose grave / risco muito elevado; falência ou intolerância a outras terapêuticas.',
+      ci:'Situações com risco aumentado de osteossarcoma (doença de Paget, radioterapia óssea prévia, FA inexplicadamente elevada, epífises abertas), hipercalcemia, metástases ósseas.' },
+
+    { name:'Estrogénios / Terapêutica Hormonal', sub:'Prevenção (não recomendado como tratamento)', tag:'Prevenção', tagCls:'t-supp', keys:'estrogenio terapeutica hormonal th prevencao tibolona',
+      dose:'Conforme esquema de TH. A <strong>tibolona</strong> aumenta a DMO e reduz fratura vertebral e não vertebral.',
+      adv:'<ul><li>Reduz fratura vertebral, não vertebral e da anca; única eficaz na <strong>osteopenia</strong></li><li>Boa opção quando há <strong>sintomas vasomotores</strong> na fase inicial da menopausa</li></ul>',
+      dis:'<ul><li><strong>Não recomendada apenas para tratar</strong> osteoporose — ponderar riscos/benefícios da TH</li><li>Benefício ósseo diminui após cessação</li></ul>',
+      use:'Prevenção da osteoporose em mulheres na fase inicial da menopausa com sintomatologia vasomotora.',
+      ci:'Contraindicações gerais da terapêutica hormonal (individualizar).' },
+
+    { name:'Cálcio + Vitamina D', sub:'Base de suporte de todo o tratamento', tag:'Suplemento', tagCls:'t-supp', keys:'calcio vitamina d colecalciferol suplemento suporte',
+      dose:'<strong>Cálcio 1200 mg/dia</strong> (preferir dieta); <strong>vitamina D 800–2000 UI/dia</strong>. Doseamento de 25-OH-D nos grupos de risco.',
+      adv:'<ul><li>Base sobre a qual assentam todos os fármacos anti-fratura</li><li>Corrige défices que aumentam o risco de fratura e de hipocalcemia sob tratamento</li></ul>',
+      dis:'<ul><li>Debate sobre suplementos de cálcio (risco CV, litíase) — preferir cálcio da dieta</li></ul>',
+      use:'Todos os doentes sob tratamento farmacológico e sempre que a dieta/exposição solar sejam insuficientes.',
+      ci:'Hipercalcemia; litíase/hipercalciúria (ajustar). Preferir aporte dietético.' }
+  ];
+
+  function drugCard(d){
+    return '<div class="pat-card" data-keys="'+(d.name+' '+d.sub+' '+d.keys).toLowerCase()+'">'
+      + '<button type="button" class="pat-head mk-cabeca" aria-expanded="false" onclick="mkAlternar(this)">'
+      + '<div><div class="pat-name">'+d.name+'</div><div class="pat-sub">'+d.sub+'</div></div>'
+      + '<span style="display:flex;align-items:center;gap:10px;">'
+      + '<span class="pat-tag '+d.tagCls+'">'+d.tag+'</span><svg class="mk-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></button>'
+      + '<div class="pat-body">'
+      + '<div class="pat-section dose"><div class="ps-label">Dose / administração</div><p>'+d.dose+'</p></div>'
+      + '<div class="pat-section adv"><div class="ps-label">Vantagens</div>'+d.adv+'</div>'
+      + '<div class="pat-section dis"><div class="ps-label">Desvantagens / efeitos adversos</div>'+d.dis+'</div>'
+      + '<div class="pat-section use"><div class="ps-label">Indicação típica</div><p>'+d.use+'</p></div>'
+      + '<div class="pat-section ci"><div class="ps-label">Contraindicações / cautelas</div><p>'+d.ci+'</p></div>'
+      + '</div></div>';
+  }
+  (function(){
+    var c=document.getElementById('drug-list');
+    c.innerHTML = DRUGS.map(drugCard).join('');
+    var first=c.querySelector('.pat-card'); if(first) first.classList.add('open');
+  })();
+  function filterDrugs(inp){
+    var q=inp.value.toLowerCase().trim();
+    document.querySelectorAll('#drug-list .pat-card').forEach(function(card){
+      card.style.setProperty('display', (card.getAttribute('data-keys').indexOf(q)>=0)?'block':'none','important');
+    });
+  }
+
+  // =========================================================
+  //  DXA INTERPRETER
+  // =========================================================
+  function cv(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?null:v; }
+  function interpretDXA(){
+    var pre = document.getElementById('d_profile').value==='pre';
+    var fx = document.getElementById('d_fx').value;
+    var rows=[]; function row(l,i,t,x){ rows.push({level:l,icon:i,title:t,text:x}); }
+
+    if(pre){
+      var z=cv('d_z');
+      if(z==null){ mkAviso('Introduz o Z-score.'); return; }
+      if(z<=-2.0){
+        row('warn','','Z-score '+z+' — abaixo do esperado para a idade','Nesta faixa etária usa-se o Z-score. Um valor ≤ −2,0 obriga a procurar uma CAUSA SECUNDÁRIA e não se aplica o rótulo "osteoporose" da OMS.');
+      } else {
+        row('ok','','Z-score '+z+' — dentro do esperado para a idade','Sem critério para "abaixo do esperado". Interpretar no contexto clínico (fraturas, fatores de risco).');
+      }
+      row('info','','Não usar critérios OMS por T-score','Em pré-menopausa / homem <50 anos, o diagnóstico de osteoporose baseia-se no contexto clínico e em fraturas de fragilidade, não apenas no T-score.');
+    } else {
+      var t=cv('d_t');
+      if(t==null){ mkAviso('Introduz o T-score.'); return; }
+      var cat, cls, icon;
+      if(t>=-1.0){ cat='Normal'; cls='ok'; icon=''; }
+      else if(t>-2.5){ cat='Osteopenia (massa óssea baixa)'; cls='warn'; icon=''; }
+      else { cat='Osteoporose'; cls='alert'; icon=''; }
+      row(cls,icon,'T-score '+t+' → '+cat,'Classificação OMS pelo local com o T-score mais baixo.');
+      if(t<=-2.5 && fx!=='none'){ row('alert','','Osteoporose grave (estabelecida)','T ≤ −2,5 com fratura de fragilidade.'); }
+    }
+
+    // Fracture-driven treatment indication (any profile)
+    if(fx==='hipspine'){ row('alert','','Fratura da anca/coluna → tratar','Fratura de fragilidade da anca ou coluna estabelece indicação de tratamento, independentemente do T-score/FRAX.'); }
+    else if(fx==='other2'){ row('alert','','≥2 fraturas de fragilidade → tratar','Duas ou mais fraturas de fragilidade (>50 anos) estabelecem indicação de tratamento.'); }
+    else if(fx==='other1'){ row('warn','','1 fratura noutra localização','Integrar no risco global (FRAX). Uma fratura de fragilidade é sinal de alerta e reforça a avaliação.'); }
+
+    // suggestion to compute FRAX when osteopenia/no clear indication
+    if(!pre){
+      var t2=cv('d_t');
+      if(t2!=null && t2>-2.5 && fx==='none'){ row('info','','Calcular FRAX','Sem osteoporose densitométrica nem fratura — decidir tratar/vigiar pelo FRAX Port (com DMO). Ver separador Interpretador FRAX.'); }
+    }
+
+    renderResult('dxa-result', rows);
+  }
+  function resetDXA(){ document.getElementById('d_t').value=''; document.getElementById('d_z').value=''; document.getElementById('d_fx').value='none'; document.getElementById('dxa-result').classList.remove('visible'); }
+
+  // =========================================================
+  //  FRAX INTERPRETER (FRAX Port thresholds)
+  // =========================================================
+  function interpretFRAX(){
+    var major=cv('f_major'), hip=cv('f_hip');
+    var dmo=document.getElementById('f_dmo').value==='yes';
+    var fx=document.getElementById('f_fx').value==='yes';
+    if(major==null && hip==null && !fx){ mkAviso('Introduz os valores do FRAX (ou indique fratura).'); return; }
+    var rows=[]; function row(l,i,t,x){ rows.push({level:l,icon:i,title:t,text:x}); }
+
+    if(fx){
+      row('alert','','Fratura → tratar','Fratura de fragilidade da anca/coluna ou ≥2 fraturas estabelecem indicação de tratamento, dispensando o cálculo do FRAX.');
+    }
+
+    if(major!=null || hip!=null){
+      var mj=major==null?0:major, hp=hip==null?0:hip;
+      if(!dmo){
+        // Quadro 5 — sem DMO
+        if(mj>=11 || hp>=3){ row('alert','','Risco elevado (sem DMO)','Major ≥11% ou anca ≥3% → tratamento farmacológico, sem necessidade de DXA.'); }
+        else if( (mj>7 && mj<11) || (hp>2 && hp<3) ){ row('warn','','Risco intermédio (sem DMO)','Major 7–11% e anca 2–3% → pedir DXA para selecionar quem tratar e recalcular o FRAX com DMO.'); }
+        else if(mj<=7 && hp<=2){ row('ok','','Risco baixo (sem DMO)','Major ≤7% e anca ≤2% → medidas de estilo de vida; sem necessidade de DXA.'); }
+        else { row('info','','Valores discordantes','Um dos parâmetros aponta para intermédio/elevado — considerar DXA e reavaliar.'); }
+      } else {
+        // Quadro 6 — com DMO
+        if(mj>=9 || hp>=2.5){ row('alert','','Tratar (com DMO)','Major ≥9% ou anca ≥2,5% (FRAX com DMO) → tratamento farmacológico.'); }
+        else { row('ok','','Vigilância (com DMO)','Major <9% e anca <2,5% → vigilância + medidas gerais. Reavaliar periodicamente.'); }
+      }
+    }
+
+    if(rows.some(function(r){return r.level==='alert';})){
+      rows.unshift({level:'info',icon:'',title:'Se tratar: 1.ª linha',text:'Alendronato, risedronato, ácido zoledrónico ou denosumab. Repor cálcio/vitamina D e avaliar função renal e saúde oral antes de iniciar.'});
+    }
+    renderResult('frax-result', rows);
+  }
+  function resetFRAX(){ ['f_major','f_hip'].forEach(function(id){document.getElementById(id).value='';}); document.getElementById('f_dmo').value='no'; document.getElementById('f_fx').value='none'; document.getElementById('frax-result').classList.remove('visible'); }
+
+  function renderResult(elId, rows){
+    var hasAlert=rows.some(function(r){return r.level==='alert';});
+    var hasWarn=rows.some(function(r){return r.level==='warn';});
+    var banner = hasAlert ? {cls:'alert',icon:'',t:'Indicação de tratamento / achado relevante'} : (hasWarn ? {cls:'warn',icon:'',t:'Avaliar e orientar'} : {cls:'ok',icon:'',t:'Sem indicação de tratamento farmacológico'});
+    var html='<div class="result-row '+banner.cls+'"><span class="rr-icon">'+banner.icon+'</span><div><div class="rr-title">'+banner.t+'</div></div></div>';
+    rows.forEach(function(r){ html+='<div class="result-row '+r.level+'"><span class="rr-icon">'+r.icon+'</span><div><div class="rr-title">'+r.title+'</div><div class="rr-text">'+r.text+'</div></div></div>'; });
+    html+='<div class="info-block purple" style="margin-top:12px;margin-bottom:0;"><p style="font-size:12px;"><strong>Nota:</strong> limiares do FRAX® Port (Consenso Nacional Menopausa 2021). Decisão sempre individualizada e integrada com a clínica, comorbilidades e preferências do doente.</p></div>';
+    var res=document.getElementById(elId); res.innerHTML=html; res.classList.add('visible'); res.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>

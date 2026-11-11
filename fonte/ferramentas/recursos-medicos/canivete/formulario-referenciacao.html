@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulário de referenciação</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "formulario-referenciacao",
+  "titulo": "Formulário de referenciação",
+  "descricao": "Preenche a referenciação por campos, com contagem de caracteres, e copia o texto integral para o SClínico.",
+  "resumo": "Campos da referenciação, prontos para o SClínico",
+  "area": "recursos-medicos",
+  "grupo": "canivete",
+  "icone": "referenciacao",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-11",
+  "layout": "normal",
+  "ordem": 3,
+  "palavras": [
+    "referenciação",
+    "SClínico",
+    "pedido de consulta",
+    "hospital",
+    "encaminhamento",
+    "caracteres",
+    "carta"
+  ],
+  "bibliografia": [
+    "Ferramenta de preenchimento: não usa fontes clínicas. Limite orientativo de 1900 caracteres do campo de referenciação do SClínico."
+  ],
+  "corpo": "bancada"
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Formulário de referenciação */
+.ref-campo { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-g); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ref-cabeca { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ref-cabeca h2 { margin: 0; font-family: var(--letra-titulo); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+.ref-meta { display: flex; align-items: center; gap: 10px; }
+.char-count { font-size: 14px; color: var(--cor-texto-3); }
+.copy-field-btn { min-height: 36px; padding: 4px 12px; font-size: 14px; }
+.ref-campo textarea { width: 100%; min-height: 96px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 10px 12px; font-family: var(--letra-texto); font-size: 16px; line-height: 1.5; resize: vertical; }
+.ref-campo textarea:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.ref-total { background: var(--cor-menta-clara); border: 1px solid #CDE7DF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.ref-total h2 { margin: 0; font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
+.ref-conta { background: var(--cor-branco); border-radius: 14px; padding: 14px 16px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.ref-conta .label { font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+#totalCount { font-size: 34px; font-weight: 700; line-height: 1; }
+#totalCount.over { color: var(--clin-alerta); }
+.ref-conta .max { width: 100%; font-size: 14px; color: var(--cor-texto-3); }
+#alertBanner { display: none; margin: 0; }
+#alertBanner.show { display: block; }
+.ref-botoes { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; }
+.ref-botoes .mgf-botao { min-height: 48px; }
+.ref-botoes .mgf-botao-principal { flex: 1 1 auto; justify-content: center; }
+.ref-previa summary { cursor: pointer; font-weight: 700; color: var(--cor-verde); font-size: 15px; }
+.ref-previa pre { margin: 8px 0 0; background: var(--cor-branco); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 14px; line-height: 1.5; white-space: pre-wrap; max-height: 360px; overflow: auto; }
+#toast { min-height: 1.3em; margin: 0; font-size: 15px; font-weight: 700; color: var(--clin-normal); }
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <div id="fieldsContainer"></div>
+  <p class="mgf-nota" data-tom="menta"><strong>Privacidade.</strong> Os dados não são guardados nem enviados para qualquer servidor.</p>
+  </div>
+  <div class="mgf-resposta">
+  <section class="ref-total" aria-labelledby="ref-total-titulo">
+    <h2 id="ref-total-titulo">Texto para o SClínico</h2>
+    <div class="ref-conta">
+      <span class="label">Total de caracteres</span>
+      <span class="count" id="totalCount" aria-live="polite">0</span>
+      <span class="max">limite orientativo: 1900</span>
+    </div>
+    <p class="mgf-aviso" id="alertBanner"><strong>Atenção:</strong> o texto excede os 1900 caracteres habitualmente permitidos no campo de referenciação do SClínico. Considera resumir antes de colar.</p>
+    <div class="ref-botoes">
+      <button type="button" class="mgf-botao mgf-botao-principal" id="copyAllBtn">Copiar texto integral</button>
+      <button type="button" class="mgf-botao" id="clearAllBtn">Limpar tudo</button>
+    </div>
+    <p id="toast" role="status"></p>
+    <details class="ref-previa"><summary>Ver o texto integral</summary><pre id="ref-previa"></pre></details>
+  </section>
+  </div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+  const fields = [
+    { id: "identificacao", label: "Identificação / Dados Sociais", placeholder: "Nome, idade, nº utente, contacto, situação social relevante..." },
+    { id: "antecedentes", label: "Antecedentes Pessoais", placeholder: "Doenças relevantes, cirurgias, alergias, hábitos..." },
+    { id: "medicacao", label: "Medicação Habitual", placeholder: "Fármacos, doses, posologia..." },
+    { id: "historia", label: "História Clínica", placeholder: "Evolução clínica, sintomas, exame objetivo..." },
+    { id: "mcdts", label: "MCDT's Relevantes", placeholder: "Análises, imagiologia, outros exames com data e resultado..." },
+    { id: "suspeita", label: "Suspeita Diagnóstica / Motivo de Referenciação", placeholder: "Hipótese diagnóstica e razão do encaminhamento..." }
+  ];
+
+  const container = document.getElementById("fieldsContainer");
+
+  fields.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "ref-campo";
+    div.innerHTML = `
+      <div class="ref-cabeca">
+        <h2><label for="${f.id}">${f.label}</label></h2>
+        <div class="ref-meta">
+          <span class="char-count" id="count-${f.id}">0 caracteres</span>
+          <button type="button" class="mgf-botao copy-field-btn" data-target="${f.id}">Copiar campo</button>
+        </div>
+      </div>
+      <textarea id="${f.id}" placeholder="${f.placeholder}"></textarea>
+    `;
+    container.appendChild(div);
+  });
+
+  const TOTAL_LIMIT = 1900;
+
+  function buildFullText(){
+    return fields.map(f => {
+      const val = document.getElementById(f.id).value.trim();
+      return `${f.label.toUpperCase()}:\n${val}`;
+    }).join("\n\n");
+  }
+
+  function updateCounts(){
+    let total = 0;
+    fields.forEach(f => {
+      const val = document.getElementById(f.id).value;
+      document.getElementById(`count-${f.id}`).textContent = `${val.length} caracteres`;
+    });
+    const fullText = buildFullText();
+    total = fullText.length;
+    document.getElementById("ref-previa").textContent = fullText;   /* novo: pré-visualização */
+
+    const totalEl = document.getElementById("totalCount");
+    totalEl.textContent = total;
+    const alertBanner = document.getElementById("alertBanner");
+    if(total > TOTAL_LIMIT){
+      totalEl.classList.add("over");
+      alertBanner.classList.add("show");
+    } else {
+      totalEl.classList.remove("over");
+      alertBanner.classList.remove("show");
+    }
+  }
+
+  fields.forEach(f => {
+    document.getElementById(f.id).addEventListener("input", updateCounts);
+  });
+
+  function showToast(msg){
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => { toast.textContent = ""; }, 1800);
+  }
+
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(e){
+      // alternativa
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try{ ok = document.execCommand("copy"); }catch(err){ ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
+  document.getElementById("copyAllBtn").addEventListener("click", async () => {
+    const text = buildFullText();
+    const ok = await copyText(text);
+    showToast(ok ? "Texto integral copiado" : "Falha ao copiar");
+  });
+
+  /* «Limpar tudo» pede confirmação no próprio botão (em vez da janela confirm() do original) */
+  const clearAllBtn = document.getElementById("clearAllBtn");
+  clearAllBtn.addEventListener("click", () => {
+    if(clearAllBtn.dataset.confirmar !== "sim"){
+      clearAllBtn.dataset.confirmar = "sim";
+      clearAllBtn.textContent = "Confirmar: limpar todos os campos";
+      clearTimeout(clearAllBtn._t);
+      clearAllBtn._t = setTimeout(() => { clearAllBtn.dataset.confirmar = ""; clearAllBtn.textContent = "Limpar tudo"; }, 4000);
+      return;
+    }
+    clearTimeout(clearAllBtn._t);
+    clearAllBtn.dataset.confirmar = ""; clearAllBtn.textContent = "Limpar tudo";
+    fields.forEach(f => document.getElementById(f.id).value = "");
+    updateCounts();
+  });
+
+  document.querySelectorAll(".copy-field-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = btn.getAttribute("data-target");
+      const val = document.getElementById(id).value;
+      const ok = await copyText(val);
+      if(ok){
+        btn.classList.add("copiado");
+        const orig = btn.textContent;
+        btn.textContent = "Copiado";
+        setTimeout(() => { btn.classList.remove("copiado"); btn.textContent = orig; }, 1500);
+      } else {
+        showToast("Falha ao copiar campo");
+      }
+    });
+  });
+
+  updateCounts();
+</script>
+</body>
+</html>

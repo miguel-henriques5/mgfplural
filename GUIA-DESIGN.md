@@ -35,6 +35,8 @@ Todas as páginas de ferramenta seguem a mesma arrumação (aprovada a 10/11/202
 - **Cabeçalho compacto**, gerado pelo site: migalhas com o menu das outras ferramentas do grupo, ilustração, título e uma linha com o resumo (campo `resumo` da ficha, até ~50 caracteres), autor, versão e data; os botões Descarregar e Feedback, discretos. O aviso «Apoia, não substitui, o juízo clínico» é posto pelo site no fim da coluna dos comandos.
 - **Bibliografia** no fim da página; com mais de 5 referências fica fechada e abre ao carregar.
 - **Folha para o doente:** se o que se imprime é para o doente, põe `"impressao": "doente"` na ficha e a impressão sai sem cabeçalho, autoria nem bibliografia.
+- **Ferramentas sem conteúdo clínico** (organização, horários): `"aviso_clinico": false` na ficha tira o aviso «Apoia, não substitui, o juízo clínico».
+- **Bibliotecas** (por exemplo para criar PDF ou Excel): nada vem da internet. Põe o ficheiro em `assets/vendor/`, com a licença ao lado, e lista-o na ficha em `"bibliotecas": ["jspdf.umd.min.js"]`. A página do site carrega-o a partir de `assets/vendor/` e a versão para descarregar leva-o lá dentro. Hoje há jsPDF 2.5.1 e jsPDF-AutoTable 3.8.2 (MIT) e SheetJS 0.18.5 (Apache 2.0).
 - **Caixas de seleção:** o estilo comum (linha leve, uma só seta para baixo) aplica-se sozinho; não lhes dês bordas nem setas próprias.
 - **A ferramenta assenta no fundo da página**, sem caixa à volta. Uma caixa, não caixas dentro de caixas.
 - **Bancada** (por defeito): comandos à esquerda, resposta à direita. A resposta fica sempre à vista enquanto se preenche. No telemóvel passa a uma só coluna.
