@@ -661,6 +661,57 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "nota-soap",
+  "titulo": "Nota SOAP",
+  "descricao": "Registo da consulta em S-O-A-P para colar no SClínico: sinais vitais com IMC, sugestões ICPC-2, modelos de consulta, registos guardados neste computador, tarefas e notas do dia.",
+  "area": "Recursos médicos",
+  "grupo": "Registo e vigilância",
+  "icone": "nota-soap",
+  "url": "ferramentas/recursos-medicos/registo-e-vigilancia/nota-soap.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "SOAP",
+   "registo",
+   "SClínico",
+   "consulta",
+   "ICPC-2",
+   "sinais vitais",
+   "notas"
+  ]
+ },
+ {
+  "id": "vigilancia-mgf",
+  "titulo": "Vigilância MGF",
+  "descricao": "Acompanhamento da lista de utentes por programa (saúde infantil e materna, diabetes, hipertensão, DPOC, asma, obesidade, domicílios e rastreios): o que está em dia, a fazer e em atraso, cruzamentos, importação de listas do MIM@UF e do SDM, relatório da lista em PDF e modo de demonstração.",
+  "area": "Recursos médicos",
+  "grupo": "Registo e vigilância",
+  "icone": "indicadores",
+  "url": "ferramentas/recursos-medicos/registo-e-vigilancia/vigilancia-mgf.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "vigilância",
+   "programas de saúde",
+   "lista de utentes",
+   "saúde infantil",
+   "saúde materna",
+   "diabetes",
+   "hipertensão",
+   "DPOC",
+   "asma",
+   "obesidade",
+   "domicílios",
+   "rastreios",
+   "MIM@UF",
+   "SDM",
+   "pirâmide etária",
+   "índice de dependência",
+   "multimorbilidade",
+   "relatório"
+  ]
+ },
+ {
   "id": "vacinacao",
   "titulo": "Vacinação (PNV)",
   "descricao": "Programa Nacional de Vacinação: mapa, esquemas gerais e de recurso, critérios para vacinar e vacinação sazonal.",

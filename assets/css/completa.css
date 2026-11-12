@@ -52,3 +52,13 @@ body.pagina-completa { background: var(--cor-papel); color: var(--cor-tinta); fo
   .bc-botao { padding: 6px 10px; }
 }
 @media print { .barra-completa, .bc-mostrar { display: none !important; } }
+
+/* posição da barra escolhida na ficha ("barra": {"lado", "acima", "recolhida"}), para não tapar a ferramenta */
+.barra-completa, .bc-mostrar { bottom: calc(16px + var(--bc-acima, 0px)); }
+.barra-completa[data-lado="esquerda"], .bc-mostrar[data-lado="esquerda"] { right: auto; left: 16px; }
+.barra-completa[data-lado="esquerda"] { padding: 4px 4px 4px 10px; }
+.barra-completa[data-lado="esquerda"] .bc-painel { right: auto; left: 0; }
+@media (max-width: 640px) {
+  .barra-completa, .bc-mostrar { bottom: calc(8px + var(--bc-acima, 0px)); }
+  .barra-completa[data-lado="esquerda"], .bc-mostrar[data-lado="esquerda"] { left: 8px; }
+}
