@@ -661,6 +661,31 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "combinar-listas",
+  "titulo": "Combinar listas de Excel",
+  "descricao": "Junta duas ou mais listas de Excel numa só, encontrando o mesmo utente pelo nº de utente ou pelo nome: por exemplo, os resultados de um rastreio e uma lista de emails. Avisa do que não tem correspondência, dos repetidos e dos nomes que não batem certo, e descarrega a lista final em Excel.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "puzzle",
+  "url": "ferramentas/recursos-medicos/canivete/combinar-listas.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "Excel",
+   "juntar listas",
+   "combinar",
+   "cruzar listas",
+   "PROCV",
+   "VLOOKUP",
+   "nº de utente",
+   "emails",
+   "contactos",
+   "rastreio",
+   "lista de utentes",
+   "CSV"
+  ]
+ },
+ {
   "id": "nota-soap",
   "titulo": "Nota SOAP",
   "descricao": "Registo da consulta em S-O-A-P para colar no SClínico: sinais vitais com IMC, sugestões ICPC-2, modelos de consulta, registos guardados neste computador, tarefas e notas do dia.",

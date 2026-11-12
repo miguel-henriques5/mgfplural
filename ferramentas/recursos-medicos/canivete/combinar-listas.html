@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Combinar listas de Excel · MGF no Plural</title>
+<meta name="description" content="Junta duas ou mais listas de Excel numa só, encontrando o mesmo utente pelo nº de utente ou pelo nome: por exemplo, os resultados de um rastreio e uma lista de emails. Avisa do que não tem correspondência, dos repetidos e dos nomes que não batem certo, e descarrega a lista final em Excel.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+#ferramenta .cl-intro { font-size: 17px; line-height: 1.5; color: var(--cor-texto-2); margin: -10px 0 14px; max-width: 760px; }
+#ferramenta .cl-passo { margin: 30px 0 0; }
+#ferramenta .cl-passo-titulo { display: flex; align-items: center; gap: 12px; font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 6px; }
+#ferramenta .cl-num { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--cor-tinta); color: var(--cor-branco); font-family: var(--letra-texto); font-size: 16px; font-weight: 700; }
+#ferramenta .cl-passo-sub { color: var(--cor-texto-2); font-size: 16px; margin: 0 0 14px 44px; }
+#ferramenta .cl-listas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+#ferramenta .cl-lista { margin: 0; }
+#ferramenta .cl-lista .mgf-cartao-corpo { gap: 10px; }
+#ferramenta .cl-lista-sub { font-size: 15px; color: var(--cor-texto-3); margin: -2px 0 0; padding: 0 18px; }
+#ferramenta .cl-zona { border: 2px dashed var(--cor-linha); border-radius: var(--raio); padding: 18px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: background .15s, border-color .15s; }
+#ferramenta .cl-zona.sobre { background: var(--cor-menta-clara); border-color: var(--cor-verde); }
+#ferramenta .cl-zona p { margin: 0; font-size: 15px; color: var(--cor-texto-3); }
+#ferramenta .cl-zona .mgf-botoes { margin: 0; justify-content: center; }
+#ferramenta .cl-colar textarea { width: 100%; min-height: 120px; box-sizing: border-box; font-family: var(--letra-texto); font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--cor-campo); border-radius: 12px; resize: vertical; }
+#ferramenta .cl-ficheiro { display: flex; align-items: center; gap: 8px; font-weight: 700; word-break: break-word; }
+#ferramenta .cl-ficheiro svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+#ferramenta .cl-meta { font-size: 15px; color: var(--cor-texto-2); }
+#ferramenta .cl-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+#ferramenta .mgf-campo select, #ferramenta .mgf-campo input { width: 100%; }
+#ferramenta .cl-check { display: flex; align-items: flex-start; gap: 10px; font-size: 16px; line-height: 1.4; cursor: pointer; }
+#ferramenta .cl-check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--cor-verde); flex: 0 0 auto; }
+#ferramenta .cl-previa { overflow-x: auto; border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-p); }
+#ferramenta .cl-previa table { border-collapse: collapse; font-size: 13.5px; width: 100%; }
+#ferramenta .cl-previa th, #ferramenta .cl-previa td { padding: 5px 8px; border-bottom: 1px solid var(--cor-linha-suave); text-align: left; white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+#ferramenta .cl-previa th { background: var(--cor-papel); font-weight: 700; }
+#ferramenta .cl-botoes-pequenos { display: flex; flex-wrap: wrap; gap: 8px; }
+#ferramenta .cl-pequeno { min-height: 38px; padding: 6px 12px; font-size: 14px; }
+#ferramenta .cl-ligacao { margin: 0 0 12px; }
+#ferramenta .cl-contagem { font-size: 16px; padding: 10px 14px; border-radius: var(--raio-p); }
+#ferramenta .cl-aviso-col { font-size: 15px; color: var(--clin-atencao); }
+#ferramenta .cl-colunas { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta .cl-col { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 10px; border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-p); background: var(--cor-branco); }
+#ferramenta .cl-col.desligada { background: var(--cor-papel); }
+#ferramenta .cl-col.desligada .cl-col-nome input { color: var(--cor-texto-3); }
+#ferramenta .cl-col input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--cor-verde); }
+#ferramenta .cl-col-nome { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-width: 0; }
+#ferramenta .cl-col-nome input { font-family: var(--letra-texto); font-size: 16px; padding: 6px 10px; border: 1.5px solid var(--cor-linha); border-radius: 8px; min-width: 0; flex: 1 1 200px; }
+#ferramenta .cl-col-origem { font-size: 13.5px; color: var(--cor-texto-3); }
+#ferramenta .cl-mover { display: flex; gap: 4px; }
+#ferramenta .cl-mover button { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); cursor: pointer; display: grid; place-items: center; }
+#ferramenta .cl-mover button:disabled { opacity: .35; cursor: default; }
+#ferramenta .cl-mover svg { width: 16px; height: 16px; }
+#ferramenta .cl-opcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 14px; }
+#ferramenta .cl-prob { border: 1px solid var(--cor-linha-suave); border-left: 5px solid var(--clin-info-borda); border-radius: var(--raio-p); background: var(--cor-branco); margin: 0 0 8px; }
+#ferramenta .cl-prob[data-nivel="atencao"] { border-left-color: var(--clin-atencao-borda); }
+#ferramenta .cl-prob[data-nivel="alerta"] { border-left-color: var(--clin-alerta-borda); }
+#ferramenta .cl-prob[data-nivel="normal"] { border-left-color: var(--clin-normal-borda); }
+#ferramenta .cl-prob > summary { cursor: pointer; padding: 12px 14px; font-size: 16px; list-style-position: inside; }
+#ferramenta .cl-prob > summary b { margin-right: 4px; }
+#ferramenta .cl-prob-corpo { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.5; }
+#ferramenta .cl-prob-corpo p { margin: 0; }
+#ferramenta .cl-prob .mgf-tabela { font-size: 14px; }
+#ferramenta .cl-prob .mgf-tabela td input { width: 18px; height: 18px; accent-color: var(--cor-verde); }
+#ferramenta .cl-final { overflow: auto; max-height: 520px; border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-p); background: var(--cor-branco); }
+#ferramenta .cl-final table { border-collapse: collapse; font-size: 14px; width: 100%; }
+#ferramenta .cl-final th { position: sticky; top: 0; background: var(--cor-papel); font-weight: 700; text-align: left; padding: 7px 10px; border-bottom: 1.5px solid var(--cor-linha); white-space: nowrap; }
+#ferramenta .cl-final td { padding: 6px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; }
+#ferramenta .cl-final tr.cl-sem td { background: var(--clin-atencao-fundo); }
+#ferramenta .cl-final tr.cl-so td { background: var(--clin-info-fundo); }
+#ferramenta .cl-filtro { display: grid; grid-template-columns: minmax(160px, 1.2fr) minmax(150px, 1fr) minmax(140px, 1.2fr) auto; gap: 10px; align-items: end; margin: 0 0 12px; }
+#ferramenta .cl-filtro .mgf-botao { min-height: 48px; }
+#ferramenta .cl-copiar-coluna { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+#ferramenta .cl-copiar-coluna .mgf-campo { flex: 1 1 220px; }
+#ferramenta .cl-mensagem { font-size: 15px; }
+#ferramenta .cl-mensagem:empty { display: none; }
+#ferramenta .mgf-botao:disabled { opacity: .45; cursor: default; transform: none; }
+#ferramenta .cl-mais { font-size: 14px; color: var(--cor-texto-3); }
+@media (max-width: 640px) {
+  #ferramenta .cl-passo-sub { margin-left: 0; }
+  #ferramenta .cl-filtro { grid-template-columns: 1fr; }
+  #ferramenta .cl-col { grid-template-columns: auto minmax(0, 1fr); }
+  #ferramenta .cl-mover { grid-column: 2; }
+}
+@media print {
+  #ferramenta .cl-passo:not(#cl-passo4), #ferramenta .cl-intro, #ferramenta .cl-inicio, #ferramenta .cl-filtro, #ferramenta .cl-exportar { display: none !important; }
+  #ferramenta .cl-final { max-height: none; overflow: visible; }
+}
+</style>
+</head>
+<body data-ferramenta="combinar-listas" data-titulo="Combinar listas de Excel">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/programas-e-valencias/index.html"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/saude-infantil.html" target="_blank" rel="noopener">Saúde infantil e juvenil ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/vigilancia-gravidez.html" target="_blank" rel="noopener">Vigilância da gravidez ↗</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/combinar-listas.html">Combinar listas de Excel</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/index.html"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/nota-soap.html" target="_blank" rel="noopener">Nota SOAP ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/vigilancia-mgf.html" target="_blank" rel="noopener">Vigilância MGF ↗</a></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><a class="menu-outra-area" href="../../../ferramentas/documentacao/index.html"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação</span></a><a class="menu-outra-area" href="../../../ferramentas/mapa-de-recursos/index.html"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos</span></a><span class="menu-outra-area em-breve"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores<small>Em breve</small></span></span></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Canivete <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a>
+<ul><li><a href="pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a></li><li><a href="consulta-resultados-exames.html">Consulta rápida de resultados</a></li><li><a href="formulario-referenciacao.html">Formulário de referenciação</a></li><li><a href="construir-horario.html">Construir horário</a></li><li><a href="combinar-listas.html" aria-current="page">Combinar listas de Excel</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/puzzle.svg" alt="">
+<div class="ficha-titulo">
+<h1>Combinar listas de Excel</h1>
+<p class="ficha-meta">Junta listas pelo nº de utente ou pelo nome · <strong>Miguel Henriques</strong> · v1.0 · 12 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/combinar-listas.html" download="combinar-listas.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Combinar%20listas%20de%20Excel%20%28v1.0%29&body=Ferramenta%3A%20Combinar%20listas%20de%20Excel%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-coluna">
+<main class="mgf-ferramenta" id="ferramenta">
+<h2 class="mgf-pergunta">Que listas queres juntar?</h2>
+<p class="cl-intro">Por exemplo, os resultados de um rastreio (com o nº de utente e o nome) e uma lista de contactos (com o nº de utente e o email). A ferramenta encontra o mesmo utente nas duas listas e faz uma lista final com as colunas que escolheres, pronta para o Excel.</p>
+<p class="mgf-nota"><strong>Nota.</strong> Os ficheiros são lidos só neste computador: nada é enviado nem guardado, e ao fechar a página tudo desaparece. A lista final tem dados de utentes: guarda-a num local seguro e apaga-a quando já não precisares.</p>
+<div class="mgf-botoes cl-inicio">
+  <button type="button" class="mgf-botao" data-acao="exemplo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 14h9"/></svg><span>Experimentar com listas de exemplo</span></button>
+  <button type="button" class="mgf-botao" data-acao="limpar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>Começar de novo</span></button>
+</div>
+<p class="cl-mensagem mgf-interp" data-nivel="info" id="cl-mensagem-topo" role="status" aria-live="polite" style="margin-top:12px"></p>
+
+<section class="cl-passo" id="cl-passo1" aria-labelledby="cl-t1">
+  <h3 class="cl-passo-titulo" id="cl-t1"><span class="cl-num">1</span>As listas</h3>
+  <p class="cl-passo-sub">A lista 1 é a principal: a lista final tem uma linha por cada linha dela. Das outras listas vêm os dados a acrescentar (o email, por exemplo). Ficheiros Excel (.xlsx, .xls, .ods) ou CSV, ou células coladas do Excel.</p>
+  <div class="cl-listas" id="cl-listas"></div>
+  <div class="cl-botoes-pequenos" id="cl-acoes-listas" style="margin-top:12px"></div>
+</section>
+
+<section class="cl-passo" id="cl-passo2" aria-labelledby="cl-t2" hidden>
+  <h3 class="cl-passo-titulo" id="cl-t2"><span class="cl-num">2</span>Como se reconhece o mesmo utente</h3>
+  <p class="cl-passo-sub">Escolhe a coluna que identifica o utente em cada lista. O nº de utente é o mais seguro; o nome serve quando não há número.</p>
+  <div id="cl-ligacoes"></div>
+</section>
+
+<section class="cl-passo" id="cl-passo3" aria-labelledby="cl-t3" hidden>
+  <h3 class="cl-passo-titulo" id="cl-t3"><span class="cl-num">3</span>O que fica na lista final</h3>
+  <p class="cl-passo-sub">Marca as colunas que queres, muda-lhes o nome se quiseres e acerta a ordem com as setas.</p>
+  <div class="cl-colunas" id="cl-colunas"></div>
+  <div class="cl-opcoes" id="cl-opcoes"></div>
+</section>
+
+<section class="cl-passo" id="cl-passo4" aria-labelledby="cl-t4" hidden>
+  <h3 class="cl-passo-titulo" id="cl-t4"><span class="cl-num">4</span>Lista final</h3>
+  <div id="cl-resumo"></div>
+  <div id="cl-problemas" style="margin-top:14px"></div>
+  <h4 style="margin:22px 0 8px;font-size:18px">Ver e filtrar</h4>
+  <div class="cl-filtro" id="cl-filtro"></div>
+  <div class="cl-final" id="cl-final"></div>
+  <p class="cl-mais" id="cl-final-mais"></p>
+  <div class="cl-exportar" id="cl-exportar">
+    <h4 style="margin:22px 0 8px;font-size:18px">Levar a lista</h4>
+    <div class="mgf-botoes" style="margin-top:0">
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span>Descarregar Excel</span></button>
+      <button type="button" class="mgf-botao" data-acao="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span>Descarregar CSV</span></button>
+      <button type="button" class="mgf-botao" data-acao="copiar-tabela"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>Copiar a tabela</span></button>
+    </div>
+    <p class="cl-mais" style="margin-top:8px">O Excel tem a lista final (com o filtro, se houver) e, em folhas à parte, quem ficou sem correspondência, o que só está nas outras listas e um resumo.</p>
+    <div class="cl-copiar-coluna" style="margin-top:14px">
+      <label class="mgf-campo">Copiar só uma coluna (por exemplo, os emails)<select id="cl-col-copiar"></select></label>
+      <button type="button" class="mgf-botao" data-acao="copiar-coluna" style="min-height:48px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>Copiar</span></button>
+    </div>
+    <p class="cl-mais" style="margin-top:6px">Copia os valores das linhas visíveis, sem repetidos nem vazios, separados por «; ». Para um email a vários utentes, cola os endereços no campo Cco (cópia oculta), para ninguém ver os dos outros.</p>
+  </div>
+  <p class="cl-mensagem" id="cl-mensagem" role="status" aria-live="polite"></p>
+</section>
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Ferramenta de organização: não usa fontes clínicas. Biblioteca incluída: SheetJS 0.18.5 (licença Apache 2.0).</li><li>Regulamento (UE) 2016/679 do Parlamento Europeu e do Conselho, de 27 de abril de 2016 (Regulamento Geral sobre a Proteção de Dados).</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 12 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Combinar%20listas%20de%20Excel%20%28v1.0%29&body=Ferramenta%3A%20Combinar%20listas%20de%20Excel%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="construir-horario.html">← Construir horário</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v0.1 · 2026-11-12</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/vendor/xlsx.full.min.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+(function () {
+"use strict";
+var raiz = document.getElementById("ferramenta");
+var $ = function (s) { return raiz.querySelector(s); };
+var MAX_LISTAS = 5;
+
+/* ---------- estado ---------- */
+var E = {
+  listas: [],              // {nome, folhas:[{nome, matriz}], folha, auto, linhaTitulos, semTitulos, cab, linhas, g}
+  lig: [],                 // por lista extra: {metodo, cP, cL, dP, dL, nP, nL, porNome, varias}
+  colunas: [],             // {lista, col, nome, on}
+  opc: { semCorresp: "manter", soNaOutra: "nao", estado: true, limparNum: true },
+  aceites: {},             // "i:r" -> linha da lista i aceite à mão
+  recusados: {},           // "i:r:l" -> par recusado à mão
+  filtro: { col: "", op: "contem", valor: "" },
+  colar: {},               // lista -> true quando a caixa de colar está aberta
+  R: null, F: null
+};
+
+/* ---------- utilidades ---------- */
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function pad(n) { return String(n).padStart(2, "0"); }
+function letra(i) { var s = ""; i++; while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+function eData(v) { return v !== null && typeof v === "object" && !!v.iso; }
+/* valor de uma célula: texto, número ou data {iso, hm} */
+function txt(v) {
+  if (v == null) return "";
+  if (eData(v)) { var p = v.iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0] + (v.hm ? " " + v.hm : ""); }
+  if (typeof v === "number") return isFinite(v) ? String(+v.toPrecision(12)).replace(".", ",") : "";
+  return String(v);
+}
+function vazio(v) { return txt(v).trim() === ""; }
+function semAcentos(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+var PARTICULAS = { de: 1, da: 1, "do": 1, das: 1, dos: 1, e: 1, d: 1 };
+function normNome(v) { return semAcentos(txt(v)).toLowerCase().replace(/[^a-z\s]/g, " ").split(/\s+/).filter(function (t) { return t && !PARTICULAS[t]; }).join(" "); }
+function normNum(v) { var s = typeof v === "number" ? String(Math.round(v)) : txt(v); return s.replace(/\D/g, "").replace(/^0+/, ""); }
+function normTexto(v) { return semAcentos(txt(v)).toLowerCase().replace(/\s+/g, " ").trim(); }
+function isoValida(y, m, d) {
+  if (!(y >= 1900 && y <= 2100 && m >= 1 && m <= 12 && d >= 1)) return "";
+  var dim = [31, (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
+  return d <= dim ? y + "-" + pad(m) + "-" + pad(d) : "";
+}
+var MESES = { jan: 1, fev: 2, feb: 2, mar: 3, abr: 4, apr: 4, mai: 5, may: 5, jun: 6, jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12 };
+function ano2(a) { var y = new Date().getFullYear(); return 2000 + a <= y ? 2000 + a : 1900 + a; }
+/* datas escritas de muitas maneiras: 05/07/2012, 2012-07-05, 05072012, 050712, 5 de julho de 2012 */
+function lerData(s) {
+  s = String(s || "").trim().replace(/(?:T|\s+)\d{1,2}:\d{2}(?::\d{2})?.*$/, "");
+  var m = s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/); if (m) return isoValida(+m[1], +m[2], +m[3]);
+  m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2}|\d{4})$/); if (m) return isoValida(m[3].length === 2 ? ano2(+m[3]) : +m[3], +m[2], +m[1]);
+  var d = s.replace(/\s+/g, "");
+  if (/^\d{7}$/.test(d)) d = "0" + d;
+  if (/^\d{8}$/.test(d)) return isoValida(+d.slice(0, 4), +d.slice(4, 6), +d.slice(6, 8)) || isoValida(+d.slice(4, 8), +d.slice(2, 4), +d.slice(0, 2));
+  if (/^\d{6}$/.test(d)) return isoValida(ano2(+d.slice(4, 6)), +d.slice(2, 4), +d.slice(0, 2));
+  var t = semAcentos(s).toLowerCase();
+  m = t.match(/^(\d{1,2})\s*(?:de\s+|[-\/.]\s*)?([a-z]{3,})\.?\s*(?:de\s+|[-\/.,]\s*)?(\d{4}|\d{2})$/);
+  if (m && MESES[m[2].slice(0, 3)]) return isoValida(m[3].length === 2 ? ano2(+m[3]) : +m[3], MESES[m[2].slice(0, 3)], +m[1]);
+  return "";
+}
+function normData(v) {
+  if (eData(v)) return v.iso;
+  if (typeof v === "number" && v > 0 && v < 80000) { var d = XLSX.SSF.parse_date_code(v); return d ? isoValida(d.y, d.m, d.d) : ""; }
+  return lerData(txt(v));
+}
+function nomeLista(i) { return "lista " + (i + 1); }
+function plural(n, um, varios) { return n + " " + (n === 1 ? um : varios); }
+function fmtN(n) { return n.toLocaleString("pt-PT"); }
+
+/* ---------- ler ficheiros ---------- */
+function decodificar(buf) {
+  try { return new TextDecoder("utf-8", { fatal: true }).decode(buf).replace(/^﻿/, ""); }
+  catch (e) { return new TextDecoder("windows-1252").decode(buf); }
+}
+/* CSV ou texto colado: separador ; , ou tabulação (o que aparecer mais na primeira linha), aspas como no Excel */
+function lerTextoTabela(texto) {
+  texto = texto.replace(/\r\n?/g, "\n");
+  var primeira = texto.split("\n").find(function (l) { return l.trim(); }) || "";
+  var sep = ["\t", ";", ","].map(function (s) { return [s, primeira.split(s).length]; }).sort(function (a, b) { return b[1] - a[1]; })[0];
+  sep = sep[1] > 1 ? sep[0] : "\t";
+  var linhas = [], linha = [], campo = "", aspas = false;
+  for (var i = 0; i < texto.length; i++) {
+    var c = texto[i];
+    if (aspas) {
+      if (c === '"') { if (texto[i + 1] === '"') { campo += '"'; i++; } else aspas = false; }
+      else campo += c;
+    } else if (c === '"' && campo === "") aspas = true;
+    else if (c === sep) { linha.push(campo.trim()); campo = ""; }
+    else if (c === "\n") { linha.push(campo.trim()); linhas.push(linha); linha = []; campo = ""; }
+    else campo += c;
+  }
+  if (campo !== "" || linha.length) { linha.push(campo.trim()); linhas.push(linha); }
+  return linhas;
+}
+function valorCelula(c) {
+  if (!c || c.v == null) return "";
+  if (c.t === "n") {
+    if (c.z && XLSX.SSF.is_date(c.z)) {
+      /* datas gravadas com fuso horário antigo ficam a 1 minuto da meia-noite: arredondar */
+      var sv = Math.abs(c.v - Math.round(c.v)) < 0.0015 ? Math.round(c.v) : c.v;
+      var d = XLSX.SSF.parse_date_code(sv);
+      if (d && d.y > 1900) return { iso: d.y + "-" + pad(d.m) + "-" + pad(d.d), hm: (d.H || d.M) ? pad(d.H) + ":" + pad(d.M) : "" };
+    }
+    return c.v;
+  }
+  if (c.t === "d") { var x = c.v instanceof Date ? c.v : new Date(c.v); if (!isNaN(x)) return { iso: x.getFullYear() + "-" + pad(x.getMonth() + 1) + "-" + pad(x.getDate()), hm: "" }; }
+  if (c.t === "b") return c.v ? "Sim" : "Não";
+  if (c.t === "e") return "";
+  return String(c.v).replace(/ /g, " ").trim();
+}
+function matrizDaFolha(ws) {
+  var maxR = -1, maxC = -1, minR = Infinity, minC = Infinity, cel = [];
+  Object.keys(ws).forEach(function (k) {
+    if (k.charAt(0) === "!") return;
+    var a = XLSX.utils.decode_cell(k); if (ws[k].v == null || ws[k].v === "") return;
+    cel.push([a.r, a.c, ws[k]]);
+    if (a.r > maxR) maxR = a.r; if (a.c > maxC) maxC = a.c; if (a.r < minR) minR = a.r; if (a.c < minC) minC = a.c;
+  });
+  if (!cel.length) return [];
+  maxC = Math.min(maxC, minC + 300);
+  var m = [];
+  for (var r = 0; r <= maxR - minR; r++) { var l = new Array(maxC - minC + 1); for (var j = 0; j < l.length; j++) l[j] = ""; m.push(l); }
+  cel.forEach(function (x) { if (x[1] <= maxC) m[x[0] - minR][x[1] - minC] = valorCelula(x[2]); });
+  return m;
+}
+function lerFicheiro(f) {
+  return f.arrayBuffer().then(function (buf) {
+    var ext = (f.name.split(".").pop() || "").toLowerCase();
+    if (ext === "csv" || ext === "txt" || ext === "tsv") return { nome: f.name, folhas: [{ nome: "Folha 1", matriz: lerTextoTabela(decodificar(buf)) }] };
+    var wb = XLSX.read(new Uint8Array(buf), { type: "array", cellNF: true, cellText: false, cellDates: false });
+    return { nome: f.name, folhas: wb.SheetNames.map(function (n) { return { nome: n, matriz: matrizDaFolha(wb.Sheets[n]) }; }) };
+  });
+}
+
+/* ---------- títulos, colunas e palpites ---------- */
+var PALAVRAS_TITULO = /utente|sns|nome|n\.?\s*[º°o]|mail|contacto|telefone|telem|resultado|data|idade|sexo|morada|numero|processo|codigo|exame/i;
+function pareceTitulo(l, seguinte) {
+  var cheias = l.filter(function (v) { return !vazio(v); });
+  if (!cheias.length) return false;
+  var textos = cheias.every(function (v) { return typeof v === "string" && /[a-zA-ZÀ-ÿ]/.test(v) && v.indexOf("@") < 0 && v.length <= 60; });
+  if (!textos) return false;
+  if (cheias.some(function (v) { return PALAVRAS_TITULO.test(semAcentos(v)); })) return true;
+  if (!seguinte) return false;
+  return l.some(function (v, c) { var s = seguinte[c]; return !vazio(v) && !vazio(s) && (typeof s !== "string" || /^\d[\d\s.\/-]*$/.test(s) || s.indexOf("@") >= 0); });
+}
+function detetarTitulos(m) {
+  var cont = m.slice(0, 60).map(function (l) { return l.filter(function (v) { return !vazio(v); }).length; });
+  var max = Math.max.apply(null, [0].concat(cont));
+  var limite = max <= 1 ? 1 : Math.max(2, Math.ceil(max * 0.6));
+  for (var i = 0; i < Math.min(m.length, 30); i++) {
+    if (cont[i] < limite) continue;
+    var j = i + 1; while (j < m.length && cont[j] === 0) j++;
+    return pareceTitulo(m[i], m[j]) ? i : -1;
+  }
+  return -1;
+}
+function prepararLista(L) {
+  var m = (L.folhas[L.folha] || { matriz: [] }).matriz;
+  var h = L.semTitulos ? -1 : (L.linhaTitulos != null ? L.linhaTitulos : L.auto);
+  var largura = 0;
+  m.forEach(function (l) { var k = l.length; while (k > 0 && vazio(l[k - 1])) k--; if (k > largura) largura = k; });
+  var corpo = (h >= 0 ? m.slice(h + 1) : m).filter(function (l) { return l.some(function (v) { return !vazio(v); }); });
+  var usar = [];
+  for (var c = 0; c < largura; c++) {
+    var t = h >= 0 ? txt(m[h][c]).replace(/\s+/g, " ").trim() : "";
+    if (t || corpo.some(function (l) { return !vazio(l[c]); })) usar.push([c, t]);
+  }
+  var vistos = {};
+  L.cab = usar.map(function (u) {
+    var n = u[1] || "Coluna " + letra(u[0]), k = n, j = 2;
+    while (vistos[k.toLowerCase()]) k = n + " (" + (j++) + ")";
+    vistos[k.toLowerCase()] = 1; return k;
+  });
+  L.linhas = corpo.map(function (l) { return usar.map(function (u) { var v = l[u[0]]; return v == null ? "" : v; }); });
+  L.g = adivinhar(L);
+}
+function proporcao(L, c, teste) {
+  var n = 0, ok = 0;
+  for (var r = 0; r < L.linhas.length && n < 300; r++) { var v = L.linhas[r][c]; if (vazio(v)) continue; n++; if (teste(v)) ok++; }
+  return n ? ok / n : 0;
+}
+var eNumUtente = function (v) { var d = normNum(v); return d.length >= 7 && d.length <= 10 && !/[a-z@]/i.test(txt(v)); };
+var eNome = function (v) { return typeof v === "string" && /^[A-Za-zÀ-ÿ'’.\-]+(\s+[A-Za-zÀ-ÿ'’.\-]+)+$/.test(v.trim()) && v.indexOf("@") < 0; };
+function adivinhar(L) {
+  var cab = L.cab.map(function (h) { return semAcentos(h).toLowerCase(); });
+  function procura(rx, nao, teste) {
+    for (var c = 0; c < cab.length; c++) if (rx.test(cab[c]) && !(nao && nao.test(cab[c])) && (!teste || proporcao(L, c, teste) >= 0.5)) return c;
+    return -1;
+  }
+  function porConteudo(teste, nao) {
+    var melhor = -1, p = 0.7;
+    for (var c = 0; c < cab.length; c++) { if (nao && nao.test(cab[c])) continue; var x = proporcao(L, c, teste); if (x >= p) { p = x; melhor = c; } }
+    return melhor;
+  }
+  var num = procura(/(n\.?\s*[º°o]?\s*(de\s*)?utente|\bsns\b|\bnus\b|numero\s*(de\s*)?utente|num\.?\s*utente|utente\s*n|n[º°]\s*benef)/, null, eNumUtente);
+  if (num < 0) num = porConteudo(eNumUtente);
+  var nome = procura(/nome|^utente$/, /medic|profission|enferm|unidade|\bpai\b|\bmae\b|ficheiro|exame|prova|familia/, eNome);
+  if (nome < 0) nome = porConteudo(eNome, /medic|profission|enferm|unidade|\bpai\b|\bmae\b|ficheiro|exame|prova|familia|mail|morada|rua|localidade|resultado|observ/);
+  var data = procura(/nasc|\bdn\b|d\.\s*n\./);
+  var email = procura(/mail/);
+  return { num: num, nome: nome, data: data, email: email };
+}
+function ligacaoPadrao(i) {
+  var A = E.listas[0].g, B = E.listas[i].g;
+  var g = { metodo: "texto", cP: 0, cL: 0, dP: A.data, dL: B.data, nP: A.nome, nL: B.nome, porNome: false, varias: "juntar" };
+  if (A.num >= 0 && B.num >= 0) { g.metodo = "num"; g.cP = A.num; g.cL = B.num; g.porNome = A.nome >= 0 && B.nome >= 0; }
+  else if (A.nome >= 0 && B.nome >= 0) { g.metodo = "nome"; g.cP = A.nome; g.cL = B.nome; }
+  return g;
+}
+function colunasPadrao() {
+  var cols = [], usados = {};
+  E.listas.forEach(function (L, i) {
+    var g = E.lig[i];
+    L.cab.forEach(function (h, c) {
+      var on = i === 0 || !g || [g.cL, g.dL, g.nL].indexOf(c) < 0;
+      var nome = h;
+      if (usados[nome.toLowerCase()]) nome = h + " (" + nomeLista(i) + ")";
+      if (on) usados[nome.toLowerCase()] = 1;
+      cols.push({ lista: i, col: c, nome: nome, on: on });
+    });
+  });
+  E.colunas = cols;
+}
+function listasMudaram() {
+  E.lig = [];
+  if (listasProntas()) for (var i = 1; i < E.listas.length; i++) E.lig[i] = ligacaoPadrao(i);
+  E.aceites = {}; E.recusados = {};
+  E.filtro = { col: "", op: "contem", valor: "" };
+  if (listasProntas()) colunasPadrao(); else E.colunas = [];
+  tudo();
+}
+
+/* ---------- juntar ---------- */
+function chave(L, r, metodo, c, d) {
+  if (c < 0 || c >= L.cab.length) return "";
+  var v = L.linhas[r][c];
+  if (metodo === "num") return normNum(v);
+  if (metodo === "nome") return normNome(v);
+  if (metodo === "nomedata") { var n = normNome(v), dt = d >= 0 ? normData(L.linhas[r][d]) : ""; return n && dt ? n + "|" + dt : ""; }
+  return normTexto(v);
+}
+function tokens(n) { return n ? n.split(" ") : []; }
+function nomesCompativeis(a, b) {
+  if (!a || !b || a === b) return true;
+  var ta = tokens(a), tb = tokens(b);
+  if (ta[0] === tb[0] && ta[ta.length - 1] === tb[tb.length - 1]) return true;
+  var curto = ta.length <= tb.length ? ta : tb, longo = curto === ta ? tb : ta;
+  return curto[0] === longo[0] && curto.every(function (t) { return longo.indexOf(t) >= 0; });
+}
+function primeiroUltimo(n) { var t = tokens(n); return t.length >= 2 ? t[0] + " " + t[t.length - 1] : ""; }
+function distancia(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  var ant = []; for (var j = 0; j <= b.length; j++) ant[j] = j;
+  for (var i = 1; i <= a.length; i++) {
+    var cur = [i], menor = i;
+    for (var k = 1; k <= b.length; k++) { cur[k] = Math.min(ant[k] + 1, cur[k - 1] + 1, ant[k - 1] + (a[i - 1] === b[k - 1] ? 0 : 1)); if (cur[k] < menor) menor = cur[k]; }
+    if (menor > max) return max + 1;
+    ant = cur;
+  }
+  return ant[b.length];
+}
+function indice(chaves) {
+  var m = new Map();
+  chaves.forEach(function (k, r) { if (!k) return; if (!m.has(k)) m.set(k, []); m.get(k).push(r); });
+  return m;
+}
+function combinar() {
+  var P = E.listas[0], N = P.linhas.length, R = { listas: [] };
+  for (var i = 1; i < E.listas.length; i++) {
+    var L = E.listas[i], g = E.lig[i], M = L.linhas.length;
+    var kP = P.linhas.map(function (_, r) { return chave(P, r, g.metodo, g.cP, g.dP); });
+    var kL = L.linhas.map(function (_, r) { return chave(L, r, g.metodo, g.cL, g.dL); });
+    var comNomes = g.nP >= 0 && g.nL >= 0 && g.nP < P.cab.length && g.nL < L.cab.length;
+    var nP = comNomes ? P.linhas.map(function (l) { return normNome(l[g.nP]); }) : null;
+    var nL = comNomes ? L.linhas.map(function (l) { return normNome(l[g.nL]); }) : null;
+    var idx = indice(kL), idxN = comNomes ? indice(nL) : null;
+    var corr = [], usados = new Set();
+    for (var r = 0; r < N; r++) {
+      var c = [], via = "";
+      if (kP[r]) { c = (idx.get(kP[r]) || []).filter(function (l) { return !E.recusados[i + ":" + r + ":" + l]; }); via = "chave"; }
+      if (!c.length && g.metodo === "num" && g.porNome && comNomes && nP[r]) {
+        c = (idxN.get(nP[r]) || []).filter(function (l) { return (!kP[r] || !kL[l]) && !E.recusados[i + ":" + r + ":" + l]; });
+        via = "nome";
+      }
+      var ac = E.aceites[i + ":" + r];
+      if (!c.length && ac != null && ac < M) { c = [ac]; via = "manual"; }
+      if (!c.length) via = "";
+      corr.push({ linhas: c, via: via });
+      c.forEach(function (l) { usados.add(l); });
+    }
+    var X = { i: i, corr: corr, kP: kP, kL: kL, nP: nP, nL: nL, comNomes: comNomes };
+    X.semCorr = []; X.varias = []; X.conflitos = [];
+    corr.forEach(function (o, r) {
+      if (!o.linhas.length) X.semCorr.push(r);
+      if (o.linhas.length > 1) X.varias.push(r);
+      if (comNomes && o.via === "chave" && g.metodo !== "nome" && g.metodo !== "nomedata")
+        o.linhas.forEach(function (l) { if (nP[r] && nL[l] && !nomesCompativeis(nP[r], nL[l])) X.conflitos.push([r, l]); });
+    });
+    X.soNaL = []; for (var l = 0; l < M; l++) if (!usados.has(l)) X.soNaL.push(l);
+    X.semChaveP = kP.filter(function (k) { return !k; }).length;
+    X.semChaveL = kL.filter(function (k) { return !k; }).length;
+    var rep = indice(kP); X.repetidos = []; rep.forEach(function (rs, k) { if (rs.length > 1) X.repetidos.push(rs); });
+    var repL = indice(kL); X.repetidosL = 0; repL.forEach(function (ls) { if (ls.length > 1) X.repetidosL++; });
+    X.numInvalP = g.metodo === "num" ? kP.filter(function (k) { return k && k.length !== 9; }).length : 0;
+    X.numInvalL = g.metodo === "num" ? kL.filter(function (k) { return k && k.length !== 9; }).length : 0;
+    X.sugestoes = sugerir(X, g);
+    R.listas[i] = X;
+  }
+  return R;
+}
+/* correspondências prováveis para quem ficou sem nenhuma: nunca entram sozinhas, só se marcares */
+function sugerir(X, g) {
+  var out = [], vistos = {};
+  var livres = X.soNaL.slice(0, 5000);
+  X.semCorr.slice(0, 400).forEach(function (r) {
+    var achados = [];
+    livres.forEach(function (l) {
+      var m = "", p = 0;
+      if (X.comNomes && X.nP[r] && X.nL[l]) {
+        if (X.nP[r] === X.nL[l]) { m = g.metodo === "nomedata" ? "mesmo nome, data de nascimento diferente" : (g.metodo === "num" ? "mesmo nome, nº de utente diferente" : "mesmo nome"); p = 3; }
+        else if (primeiroUltimo(X.nP[r]) && primeiroUltimo(X.nP[r]) === primeiroUltimo(X.nL[l])) { m = "primeiro e último nome iguais"; p = 2; }
+        else if (X.nP[r].length > 8 && distancia(X.nP[r], X.nL[l], 2) <= 2) { m = "nome quase igual"; p = 2; }
+      }
+      if (!m && g.metodo === "num" && X.kP[r] && X.kL[l] && X.kP[r].length === X.kL[l].length && distancia(X.kP[r], X.kL[l], 1) <= 1 &&
+          (!X.comNomes || !X.nP[r] || !X.nL[l] || nomesCompativeis(X.nP[r], X.nL[l]))) { m = "nº de utente com um algarismo diferente"; p = 1; }
+      if (m) achados.push({ l: l, m: m, p: p });
+    });
+    if (!achados.length) return;
+    achados.sort(function (a, b) { return b.p - a.p; });
+    if (achados.length > 1 && achados[1].p === achados[0].p) return;   // ambíguo: não sugere
+    if (vistos[achados[0].l]) return;
+    vistos[achados[0].l] = 1;
+    out.push({ r: r, l: achados[0].l, motivo: achados[0].m });
+  });
+  return out;
+}
+function valorJunto(L, linhas, col, modo) {
+  if (!linhas.length) return "";
+  if (linhas.length === 1 || modo === "primeira" || modo === "linhas") return L.linhas[linhas[0]][col];
+  var vistos = {}, vals = [];
+  linhas.forEach(function (l) { var v = L.linhas[l][col], t = txt(v).trim(); if (t && !vistos[t.toLowerCase()]) { vistos[t.toLowerCase()] = 1; vals.push(v); } });
+  return vals.length === 0 ? "" : vals.length === 1 ? vals[0] : vals.map(txt).join("; ");
+}
+function estadoTexto(o, modo) {
+  if (!o.linhas.length) return "Não";
+  if (o.via === "manual") return "Sim, confirmada por ti";
+  if (o.via === "nome") return "Sim, pelo nome";
+  if (o.linhas.length > 1) return modo === "juntar" ? "Sim, várias (juntas)" : modo === "primeira" ? "Sim, a primeira de várias" : "Sim, uma de várias";
+  return "Sim";
+}
+function construir() {
+  var R = E.R, P = E.listas[0], cols = E.colunas.filter(function (c) { return c.on; });
+  var extras = E.listas.length - 1;
+  var cab = cols.map(function (c) { return c.nome; });
+  if (E.opc.estado) for (var i = 1; i <= extras; i++) cab.push(extras > 1 ? "Correspondência na " + nomeLista(i) : "Correspondência");
+  /* colunas do nº de utente usadas para ligar: escritas só com algarismos, se pedido */
+  var limpar = cols.map(function (c) {
+    if (!E.opc.limparNum) return false;
+    for (var k = 1; k <= extras; k++) { var gk = E.lig[k]; if (gk.metodo === "num" && ((c.lista === 0 && c.col === gk.cP) || (c.lista === k && c.col === gk.cL))) return true; }
+    return false;
+  });
+  var limparLinha = function (lin) { limpar.forEach(function (sim, k) { if (sim && !vazio(lin[k])) lin[k] = String(lin[k]).split(/;\s*/).map(function (x) { return normNum(x) || x; }).join("; "); }); return lin; };
+  var linhas = [], tipos = [];
+  P.linhas.forEach(function (lp, r) {
+    var falta = false;
+    for (var i = 1; i <= extras; i++) if (!R.listas[i].corr[r].linhas.length) falta = true;
+    if (falta && E.opc.semCorresp === "tirar") return;
+    var combos = [[]];
+    for (var j = 1; j <= extras; j++) {
+      var o = R.listas[j].corr[r], modo = E.lig[j].varias;
+      var opcoes = o.linhas.length > 1 && modo === "linhas" ? o.linhas.map(function (l) { return [l]; }) : [o.linhas];
+      combos = combos.reduce(function (acc, c) { return acc.concat(opcoes.map(function (op) { return c.concat([op]); })); }, []);
+    }
+    combos.forEach(function (combo) {
+      var lin = cols.map(function (c) { return c.lista === 0 ? lp[c.col] : valorJunto(E.listas[c.lista], combo[c.lista - 1], c.col, E.lig[c.lista].varias); });
+      if (E.opc.estado) for (var k = 1; k <= extras; k++) lin.push(estadoTexto(R.listas[k].corr[r], E.lig[k].varias));
+      linhas.push(limparLinha(lin)); tipos.push(falta ? "sem" : "ok");
+    });
+  });
+  if (E.opc.soNaOutra === "acrescentar") {
+    for (var i2 = 1; i2 <= extras; i2++) {
+      var L = E.listas[i2], g = E.lig[i2];
+      R.listas[i2].soNaL.forEach(function (l) {
+        var lin = cols.map(function (c) {
+          if (c.lista === i2) return L.linhas[l][c.col];
+          if (c.lista === 0) { if (c.col === g.cP) return L.linhas[l][g.cL]; if (c.col === g.nP && g.nL >= 0) return L.linhas[l][g.nL]; if (c.col === g.dP && g.dL >= 0) return L.linhas[l][g.dL]; }
+          return "";
+        });
+        if (E.opc.estado) for (var k = 1; k <= extras; k++) lin.push(k === i2 ? "Só na " + nomeLista(i2) : "");
+        linhas.push(limparLinha(lin)); tipos.push("so");
+      });
+    }
+  }
+  return { cab: cab, linhas: linhas, tipos: tipos };
+}
+function filtrar(T) {
+  var f = E.filtro, c = f.col === "" ? -1 : +f.col;
+  if (c < 0 || c >= T.cab.length) return T;
+  var alvo = normTexto(f.valor);
+  var ok = function (v) {
+    var t = normTexto(v);
+    if (f.op === "vazio") return t === "";
+    if (f.op === "preenchido") return t !== "";
+    if (f.op === "igual") return t === alvo;
+    if (f.op === "nao") return t.indexOf(alvo) < 0;
+    return t.indexOf(alvo) >= 0;
+  };
+  var linhas = [], tipos = [];
+  T.linhas.forEach(function (l, r) { if (ok(l[c])) { linhas.push(l); tipos.push(T.tipos[r]); } });
+  return { cab: T.cab, linhas: linhas, tipos: tipos, filtrada: true };
+}
+
+/* ---------- desenhar ---------- */
+var IC = {
+  ficheiro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/><path d="M14 3v4h4M9 12l6 6M15 12l-6 6"/></svg>',
+  carregar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V9"/><path d="M7 14l5-5 5 5"/><path d="M5 4h14"/></svg>',
+  colar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9z"/></svg>',
+  cima: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>',
+  baixo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>',
+  mais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  trocar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>'
+};
+function opcoesColunas(L, sel, comNenhuma) {
+  return (comNenhuma ? '<option value="-1"' + (sel < 0 ? " selected" : "") + ">—</option>" : "") +
+    L.cab.map(function (h, c) { return '<option value="' + c + '"' + (c === sel ? " selected" : "") + ">" + esc(h) + "</option>"; }).join("");
+}
+function previa(L) {
+  var n = Math.min(4, L.linhas.length), cab = L.cab.slice(0, 8);
+  return '<div class="cl-previa"><table><thead><tr>' + cab.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + (L.cab.length > 8 ? "<th>…</th>" : "") +
+    "</tr></thead><tbody>" + L.linhas.slice(0, n).map(function (l) { return "<tr>" + l.slice(0, 8).map(function (v) { return "<td>" + esc(txt(v)) + "</td>"; }).join("") + (L.cab.length > 8 ? "<td></td>" : "") + "</tr>"; }).join("") + "</tbody></table></div>";
+}
+function cartaoLista(i) {
+  var L = E.listas[i];
+  var titulo = i === 0 ? "Lista 1 — a principal" : "Lista " + (i + 1);
+  var sub = i === 0 ? "Por exemplo, os resultados do rastreio." : (i === 1 ? "Por exemplo, os contactos com o email." : "Mais dados a acrescentar.");
+  var h = '<fieldset class="mgf-cartao cl-lista" data-lista="' + i + '"><legend class="mgf-so-leitor">' + titulo + '</legend><div class="mgf-cartao-titulo" aria-hidden="true">' + titulo + "</div>";
+  if (!L) {
+    h += '<p class="cl-lista-sub">' + sub + '</p><div class="mgf-cartao-corpo">';
+    if (E.colar[i]) {
+      h += '<div class="cl-colar"><label class="mgf-campo">Cola aqui as células copiadas do Excel (com a linha dos títulos)<textarea data-colar-texto="' + i + '" spellcheck="false"></textarea></label>' +
+        '<div class="cl-botoes-pequenos" style="margin-top:8px"><button type="button" class="mgf-botao mgf-botao-principal cl-pequeno" data-acao="usar-colado" data-lista="' + i + '">Usar estas células</button>' +
+        '<button type="button" class="mgf-botao cl-pequeno" data-acao="cancelar-colar" data-lista="' + i + '">Cancelar</button></div></div>';
+    } else {
+      h += '<div class="cl-zona" data-zona="' + i + '"><div class="mgf-botoes"><button type="button" class="mgf-botao mgf-botao-principal" data-acao="escolher" data-lista="' + i + '">' + IC.carregar + "<span>Escolher ficheiro</span></button>" +
+        '<button type="button" class="mgf-botao" data-acao="colar" data-lista="' + i + '">' + IC.colar + "<span>Colar do Excel</span></button></div><p>ou arrasta o ficheiro para aqui</p>" +
+        (i >= 2 ? '<button type="button" class="mgf-botao cl-pequeno" data-acao="retirar" data-lista="' + i + '">Afinal não</button>' : "") + "</div>";
+    }
+    return h + "</div></fieldset>";
+  }
+  var F = L.folhas[L.folha], nTit = L.semTitulos ? -1 : (L.linhaTitulos != null ? L.linhaTitulos : L.auto);
+  h += '<div class="mgf-cartao-corpo"><div class="cl-ficheiro">' + IC.ficheiro + "<span>" + esc(L.nome) + "</span></div>";
+  h += '<div class="cl-meta">' + plural(L.linhas.length, "linha", "linhas") + " · " + plural(L.cab.length, "coluna", "colunas") + "</div>";
+  h += '<div class="cl-campos">';
+  if (L.folhas.length > 1) h += '<label class="mgf-campo">Folha<select data-folha="' + i + '">' + L.folhas.map(function (f, k) { return '<option value="' + k + '"' + (k === L.folha ? " selected" : "") + ">" + esc(f.nome) + "</option>"; }).join("") + "</select></label>";
+  var opcoesTit = '<option value="-1"' + (nTit < 0 ? " selected" : "") + ">Não tem títulos</option>";
+  for (var k = 0; k < Math.min(F.matriz.length, 30); k++) {
+    var amostra = F.matriz[k].filter(function (v) { return !vazio(v); }).slice(0, 3).map(txt).join(" · ");
+    if (!amostra) continue;
+    opcoesTit += '<option value="' + k + '"' + (k === nTit ? " selected" : "") + ">Linha " + (k + 1) + ": " + esc(amostra.slice(0, 40)) + "</option>";
+  }
+  h += '<label class="mgf-campo">Linha dos títulos<select data-titulos="' + i + '">' + opcoesTit + "</select></label></div>";
+  if (!L.linhas.length) h += '<div class="mgf-interp" data-nivel="atencao">Não encontrei linhas com dados nesta folha.</div>';
+  else h += previa(L);
+  h += '<div class="cl-botoes-pequenos"><button type="button" class="mgf-botao cl-pequeno" data-acao="escolher" data-lista="' + i + '">Trocar ficheiro</button>' +
+    '<button type="button" class="mgf-botao cl-pequeno" data-acao="retirar" data-lista="' + i + '">Retirar esta lista</button></div>';
+  return h + "</div></fieldset>";
+}
+function desenharListas() {
+  var n = Math.max(2, E.listas.length), h = "";
+  for (var i = 0; i < n; i++) h += cartaoLista(i);
+  $("#cl-listas").innerHTML = h;
+  var cheias = listasProntas();
+  var acoes = "";
+  if (cheias) acoes += '<button type="button" class="mgf-botao cl-pequeno" data-acao="trocar">' + IC.trocar + "<span>A principal é a lista 2: trocar</span></button>";
+  if (cheias && E.listas.length < MAX_LISTAS) acoes += '<button type="button" class="mgf-botao cl-pequeno" data-acao="mais-lista">' + IC.mais + "<span>Juntar mais uma lista</span></button>";
+  $("#cl-acoes-listas").innerHTML = acoes;
+  $('[data-acao="limpar"]').hidden = !E.listas.some(function (L) { return !!L; });
+  ligarZonas();
+}
+function listasProntas() {
+  if (E.listas.length < 2) return false;
+  for (var i = 0; i < E.listas.length; i++) if (!E.listas[i] || !E.listas[i].cab.length) return false;
+  return true;
+}
+var METODOS = [["num", "Nº de utente"], ["nome", "Nome"], ["nomedata", "Nome e data de nascimento"], ["texto", "Outra coluna (texto igual)"]];
+function desenharLigacoes() {
+  var P = E.listas[0], h = "";
+  for (var i = 1; i < E.listas.length; i++) {
+    var L = E.listas[i], g = E.lig[i], X = E.R && E.R.listas[i];
+    h += '<fieldset class="mgf-cartao cl-ligacao"><legend class="mgf-so-leitor">Lista 1 e ' + nomeLista(i) + '</legend><div class="mgf-cartao-titulo" aria-hidden="true">Lista 1 e ' + nomeLista(i) + '</div><div class="mgf-cartao-corpo">';
+    h += '<div class="cl-campos"><label class="mgf-campo">Reconhecer o utente pelo<select data-lig="' + i + '" data-campo="metodo">' +
+      METODOS.map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === g.metodo ? " selected" : "") + ">" + m[1] + "</option>"; }).join("") + "</select></label></div>";
+    var rot = g.metodo === "num" ? "Coluna do nº de utente" : g.metodo === "texto" ? "Coluna" : "Coluna do nome";
+    h += '<div class="cl-campos"><label class="mgf-campo">' + rot + " na lista 1<select data-lig=\"" + i + '" data-campo="cP">' + opcoesColunas(P, g.cP) + "</select></label>" +
+      '<label class="mgf-campo">' + rot + " na " + nomeLista(i) + '<select data-lig="' + i + '" data-campo="cL">' + opcoesColunas(L, g.cL) + "</select></label></div>";
+    if (g.metodo === "nomedata") {
+      h += '<div class="cl-campos"><label class="mgf-campo">Data de nascimento na lista 1<select data-lig="' + i + '" data-campo="dP">' + opcoesColunas(P, g.dP, true) + "</select></label>" +
+        '<label class="mgf-campo">Data de nascimento na ' + nomeLista(i) + '<select data-lig="' + i + '" data-campo="dL">' + opcoesColunas(L, g.dL, true) + "</select></label></div>";
+    }
+    if (g.metodo === "num" || g.metodo === "texto") {
+      h += '<p class="cl-meta" style="margin:4px 0 0">Nomes, para conferir (opcional): a ferramenta avisa quando o mesmo número tem nomes diferentes e sugere correspondências para quem fica sem nenhuma.</p>' +
+        '<div class="cl-campos"><label class="mgf-campo">Nome na lista 1<select data-lig="' + i + '" data-campo="nP">' + opcoesColunas(P, g.nP, true) + "</select></label>" +
+        '<label class="mgf-campo">Nome na ' + nomeLista(i) + '<select data-lig="' + i + '" data-campo="nL">' + opcoesColunas(L, g.nL, true) + "</select></label></div>";
+      if (g.metodo === "num") h += '<label class="cl-check"><input type="checkbox" data-lig="' + i + '" data-campo="porNome"' + (g.porNome ? " checked" : "") + (g.nP < 0 || g.nL < 0 ? " disabled" : "") +
+        "><span>Quando falta o nº de utente numa das listas, procurar pelo nome</span></label>";
+    }
+    h += '<label class="mgf-campo">Quando o mesmo utente aparece mais do que uma vez na ' + nomeLista(i) + '<select data-lig="' + i + '" data-campo="varias">' +
+      [["juntar", "Juntar os valores diferentes na mesma célula (com «; »)"], ["primeira", "Usar só a primeira linha"], ["linhas", "Fazer uma linha por cada uma"]]
+        .map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === g.varias ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></label>";
+    if (X) {
+      var N = P.linhas.length, ok = N - X.semCorr.length;
+      var nivel = !N ? "info" : ok === N ? "normal" : ok === 0 ? "alerta" : "atencao";
+      h += '<div class="mgf-interp cl-contagem" data-nivel="' + nivel + '"><strong>' + fmtN(ok) + " de " + fmtN(N) + "</strong> linhas da lista 1 têm correspondência na " + nomeLista(i) + "." +
+        (ok === 0 && N ? " Confirma se escolheste as colunas certas." : "") + "</div>";
+      if (g.metodo === "num") {
+        var inval = [];
+        if (X.numInvalP) inval.push(fmtN(X.numInvalP) + " na lista 1");
+        if (X.numInvalL) inval.push(fmtN(X.numInvalL) + " na " + nomeLista(i));
+        if (inval.length) h += '<p class="cl-aviso-col">Há números com mais ou menos de 9 algarismos (' + inval.join(", ") + "). Se não for o nº de utente, escolhe outra coluna.</p>";
+      }
+    }
+    h += "</div></fieldset>";
+  }
+  $("#cl-ligacoes").innerHTML = h;
+}
+function desenharColunas() {
+  var h = "", on = E.colunas;
+  on.forEach(function (c, k) {
+    h += '<div class="cl-col' + (c.on ? "" : " desligada") + '"><input type="checkbox" data-col-on="' + k + '"' + (c.on ? " checked" : "") + ' aria-label="Incluir ' + esc(c.nome) + '">' +
+      '<div class="cl-col-nome"><input type="text" value="' + esc(c.nome) + '" data-col-nome="' + k + '" aria-label="Nome da coluna na lista final"><span class="cl-col-origem">' +
+      esc(E.listas[c.lista].cab[c.col]) + " · " + nomeLista(c.lista) + "</span></div>" +
+      '<div class="cl-mover"><button type="button" data-mover="' + k + '" data-dir="-1" aria-label="Subir"' + (k === 0 ? " disabled" : "") + ">" + IC.cima + "</button>" +
+      '<button type="button" data-mover="' + k + '" data-dir="1" aria-label="Descer"' + (k === on.length - 1 ? " disabled" : "") + ">" + IC.baixo + "</button></div></div>";
+  });
+  $("#cl-colunas").innerHTML = h;
+  var mais = E.listas.length > 2;
+  $("#cl-opcoes").innerHTML =
+    '<label class="mgf-campo">Utentes da lista 1 sem correspondência<select data-opc="semCorresp"><option value="manter"' + (E.opc.semCorresp === "manter" ? " selected" : "") + ">Ficam na lista final, com os dados em falta em branco</option>" +
+    '<option value="tirar"' + (E.opc.semCorresp === "tirar" ? " selected" : "") + ">Saem da lista final" + (mais ? " (fica só quem está em todas as listas)" : "") + "</option></select></label>" +
+    '<label class="mgf-campo">Utentes que só estão ' + (mais ? "nas outras listas" : "na lista 2") + '<select data-opc="soNaOutra"><option value="nao"' + (E.opc.soNaOutra === "nao" ? " selected" : "") + ">Não entram (vão numa folha à parte do Excel)</option>" +
+    '<option value="acrescentar"' + (E.opc.soNaOutra === "acrescentar" ? " selected" : "") + ">Entram no fim da lista final</option></select></label>" +
+    '<label class="cl-check" style="align-self:end;padding-bottom:12px"><input type="checkbox" data-opc="estado"' + (E.opc.estado ? " checked" : "") + "><span>Acrescentar a coluna «Correspondência» (Sim, Não, pelo nome…)</span></label>" +
+    (E.lig.some(function (g) { return g && g.metodo === "num"; }) ? '<label class="cl-check"><input type="checkbox" data-opc="limparNum"' + (E.opc.limparNum ? " checked" : "") + "><span>Escrever o nº de utente só com algarismos (sem espaços nem zeros à esquerda)</span></label>" : "");
+}
+function tabelaProblema(cab, linhas, max) {
+  max = max || 100;
+  return '<div class="mgf-tabela-caixa"><table class="mgf-tabela"><thead><tr>' + cab.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    linhas.slice(0, max).map(function (l) { return "<tr>" + l.map(function (v) { return "<td>" + v + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>" +
+    (linhas.length > max ? '<p class="cl-mais">E mais ' + fmtN(linhas.length - max) + " (estão todas no Excel).</p>" : "");
+}
+function problema(nivel, titulo, corpo, aberto) {
+  return '<details class="cl-prob" data-nivel="' + nivel + '"' + (aberto ? " open" : "") + "><summary>" + titulo + '</summary><div class="cl-prob-corpo">' + corpo + "</div></details>";
+}
+function idP(r, g) {   /* como mostrar um utente da lista 1: número e nome, se houver */
+  var P = E.listas[0], l = P.linhas[r], partes = [];
+  if (g.cP >= 0) partes.push(esc(txt(l[g.cP])) || "<i>(vazio)</i>");
+  if (g.nP >= 0 && g.nP !== g.cP) partes.push(esc(txt(l[g.nP])));
+  return partes.join(" · ");
+}
+function idL(L, l, g) {
+  var x = L.linhas[l], partes = [];
+  if (g.cL >= 0) partes.push(esc(txt(x[g.cL])) || "<i>(vazio)</i>");
+  if (g.nL >= 0 && g.nL !== g.cL) partes.push(esc(txt(x[g.nL])));
+  return partes.join(" · ");
+}
+function desenharProblemas() {
+  var P = E.listas[0], h = "", algum = false;
+  for (var i = 1; i < E.listas.length; i++) {
+    var X = E.R.listas[i], g = E.lig[i], L = E.listas[i], nl = nomeLista(i);
+    if (E.listas.length > 2) h += '<h4 style="margin:14px 0 6px">Lista 1 e ' + nl + "</h4>";
+    if (X.sugestoes.length) { algum = true;
+      h += problema("atencao", "<b>" + plural(X.sugestoes.length, "correspondência provável", "correspondências prováveis") + "</b> para confirmares",
+        "<p>Utentes da lista 1 sem correspondência exata, mas com alguém parecido na " + nl + ". Só entram se marcares.</p>" +
+        tabelaProblema(["É o mesmo?", "Lista 1", nl.charAt(0).toUpperCase() + nl.slice(1), "Porquê"], X.sugestoes.map(function (s, k) {
+          return ['<input type="checkbox" data-sug="' + i + ":" + k + '" aria-label="É o mesmo utente">', idP(s.r, g), idL(L, s.l, g), esc(s.motivo)]; }), 200) +
+        '<div><button type="button" class="mgf-botao mgf-botao-principal cl-pequeno" data-acao="aceitar" data-lista="' + i + '">Juntar os que marquei</button></div>', true);
+    }
+    if (X.conflitos.length) { algum = true;
+      h += problema("alerta", "<b>" + plural(X.conflitos.length, "utente", "utentes") + "</b> com o mesmo número mas nomes diferentes",
+        "<p>Pode ser um erro no número numa das listas. Confere e separa os que não são a mesma pessoa.</p>" +
+        tabelaProblema(["Não é o mesmo", "Lista 1", nl.charAt(0).toUpperCase() + nl.slice(1)], X.conflitos.map(function (c, k) {
+          return ['<input type="checkbox" data-conf="' + i + ":" + k + '" aria-label="Não é o mesmo utente">', idP(c[0], g), idL(L, c[1], g)]; }), 200) +
+        '<div><button type="button" class="mgf-botao cl-pequeno" data-acao="separar" data-lista="' + i + '">Separar os que marquei</button></div>', true);
+    }
+    if (X.semCorr.length) { algum = true;
+      var semNum = X.semCorr.filter(function (r) { return !X.kP[r]; }).length;
+      h += problema("atencao", "<b>" + plural(X.semCorr.length, "linha", "linhas") + " da lista 1</b> sem correspondência na " + nl,
+        "<p>Pode ser um utente que não está na " + nl + ", um número mal escrito ou um nome escrito de outra maneira." +
+        (semNum ? " " + plural(semNum, "linha não tem", "linhas não têm") + " nada na coluna escolhida." : "") +
+        (E.opc.semCorresp === "manter" ? " Ficam na lista final com os dados em falta em branco (a cor de fundo assinala-as)." : " Saíram da lista final.") + "</p>" +
+        tabelaProblema(["Lista 1", "Porquê"], X.semCorr.map(function (r) { return [idP(r, g), X.kP[r] ? "não encontrado" : "sem " + (g.metodo === "num" ? "nº de utente" : "valor")]; })));
+    }
+    if (X.varias.length) { algum = true;
+      var modoTxt = { juntar: "os valores diferentes ficam juntos na mesma célula", primeira: "fica só a primeira", linhas: "há uma linha por cada uma" }[g.varias];
+      h += problema("info", "<b>" + plural(X.varias.length, "utente", "utentes") + "</b> que aparecem mais do que uma vez na " + nl,
+        "<p>Por exemplo, dois emails para a mesma pessoa. Agora " + modoTxt + "; podes mudar no passo 2.</p>" +
+        tabelaProblema(["Lista 1", "Vezes na " + nl], X.varias.map(function (r) { return [idP(r, g), X.corr[r].linhas.length]; })));
+    }
+    if (X.repetidos.length) { algum = true;
+      h += problema("info", "<b>" + plural(X.repetidos.length, "utente repetido", "utentes repetidos") + "</b> na lista 1",
+        "<p>O mesmo utente em mais do que uma linha da lista 1 (por exemplo, dois exames). Cada linha dá uma linha na lista final; se for repetição por engano, apaga-a no Excel original.</p>" +
+        tabelaProblema(["Lista 1", "Linhas"], X.repetidos.map(function (rs) { return [idP(rs[0], g), rs.length]; })));
+    }
+    if (X.soNaL.length) { algum = true;
+      h += problema("info", "<b>" + plural(X.soNaL.length, "linha", "linhas") + " da " + nl + "</b> que não estão na lista 1",
+        "<p>" + (E.opc.soNaOutra === "acrescentar" ? "Entram no fim da lista final." : "Não entram na lista final; vão numa folha à parte do Excel.") + " Podes mudar no passo 3.</p>" +
+        tabelaProblema([nl.charAt(0).toUpperCase() + nl.slice(1)], X.soNaL.map(function (l) { return [idL(L, l, g)]; })));
+    }
+    if (X.semChaveL) { algum = true;
+      h += problema("info", "<b>" + plural(X.semChaveL, "linha", "linhas") + " da " + nl + "</b> sem nada na coluna escolhida", "<p>Não podem ser ligadas pela coluna escolhida" + (g.metodo === "num" && g.porNome ? ", só pelo nome." : ".") + "</p>");
+    }
+  }
+  if (!algum) h = '<div class="mgf-interp" data-nivel="normal"><strong>Tudo certo.</strong> Todas as linhas da lista 1 têm uma correspondência, sem repetidos nem nomes trocados.</div>';
+  $("#cl-problemas").innerHTML = h;
+}
+function desenharResumo(T) {
+  var P = E.listas[0], N = P.linhas.length, extras = E.listas.length - 1;
+  var sem = 0, comTodas = 0;
+  P.linhas.forEach(function (_, r) { var f = false; for (var i = 1; i <= extras; i++) if (!E.R.listas[i].corr[r].linhas.length) f = true; if (f) sem++; else comTodas++; });
+  var conferir = 0; for (var i = 1; i <= extras; i++) conferir += E.R.listas[i].sugestoes.length + E.R.listas[i].conflitos.length;
+  $("#cl-resumo").innerHTML = '<div class="mgf-resultado"><div class="mgf-resultado-topo"><h3>Lista final</h3><div class="mgf-pontuacao">' + fmtN(T.linhas.length) + "<small>" + (T.linhas.length === 1 ? "linha" : "linhas") + "</small></div></div>" +
+    '<div class="mgf-resultado-corpo"><div class="mgf-resumo">' +
+    '<div data-nivel="normal"><span class="mgf-resumo-rotulo">Com correspondência</span><span class="mgf-resumo-valor">' + fmtN(comTodas) + '</span><span class="mgf-resumo-sub">de ' + fmtN(N) + " linhas da lista 1</span></div>" +
+    '<div data-nivel="' + (sem ? "atencao" : "normal") + '"><span class="mgf-resumo-rotulo">Sem correspondência</span><span class="mgf-resumo-valor">' + fmtN(sem) + '</span><span class="mgf-resumo-sub">' + (E.opc.semCorresp === "manter" ? "ficam na lista, em branco" : "saíram da lista") + "</span></div>" +
+    '<div data-nivel="' + (conferir ? "alerta" : "normal") + '"><span class="mgf-resumo-rotulo">Para conferires</span><span class="mgf-resumo-valor">' + fmtN(conferir) + '</span><span class="mgf-resumo-sub">correspondências prováveis e nomes diferentes</span></div>' +
+    "</div></div></div>";
+}
+function desenharFiltro(T) {
+  var f = E.filtro;
+  var precisaValor = f.op !== "vazio" && f.op !== "preenchido";
+  $("#cl-filtro").innerHTML =
+    '<label class="mgf-campo">Mostrar só as linhas em que<select data-filtro="col"><option value="">— todas as linhas —</option>' + T.cab.map(function (h, c) { return '<option value="' + c + '"' + (String(c) === f.col ? " selected" : "") + ">" + esc(h) + "</option>"; }).join("") + "</select></label>" +
+    '<label class="mgf-campo">Condição<select data-filtro="op">' + [["contem", "contém"], ["igual", "é igual a"], ["nao", "não contém"], ["vazio", "está vazio"], ["preenchido", "está preenchido"]]
+      .map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === f.op ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></label>" +
+    '<label class="mgf-campo">Valor<input type="text" data-filtro="valor" value="' + esc(f.valor) + '"' + (precisaValor ? "" : " disabled") + ' placeholder="por exemplo, positivo"></label>' +
+    '<button type="button" class="mgf-botao" data-acao="sem-filtro"' + (f.col === "" ? " disabled" : "") + ">Tirar o filtro</button>";
+  var sel = $("#cl-col-copiar"), atual = sel.value;
+  var emailIdx = T.cab.findIndex(function (h) { return /mail/i.test(semAcentos(h)); });
+  sel.innerHTML = T.cab.map(function (h, c) { return '<option value="' + c + '">' + esc(h) + "</option>"; }).join("");
+  sel.value = atual !== "" && +atual < T.cab.length ? atual : String(Math.max(0, emailIdx));
+}
+function desenharTabela() {
+  var T = E.F, max = 300;
+  $("#cl-final").innerHTML = "<table><thead><tr><th>#</th>" + T.cab.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    T.linhas.slice(0, max).map(function (l, k) { return '<tr class="' + (T.tipos[k] === "sem" ? "cl-sem" : T.tipos[k] === "so" ? "cl-so" : "") + '"><td>' + (k + 1) + "</td>" + l.map(function (v) { return "<td>" + esc(txt(v)) + "</td>"; }).join("") + "</tr>"; }).join("") +
+    "</tbody></table>";
+  var notas = [];
+  if (T.filtrada) notas.push("Com o filtro: " + plural(T.linhas.length, "linha", "linhas") + " de " + fmtN(E.T.linhas.length) + ".");
+  if (T.linhas.length > max) notas.push("Aqui aparecem as primeiras " + max + "; o Excel leva todas.");
+  if (T.tipos.indexOf("sem") >= 0) notas.push("Linhas com fundo âmbar: sem correspondência.");
+  if (T.tipos.indexOf("so") >= 0) notas.push("Fundo azul: só estão nas outras listas.");
+  $("#cl-final-mais").textContent = notas.join(" ");
+}
+function recalcular() {
+  E.T = construir();
+  E.F = filtrar(E.T);
+}
+function tudo() {
+  desenharListas();
+  var pronto = listasProntas();
+  $("#cl-passo2").hidden = !pronto; $("#cl-passo3").hidden = !pronto; $("#cl-passo4").hidden = !pronto;
+  if (!pronto) { E.R = null; return; }
+  E.R = combinar();
+  desenharLigacoes(); desenharColunas();
+  depoisDeJuntar();
+}
+function depoisDeJuntar() {
+  recalcular();
+  desenharResumo(E.T); desenharProblemas(); desenharFiltro(E.T); desenharTabela();
+}
+function soLigacoes() { E.R = combinar(); desenharLigacoes(); depoisDeJuntar(); }
+
+/* ---------- carregar ---------- */
+function mensagem(t, topo) { $("#cl-mensagem").textContent = topo ? "" : t || ""; $("#cl-mensagem-topo").textContent = topo ? t || "" : ""; }
+function novaLista(dados, i) {
+  var folha = dados.folhas.findIndex(function (f) { return f.matriz.some(function (l) { return l.some(function (v) { return !vazio(v); }); }); });
+  if (folha < 0) { alertaLista(i, "O ficheiro «" + dados.nome + "» não tem dados."); return; }
+  var L = { nome: dados.nome, folhas: dados.folhas, folha: folha, linhaTitulos: null, semTitulos: false };
+  L.auto = detetarTitulos(dados.folhas[folha].matriz);
+  prepararLista(L);
+  E.listas[i] = L; delete E.colar[i];
+  listasMudaram();
+}
+function alertaLista(i, t) { mensagem(""); var c = raiz.querySelector('[data-lista="' + i + '"].cl-lista .mgf-cartao-corpo'); if (c) { var d = document.createElement("div"); d.className = "mgf-interp"; d.dataset.nivel = "alerta"; d.textContent = t; c.appendChild(d); } else mensagem(t); }
+function carregarFicheiro(f, i) {
+  if (!f) return;
+  if (typeof XLSX === "undefined") { alertaLista(i, "O leitor de Excel não carregou. Recarrega a página."); return; }
+  lerFicheiro(f).then(function (d) { novaLista(d, i); }, function () {
+    alertaLista(i, "Não consegui ler «" + f.name + "». Se for um Excel antigo ou protegido com palavra-passe, abre-o no Excel e guarda-o como .xlsx.");
+  });
+}
+function escolher(i) {
+  var inp = document.createElement("input"); inp.type = "file"; inp.accept = ".xlsx,.xls,.xlsm,.xlsb,.ods,.csv,.txt,.tsv";
+  inp.onchange = function () { carregarFicheiro(inp.files[0], i); };
+  inp.click();
+}
+function ligarZonas() {
+  raiz.querySelectorAll("[data-zona]").forEach(function (z) {
+    var i = +z.dataset.zona;
+    z.ondragover = function (e) { e.preventDefault(); z.classList.add("sobre"); };
+    z.ondragleave = function () { z.classList.remove("sobre"); };
+    z.ondrop = function (e) { e.preventDefault(); z.classList.remove("sobre"); carregarFicheiro(e.dataTransfer.files[0], i); };
+  });
+}
+
+/* ---------- exemplo (utentes fictícios) ---------- */
+function exemplo() {
+  var d = function (y, m, dd) { return { iso: y + "-" + pad(m) + "-" + pad(dd), hm: "" }; };
+  var a = [["Rastreio do cancro colorretal — resultados da PSOF (exemplo fictício)"], [],
+    ["Nº Utente", "Nome", "Data da colheita", "Resultado"],
+    ["100000001", "Ana Maria Santos", d(2026, 9, 2), "Negativo"],
+    ["100000002", "Joaquim Ferreira Lopes", d(2026, 9, 3), "Positivo"],
+    ["100 000 003", "Maria da Conceição Alves", d(2026, 9, 3), "Negativo"],
+    ["0100000004", "Rui Pedro Matos", d(2026, 9, 8), "Positivo"],
+    ["", "Teresa Gomes Pinto", d(2026, 9, 9), "Negativo"],
+    ["100000006", "Manuel António Costa", d(2026, 9, 10), "Inconclusivo"],
+    ["100000007", "Helena Sousa Reis", d(2026, 9, 14), "Negativo"],
+    ["100000008", "José Carlos Nunes", d(2026, 9, 15), "Positivo"],
+    ["100000009", "Isabel Marques Rocha", d(2026, 9, 16), "Negativo"],
+    ["100000010", "Carlos Mendes Dias", d(2026, 9, 17), "Positivo"],
+    ["100000011", "Beatriz Lima Correia", d(2026, 9, 21), "Negativo"],
+    ["100000011", "Beatriz Lima Correia", d(2026, 10, 5), "Negativo"],
+    ["100000013", "Fernando Duarte Pires", d(2026, 9, 22), "Negativo"]];
+  var b = [["Nome do utente", "N.º SNS", "Email", "Observações"],
+    ["Ana Maria dos Santos", "100000001", "ana.santos@example.com", ""],
+    ["Joaquim F. Lopes", "100000002", "joaquim.lopes@example.com", ""],
+    ["Maria Conceição Alves", "100000003", "maria.alves@example.com", "prefere telefone"],
+    ["Rui Pedro Matos", "100000004", "", "sem email"],
+    ["Teresa Gomes Pinto", "", "teresa.pinto@example.com", ""],
+    ["Manuel António Costa", "100000006", "manuel.costa@example.com", ""],
+    ["José Carlos Nunes", "100000008", "jose.nunes@example.com", ""],
+    ["José Carlos Nunes", "100000008", "jcnunes@example.com", "email do trabalho"],
+    ["Isabel Marques Rocha", "100000090", "isabel.rocha@example.com", ""],
+    ["Paulo Mendes Dias", "100000010", "paulo.dias@example.com", ""],
+    ["Beatriz Lima Correia", "100000011", "beatriz.correia@example.com", ""],
+    ["Fernando Duarte Pires", "100000013", "fernando.pires@example.com", ""],
+    ["Sofia Ribeiro Antunes", "100000014", "sofia.antunes@example.com", ""],
+    ["Luís Teixeira Moura", "100000015", "luis.moura@example.com", ""]];
+  E.listas = []; E.colar = {};
+  [["exemplo-resultados-rastreio.xlsx", a], ["exemplo-contactos.xlsx", b]].forEach(function (x, i) {
+    var L = { nome: x[0], folhas: [{ nome: "Folha1", matriz: x[1] }], folha: 0, linhaTitulos: null, semTitulos: false };
+    L.auto = detetarTitulos(L.folhas[0].matriz); prepararLista(L); E.listas[i] = L;
+  });
+  listasMudaram();
+  mensagem("Listas de exemplo carregadas: utentes fictícios, com alguns problemas de propósito para veres como a ferramenta avisa. Segue os passos em baixo.", true);
+}
+
+/* ---------- exportar ---------- */
+function nomeFolha(s, usados) {
+  var n = String(s).replace(/[\[\]:*?\/\\]/g, " ").slice(0, 31).trim() || "Folha", k = n, j = 2;
+  while (usados[k.toLowerCase()]) k = n.slice(0, 27) + " (" + (j++) + ")";
+  usados[k.toLowerCase()] = 1; return k;
+}
+/* datas como número de série do Excel (sem fusos horários), com formato dd/mm/aaaa */
+function serieExcel(v) { var p = v.iso.split("-"), s = (Date.UTC(+p[0], +p[1] - 1, +p[2]) - Date.UTC(1899, 11, 30)) / 864e5;
+  if (v.hm) { var h = v.hm.split(":"); s += (+h[0] * 60 + +h[1]) / 1440; } return s; }
+function folha(aoa) {
+  var datas = [];
+  var ws = XLSX.utils.aoa_to_sheet(aoa.map(function (l, r) { return l.map(function (v, c) { if (eData(v)) { datas.push([r, c, v.hm]); return serieExcel(v); } return v; }); }));
+  datas.forEach(function (d) { var cel = ws[XLSX.utils.encode_cell({ r: d[0], c: d[1] })]; if (cel) cel.z = d[2] ? "dd/mm/yyyy hh:mm" : "dd/mm/yyyy"; });
+  ws["!cols"] = (aoa[0] || []).map(function (_, c) { var w = 8; aoa.slice(0, 200).forEach(function (l) { w = Math.max(w, Math.min(50, txt(l[c]).length + 2)); }); return { wch: w }; });
+  return ws;
+}
+function hoje() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function exportarExcel() {
+  if (typeof XLSX === "undefined") { mensagem("O leitor de Excel não carregou. Recarrega a página."); return; }
+  var wb = XLSX.utils.book_new(), usados = {}, P = E.listas[0], T = E.F;
+  XLSX.utils.book_append_sheet(wb, folha([T.cab].concat(T.linhas)), nomeFolha("Lista final", usados));
+  var resumo = [["Lista final feita em " + hoje().split("-").reverse().join("/") + " com a ferramenta Combinar listas de Excel (MGF no Plural)"], [],
+    ["Lista 1 (principal)", P.nome + " · " + plural(P.linhas.length, "linha", "linhas")]];
+  for (var i = 1; i < E.listas.length; i++) {
+    var X = E.R.listas[i], g = E.lig[i], L = E.listas[i], mt = METODOS.find(function (m) { return m[0] === g.metodo; })[1];
+    resumo.push(["Lista " + (i + 1), L.nome + " · " + plural(L.linhas.length, "linha", "linhas")]);
+    resumo.push(["  Ligação", mt + ": «" + P.cab[g.cP] + "» na lista 1 e «" + L.cab[g.cL] + "» na " + nomeLista(i)]);
+    resumo.push(["  Linhas da lista 1 com correspondência", P.linhas.length - X.semCorr.length]);
+    resumo.push(["  Linhas da lista 1 sem correspondência", X.semCorr.length]);
+    resumo.push(["  Linhas só na " + nomeLista(i), X.soNaL.length]);
+    resumo.push(["  Utentes com várias linhas na " + nomeLista(i), X.varias.length]);
+    resumo.push(["  Mesmo número, nomes diferentes", X.conflitos.length]);
+    resumo.push(["  Correspondências prováveis por confirmar", X.sugestoes.length]);
+    resumo.push(["  Correspondências confirmadas por ti", X.corr.filter(function (o) { return o.via === "manual"; }).length]);
+  }
+  if (T.filtrada) { var f = E.filtro; resumo.push([]); resumo.push(["Filtro", "«" + T.cab[+f.col] + "» " + { contem: "contém", igual: "é igual a", nao: "não contém", vazio: "está vazio", preenchido: "está preenchido" }[f.op] + (f.op === "vazio" || f.op === "preenchido" ? "" : " «" + f.valor + "»")]); }
+  resumo.push([]); resumo.push(["Este ficheiro tem dados de utentes: guarda-o num local seguro e apaga-o quando já não precisares."]);
+  var sem = [], extras = E.listas.length - 1;
+  P.linhas.forEach(function (l, r) { var f2 = false; for (var k = 1; k <= extras; k++) if (!E.R.listas[k].corr[r].linhas.length) f2 = true; if (f2) sem.push(l); });
+  if (sem.length) XLSX.utils.book_append_sheet(wb, folha([P.cab].concat(sem)), nomeFolha("Sem correspondência", usados));
+  for (var j = 1; j < E.listas.length; j++) {
+    var Lj = E.listas[j], so = E.R.listas[j].soNaL.map(function (l) { return Lj.linhas[l]; });
+    if (so.length) XLSX.utils.book_append_sheet(wb, folha([Lj.cab].concat(so)), nomeFolha("Só na lista " + (j + 1), usados));
+  }
+  XLSX.utils.book_append_sheet(wb, folha(resumo), nomeFolha("Resumo", usados));
+  XLSX.writeFile(wb, "lista-combinada-" + hoje() + ".xlsx");
+  mensagem("Excel descarregado: lista-combinada-" + hoje() + ".xlsx.");
+}
+function csvCampo(v) { var t = txt(v); return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }
+function exportarCsv() {
+  var T = E.F;
+  var texto = "﻿" + [T.cab].concat(T.linhas).map(function (l) { return l.map(csvCampo).join(";"); }).join("\r\n");
+  var b = new Blob([texto], { type: "text/csv;charset=utf-8" }), u = URL.createObjectURL(b), a = document.createElement("a");
+  a.href = u; a.download = "lista-combinada-" + hoje() + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(u); }, 2000);
+  mensagem("CSV descarregado (separado por «;», abre no Excel em português).");
+}
+function copiarTabela(botao) {
+  var T = E.F;
+  var texto = [T.cab].concat(T.linhas).map(function (l) { return l.map(function (v) { return txt(v).replace(/[\t\n\r]+/g, " "); }).join("\t"); }).join("\n");
+  MGF.copiar(texto, botao);
+  mensagem("Tabela copiada (" + plural(T.linhas.length, "linha", "linhas") + "): cola-a no Excel ou no Word.");
+}
+function copiarColuna(botao) {
+  var T = E.F, c = +$("#cl-col-copiar").value, vistos = {}, vals = [];
+  T.linhas.forEach(function (l) {
+    txt(l[c]).split(/;\s*/).forEach(function (v) { v = v.trim(); if (v && !vistos[v.toLowerCase()]) { vistos[v.toLowerCase()] = 1; vals.push(v); } });
+  });
+  if (!vals.length) { mensagem("Essa coluna está vazia nas linhas visíveis."); return; }
+  MGF.copiar(vals.join("; "), botao);
+  mensagem(plural(vals.length, "valor copiado", "valores copiados") + " de «" + T.cab[c] + "».");
+}
+
+/* ---------- eventos ---------- */
+var segundoClique = null;
+raiz.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-acao], [data-mover]");
+  if (!b || !raiz.contains(b)) return;
+  if (b.dataset.mover != null) {
+    var k = +b.dataset.mover, j = k + (+b.dataset.dir), cs = E.colunas;
+    if (j < 0 || j >= cs.length) return;
+    var t = cs[k]; cs[k] = cs[j]; cs[j] = t;
+    desenharColunas(); depoisDeJuntar();
+    var alvo = raiz.querySelector('[data-mover="' + j + '"][data-dir="' + b.dataset.dir + '"]'); if (alvo && !alvo.disabled) alvo.focus();
+    return;
+  }
+  var a = b.dataset.acao, i = +b.dataset.lista;
+  if (a === "exemplo") exemplo();
+  else if (a === "limpar") {
+    if (segundoClique !== b) { segundoClique = b; b.lastChild.textContent = "Carrega outra vez para apagar tudo"; setTimeout(function () { if (segundoClique === b) { segundoClique = null; b.lastChild.textContent = "Começar de novo"; } }, 4000); return; }
+    segundoClique = null; b.lastChild.textContent = "Começar de novo";
+    E.listas = []; E.lig = []; E.colunas = []; E.colar = {}; E.aceites = {}; E.recusados = {}; mensagem(""); tudo();
+  }
+  else if (a === "escolher") escolher(i);
+  else if (a === "colar") { E.colar[i] = true; desenharListas(); var ta = raiz.querySelector('[data-colar-texto="' + i + '"]'); if (ta) ta.focus(); }
+  else if (a === "cancelar-colar") { delete E.colar[i]; desenharListas(); }
+  else if (a === "usar-colado") {
+    var texto = raiz.querySelector('[data-colar-texto="' + i + '"]').value;
+    if (!texto.trim()) { alertaLista(i, "Cola primeiro as células (no Excel: seleciona, Ctrl+C; aqui: Ctrl+V)."); return; }
+    novaLista({ nome: "Células coladas", folhas: [{ nome: "Coladas", matriz: lerTextoTabela(texto) }] }, i);
+  }
+  else if (a === "retirar") {
+    E.listas.splice(i, 1); E.colar = {};
+    listasMudaram();
+  }
+  else if (a === "trocar") { var t0 = E.listas[0]; E.listas[0] = E.listas[1]; E.listas[1] = t0; listasMudaram(); mensagem("Trocadas: a principal é agora «" + E.listas[0].nome + "».", true); }
+  else if (a === "mais-lista") { E.listas.push(undefined); desenharListas(); }
+  else if (a === "aceitar" || a === "separar") {
+    var X = E.R.listas[i], n = 0;
+    raiz.querySelectorAll(a === "aceitar" ? "[data-sug]" : "[data-conf]").forEach(function (c) {
+      if (!c.checked) return; var p = (c.dataset.sug || c.dataset.conf).split(":"); if (+p[0] !== i) return;
+      if (a === "aceitar") { var s = X.sugestoes[+p[1]]; E.aceites[i + ":" + s.r] = s.l; }
+      else { var cf = X.conflitos[+p[1]]; E.recusados[i + ":" + cf[0] + ":" + cf[1]] = true; }
+      n++;
+    });
+    if (!n) { mensagem("Marca primeiro as linhas."); return; }
+    soLigacoes();
+    mensagem(a === "aceitar" ? plural(n, "correspondência juntada", "correspondências juntadas") + "." : plural(n, "par separado", "pares separados") + ": ficam sem correspondência.");
+  }
+  else if (a === "sem-filtro") { E.filtro = { col: "", op: "contem", valor: "" }; E.F = filtrar(E.T); desenharFiltro(E.T); desenharTabela(); }
+  else if (a === "excel") exportarExcel();
+  else if (a === "csv") exportarCsv();
+  else if (a === "copiar-tabela") copiarTabela(b);
+  else if (a === "copiar-coluna") copiarColuna(b);
+});
+raiz.addEventListener("change", function (e) {
+  var t = e.target, d = t.dataset;
+  if (d.folha != null) { var L = E.listas[+d.folha]; L.folha = +t.value; L.linhaTitulos = null; L.semTitulos = false; L.auto = detetarTitulos(L.folhas[L.folha].matriz); prepararLista(L); listasMudaram(); }
+  else if (d.titulos != null) { var L2 = E.listas[+d.titulos]; var v = +t.value; L2.semTitulos = v < 0; L2.linhaTitulos = v < 0 ? null : v; prepararLista(L2); listasMudaram(); }
+  else if (d.lig != null) {
+    var g = E.lig[+d.lig], i = +d.lig, A = E.listas[0].g, B = E.listas[i].g;
+    if (d.campo === "porNome") g.porNome = t.checked;
+    else if (d.campo === "varias") g.varias = t.value;
+    else if (d.campo === "metodo") {
+      g.metodo = t.value;
+      if (g.metodo === "num") { if (A.num >= 0) g.cP = A.num; if (B.num >= 0) g.cL = B.num; }
+      if (g.metodo === "nome" || g.metodo === "nomedata") { if (A.nome >= 0) g.cP = A.nome; if (B.nome >= 0) g.cL = B.nome; }
+      if (g.metodo === "nomedata") { g.dP = A.data; g.dL = B.data; }
+    }
+    else g[d.campo] = +t.value;
+    if (g.metodo === "nome" || g.metodo === "nomedata") { g.nP = g.cP; g.nL = g.cL; }
+    if (g.nP < 0 || g.nL < 0) g.porNome = false;
+    soLigacoes();
+  }
+  else if (d.colOn != null) { E.colunas[+d.colOn].on = t.checked; t.closest(".cl-col").classList.toggle("desligada", !t.checked); depoisDeJuntar(); }
+  else if (d.opc != null) { E.opc[d.opc] = t.type === "checkbox" ? t.checked : t.value; depoisDeJuntar(); }
+  else if (d.filtro === "col" || d.filtro === "op") { E.filtro[d.filtro] = t.value; E.F = filtrar(E.T); desenharFiltro(E.T); desenharTabela(); }
+});
+var espera = null;
+raiz.addEventListener("input", function (e) {
+  var t = e.target, d = t.dataset;
+  if (d.colNome != null) { E.colunas[+d.colNome].nome = t.value || E.listas[E.colunas[+d.colNome].lista].cab[E.colunas[+d.colNome].col]; clearTimeout(espera); espera = setTimeout(function () { recalcular(); desenharFiltro(E.T); desenharTabela(); }, 250); }
+  else if (d.filtro === "valor") { E.filtro.valor = t.value; clearTimeout(espera); espera = setTimeout(function () { E.F = filtrar(E.T); desenharTabela(); raiz.querySelector('[data-acao="sem-filtro"]').disabled = E.filtro.col === ""; }, 200); }
+});
+
+tudo();
+})();
+</script>
+</body>
+</html>
