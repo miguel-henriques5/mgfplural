@@ -118,7 +118,7 @@ def ler_ferramentas():
         if re.search(r'https?://[^"\'\s]+\.(js|css|woff2?|ttf)\b', t) or "fonts.googleapis" in t:
             erro(f"{f.name}: carrega scripts, estilos ou letras de fora do site")
         ficha["estilo"] = extrair(r'<style data-mgf="ferramenta">(.*?)</style>', t, f.name, False)
-        ficha["conteudo"] = extrair(r'(<main class="mgf-ferramenta" id="ferramenta">.*?</main>)', t, f.name)
+        ficha["conteudo"] = extrair(r'(<main class="mgf-ferramenta" id="ferramenta">.*?</main>)\s*<script data-mgf="ferramenta">', t, f.name)
         ficha["script"] = extrair(r'<script data-mgf="ferramenta">(.*?)</script>', t, f.name, False)
         rel = f.relative_to(FONTE / "ferramentas")
         if rel.parts[0] != ficha["area"] or rel.parts[1] != ficha["grupo"]:
@@ -612,7 +612,17 @@ def barra_completa(f, prefixo, autonomo):
     if f.get("dados_externos"):
         fotos += ("<h3>Mapa de fundo</h3><p>O mapa de fundo vem da internet (OpenFreeMap; se falhar, Esri). É o único pedido que "
                   "esta página faz, e não leva nada do que escreves. Sem ligação, a pesquisa, as categorias e a lista de recursos funcionam.</p>")
-    return f"""<aside class="barra-completa" aria-label="MGF no Plural">
+    if f.get("dados_no_browser"):
+        fotos += ("<h3>Dados guardados neste computador</h3><p>O que guardas nesta ferramenta fica só na memória deste browser, "
+                  "neste computador: não vai para nenhum servidor. És responsável por não partilhar essa memória nem os ficheiros "
+                  "que exportas (cópias de segurança, listas) em locais sem segurança. Num computador partilhado, apaga os dados no fim.</p>")
+    b = f.get("barra", {})
+    lado = b.get("lado", "direita")
+    if lado not in ("direita", "esquerda") or not isinstance(b.get("acima", 0), int):
+        erro(f"{f['id']}: «barra» inválida na ficha: {b}")
+    pos = f' data-lado="{lado}" style="--bc-acima:{b.get("acima", 0)}px"'
+    recolhida = bool(b.get("recolhida"))
+    return f"""<aside class="barra-completa" aria-label="MGF no Plural"{pos}{" hidden" if recolhida else ""}>
 <a class="bc-simbolo" href="{inicio}" title="MGF no Plural — todas as ferramentas"{' target="_blank" rel="noopener"' if autonomo else ''}>{simbolo(14)}<span class="so-leitor">MGF no Plural — todas as ferramentas</span></a>
 <button type="button" class="bc-info" aria-expanded="false" aria-controls="bc-painel"><span class="bc-info-texto"><strong>{e(f["autor"])}</strong> · v{e(f["versao"])}</span><span class="so-leitor"> — sobre esta ferramenta</span> ⓘ</button>
 {principal}
@@ -621,14 +631,14 @@ def barra_completa(f, prefixo, autonomo):
 <div class="bc-painel" id="bc-painel" hidden>
 <h2>{e(f["titulo"])}</h2>
 <p class="bc-meta">Criado por {e(f["autor"])} · v{e(f["versao"])} · revisto a {data_pt(f["revisto"])} · licença MIT</p>
-<p class="bc-aviso">{"" if f.get("aviso_clinico") is False else AVISO_CLINICO + " "}{AVISO_PRIVACIDADE}</p>
+<p class="bc-aviso">{"" if f.get("aviso_clinico") is False else AVISO_CLINICO + " "}{"Os dados que guardas ficam só neste computador (ver em baixo)." if f.get("dados_no_browser") else AVISO_PRIVACIDADE}</p>
 {fotos}<details><summary>Bibliografia · {len(f["bibliografia"])} referência{"" if len(f["bibliografia"]) == 1 else "s"}</summary><ol>{refs}</ol></details>
 <h3>Encontraste um erro?</h3>
 <p>Escreve-nos e corrigimos juntos: <a href="{assunto_feedback(f)}">{SITE["email"]}</a> · <button type="button" class="bc-copiar" data-copiar="{SITE["email"]}">Copiar endereço</button></p>
 <p><a href="{inicio}"{' target="_blank" rel="noopener"' if autonomo else ''}>Todas as ferramentas do MGF no Plural</a></p>
 </div>
 </aside>
-<button type="button" class="bc-mostrar" hidden aria-label="Mostrar a barra do MGF no Plural">{simbolo(14)}</button>"""
+<button type="button" class="bc-mostrar"{pos}{"" if recolhida else " hidden"} aria-label="Mostrar a barra do MGF no Plural" title="MGF no Plural">{simbolo(14)}</button>"""
 
 
 JS_BARRA = r"""(function () {
