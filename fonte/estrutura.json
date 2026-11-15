@@ -22,7 +22,8 @@
         { "id": "programas-e-valencias", "nome": "Programas e valências", "icone": "programas", "tom": "papel" },
         { "id": "cabulas", "nome": "Cábulas", "icone": "folheto", "tom": "menta" },
         { "id": "canivete", "nome": "Canivete", "icone": "checklist", "tom": "ambar" },
-        { "id": "registo-e-vigilancia", "nome": "Registo e vigilância", "icone": "nota-soap", "tom": "areia", "atalhos_inicio": true }
+        { "id": "registo-e-vigilancia", "nome": "Registo e vigilância", "icone": "nota-soap", "tom": "areia", "atalhos_inicio": true },
+        { "id": "recursos-externos", "nome": "Recursos externos", "icone": "sites", "tom": "papel" }
       ]
     },
     {
