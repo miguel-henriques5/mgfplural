@@ -10,6 +10,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "gravidez",
    "grávida",
@@ -36,6 +37,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "Wells",
    "TEP",
@@ -59,6 +61,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "CURB-65",
    "CURB",
@@ -87,6 +90,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "EPDS",
    "Edimburgo",
@@ -117,6 +121,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "IPSS",
    "próstata",
@@ -146,6 +151,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "antibiótico",
    "antibioterapia",
@@ -179,6 +185,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "prescrição",
    "dor",
@@ -218,6 +225,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "pediatria",
    "criança",
@@ -247,6 +255,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "gravidez",
    "grávida",
@@ -277,6 +286,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "guia terapêutica",
    "esquema terapêutico",
@@ -302,6 +312,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "análises",
    "hemograma",
@@ -332,6 +343,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "ECG",
    "eletrocardiograma",
@@ -359,6 +371,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/espirometria.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "espirometria",
    "FEV1",
@@ -384,6 +397,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "audiograma",
    "audiometria",
@@ -409,6 +423,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "ecocardiograma",
    "eco",
@@ -438,6 +453,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "ecografia renal",
    "ecografia vesical",
@@ -464,6 +480,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "TC",
    "tomografia",
@@ -492,6 +509,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/programas-e-valencias/saude-infantil.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "PNSIJ",
    "pediatria",
@@ -513,6 +531,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/programas-e-valencias/vigilancia-gravidez.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "grávida",
    "obstetrícia",
@@ -534,6 +553,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/cabulas/menopausa.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "menopausa",
    "climatério",
@@ -559,6 +579,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/cabulas/osteoporose.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "osteoporose",
    "densitometria",
@@ -584,6 +605,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "ICPC-2",
    "ICPC",
@@ -606,6 +628,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "resultados",
    "exames",
@@ -628,6 +651,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/canivete/formulario-referenciacao.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "referenciação",
    "SClínico",
@@ -648,6 +672,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/canivete/construir-horario.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "horário",
    "horário semanal",
@@ -670,6 +695,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/canivete/combinar-listas.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "Excel",
    "juntar listas",
@@ -695,6 +721,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/registo-e-vigilancia/nota-soap.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "SOAP",
    "registo",
@@ -715,6 +742,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-medicos/registo-e-vigilancia/vigilancia-mgf.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "vigilância",
    "programas de saúde",
@@ -737,6 +765,29 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "pocus-mgf",
+  "titulo": "POCUS MGF",
+  "descricao": "Guias de bolso de ecografia point-of-care para Medicina Geral e Familiar: como obter cada janela, o que procurar e como interpretar. Do Grupo de Estudos em Ecografia Point-of-Care (GEco) da APMGF.",
+  "area": "Recursos médicos",
+  "grupo": "Recursos externos",
+  "icone": "ecografia",
+  "url": "https://www.pocusmgf.com/",
+  "layout": "ligacao",
+  "autor": "GEco · APMGF",
+  "externo": true,
+  "palavras": [
+   "POCUS",
+   "ecografia",
+   "point-of-care",
+   "ecógrafo",
+   "FoCUS",
+   "ecografia pulmonar",
+   "ecografia abdominal",
+   "GEco",
+   "APMGF"
+  ]
+ },
+ {
   "id": "vacinacao",
   "titulo": "Vacinação (PNV)",
   "descricao": "Programa Nacional de Vacinação: mapa, esquemas gerais e de recurso, critérios para vacinar e vacinação sazonal.",
@@ -746,6 +797,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/recursos-de-enfermagem/geral/vacinacao.html",
   "layout": "normal",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "vacinação",
    "vacinas",
@@ -771,6 +823,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/documentacao/modelos/consentimento-diu.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "modelo",
    "documento",
@@ -790,6 +843,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/documentacao/modelos/consentimento-diu-l.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "modelo",
    "documento",
@@ -809,6 +863,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/documentacao/modelos/consentimento-implante.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "modelo",
    "documento",
@@ -828,6 +883,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/documentacao/modelos/manual-de-procedimentos.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "modelo",
    "documento",
@@ -844,6 +900,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/documentacao/modelos/modelo-de-ata.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "modelo",
    "documento",
@@ -860,6 +917,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/mapa-de-recursos/zonas/amadora.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "recursos",
    "comunidade",
@@ -880,6 +938,7 @@ window.MGF_CATALOGO = [
   "url": "ferramentas/plataforma-de-indicadores/geral/plataforma-de-indicadores.html",
   "layout": "completa",
   "autor": "Miguel Henriques",
+  "externo": false,
   "palavras": [
    "indicadores",
    "IDE",
