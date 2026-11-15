@@ -1,0 +1,23 @@
+[
+ {
+  "id": "pocus-mgf",
+  "titulo": "POCUS MGF",
+  "fonte": "GEco · APMGF",
+  "url": "https://www.pocusmgf.com/",
+  "area": "recursos-medicos",
+  "grupo": "recursos-externos",
+  "icone": "ecografia",
+  "descricao": "Guias de bolso de ecografia point-of-care para Medicina Geral e Familiar: como obter cada janela, o que procurar e como interpretar. Do Grupo de Estudos em Ecografia Point-of-Care (GEco) da APMGF.",
+  "palavras": [
+   "POCUS",
+   "ecografia",
+   "point-of-care",
+   "ecógrafo",
+   "FoCUS",
+   "ecografia pulmonar",
+   "ecografia abdominal",
+   "GEco",
+   "APMGF"
+  ]
+ }
+]

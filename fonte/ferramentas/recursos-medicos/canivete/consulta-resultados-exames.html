@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consulta rápida de resultados</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "consulta-resultados-exames",
+  "titulo": "Consulta rápida de resultados",
+  "descricao": "Cola a lista de resultados de exames uma vez por dia e pesquisa por número de utente durante a consulta.",
+  "resumo": "Cola a lista e pesquisa por número de utente",
+  "area": "recursos-medicos",
+  "grupo": "canivete",
+  "icone": "pesquisa",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-11",
+  "layout": "normal",
+  "ordem": 2,
+  "palavras": [
+    "resultados",
+    "exames",
+    "análises",
+    "lista",
+    "Excel",
+    "número de utente",
+    "consulta",
+    "colar",
+    "SOAP"
+  ],
+  "bibliografia": [
+    "Ferramenta de organização de dados: não usa fontes clínicas."
+  ],
+  "corpo": "bancada"
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Consulta rápida de resultados: só componentes comuns e estes acertos */
+.res-colar { width: 100%; min-height: 220px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 15px; line-height: 1.5; resize: vertical; }
+.res-colar:focus, .res-nota:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.res-procura { display: flex; gap: 8px; align-items: stretch; }
+.res-procura .mgf-pesquisa { flex: 1; margin: 0; }
+.res-nova { width: 48px; height: 48px; padding: 0; justify-content: center; flex: 0 0 auto; }
+.res-contagem { margin: 0; font-size: 15px; color: var(--cor-texto-3); }
+.res-utente { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-g); padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.res-utente + .res-utente { margin-top: 12px; }
+.res-nome { margin: 0; font-family: var(--letra-titulo); font-weight: 700; font-size: 19px; }
+.res-num { margin: 0 0 6px; font-size: 14px; color: var(--cor-texto-3); }
+.res-exame { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--cor-linha-suave); }
+.res-exame p { margin: 0; }
+.res-tipo { font-size: 14px; color: var(--cor-texto-3); }
+.res-valor { font-size: 20px; font-weight: 700; }
+.res-data { font-size: 14px; color: var(--cor-texto-3); }
+.res-copiar { width: 44px; height: 44px; padding: 0; justify-content: center; flex: 0 0 auto; }
+.res-vazio { margin: 0; padding: 24px 16px; text-align: center; color: var(--cor-texto-3); border: 1.5px dashed var(--cor-linha); border-radius: var(--raio); }
+.res-nota { width: 100%; min-height: 120px; box-sizing: border-box; border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 12px 14px; font-family: var(--letra-texto); font-size: 16px; resize: vertical; }
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <div class="mgf-cartao" id="setup-view">
+    <div class="mgf-cartao-titulo">1. Cola a lista do dia</div>
+    <div class="mgf-cartao-corpo">
+      <label for="paste-area" class="res-contagem">Linhas do Excel (Ctrl+V): número de utente, nome, exame, resultado, data</label>
+      <textarea id="paste-area" class="res-colar" placeholder="12345&#9;João Silva&#9;Hemoglobina glicada&#9;7.2%&#9;03/07/2026
+12346&#9;Maria Santos&#9;TSH&#9;2.1&#9;05/07/2026"></textarea>
+      <div class="mgf-botoes"><button type="button" class="mgf-botao mgf-botao-principal" id="load-btn">Carregar lista</button></div>
+      <p class="mgf-mensagem" id="setup-error" role="alert"></p>
+    </div>
+  </div>
+  <div id="app-view" style="display:none">
+    <h2 class="mgf-pergunta">Que utente procuras?</h2>
+    <div class="res-procura">
+      <label class="mgf-pesquisa"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="mgf-so-leitor">Número de utente</span>
+        <input id="search-input" type="text" inputmode="numeric" placeholder="Nº de utente" autocomplete="off"></label>
+      <button type="button" class="mgf-botao res-nova" id="reset-btn" title="Carregar nova lista" aria-label="Carregar nova lista"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+    </div>
+    <p class="res-contagem" id="count-label" aria-live="polite"></p>
+  </div>
+  <p class="mgf-nota" data-tom="menta"><strong>Privacidade.</strong> A lista fica só na memória deste browser enquanto a página estiver aberta: nada é guardado nem enviado para a internet. Volta a colar a lista sempre que precisares de a atualizar.</p>
+  </div>
+  <div class="mgf-resposta">
+  <div id="results-area" aria-live="polite" hidden></div>
+  <div class="mgf-espera" id="res-espera">Carrega a lista e escreve um número de utente.</div>
+  <div class="mgf-cartao">
+    <div class="mgf-cartao-titulo"><label for="note-area">Texto livre (ex.: para colar na nota SOAP)</label></div>
+    <div class="mgf-cartao-corpo">
+      <textarea id="note-area" class="res-nota" placeholder="Escreve aqui o texto a copiar para o processo..."></textarea>
+      <div class="mgf-botoes">
+        <button type="button" class="mgf-botao mgf-botao-principal" id="copy-note-btn"><span id="copy-note-icon" style="display:inline-flex"></span>Copiar texto</button>
+        <button type="button" class="mgf-botao" id="clear-note-btn">Limpar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+var COPIAR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+(function() {
+  var data = [];
+  var setupView = document.getElementById('setup-view');
+  var appView = document.getElementById('app-view');
+  var pasteArea = document.getElementById('paste-area');
+  var loadBtn = document.getElementById('load-btn');
+  var setupError = document.getElementById('setup-error');
+  var searchInput = document.getElementById('search-input');
+  var resultsArea = document.getElementById('results-area');
+  var countLabel = document.getElementById('count-label');
+  var resetBtn = document.getElementById('reset-btn');
+  var espera = document.getElementById('res-espera');   /* novo: lugar do resultado vazio (proposta B) */
+  function lugar() { resultsArea.hidden = !resultsArea.innerHTML; }
+
+  function norm(s) { return (s || '').toString().trim().toLowerCase(); }
+
+  function detectColumns(headerCells) {
+    var map = {};
+    headerCells.forEach(function(cell, i) {
+      var c = norm(cell);
+      if (/utente|n[uú]mero|n[ºo°]/.test(c) && map.utente === undefined) map.utente = i;
+      else if (/nome/.test(c)) map.nome = i;
+      else if (/exame|tipo|an[aá]lise/.test(c)) map.exame = i;
+      else if (/resultado|valor/.test(c)) map.resultado = i;
+      else if (/data/.test(c)) map.data = i;
+    });
+    return map;
+  }
+
+  function parsePaste(text) {
+    var lines = text.split(/\r?\n/).filter(function(l) { return l.trim().length > 0; });
+    if (lines.length === 0) return { rows: [], error: 'Não encontrei linhas com dados.' };
+
+    var rows = lines.map(function(l) { return l.split('\t'); });
+    var firstRow = rows[0];
+    var looksLikeHeader = firstRow.some(function(c) { return /utente|nome|exame|resultado|data/i.test(c); });
+    var colMap;
+    var dataRows;
+
+    if (looksLikeHeader) {
+      colMap = detectColumns(firstRow);
+      dataRows = rows.slice(1);
+    } else {
+      var n = firstRow.length;
+      if (n >= 5) colMap = { utente: 0, nome: 1, exame: 2, resultado: 3, data: 4 };
+      else if (n === 4) colMap = { utente: 0, nome: 1, resultado: 2, data: 3 };
+      else return { rows: [], error: 'Não consegui identificar as colunas. Confirma que colaste incluindo pelo menos nº de utente, resultado e data.' };
+      dataRows = rows;
+    }
+
+    if (colMap.utente === undefined || colMap.resultado === undefined) {
+      return { rows: [], error: 'Preciso pelo menos de uma coluna de nº de utente e de resultado.' };
+    }
+
+    var parsed = dataRows.map(function(cells) {
+      return {
+        utente: norm(cells[colMap.utente]).replace(/\s+/g, ''),
+        nome: colMap.nome !== undefined ? (cells[colMap.nome] || '').trim() : '',
+        exame: colMap.exame !== undefined ? (cells[colMap.exame] || '').trim() : '',
+        resultado: (cells[colMap.resultado] || '').trim(),
+        data: colMap.data !== undefined ? (cells[colMap.data] || '').trim() : ''
+      };
+    }).filter(function(r) { return r.utente.length > 0; });
+
+    return { rows: parsed, error: parsed.length === 0 ? 'Não encontrei nenhuma linha válida.' : null };
+  }
+
+  loadBtn.addEventListener('click', function() {
+    var result = parsePaste(pasteArea.value);
+    if (result.error) {
+      setupError.textContent = result.error;
+      return;
+    }
+    data = result.rows;
+    setupError.textContent = '';
+    setupView.style.display = 'none';
+    appView.style.display = 'block';
+    countLabel.textContent = data.length + (data.length === 1 ? ' exame carregado' : ' exames carregados');
+    espera.textContent = 'Escreve um número de utente.';
+    searchInput.focus();
+  });
+
+  resetBtn.addEventListener('click', function() {
+    data = [];
+    pasteArea.value = '';
+    setupError.textContent = '';
+    appView.style.display = 'none';
+    setupView.style.display = 'block';
+    resultsArea.innerHTML = '';
+    searchInput.value = '';
+    espera.textContent = 'Carrega a lista e escreve um número de utente.';
+    lugar();
+  });
+
+  function escapeHtml(s) {
+    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function render(query) {
+    var q = norm(query).replace(/\s+/g, '');
+    if (!q) { resultsArea.innerHTML = ''; lugar(); return; }
+
+    var matches = data.filter(function(r) { return r.utente.indexOf(q) !== -1; });
+
+    if (matches.length === 0) {
+      resultsArea.innerHTML = '<p class="res-vazio">Sem resultados para este número de utente.</p>';
+      lugar();
+      return;
+    }
+
+    var byUtente = {};
+    matches.forEach(function(r) {
+      if (!byUtente[r.utente]) byUtente[r.utente] = [];
+      byUtente[r.utente].push(r);
+    });
+
+    var html = '';
+    Object.keys(byUtente).forEach(function(utenteId) {
+      var rows = byUtente[utenteId];
+      var nome = rows[0].nome;
+      html += '<div class="res-utente">';
+      html += '<p class="res-nome">' + escapeHtml(nome || ('Utente ' + utenteId)) + '</p>';
+      html += '<p class="res-num">Nº ' + escapeHtml(utenteId) + '</p>';
+      rows.forEach(function(r) {
+        html += '<div class="res-exame">';
+        html += '<div style="min-width: 0;">';
+        if (r.exame) html += '<p class="res-tipo">' + escapeHtml(r.exame) + '</p>';
+        html += '<p class="res-valor">' + (escapeHtml(r.resultado) || '—') + '</p>';
+        if (r.data) html += '<p class="res-data">' + escapeHtml(r.data) + '</p>';
+        html += '</div>';
+        html += '<button type="button" class="mgf-botao res-copiar" data-copy="' + escapeHtml(r.resultado) + '" title="Copiar resultado" aria-label="Copiar resultado">' + COPIAR + '</button>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+
+    resultsArea.innerHTML = html;
+    lugar();
+    Array.prototype.forEach.call(resultsArea.querySelectorAll('.res-copiar'), function(btn) {
+      btn.addEventListener('click', function() { MGF.copiar(btn.getAttribute('data-copy'), btn); });
+    });
+  }
+
+  searchInput.addEventListener('input', function() { render(searchInput.value); });
+
+  var noteArea = document.getElementById('note-area');
+  var copyNoteBtn = document.getElementById('copy-note-btn');
+  var clearNoteBtn = document.getElementById('clear-note-btn');
+  document.getElementById('copy-note-icon').innerHTML = COPIAR;
+
+  copyNoteBtn.addEventListener('click', function() {
+    if (!noteArea.value.trim()) return;
+    MGF.copiar(noteArea.value, copyNoteBtn);
+  });
+
+  clearNoteBtn.addEventListener('click', function() {
+    noteArea.value = '';
+    noteArea.focus();
+  });
+})();
+</script>
+</body>
+</html>

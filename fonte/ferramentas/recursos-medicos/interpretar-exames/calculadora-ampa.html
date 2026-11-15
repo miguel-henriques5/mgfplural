@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora AMPA</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "calculadora-ampa",
+  "titulo": "Calculadora AMPA",
+  "descricao": "Média da automedição da pressão arterial no domicílio (AMPA): regista as medições da manhã e da noite, exclui o 1.º dia e compara a média com o limiar de hipertensão (135/85 mmHg), com folha para imprimir.",
+  "resumo": "Média da automedição da PA e limiar de HTA",
+  "area": "recursos-medicos",
+  "grupo": "interpretar-exames",
+  "icone": "tensiometro",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-15",
+  "layout": "normal",
+  "ordem": 8,
+  "impressao": "doente",
+  "palavras": [
+    "AMPA",
+    "automedição",
+    "pressão arterial",
+    "tensão arterial",
+    "hipertensão",
+    "HTA",
+    "medição no domicílio",
+    "MAPA",
+    "bata branca",
+    "hipertensão mascarada",
+    "135/85"
+  ],
+  "bibliografia": [
+    "Stergiou GS, Palatini P, Parati G, et al. 2021 European Society of Hypertension practice guidelines for office and out-of-office blood pressure measurement. J Hypertens. 2021;39(7):1293-1302.",
+    "Parati G, Stergiou GS, Bilo G, et al. Home blood pressure monitoring: methodology, clinical relevance and practical application: a 2021 position paper by the Working Group on Blood Pressure Monitoring and Cardiovascular Variability of the European Society of Hypertension. J Hypertens. 2021;39(9):1742-1767.",
+    "Mancia G, Kreutz R, Brunström M, et al. 2023 ESH Guidelines for the management of arterial hypertension. J Hypertens. 2023;41(12):1874-2071."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* Calculadora AMPA — a partir do original (bloco do Squarespace), em proposta B. */
+#ferramenta .ampa-registo { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; align-items: end; }
+#ferramenta .ampa-registo .ampa-data { grid-column: span 2; }
+#ferramenta .ampa-registo .mgf-botao { margin: 0; min-height: 46px; justify-content: center; }
+#ferramenta .mgf-campo small { display: inline; }
+#ferramenta .ampa-opcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; align-items: end;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cor-linha-suave); }
+#ferramenta .ampa-check { align-self: center; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+#ferramenta .ampa-check input { width: 20px; height: 20px; margin: 0; accent-color: var(--cor-verde); flex: none; }
+#ferramenta .ampa-tabela td, #ferramenta .ampa-tabela th { white-space: nowrap; }
+#ferramenta .ampa-tabela .ampa-ta { font-weight: 700; font-variant-numeric: tabular-nums; }
+#ferramenta .ampa-tabela tr.excluida td:not(.ampa-acao) { color: var(--cor-texto-3); text-decoration: line-through; }
+#ferramenta .ampa-tabela .ampa-acao { text-align: right; width: 1%; }
+#ferramenta .ampa-excl { display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 10px;
+  background: var(--clin-atencao-fundo); color: var(--clin-atencao); text-decoration: none; }
+#ferramenta .ampa-apagar { font: inherit; font-size: 14px; font-weight: 700; background: none; border: 1px solid var(--cor-linha); color: var(--cor-texto-2);
+  border-radius: var(--raio-p); padding: 4px 10px; cursor: pointer; }
+#ferramenta .ampa-apagar:hover { border-color: var(--clin-alerta-borda); color: var(--clin-alerta); background: var(--clin-alerta-fundo); }
+#ferramenta .ampa-vazio { text-align: center; color: var(--cor-texto-3); padding: 18px 8px; white-space: normal; }
+#ferramenta .ampa-limpar.armado { border-color: var(--clin-alerta-borda); color: var(--clin-alerta); background: var(--clin-alerta-fundo); }
+#ferramenta .ampa-media { font-variant-numeric: tabular-nums; }
+#ferramenta .ampa-media-sub { font-size: 15px; color: var(--cor-texto-2); margin: 6px 0 0; }
+#ferramenta .mgf-resumo { margin-top: 14px; }
+#ferramenta .mgf-resumo-valor { font-variant-numeric: tabular-nums; }
+#ferramenta .mgf-resultado-corpo > * + * { margin-top: 12px; }
+#ferramenta .ampa-so-impressao { display: none; }
+
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+  #ferramenta .ampa-so-impressao { display: block; }
+  #ferramenta .ampa-impressao-topo { border-bottom: 2px solid var(--cor-verde); padding-bottom: 6px; margin-bottom: 10px; }
+  #ferramenta .ampa-impressao-topo h2 { font-family: var(--letra-titulo); font-size: 22px; margin: 0; }
+  #ferramenta .ampa-impressao-topo p { margin: 2px 0 0; color: var(--cor-texto-2); font-size: 13px; }
+  #ferramenta .ampa-utente { display: flex; justify-content: space-between; gap: 12px; background: var(--cor-menta-clara); border-radius: 6px;
+    padding: 6px 10px; margin: 0 0 10px; font-size: 13px; }
+  #ferramenta .ampa-nao-imprimir, #ferramenta .ampa-acao { display: none !important; }
+  #ferramenta .mgf-bancada { display: flex !important; flex-direction: column-reverse; gap: 10px; }
+  #ferramenta .mgf-bancada > .mgf-comandos, #ferramenta .mgf-bancada > .mgf-resposta { width: 100% !important; max-width: none !important; }
+  #ferramenta .mgf-cartao { break-inside: auto !important; box-shadow: none !important; }
+  #ferramenta .ampa-tabela tr { break-inside: avoid; }
+  #ferramenta .mgf-resultado-corpo { gap: 6px; padding: 8px 14px 10px; }
+  #ferramenta .mgf-resultado-corpo > * + * { margin-top: 0; }
+  #ferramenta .mgf-resumo { margin-top: 0; }
+  #ferramenta .mgf-resultado-topo { padding: 8px 14px 6px !important; }
+  #ferramenta .mgf-resumo { gap: 8px; }
+  #ferramenta .mgf-resumo > div { padding: 6px 10px; }
+  #ferramenta .mgf-resumo-rotulo, #ferramenta .mgf-resumo-sub, #ferramenta .ampa-media-sub { font-size: 12px; }
+  #ferramenta .mgf-interp, #ferramenta .mgf-nota { font-size: 12px; padding: 6px 10px; line-height: 1.4; }
+  #ferramenta .mgf-cartao-titulo { font-size: 14px; padding-top: 8px; padding-bottom: 6px; }
+  #ferramenta .ampa-tabela td, #ferramenta .ampa-tabela th { padding: 1px 8px; line-height: 1.25; font-size: 11.5px; }
+  #ferramenta .ampa-tabela { font-size: 12px; }
+  #ferramenta .mgf-resumo-valor { font-size: 20px; }
+  #ferramenta .mgf-pontuacao { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="ampa-so-impressao">
+    <div class="ampa-impressao-topo"><h2>Automedição da pressão arterial (AMPA)</h2><p>Média das medições feitas no domicílio</p></div>
+    <div class="ampa-utente"><span>Utente: <strong id="printName">—</strong></span><span>Data de emissão: <strong id="printDate"></strong></span></div>
+  </div>
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+
+    <div class="mgf-cartao ampa-nao-imprimir">
+      <div class="mgf-cartao-titulo">Registar medição</div>
+      <div class="mgf-cartao-corpo">
+        <div class="ampa-registo">
+          <label class="mgf-campo ampa-data"><span>Data <small>(opcional)</small></span><input type="date" id="inDate"></label>
+          <label class="mgf-campo">Período
+            <select id="inPer">
+              <option value="M">Manhã</option>
+              <option value="N">Noite</option>
+            </select>
+          </label>
+          <label class="mgf-campo"><span>Sistólica <small>mmHg</small></span><input type="number" id="inSys" inputmode="numeric" min="50" max="300"></label>
+          <label class="mgf-campo"><span>Diastólica <small>mmHg</small></span><input type="number" id="inDia" inputmode="numeric" min="30" max="200"></label>
+          <label class="mgf-campo"><span>Pulso <small>bpm (opc.)</small></span><input type="number" id="inPul" inputmode="numeric" min="30" max="220"></label>
+          <button type="button" class="mgf-botao mgf-botao-principal" id="btnAdd">Adicionar</button>
+        </div>
+        <p class="mgf-mensagem" id="msg" role="alert"></p>
+        <div class="ampa-opcoes">
+          <label class="ampa-check"><input type="checkbox" id="chkFirst" checked> Excluir o 1.º dia (precisa das datas)</label>
+          <label class="mgf-campo"><span>Nome ou n.º de utente <small>(opcional, só para a impressão)</small></span><input type="text" id="inName" maxlength="60" autocomplete="off"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Medições registadas (<span id="countAll">0</span>)</div>
+      <div class="mgf-cartao-corpo">
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela ampa-tabela">
+            <thead><tr><th scope="col">Data</th><th scope="col">Período</th><th scope="col">PA (mmHg)</th><th scope="col">Pulso</th><th scope="col" class="ampa-acao"><span class="mgf-so-leitor">Apagar</span></th></tr></thead>
+            <tbody id="list"><tr><td colspan="5" class="ampa-vazio">Ainda sem medições. Adiciona a primeira.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="mgf-botoes ampa-nao-imprimir">
+          <button type="button" class="mgf-botao" id="btnPrint">Imprimir ou guardar PDF</button>
+          <button type="button" class="mgf-botao ampa-limpar" id="btnClear">Limpar tudo</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mgf-resposta">
+  <div class="mgf-resultado">
+    <div class="mgf-resultado-topo">
+      <h3>Média AMPA</h3>
+      <div class="mgf-pontuacao ampa-media" id="rAvg" aria-live="polite">—</div>
+    </div>
+    <div class="mgf-resultado-corpo">
+      <p class="ampa-media-sub" id="rAvgSub">mmHg</p>
+      <div class="mgf-resumo">
+        <div><span class="mgf-resumo-rotulo">Manhã</span><span class="mgf-resumo-valor" id="rM">—</span><span class="mgf-resumo-sub" id="rMn"></span></div>
+        <div><span class="mgf-resumo-rotulo">Noite</span><span class="mgf-resumo-valor" id="rN">—</span><span class="mgf-resumo-sub" id="rNn"></span></div>
+        <div><span class="mgf-resumo-rotulo">Pulso médio</span><span class="mgf-resumo-valor" id="rP">—</span><span class="mgf-resumo-sub">bpm</span></div>
+      </div>
+      <div class="mgf-interp" id="verdict" hidden></div>
+      <p class="mgf-nota" data-nivel="atencao" id="notice" hidden></p>
+      <p class="mgf-nota"><strong>Protocolo habitual.</strong> 7 dias seguidos, 2 medições de manhã (antes da medicação e do pequeno-almoço) e 2 à noite (antes do jantar), com 1–2 min de intervalo, sentado e em repouso. O 1.º dia costuma ser excluído; recomendam-se pelo menos 12 leituras válidas (idealmente 24–28). Limiar de HTA em AMPA: média ≥ 135 e/ou ≥ 85 mmHg. Os dados não são guardados nem enviados: desaparecem ao fechar ou recarregar a página.</p>
+    </div>
+  </div>
+  </div>
+  </div>
+
+</main>
+
+<script data-mgf="ferramenta">
+/* Cálculos e regras: os do original (Calculadora AMPA). Mudou a apresentação (proposta B), o tratamento por «tu»,
+   «Limpar tudo» com segundo clique em vez da janela do browser, e sem as adaptações ao Squarespace. */
+(function () {
+  "use strict";
+  var readings = [];
+  var uid = 0;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function fmt(s) { var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+  function mean(a) { if (!a.length) return null; return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+
+  function showMsg(t) { $('msg').textContent = t; }
+  function hideMsg() { $('msg').textContent = ''; }
+
+  function add() {
+    var date = $('inDate').value, per = $('inPer').value;
+    var sys = parseInt($('inSys').value, 10), dia = parseInt($('inDia').value, 10);
+    var pulRaw = $('inPul').value, pul = pulRaw === '' ? null : parseInt(pulRaw, 10);
+    if (isNaN(sys) || isNaN(dia)) return showMsg('Preenche a sistólica e a diastólica.');
+    if (sys < 50 || sys > 300) return showMsg('Sistólica fora do intervalo plausível (50–300 mmHg).');
+    if (dia < 30 || dia > 200) return showMsg('Diastólica fora do intervalo plausível (30–200 mmHg).');
+    if (sys <= dia) return showMsg('A sistólica deve ser superior à diastólica.');
+    if (pul !== null && (isNaN(pul) || pul < 30 || pul > 220)) return showMsg('Pulso fora do intervalo plausível (30–220 bpm).');
+    hideMsg();
+    readings.push({ id: ++uid, date: date, per: per, sys: sys, dia: dia, pul: pul });
+    $('inSys').value = ''; $('inDia').value = ''; $('inPul').value = '';
+    $('inSys').focus();
+    render();
+  }
+
+  function sorted() {
+    return readings.slice().sort(function (a, b) {
+      if (a.date && b.date) {
+        if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+        if (a.per !== b.per) return a.per === 'M' ? -1 : 1;
+        return a.id - b.id;
+      }
+      if (a.date) return -1;
+      if (b.date) return 1;
+      return a.id - b.id;
+    });
+  }
+
+  function render() {
+    var all = sorted();
+    $('countAll').textContent = all.length;
+
+    var dates = [];
+    all.forEach(function (r) { if (r.date && dates.indexOf(r.date) === -1) dates.push(r.date); });
+    var skipFirst = $('chkFirst').checked && dates.length > 1;
+    var firstDate = dates[0];
+    var undated = all.some(function (r) { return !r.date; });
+
+    // Lista
+    if (!all.length) {
+      $('list').innerHTML = '<tr><td colspan="5" class="ampa-vazio">Ainda sem medições. Adiciona a primeira.</td></tr>';
+    } else {
+      $('list').innerHTML = all.map(function (r) {
+        var ex = skipFirst && r.date && r.date === firstDate;
+        return '<tr' + (ex ? ' class="excluida"' : '') + '>' +
+          '<td>' + (r.date ? fmt(r.date) : '—') + '</td>' +
+          '<td>' + (r.per === 'M' ? 'Manhã' : 'Noite') + (ex ? '<span class="ampa-excl">excl.</span>' : '') + '</td>' +
+          '<td class="ampa-ta">' + r.sys + '/' + r.dia + '</td>' +
+          '<td>' + (r.pul !== null ? r.pul : '—') + '</td>' +
+          '<td class="ampa-acao"><button type="button" class="ampa-apagar" data-del="' + r.id + '" aria-label="Apagar a medição ' + r.sys + '/' + r.dia + '">×</button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    // Cálculos
+    var used = all.filter(function (r) { return !(skipFirst && r.date && r.date === firstDate); });
+    var usedDays = dates.length - (skipFirst ? 1 : 0);
+    var S = used.map(function (r) { return r.sys; }), D = used.map(function (r) { return r.dia; });
+    var P = used.filter(function (r) { return r.pul !== null; }).map(function (r) { return r.pul; });
+    var Sm = used.filter(function (r) { return r.per === 'M'; }), Sn = used.filter(function (r) { return r.per === 'N'; });
+
+    function pair(a) {
+      if (!a.length) return '—';
+      return Math.round(mean(a.map(function (r) { return r.sys; }))) + '/' + Math.round(mean(a.map(function (r) { return r.dia; })));
+    }
+
+    var verdict = $('verdict'), notice = $('notice');
+    if (!used.length) {
+      $('rAvg').textContent = '—'; $('rAvgSub').textContent = 'mmHg';
+      $('rM').textContent = '—'; $('rN').textContent = '—'; $('rP').textContent = '—';
+      $('rMn').textContent = ''; $('rNn').textContent = '';
+      verdict.hidden = true; notice.hidden = true;
+      return;
+    }
+
+    var ms = Math.round(mean(S)), md = Math.round(mean(D));
+    $('rAvg').textContent = ms + '/' + md;
+    $('rAvgSub').textContent = 'mmHg · ' + used.length + ' leitura' + (used.length === 1 ? '' : 's') +
+      (dates.length && !undated ? ' em ' + usedDays + ' dia' + (usedDays === 1 ? '' : 's') : '');
+    $('rM').textContent = pair(Sm); $('rMn').textContent = Sm.length ? Sm.length + ' leituras' : '';
+    $('rN').textContent = pair(Sn); $('rNn').textContent = Sn.length ? Sn.length + ' leituras' : '';
+    $('rP').textContent = P.length ? Math.round(mean(P)) : '—';
+
+    var high = ms >= 135 || md >= 85;
+    verdict.hidden = false;
+    verdict.dataset.nivel = high ? 'alerta' : 'normal';
+    verdict.textContent = high
+      ? 'Média igual ou superior ao limiar de HTA em AMPA (≥ 135 e/ou ≥ 85 mmHg).'
+      : 'Média inferior ao limiar de HTA em AMPA (< 135 e < 85 mmHg).';
+
+    var notes = [];
+    if (used.length < 12) notes.push('Apenas ' + used.length + ' leituras válidas: recomendam-se pelo menos 12 (idealmente 24–28) para uma média fiável.');
+    if (dates.length && !undated && usedDays < 3) notes.push('Menos de 3 dias de registos considerados na média.');
+    if (dates.length > 1 && !$('chkFirst').checked) notes.push('O 1.º dia está incluído na média (habitualmente é excluído).');
+    if (!dates.length) notes.push('Sem datas: todas as leituras entram na média. Se o utente trouxe o 1.º dia, não o introduzas (ou indica as datas para o excluir automaticamente).');
+    else if (undated) notes.push('Há leituras sem data: entram sempre na média e não contam para os dias nem para a exclusão do 1.º dia.');
+    notice.textContent = notes.join(' ');
+    notice.hidden = !notes.length;
+  }
+
+  $('btnAdd').addEventListener('click', add);
+  ['inSys', 'inDia', 'inPul'].forEach(function (id) {
+    $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+  });
+  $('chkFirst').addEventListener('change', render);
+  $('list').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-del]') : null;
+    if (!b) return;
+    var id = parseInt(b.getAttribute('data-del'), 10);
+    readings = readings.filter(function (r) { return r.id !== id; });
+    render();
+  });
+  /* «Limpar tudo»: em vez da janela do browser, pede um segundo clique no mesmo botão. */
+  var limpar = $('btnClear');
+  limpar.addEventListener('click', function () {
+    if (!readings.length) return;
+    if (limpar._armado) {
+      clearTimeout(limpar._armado); limpar._armado = null;
+      limpar.textContent = 'Limpar tudo'; limpar.classList.remove('armado');
+      readings = []; render(); return;
+    }
+    limpar.textContent = 'Carrega outra vez para apagar todas'; limpar.classList.add('armado');
+    limpar._armado = setTimeout(function () { limpar._armado = null; limpar.textContent = 'Limpar tudo'; limpar.classList.remove('armado'); }, 4000);
+  });
+  $('btnPrint').addEventListener('click', function () { window.print(); });
+
+  function prepareForPrint() {
+    $('printName').textContent = $('inName').value.trim() || '—';
+    var n = new Date();
+    $('printDate').textContent = String(n.getDate()).padStart(2, '0') + '/' + String(n.getMonth() + 1).padStart(2, '0') + '/' + n.getFullYear();
+  }
+  window.addEventListener('beforeprint', prepareForPrint);
+
+  render();
+})();
+</script>
+</body>
+</html>

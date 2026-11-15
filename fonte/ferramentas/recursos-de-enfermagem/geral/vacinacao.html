@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vacinação (PNV)</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "vacinacao",
+  "titulo": "Vacinação (PNV)",
+  "descricao": "Programa Nacional de Vacinação: mapa, esquemas gerais e de recurso, critérios para vacinar e vacinação sazonal.",
+  "resumo": "Esquemas gerais e de recurso e vacinação sazonal",
+  "area": "recursos-de-enfermagem",
+  "grupo": "geral",
+  "icone": "vacina",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-11",
+  "layout": "normal",
+  "ordem": 1,
+  "palavras": [
+    "vacinação",
+    "vacinas",
+    "PNV",
+    "Programa Nacional de Vacinação",
+    "esquema de recurso",
+    "HPV",
+    "gripe",
+    "COVID-19",
+    "VSR",
+    "tétano",
+    "Livro Azul",
+    "DGS"
+  ],
+  "bibliografia": [
+    "DGS. Livro Azul de Vacinas — Programa Nacional de Vacinação e outras estratégias de imunização (Cap. 2 e Quadro 1: 03/10/2025; Cap. 3: 14/04/2026; Cap. 4: 29/07/2026; Cap. 18: 22/07/2026; Cap. 19). https://www.dgs.pt/publicacoes/livro-azul-de-vacinas-programa-nacional-de-vacinacao-e-outras-estrategias-de-imunizacao.aspx",
+    "DGS. Norma n.º 002/2026, de 08/04/2026: atualização da estratégia de vacinação contra o vírus do papiloma humano (HPV) no PNV.",
+    "DGS. Norma n.º 004/2026, de 02/09/2026: campanha de imunização sazonal contra o VSR em idade pediátrica, outono-inverno 2026-2027.",
+    "DGS. Normas e circulares normativas: campanha de vacinação sazonal contra a gripe e a COVID-19 2026/27. https://www.dgs.pt/normas-orientacoes-e-informacoes/normas-e-circulares-normativas.aspx",
+    "Despacho n.º 2794/2026 (referencial técnico do PNV)."
+  ],
+  "corpo": "bancada"
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+
+<style data-mgf="ferramenta">
+/* CSS do modelo original, convertido para as cores e letras da marca */
+:where(#ferramenta *) { box-sizing: border-box; margin: 0; padding: 0; }
+#ferramenta { color: #13423D; }
+#ferramenta p, #ferramenta li, #ferramenta td, #ferramenta span, #ferramenta div { line-height: 1.5; }
+#ferramenta .hdr-badges { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+#ferramenta .hdr-badge { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 3px 11px; font-size: 13px; font-weight: 600; }
+#ferramenta .card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.06); padding: 20px; margin-bottom: 18px; }
+#ferramenta .card-title { font-size: 14px; font-weight: 700; color: #2C3A38; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+#ferramenta .card-title .icon { width: 22px; height: 22px; background: #D7EDE7; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #2C3A38; }
+#ferramenta .section-intro { font-size: 14px; color: #4B5B58; margin-bottom: 14px; line-height: 1.6; }
+#ferramenta .tab-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+#ferramenta .tab-btn { background: #D7EDE7; color: #2C3A38; border: 2px solid transparent; border-radius: 8px; padding: 9px 15px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+#ferramenta .tab-btn:hover { border-color: #8FCFC0; }
+#ferramenta .tab-btn.active { background: #4B5B58; color: #FFFFFF; border-color: #0F6E64; }
+#ferramenta .subtab-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+#ferramenta .subtab-btn { background: #D7EDE7; color: #4B5B58; border: 1.5px solid #D7EDE7; border-radius: 7px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+#ferramenta .subtab-btn.active { background: #4B5B58; color: #FFFFFF; border-color: #4B5B58; }
+#ferramenta .tab-panel { display: none; }
+#ferramenta .tab-panel.active { display: block; }
+#ferramenta .subpanel { display: none; }
+#ferramenta .subpanel.active { display: block; }
+#ferramenta .search-box { width: 100%; border: 1.5px solid #D7EDE7; border-radius: 10px; padding: 11px 16px; font-size: 15px; color: #13423D; background: #FFFFFF; margin-bottom: 14px; }
+#ferramenta .search-box:focus { outline: none; border-color: #4B5B58; }
+#ferramenta .map-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid #D7EDE7; }
+#ferramenta .map-table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 860px; background: #FFFFFF; }
+#ferramenta .map-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 4px; text-align: center; white-space: nowrap; }
+#ferramenta .map-table th.age-adult { background: #4B5B58; }
+#ferramenta .map-table th:first-child { text-align: left; padding-left: 12px; position: sticky; left: 0; z-index: 2; }
+#ferramenta .map-table td { border-bottom: 1px solid #D7EDE7; padding: 6px 3px; text-align: center; vertical-align: middle; height: 42px; }
+#ferramenta .map-table td.dis { text-align: left; padding: 6px 10px; background: #D7EDE7; position: sticky; left: 0; z-index: 1; min-width: 150px; cursor: pointer; border-right: 1px solid #D7EDE7; }
+#ferramenta .map-table td.dis:hover { background: #D7EDE7; }
+#ferramenta .map-table .dis-name { font-size: 13.5px; font-weight: 700; color: #13423D; display: block; }
+#ferramenta .map-table .dis-sub { font-size: 13px; color: #4B5B58; display: block; }
+#ferramenta .map-table td.col-adult { background: #FFFFFF; }
+#ferramenta .pill { display: inline-block; font-size: 13px; font-weight: 700; padding: 5px 6px; border-radius: 7px; white-space: nowrap; cursor: pointer; border: 1.5px solid transparent; min-width: 52px; }
+#ferramenta .pill:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(19,32,30,0.12); }
+#ferramenta .p-mono { background: #D7EDE7; color: #0F6E64; border-color: #8FCFC0; }
+#ferramenta .p-hexa { background: #EAF1FA; color: #2C3A38; border-color: #EAF1FA; }
+#ferramenta .p-penta { background: #D7EDE7; color: #0F6E64; border-color: #8FCFC0; }
+#ferramenta .p-tetra { background: #D7EDE7; color: #0F6E64; border-color: #8FCFC0; }
+#ferramenta .p-pn { background: #FDECEA; color: #9E2318; border-color: #FDECEA; }
+#ferramenta .p-men { background: #E8F5EC; color: #1B6B35; border-color: #3E9A5C; }
+#ferramenta .p-viva { background: #F8E7C4; color: #8F3A00; border-color: #DE9B2C; }
+#ferramenta .p-hpv { background: #FDECEA; color: #9E2318; border-color: #FDECEA; }
+#ferramenta .p-td { background: #D7EDE7; color: #2C3A38; border-color: #8FCFC0; }
+#ferramenta .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; }
+#ferramenta .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #4B5B58; }
+#ferramenta .legend-sw { width: 16px; height: 12px; border-radius: 4px; display: inline-block; border: 1.5px solid transparent; }
+#ferramenta .preg-row td { background: #FDECEA; }
+#ferramenta .preg-cell { font-size: 13px; font-weight: 700; color: #9E2318; }
+#ferramenta .visit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+#ferramenta .visit { background: #FFFFFF; border: 1px solid #D7EDE7; border-radius: 12px; overflow: hidden; }
+#ferramenta .visit-head { background: #0F6E64; color: #FFFFFF; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+#ferramenta .visit-head .vh-age { font-size: 15px; font-weight: 700; color: #FFFFFF; }
+#ferramenta .visit-head .vh-inj { font-size: 13px; font-weight: 700; background: rgba(255,255,255,0.18); color: #FFFFFF; padding: 3px 8px; border-radius: 10px; }
+#ferramenta .visit-body { padding: 10px 14px 12px; }
+#ferramenta .vrow { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed #D7EDE7; }
+#ferramenta .vrow:last-child { border-bottom: none; }
+#ferramenta .vrow .pill { min-width: 0; flex-shrink: 0; }
+#ferramenta .vrow-txt { font-size: 13px; color: #13423D; }
+#ferramenta .vrow-site { font-size: 13px; color: #4B5B58; display: block; }
+#ferramenta .visit-note { font-size: 13px; color: #4B5B58; background: #D7EDE7; padding: 8px 14px; border-top: 1px solid #D7EDE7; }
+#ferramenta .dc-card { background: #FFFFFF; border-radius: 12px; box-shadow: 0 2px 10px rgba(19,32,30,0.05); overflow: hidden; margin-bottom: 12px; border: 1px solid #D7EDE7; }
+#ferramenta .dc-head { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; background: #D7EDE7; }
+#ferramenta .dc-head:hover { background: #D7EDE7; }
+#ferramenta .dc-name { font-size: 15px; font-weight: 700; color: #13423D; }
+#ferramenta .dc-sub { font-size: 13px; color: #4B5B58; margin-top: 2px; }
+#ferramenta .dc-tags { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+#ferramenta .dc-tag { font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
+#ferramenta .t-geral { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .t-risco { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .t-sazonal { background: #D7EDE7; color: #0F6E64; }
+#ferramenta .t-extra { background: #EAF1FA; color: #4B5B58; }
+#ferramenta .t-viva { background: #FDECEA; color: #9E2318; }
+#ferramenta .t-inat { background: #D7EDE7; color: #2C3A38; }
+#ferramenta .dc-toggle { font-size: 18px; color: #2C3A38; transition: transform 0.2s; flex-shrink: 0; }
+#ferramenta .dc-card.open .dc-toggle { transform: rotate(90deg); }
+#ferramenta .dc-body { display: none; padding: 4px 16px 16px; border-top: 1px solid #D7EDE7; }
+#ferramenta .dc-card.open .dc-body { display: block; }
+#ferramenta .dcb-sec { margin-top: 12px; }
+#ferramenta .dcb-lbl { font-size: 13px; font-weight: 700; color: #2C3A38; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+#ferramenta .dcb-txt { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .dcb-txt ul { padding-left: 18px; margin: 2px 0; }
+#ferramenta .dcb-txt li { margin-bottom: 3px; font-size: 14px; color: #13423D; }
+#ferramenta .dcb-src { font-size: 13px; color: #4B5B58; margin-top: 12px; font-style: italic; }
+#ferramenta strong, #ferramenta b { font-weight: 700; }
+#ferramenta .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #D7EDE7; margin-bottom: 14px; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; background: #FFFFFF; }
+#ferramenta .data-table th { background: #0F6E64; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 9px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; font-size: 13.5px; color: #13423D; border-bottom: 1px solid #D7EDE7; vertical-align: top; }
+#ferramenta .data-table tr:last-child td { border-bottom: none; }
+#ferramenta .data-table tr:nth-child(even) td { background: #D7EDE7; }
+#ferramenta .data-table .term { font-weight: 700; color: #0F6E64; white-space: nowrap; }
+#ferramenta .tbl-cap { font-size: 13px; font-weight: 700; color: #0F6E64; margin: 16px 0 8px; }
+#ferramenta .tbl-note { font-size: 13px; color: #4B5B58; margin: -6px 0 14px; line-height: 1.55; }
+#ferramenta .info-block { border-radius: 10px; padding: 13px 15px; margin-bottom: 12px; }
+#ferramenta .info-block.navy { background: #D7EDE7; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block.blue { background: #D7EDE7; border-left: 4px solid #0F6E64; }
+#ferramenta .info-block.green { background: #E8F5EC; border-left: 4px solid #1B6B35; }
+#ferramenta .info-block.orange { background: #F8E7C4; border-left: 4px solid #E07A1F; }
+#ferramenta .info-block.red { background: #FDECEA; border-left: 4px solid #D2483C; }
+#ferramenta .info-block.purple { background: #EAF1FA; border-left: 4px solid #4B5B58; }
+#ferramenta .info-block p, #ferramenta .info-block li { font-size: 14px; color: #13423D; line-height: 1.6; }
+#ferramenta .info-block ul { padding-left: 18px; }
+#ferramenta .info-block .ib-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+#ferramenta .info-block.navy .ib-title { color: #2C3A38; }
+#ferramenta .info-block.blue .ib-title { color: #0F6E64; }
+#ferramenta .info-block.green .ib-title { color: #1B6B35; }
+#ferramenta .info-block.orange .ib-title { color: #8F3A00; }
+#ferramenta .info-block.red .ib-title { color: #9E2318; }
+#ferramenta .info-block.purple .ib-title { color: #4B5B58; }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+#ferramenta .field-group label { display: block; font-size: 13px; font-weight: 700; color: #2C3A38; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+#ferramenta .field-group input[type="date"], #ferramenta .field-group select { width: 100%; border: 1.5px solid #D7EDE7; border-radius: 8px; padding: 9px 11px; font-size: 15px; color: #13423D; background: #FFFFFF; }
+#ferramenta .chk-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; margin-bottom: 14px; }
+#ferramenta .chk { display: flex; align-items: flex-start; gap: 9px; background: #D7EDE7; border: 1.5px solid #D7EDE7; border-radius: 9px; padding: 9px 11px; cursor: pointer; font-size: 13.5px; color: #13423D; line-height: 1.4; }
+#ferramenta .chk:hover { border-color: #8FCFC0; }
+#ferramenta .chk input { margin-top: 2px; accent-color: #4B5B58; width: 15px; height: 15px; flex-shrink: 0; }
+#ferramenta .chk.on { background: #D7EDE7; border-color: #4B5B58; }
+#ferramenta .grp-lbl { font-size: 13px; font-weight: 700; color: #0F6E64; margin: 4px 0 8px; text-transform: uppercase; letter-spacing: 0.6px; }
+#ferramenta .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+#ferramenta .btn-primary { background: #4B5B58; color: #FFFFFF; border: none; border-radius: 8px; padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+#ferramenta .btn-primary:hover { background: #0F6E64; }
+#ferramenta .btn-secondary { background: #FFFFFF; color: #2C3A38; border: 1.5px solid #4B5B58; border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 13px; border-radius: 9px; margin-bottom: 8px; border: 1px solid transparent; }
+#ferramenta .result-row.ok { background: #E8F5EC; border-color: #3E9A5C; }
+#ferramenta .result-row.warn { background: #F8E7C4; border-color: #DE9B2C; }
+#ferramenta .result-row.stop { background: #FDECEA; border-color: #FDECEA; }
+#ferramenta .result-row.info { background: #D7EDE7; border-color: #8FCFC0; }
+#ferramenta .result-row.na { background: #D7EDE7; border-color: #D7EDE7; }
+#ferramenta .rr-icon { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; color: #FFFFFF; }
+#ferramenta .ok .rr-icon { background: #1B6B35; }
+#ferramenta .warn .rr-icon { background: #E07A1F; }
+#ferramenta .stop .rr-icon { background: #D2483C; }
+#ferramenta .info .rr-icon { background: #0F6E64; }
+#ferramenta .na .rr-icon { background: #2E9C8C; }
+#ferramenta .rr-title { font-size: 14px; font-weight: 700; color: #13423D; }
+#ferramenta .rr-text { font-size: 13.5px; color: #13423D; line-height: 1.55; margin-top: 2px; }
+#ferramenta .verdict { border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; font-size: 15px; font-weight: 700; }
+#ferramenta .verdict.ok { background: #1B6B35; color: #FFFFFF; }
+#ferramenta .verdict.warn { background: #E07A1F; color: #FFFFFF; }
+#ferramenta .verdict.stop { background: #D2483C; color: #FFFFFF; }
+#ferramenta .verdict span { color: #FFFFFF; font-weight: 400; font-size: 13.5px; display: block; margin-top: 3px; }
+#ferramenta .plan-table td.st { white-space: nowrap; }
+#ferramenta .st-badge { font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+#ferramenta .st-done { background: #E8F5EC; color: #1B6B35; }
+#ferramenta .st-due { background: #FDECEA; color: #9E2318; }
+#ferramenta .st-soon { background: #F8E7C4; color: #8F3A00; }
+#ferramenta .st-fut { background: #D7EDE7; color: #4B5B58; }
+#ferramenta .age-banner { background: #0F6E64; color: #FFFFFF; border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; font-size: 14px; }
+#ferramenta .age-banner b { color: #FFFFFF; font-size: 16px; }
+#ferramenta .age-banner span { color: #FFFFFF; }
+#ferramenta .disclaimer { background: #F8E7C4; border: 1px solid #DE9B2C; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+#ferramenta .disclaimer p { font-size: 13px; color: #845406; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: center; font-size: 13px; color: #4B5B58; margin-top: 28px; padding-top: 16px; border-top: 1px solid #D7EDE7; line-height: 1.7; }
+#ferramenta a { color: #0F6E64; text-decoration: underline; }
+#ferramenta .muted { color: #4B5B58; }
+#ferramenta .kbd { display: inline-block; background: #D7EDE7; border: 1px solid #D7EDE7; border-radius: 5px; padding: 0 6px; font-size: 13px; font-weight: 700; color: #0F6E64; }
+#ferramenta .modal-bg { display: none; position: fixed; inset: 0; background: rgba(19,32,30,0.45); z-index: 9999; align-items: flex-start; justify-content: center; padding: 40px 14px; overflow-y: auto; }
+#ferramenta .modal-bg.show { display: flex; }
+#ferramenta .modal { background: #FFFFFF; border-radius: 14px; max-width: 720px; width: 100%; box-shadow: 0 10px 40px rgba(19,32,30,0.25); overflow: hidden; }
+#ferramenta .modal-head { background: #0F6E64; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+#ferramenta .modal-head h3 { color: #FFFFFF; font-size: 17px; font-weight: 700; }
+#ferramenta .modal-head .msub { color: #FFFFFF; font-size: 13px; }
+#ferramenta .modal-x { background: rgba(255,255,255,0.15); border: none; color: #FFFFFF; width: 32px; height: 32px; border-radius: 8px; font-size: 18px; cursor: pointer; flex-shrink: 0; }
+#ferramenta .modal-body { padding: 6px 18px 18px; }
+#ferramenta .tab-btn { padding: 8px 11px; font-size: 13px; }
+#ferramenta .card { padding: 15px; }
+#ferramenta .dc-head { flex-wrap: wrap; }
+@media (max-width: 600px) {
+  #ferramenta .page-header h1 { font-size: 21px ; }
+  #ferramenta .tab-btn { padding: 8px 11px ; font-size: 12px ; }
+  #ferramenta .card { padding: 15px ; }
+  #ferramenta .dc-head { flex-wrap: wrap ; }
+}
+
+/* ---- Componentes do modelo original, com o aspeto da marca (sobrepõem-se ao CSS acima) ---- */
+#ferramenta .mk-separadores { margin-bottom: 14px; }
+#ferramenta > .mgf-nota { margin: 0 0 16px; }
+#ferramenta .card { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); box-shadow: none; padding: 18px; margin: 0 0 14px; }
+#ferramenta .card-title { font-family: var(--letra-titulo); font-size: 19px; font-weight: 800; letter-spacing: -0.015em; text-transform: none; color: var(--cor-tinta); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+#ferramenta .card-title .icon { width: 18px; height: 18px; flex: 0 0 auto; border-radius: var(--raio-forma); background: var(--cor-menta); padding: 0; }
+#ferramenta .card p { margin: 0; }
+#ferramenta h3 { font-family: var(--letra-titulo); color: var(--cor-tinta); }
+#ferramenta .section-intro { font-size: 15px; color: var(--cor-texto-2); margin: 0 0 12px; }
+#ferramenta .info-block { border-radius: var(--raio-p); padding: 12px 14px; margin: 0 0 12px; border-left: 5px solid var(--cor-verde-medio); background: var(--cor-menta-clara); font-size: 15px; line-height: 1.55; }
+#ferramenta .info-block p { font-size: 15px; line-height: 1.55; color: var(--cor-tinta); }
+#ferramenta .ib-title { font-family: inherit; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--cor-verde-fundo); }
+#ferramenta .info-block.navy, #ferramenta .info-block.teal, #ferramenta .info-block.gold { background: var(--cor-menta-clara); border-color: var(--cor-verde-medio); }
+#ferramenta .info-block.navy .ib-title, #ferramenta .info-block.teal .ib-title, #ferramenta .info-block.gold .ib-title { color: var(--cor-verde-fundo); }
+#ferramenta .info-block.blue, #ferramenta .info-block.indigo { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .info-block.blue .ib-title, #ferramenta .info-block.indigo .ib-title { color: var(--clin-info); }
+#ferramenta .info-block.green { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .info-block.green .ib-title { color: var(--clin-normal); }
+#ferramenta .info-block.orange { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .info-block.orange .ib-title { color: var(--clin-atencao); }
+#ferramenta .info-block.red { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .info-block.red .ib-title { color: var(--clin-alerta); }
+#ferramenta .info-block.purple { background: var(--cor-ambar-claro); border-color: var(--cor-mostarda); }
+#ferramenta .info-block.purple .ib-title { color: var(--cor-ambar-texto); }
+#ferramenta .tbl-wrap { overflow-x: auto; }
+#ferramenta .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#ferramenta .data-table th { background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha); font-size: 13px; font-weight: 700; padding: 8px 10px; text-align: left; }
+#ferramenta .data-table td { padding: 8px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; font-size: 14px; color: var(--cor-tinta); }
+#ferramenta .data-table tr:last-child td { border-bottom: 0; }
+#ferramenta .data-table tr:nth-child(even) td { background: var(--cor-papel); }
+#ferramenta .data-table .term { font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .search-box { width: 100%; font-family: var(--letra-texto); font-size: 16px; min-height: 46px; padding: 10px 14px; margin: 0 0 14px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio); background: var(--cor-branco); color: var(--cor-tinta); }
+#ferramenta .search-box:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+#ferramenta .field-group { display: flex; flex-direction: column; gap: 6px; }
+#ferramenta label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+#ferramenta .field-group input, #ferramenta .field-group select, #ferramenta input[type="number"], #ferramenta select { font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta); min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--cor-campo); border-radius: var(--raio-p); background: var(--cor-branco); width: 100%; }
+#ferramenta input:focus, #ferramenta select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+#ferramenta .field-hint { font-size: 13px; color: var(--cor-texto-3); font-style: italic; font-weight: 400; }
+#ferramenta .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+#ferramenta .btn-primary, #ferramenta .btn-secondary, #ferramenta .btn-print { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--letra-texto); font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer; transition: transform .25s var(--mola), background .2s; }
+#ferramenta .btn-primary { background: var(--cor-verde); color: var(--cor-branco); border: 1.5px solid var(--cor-verde); }
+#ferramenta .btn-primary:hover { background: var(--cor-verde-fundo); transform: translateY(-2px); }
+#ferramenta .btn-secondary, #ferramenta .btn-print { background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta); }
+#ferramenta .btn-secondary:hover, #ferramenta .btn-print:hover { background: var(--cor-papel); transform: translateY(-2px); }
+#ferramenta .mk-mensagem { margin-top: 10px; }
+#ferramenta .calc-result { display: none; margin-top: 16px; }
+#ferramenta .calc-result.visible { display: block; }
+#ferramenta .result-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--raio-p); margin-bottom: 9px; border-left: 5px solid var(--cor-linha); background: var(--cor-papel); }
+#ferramenta .result-row.ok { background: var(--clin-normal-fundo); border-color: var(--clin-normal-borda); }
+#ferramenta .result-row.warn { background: var(--clin-atencao-fundo); border-color: var(--clin-atencao-borda); }
+#ferramenta .result-row.info { background: var(--clin-info-fundo); border-color: var(--clin-info-borda); }
+#ferramenta .result-row.alert, #ferramenta .result-row.bad, #ferramenta .result-row.danger { background: var(--clin-alerta-fundo); border-color: var(--clin-alerta-borda); }
+#ferramenta .rr-icon { flex: 0 0 22px; font-size: 0; line-height: 1; text-align: center; padding-top: 3px; }
+#ferramenta .rr-icon::before { content: "•"; font-family: inherit; font-size: 16px; font-weight: 700; }
+#ferramenta .result-row.ok .rr-icon::before { content: "✓"; color: var(--clin-normal); }
+#ferramenta .result-row.warn .rr-icon::before { content: "!"; color: var(--clin-atencao); }
+#ferramenta .result-row.info .rr-icon::before { content: "i"; color: var(--clin-info); }
+#ferramenta .result-row.alert .rr-icon::before, #ferramenta .result-row.bad .rr-icon::before, #ferramenta .result-row.danger .rr-icon::before { content: "!!"; color: var(--clin-alerta); }
+#ferramenta .rr-title { font-weight: 700; font-size: 15px; margin-bottom: 2px; color: var(--cor-tinta); }
+#ferramenta .rr-text { font-size: 15px; line-height: 1.5; color: var(--cor-tinta); }
+#ferramenta .big-num { font-family: inherit; font-size: 28px; font-weight: 700; color: var(--cor-verde-fundo); }
+#ferramenta .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid var(--cor-linha); background: var(--cor-papel); color: var(--cor-texto-2); text-transform: none; letter-spacing: 0; }
+#ferramenta .badge.b-green { background: var(--clin-normal-fundo); color: var(--clin-normal); border-color: var(--clin-normal-borda); }
+#ferramenta .badge.b-orange { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+#ferramenta .badge.b-red { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-color: var(--clin-alerta-borda); }
+#ferramenta .badge.b-blue { background: var(--clin-info-fundo); color: var(--clin-info); border-color: var(--clin-info-borda); }
+#ferramenta .steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+#ferramenta .steps-list li { display: flex; gap: 12px; align-items: flex-start; }
+#ferramenta .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--raio-forma); background: var(--cor-ambar); color: var(--cor-tinta); display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 14px; font-weight: 700; }
+#ferramenta .step-text { flex: 1; font-size: 15px; line-height: 1.55; }
+#ferramenta .tool-footer { text-align: left; font-size: 14px; color: var(--cor-texto-2); margin-top: 24px; padding: 12px 14px; border: 0; border-radius: var(--raio-p); background: var(--cor-papel); }
+/* cartões de padrões que abrem e fecham (cabeçalho é um botão) */
+#ferramenta .mk-cabeca { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 56px; padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta); font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s; }
+#ferramenta .mk-cabeca:hover { background: var(--cor-papel); }
+#ferramenta .open > .mk-cabeca { background: var(--cor-menta-clara); }
+#ferramenta .mk-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+#ferramenta .open > .mk-cabeca .mk-seta { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { #ferramenta .mk-seta { transition: none; } }
+@media print {
+  #ferramenta .no-print, #ferramenta .btn-row, #ferramenta .search-box, #ferramenta .mk-seta { display: none !important; }
+  #ferramenta .card { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+  <div class="mgf-bancada mgf-bancada-guia">
+  <div class="mgf-comandos">
+  <p class="mgf-guia-intro">Mapa, esquemas gerais e de recurso, critérios para vacinar e vacinação sazonal (PNV 2025 e Livro Azul de Vacinas da DGS; HPV segundo a Norma 002/2026; época sazonal 2026/27).</p>
+  <div class="mgf-separadores mk-separadores" role="tablist" aria-label="Secções">
+    <button type="button" class="mgf-separador" role="tab" id="sep-mapa" aria-controls="tab-mapa" aria-selected="true">Mapa PNV</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-lista" aria-controls="tab-lista" aria-selected="false">Lista de vacinas</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-plan" aria-controls="tab-plan" aria-selected="false">Planeador</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-rec" aria-controls="tab-rec" aria-selected="false">Esquemas de recurso</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-crit" aria-controls="tab-crit" aria-selected="false">Vacinar ou não?</button>
+    <button type="button" class="mgf-separador" role="tab" id="sep-saz" aria-controls="tab-saz" aria-selected="false">Sazonal 2026/27</button>
+  </div>
+  <p class="mgf-nota" data-nivel="atencao"><strong>Ferramenta de apoio à decisão para profissionais de saúde.</strong> Baseada no <em>Livro Azul de Vacinas</em> da DGS (referencial técnico do PNV, Despacho n.º 2794/2026), na Norma 002/2026 (HPV), na Norma 004/2026 (VSR) e nas normas da campanha sazonal 2026/27. O Livro Azul é um documento dinâmico: em caso de dúvida prevalece sempre a versão oficial em vigor. Não substitui o juízo clínico nem a consulta do RCM.</p>
+  </div>
+  <div class="mgf-resposta">
+  <div class="mgf-painel mk-painel" id="tab-mapa" role="tabpanel" aria-labelledby="sep-mapa">
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Esquema geral recomendado — PNV 2025</div>
+      <div class="subtab-row no-print" data-group="mapa">
+        <button type="button" class="subtab-btn active" data-sub="m-grid">Mapa por idades</button>
+        <button type="button" class="subtab-btn" data-sub="m-visit">Por consulta (o que dar em cada idade)</button>
+        <button type="button" class="subtab-btn" data-sub="m-comb">Vacinas combinadas e locais</button>
+      </div>
+      <div class="subpanel active" id="m-grid">
+        <p class="section-intro">Clique no nome da doença ou numa dose para ver o detalhe da vacina. Deslize na horizontal em ecrãs pequenos.</p>
+        <div class="map-wrap"><table class="map-table" id="mapTable"></table></div>
+        <div class="legend" id="mapLegend"></div>
+        <div class="info-block navy" style="margin-top:14px;">
+          <div class="ib-title">Principais alterações face ao PNV 2020</div>
+          <ul>
+            <li><strong>MenACWY aos 12 meses</strong> substitui a MenC (Norma 005/2025). Crianças ≥12 meses e &lt;18 anos que não fizeram MenC aos 12 meses: 1 dose de MenACWY na primeira oportunidade.</li>
+            <li><strong>Pn20 aos 2, 4 e 12 meses</strong> substitui a Pn13. Quem iniciou com Pn13 completa com Pn20.</li>
+            <li><strong>HPV9 aos 10 anos, ambos os sexos</strong>, 2 doses (0, 6 meses); recurso até aos 26 anos (♀) e coortes masculinas 2000–2002 (Norma 002/2026, abril 2026).</li>
+            <li>Aos 6 e 12 meses completa-se a primovacinação para 7 e 11 das 12 infeções abrangidas; aos 10 anos completa-se o esquema para as 12.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="subpanel" id="m-visit">
+        <p class="section-intro">Vacinas, n.º de inoculações e local anatómico aconselhado em cada consulta do esquema geral. Antes dos 12 meses: coxa (músculo vasto externo); a partir dos 12 meses: deltoide. Nunca no glúteo. Mais do que uma vacina no mesmo membro: distanciar ≥2,5 cm.</p>
+        <div class="visit-grid" id="visitGrid"></div>
+      </div>
+      <div class="subpanel" id="m-comb">
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina combinada</th><th>Antigénios</th><th>Idades no esquema geral</th></tr>
+          <tr><td class="term">Hexavalente</td><td>DTPa + Hib + VIP + VHB</td><td>2 e 6 meses</td></tr>
+          <tr><td class="term">Pentavalente</td><td>DTPa + Hib + VIP</td><td>4 e 18 meses</td></tr>
+          <tr><td class="term">Tetravalente</td><td>DTPa + VIP</td><td>5 anos</td></tr>
+          <tr><td class="term">VASPR</td><td>Sarampo + parotidite + rubéola (viva)</td><td>12 meses e 5 anos</td></tr>
+          <tr><td class="term">Td / Tdpa</td><td>Tétano + difteria (doses reduzidas) ± tosse convulsa acelular</td><td>Td: 10, 25, 45, 65 anos e 10/10 anos · Tdpa: cada gravidez</td></tr>
+        </table></div>
+        <p class="tbl-note">Por limitação de apresentações no mercado, pode ser necessário administrar antigénios não estritamente necessários (ex.: pentavalente aos 18 meses, após descontinuação da DTPaHib). É uma prática segura e recomendada.</p>
+        <div class="tbl-cap">Locais anatómicos aconselhados (Livro Azul, Cap. 2 — Quadros 2 e 3)</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Idade</th><th>Membro esquerdo</th><th>Membro direito</th></tr>
+          <tr><td class="term">&lt;12 meses</td><td><b>Coxa esquerda:</b> hexavalente / pentavalente, MenB (MenACWY, se administrada &lt;12 meses)<br><b>Braço esquerdo:</b> BCG (grupos de risco)</td><td><b>Coxa direita:</b> Pn20, VHB monovalente, Hib/VIP monovalentes (VASPR, se "dose zero" &lt;12 meses)</td></tr>
+          <tr><td class="term">≥12 meses</td><td><b>Braço esquerdo:</b> pentavalente, tetravalente, MenB, MenACWY, Td/Tdpa (BCG)</td><td><b>Braço direito:</b> Pn20, VASPR, HPV, VHB, Hib, VIP, Pn23</td></tr>
+        </table></div>
+        <div class="info-block orange"><div class="ib-title">Atenção</div><p>Não administrar outras vacinas no braço da BCG durante 3 meses. A partir dos 12 meses, se o deltoide não estiver suficientemente desenvolvido, pode usar-se a coxa. Alterações excecionais do local ficam registadas na plataforma VACINAS e no Boletim Individual de Saúde. Confirmar a distribuição por membro no quadro oficial em vigor.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-lista" role="tabpanel" aria-labelledby="sep-lista" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Vacinas — detalhe, esquemas e critérios</div>
+      <p class="section-intro">O PNV é universal, gratuito e não obrigatório por lei; as vacinas do <b>esquema geral</b> são as habitualmente designadas "obrigatórias". Toque numa vacina para abrir o detalhe.</p>
+      <div class="subtab-row no-print" id="listFilters">
+        <button type="button" class="subtab-btn active" data-f="all">Todas</button>
+        <button type="button" class="subtab-btn" data-f="geral">Esquema geral (universais)</button>
+        <button type="button" class="subtab-btn" data-f="risco">Grupos de risco / situações especiais</button>
+        <button type="button" class="subtab-btn" data-f="sazonal">Sazonais</button>
+        <button type="button" class="subtab-btn" data-f="extra">Opcionais extra-PNV</button>
+      </div>
+      <input type="text" class="search-box no-print" id="vaxSearch" placeholder="Pesquisar vacina, doença ou sigla (ex.: MenB, sarampo, grávida)…">
+      <div id="vaxList"></div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-plan" role="tabpanel" aria-labelledby="sep-plan" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Planeador por data de nascimento</div>
+      <div class="subtab-row no-print" data-group="plan">
+        <button type="button" class="subtab-btn active" data-sub="p-cal">Calendário da criança</button>
+        <button type="button" class="subtab-btn" data-sub="p-elig">Elegibilidade / recuperação por idade</button>
+        <button type="button" class="subtab-btn" data-sub="p-td">Td no adulto</button>
+      </div>
+      <div class="subpanel active" id="p-cal">
+        <p class="section-intro">Introduz a data de nascimento para obter as datas-alvo de cada consulta do esquema geral. Assinale as doses já registadas: as doses cuja idade já passou e não estão assinaladas aparecem como <b>em atraso</b>, com a regra de recuperação aplicável à idade atual.</p>
+        <div class="input-grid">
+          <div class="field-group"><label for="calDob">Data de nascimento</label><input type="date" id="calDob"></div>
+          <div class="field-group"><label for="calSex">Sexo (para HPV)</label><select id="calSex"><option value="">—</option><option value="F">Feminino</option><option value="M">Masculino</option></select></div>
+        </div>
+        <div class="btn-row no-print"><button type="button" class="btn-primary" id="calGo">Gerar calendário</button><button type="button" class="btn-secondary" id="calAll">Marcar tudo até hoje como feito</button><button type="button" class="btn-secondary" onclick="window.print()">Imprimir</button></div>
+        <div id="calOut"></div>
+      </div>
+      <div class="subpanel" id="p-elig">
+        <p class="section-intro">Para utentes com vacinação incompleta ou desconhecida: indica, para a idade atual, que vacinas do PNV ainda podem ser iniciadas/completadas e com que regra. Lembre-se: <b>pessoas sem registo de uma vacina consideram-se não vacinadas</b> para essa vacina.</p>
+        <div class="input-grid">
+          <div class="field-group"><label for="elDob">Data de nascimento</label><input type="date" id="elDob"></div>
+          <div class="field-group"><label for="elSex">Sexo</label><select id="elSex"><option value="">—</option><option value="F">Feminino</option><option value="M">Masculino</option></select></div>
+        </div>
+        <div class="grp-lbl">Situações especiais</div>
+        <div class="chk-list" id="elFlags">
+          <label class="chk"><input type="checkbox" value="gravida"> Grávida</label>
+          <label class="chk"><input type="checkbox" value="imuno"> Imunocomprometido(a)</label>
+          <label class="chk"><input type="checkbox" value="risco"> Doença crónica / patologia de risco</label>
+          <label class="chk"><input type="checkbox" value="asplenia"> Asplenia, défice do complemento ou inibidores do complemento</label>
+          <label class="chk"><input type="checkbox" value="profsaude"> Profissional de saúde</label>
+          <label class="chk"><input type="checkbox" value="erpi"> Residente em ERPI / RNCCI</label>
+        </div>
+        <div class="btn-row no-print"><button type="button" class="btn-primary" id="elGo">Avaliar</button></div>
+        <div id="elOut"></div>
+      </div>
+      <div class="subpanel" id="p-td">
+        <p class="section-intro">Calcula a data da próxima dose de Td segundo o PNV: reforços aos 10, 25, 45 e 65 anos (intervalo de 15 anos se a última dose foi dada entre os 10 e os 17 anos; 20 anos se dada em adulto); a partir dos 65 anos, vacinar se a última dose foi há ≥10 anos e depois de 10 em 10 anos.</p>
+        <div class="input-grid">
+          <div class="field-group"><label for="tdDob">Data de nascimento</label><input type="date" id="tdDob"></div>
+          <div class="field-group"><label for="tdLast">Data da última dose (tétano)</label><input type="date" id="tdLast"></div>
+          <div class="field-group"><label for="tdPrim">Primovacinação (≥3 doses)</label><select id="tdPrim"><option value="sim">Completa (≥3 doses registadas)</option><option value="nao">Incompleta</option><option value="desc">Desconhecida / sem registo</option></select></div>
+        </div>
+        <div class="btn-row no-print"><button type="button" class="btn-primary" id="tdGo">Calcular</button></div>
+        <div id="tdOut"></div>
+        <div class="tbl-cap">Profilaxia do tétano em feridas (resumo)</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>História vacinal (tétano)</th><th>Ferida limpa e minor</th><th>Ferida tetanigénica / outras</th></tr>
+          <tr><td class="term">Desconhecida ou &lt;3 doses</td><td>Td (e completar primovacinação)</td><td>Td + imunoglobulina antitetânica (e completar primovacinação)</td></tr>
+          <tr><td class="term">≥3 doses</td><td>Td só se última dose há ≥10 anos</td><td>Td se última dose há ≥5 anos</td></tr>
+        </table></div>
+        <p class="tbl-note">Resumo clássico do PNV; confirmar critérios e doses de imunoglobulina no Cap. 38 (Tétano) do Livro Azul. Em &lt;7 anos usar vacina com DTPa segundo o esquema da idade.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-rec" role="tabpanel" aria-labelledby="sep-rec" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Esquemas vacinais de recurso</div>
+      <div class="info-block green"><div class="ib-title">Princípios</div><ul>
+        <li>Aproveitar <b>todas as oportunidades</b>; todas as doses válidas contam, mesmo fora da idade recomendada. <b>Nunca se reinicia</b> um esquema interrompido — completa-se, independentemente do tempo decorrido (exceções: raiva e cólera oral, fora do PNV).</li>
+        <li>Administrar apenas o n.º de doses necessário para completar o esquema de cada vacina, de acordo com a idade atual.</li>
+        <li>Se não for possível dar todas na mesma sessão, priorizar as doenças de maior risco (incidência/gravidade) para a idade. Dar em simultâneo o maior número possível, em locais diferentes.</li>
+        <li>Os esquemas de recurso aplicam-se até a pessoa cumprir o PNV para a sua idade; a partir daí segue o esquema geral.</li>
+      </ul></div>
+      <div class="subtab-row no-print" data-group="rec">
+        <button type="button" class="subtab-btn active" data-sub="r-lt7">≥3 meses e &lt;7 anos</button>
+        <button type="button" class="subtab-btn" data-sub="r-age">Hib · Pn20 · MenB (&lt;5 anos)</button>
+        <button type="button" class="subtab-btn" data-sub="r-ge7">≥7 e &lt;18 anos</button>
+        <button type="button" class="subtab-btn" data-sub="r-adult">Adultos</button>
+        <button type="button" class="subtab-btn" data-sub="r-max">Idades máximas</button>
+        <button type="button" class="subtab-btn" data-sub="r-min">Idades e intervalos mínimos</button>
+        <button type="button" class="subtab-btn" data-sub="r-int">Intervalos entre vacinas</button>
+      </div>
+      <div class="subpanel active" id="r-lt7">
+        <div class="tbl-cap">Esquema em atraso — crianças ≥3 meses e &lt;7 anos (Cap. 3, Quadro 1)</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>1.ª visita</th><th>4 semanas após a anterior</th><th>6 meses de idade ou 4 semanas após a anterior</th><th>18 meses de idade ou 6 meses após a anterior</th><th>5 anos de idade ou 6 meses após a anterior</th></tr>
+          <tr><td class="term">VHB</td><td>VHB 1</td><td>VHB 2</td><td>VHB 3 <span class="muted">(ver nota a)</span></td><td>—</td><td>—</td></tr>
+          <tr><td class="term">DTPa</td><td>DTPa 1</td><td>DTPa 2</td><td>DTPa 3</td><td>DTPa 4</td><td>DTPa 5</td></tr>
+          <tr><td class="term">VIP</td><td>VIP 1</td><td>VIP 2</td><td>VIP 3</td><td>VIP 4</td><td>VIP 5</td></tr>
+          <tr><td class="term">Hib / Pn20 / MenB</td><td colspan="5">Número de doses depende da idade da 1.ª dose → ver separador "Hib · Pn20 · MenB"</td></tr>
+          <tr><td class="term">MenACWY</td><td>1 dose (se ≥12 meses)</td><td colspan="4">Dose única ≥12 meses, a quem não tem dose ≥12 meses</td></tr>
+          <tr><td class="term">VASPR</td><td>VASPR 1 (se ≥12 meses)</td><td>—</td><td>—</td><td>—</td><td>VASPR 2</td></tr>
+        </table></div>
+        <div class="tbl-note"><b>a. VHB</b> – a VHB 3 é dada aos 6 meses de idade, respeitando os intervalos mínimos; depois dos 6 meses, 6 meses após a dose anterior (ou segundo os intervalos mínimos). <b>DTPa</b> – se a DTPa 4 for dada com ≥4 anos, não se dá a DTPa 5. <b>VIP</b> – se a VIP 4 for dada com ≥4 anos e com ≥6 meses de intervalo da anterior, o esquema está completo. <b>VASPR</b> – administrada com ≥12 meses.</div>
+        <div class="info-block blue"><div class="ib-title">Doença prévia não dispensa a vacina</div><p>Crianças que tiveram <b>tosse convulsa</b> devem ser vacinadas após a cura (a doença pode não conferir imunidade duradoura). Após <b>doença invasiva por Hib, Neisseria meningitidis B ou ACWY, ou pneumocócica</b>: iniciar/completar a vacina correspondente ≥1 mês após o início da doença (Hib/MenB/Pn20 até ao dia antes dos 5 anos; MenACWY até ao dia antes dos 18 anos, se a doença ocorreu &lt;2 anos).</p></div>
+      </div>
+      <div class="subpanel" id="r-age">
+        <div class="tbl-cap">Hib — esquema de recurso (&lt;5 anos) · intervalo de 8 semanas entre doses</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Idade da 1.ª dose</th><th>Primovacinação</th><th>Reforço único</th></tr>
+          <tr><td class="term">6 semanas – 6 meses</td><td>3 doses</td><td>18 meses (≥8 semanas após a anterior)</td></tr>
+          <tr><td class="term">7 – 11 meses</td><td>2 doses</td><td>18 meses (≥8 semanas após a anterior)*</td></tr>
+          <tr><td class="term">12 meses – 4 anos</td><td>1 dose</td><td>—</td></tr>
+        </table></div>
+        <p class="tbl-note">* Se a última dose da primovacinação for dada com ≥12 meses, considera-se o esquema completo. Hib recomendada &lt;5 anos, exceto alterações imunitárias (qualquer idade).</p>
+        <div class="tbl-cap">Pn20 — esquema de recurso 2+1 (&lt;5 anos) · Cap. 19, Quadro 4</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Idade da 1.ª dose</th><th>Primovacinação</th><th>Reforço</th></tr>
+          <tr><td class="term">6 semanas – 9 meses</td><td>2 doses (intervalo mínimo 8 semanas)*</td><td>A partir dos 12 meses**</td></tr>
+          <tr><td class="term">10 – 23 meses</td><td>1 dose</td><td>1 dose (≥8 semanas depois)</td></tr>
+          <tr><td class="term">24 meses – 4 anos</td><td>1 dose</td><td>—</td></tr>
+        </table></div>
+        <p class="tbl-note">* Se a 2.ª dose for dada com ≥12 meses, o esquema está completo. ** Se a 1.ª dose foi dada antes dos 6 meses (como recomendado), a 3.ª pode ser dada a partir dos 11 meses. Quem iniciou com Pn13 completa com Pn20. Recomendada &lt;5 anos, exceto grupos de risco.</p>
+        <div class="tbl-cap">MenB — esquema de recurso (&lt;5 anos; nascidos ≥2019) · Cap. 18, Quadro 6</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Idade da 1.ª dose</th><th>Primovacinação (8 semanas entre doses)</th><th>Reforço único (≥8 semanas após a anterior)</th></tr>
+          <tr><td class="term">2 – 11 meses</td><td>2 doses</td><td>≥12 meses*</td></tr>
+          <tr><td class="term">12 – 23 meses</td><td>2 doses</td><td>—</td></tr>
+          <tr><td class="term">24 meses – 4 anos</td><td>2 doses</td><td>—</td></tr>
+        </table></div>
+        <p class="tbl-note">* Se a 2.ª dose for dada com ≥12 meses, o esquema está completo. Crianças que iniciaram MenB por prescrição podem completar no PNV até ao dia antes dos 5 anos.</p>
+      </div>
+      <div class="subpanel" id="r-ge7">
+        <div class="tbl-cap">Esquema tardio — ≥7 e &lt;18 anos (Cap. 3, Quadro 5) · por ordem de prioridade</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>Esquema</th><th>Notas</th></tr>
+          <tr><td class="term">Tdpa / Td</td><td>Dose 1 → Dose 2 (≥4 semanas) → Dose 3 (6 meses após a 2.ª) → Td 4 aos 10 anos de idade ou 12 meses após a 3.ª</td><td><b>Tdpa se ≥7 e &lt;10 anos</b>; <b>Td se ≥10 anos</b>. Se a 3.ª dose de Td for dada entre os 10 e os 17 anos, a Td seguinte é 15 anos depois.</td></tr>
+          <tr><td class="term">VIP</td><td>3 doses: 0 → ≥4 semanas → 6 meses após a 2.ª</td><td>Se a 3.ª ou 4.ª dose for dada ≥4 anos com ≥6 meses da anterior, esquema completo. Esquema misto VAP+VIP: 4 doses.</td></tr>
+          <tr><td class="term">VHB</td><td>3 doses: 0 → ≥4 semanas → 3.ª ≥8 semanas após a 2.ª e ≥16 semanas após a 1.ª (habitualmente 0-1-6 meses)</td><td>Dose de adulto a partir dos 16 anos.</td></tr>
+          <tr><td class="term">MenACWY</td><td>1 dose</td><td>Se &lt;3 doses no 1.º ano de vida e nenhuma dose ≥12 meses. Até aos 17 anos (inclusive).</td></tr>
+          <tr><td class="term">VASPR</td><td>2 doses, intervalo mínimo 4 semanas</td><td>Sem limite de idade.</td></tr>
+          <tr><td class="term">HPV9</td><td>2 doses (0, 6 meses; mínimo 5 meses)</td><td>&gt;10 e &lt;18 anos, ambos os sexos. <b>Imunocomprometidos: 3 doses (0, 1–2, 6 meses)</b>.</td></tr>
+        </table></div>
+      </div>
+      <div class="subpanel" id="r-adult">
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>Adultos (≥18 anos) — recurso</th></tr>
+          <tr><td class="term">Td</td><td>Nunca vacinados, estado desconhecido ou primovacinação incompleta: <b>3 doses</b> — 2.ª dose 4–6 semanas após a 1.ª; 3.ª dose 6–12 meses após a 2.ª. Depois reforços ao longo da vida (próxima dose 20 anos depois em adulto; ≥65 anos de 10 em 10 anos).</td></tr>
+          <tr><td class="term">VASPR</td><td>Nascidos ≥1970, sem história credível de sarampo, nunca vacinados ou estado desconhecido: <b>1 dose</b>. <b>Profissionais de saúde</b> com contacto com doentes: <b>2 doses</b>, independentemente do ano de nascimento. Mulheres em idade fértil: 2 doses de VAR/VASPR (evitar gravidez nas 4 semanas seguintes).</td></tr>
+          <tr><td class="term">HPV9</td><td>♀ ≥18 e &lt;27 anos; ♂ coortes 2000–2002 (alargamento faseado a 2003–2008): 2 doses (0, 6 meses). Imunocomprometidos ≥18 e &lt;27 anos: 3 doses.</td></tr>
+          <tr><td class="term">VIP</td><td>Risco acrescido de exposição (ex.: viagem): iniciar/completar em qualquer idade, 3 doses.</td></tr>
+          <tr><td class="term">Outras</td><td>Pn20+Pn23, VHB, VHA, MenACWY/MenB, gripe, COVID-19, mpox: conforme grupo de risco (ver Lista → Grupos de risco).</td></tr>
+        </table></div>
+        <p class="tbl-note">Inquérito Serológico Nacional 2015/2016: 99,6% dos nascidos antes de 1970 estão imunes ao sarampo.</p>
+      </div>
+      <div class="subpanel" id="r-max">
+        <div class="tbl-cap">Idades máximas para iniciar e completar (até ao último dia da idade referida; exceto grupos de risco)</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>Idade máxima</th><th>Coortes / notas</th></tr>
+          <tr><td class="term">Hib</td><td>4 anos</td><td>Alterações imunitárias: qualquer idade</td></tr>
+          <tr><td class="term">Pn20</td><td>4 anos</td><td>Grupos de risco: ver Cap. 19</td></tr>
+          <tr><td class="term">MenB</td><td>4 anos</td><td>Nascidos ≥2019</td></tr>
+          <tr><td class="term">DTPa</td><td>6 anos</td><td>Depois: Tdpa (7–9 anos) ou Td (≥10 anos)</td></tr>
+          <tr><td class="term">Tdpa</td><td>9 anos (fora da gravidez)</td><td>Grávidas: cada gravidez</td></tr>
+          <tr><td class="term">MenACWY</td><td>17 anos</td><td>Se &lt;3 doses no 1.º ano e nenhuma dose ≥12 meses</td></tr>
+          <tr><td class="term">HPV</td><td>Iniciar até 26 anos; completar até 27 anos</td><td>♀ até 26; ♂ &lt;18 anos e coortes 2000–2002</td></tr>
+          <tr><td class="term">VASPR</td><td>Sem limite</td><td>Adultos: nascidos ≥1970 (profissionais de saúde: qualquer ano)</td></tr>
+          <tr><td class="term">Td</td><td>Sem limite</td><td>—</td></tr>
+          <tr><td class="term">VHB · VIP</td><td>Ver Cap. 3 / capítulos específicos</td><td>Completar esquemas iniciados; adultos em grupos de risco</td></tr>
+        </table></div>
+      </div>
+      <div class="subpanel" id="r-min">
+        <div class="tbl-cap">Idade mínima para a 1.ª dose e intervalos mínimos entre doses da mesma vacina</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>Idade mínima</th><th>1.ª→2.ª</th><th>2.ª→3.ª</th><th>3.ª→4.ª</th><th>4.ª→5.ª</th></tr>
+          <tr><td class="term">VHB</td><td>Nascimento</td><td>4 sem</td><td>8 sem*</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">DTPa</td><td>6 semanas</td><td>4 sem</td><td>4 sem</td><td>6 meses**</td><td>6 meses</td></tr>
+          <tr><td class="term">Hib</td><td>6 semanas</td><td>4 sem</td><td>4 sem</td><td>8 sem</td><td>—</td></tr>
+          <tr><td class="term">VIP</td><td>6 semanas</td><td>4 sem</td><td>4 sem</td><td>6 meses</td><td>6 meses</td></tr>
+          <tr><td class="term">Pn20</td><td>6 semanas</td><td>4 sem</td><td>8 sem</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">MenB</td><td>8 semanas</td><td>4 sem</td><td>4 sem</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">MenACWY</td><td>12 meses (6 sem só pós-exposição)</td><td>8 sem</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">VASPR</td><td>12 meses (6 meses "dose zero")</td><td>4 sem</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">HPV (2 doses)</td><td>9 anos</td><td>5 meses</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">HPV (3 doses)</td><td>9 anos</td><td>4 sem</td><td>4 meses***</td><td>—</td><td>—</td></tr>
+          <tr><td class="term">Tdpa / Td</td><td>7 anos</td><td>4 sem</td><td>6 meses</td><td colspan="2">ver esquema</td></tr>
+        </table></div>
+        <div class="tbl-note">* VHB: intervalo mínimo 1.ª→3.ª de 16 semanas; VHB 3 com ≥6 meses de idade; a hexavalente nunca antes das 6 semanas. ** DTPa: excecionalmente aceita-se 4 meses entre DTPa 3 e 4; idade mínima da DTPa 4: 12 meses. *** HPV 3 doses: garantir ≥5 meses entre a 1.ª e a 3.ª.</div>
+        <div class="info-block red"><div class="ib-title">Regra dos 4 dias</div><p>Doses dadas <b>mais de 4 dias antes</b> da idade mínima ou com intervalo inferior ao mínimo (tolerância de 4 dias) <b>não são válidas</b> e devem ser repetidas, respeitando o intervalo mínimo a contar da dose inválida. Idades/intervalos mínimos só se usam em: risco elevado de incumprimento, viagem, alterações imunitárias, pós-exposição ou surto. Esquemas acelerados abaixo dos mínimos exigem prescrição médica fundamentada.</p></div>
+      </div>
+      <div class="subpanel" id="r-int">
+        <div class="tbl-cap">Intervalos entre vacinas diferentes (Cap. 3, Quadro 8)</div>
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Combinação</th><th>Intervalo mínimo</th></tr>
+          <tr><td class="term">≥2 inativadas</td><td rowspan="4" style="vertical-align:middle;">Mesmo dia ou qualquer intervalo</td></tr>
+          <tr><td class="term">Inativada + viva (oral ou injetável)</td></tr>
+          <tr><td class="term">Viva oral + viva injetável</td></tr>
+          <tr><td class="term">≥2 vivas orais</td></tr>
+          <tr><td class="term">≥2 vivas injetáveis (ex.: VASPR, varicela, BCG, febre amarela)</td><td><b>Mesmo dia ou ≥4 semanas</b>. Se não respeitado, repetir a última dada ≥4 semanas depois.</td></tr>
+        </table></div>
+        <p class="tbl-note">Exceção: para proteção rápida (ex.: viagem), febre amarela e VASPR podem ser dadas com qualquer intervalo. Vacinas e imunoglobulinas podem ser administradas em simultâneo em locais diferentes (ver precauções da VASPR após imunoglobulinas/hemoderivados). Nirsevimab pode ser coadministrado com qualquer vacina.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-crit" role="tabpanel" aria-labelledby="sep-crit" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Critérios para vacinar ou não</div>
+      <div class="subtab-row no-print" data-group="crit">
+        <button type="button" class="subtab-btn active" data-sub="c-tri">Posso vacinar hoje?</button>
+        <button type="button" class="subtab-btn" data-sub="c-ci">Contraindicações e precauções</button>
+        <button type="button" class="subtab-btn" data-sub="c-false">Falsas contraindicações</button>
+        <button type="button" class="subtab-btn" data-sub="c-imuno">Imunocomprometidos</button>
+        <button type="button" class="subtab-btn" data-sub="c-grav">Gravidez e amamentação</button>
+        <button type="button" class="subtab-btn" data-sub="c-rules">Regras gerais</button>
+      </div>
+      <div class="subpanel active" id="c-tri">
+        <p class="section-intro">Triagem pré-vacinal rápida. Seleciona o tipo de vacina(s) e as situações presentes.</p>
+        <div class="grp-lbl">Vacina(s) a administrar</div>
+        <div class="chk-list" id="triVax">
+          <label class="chk"><input type="checkbox" value="inat" checked> Inativadas (hexa/penta/tetra, Pn20, MenB, MenACWY, VHB, HPV, Td, gripe…)</label>
+          <label class="chk"><input type="checkbox" value="vivai"> Viva injetável (VASPR, varicela, BCG)</label>
+          <label class="chk"><input type="checkbox" value="vivao"> Viva oral (rotavírus)</label>
+          <label class="chk"><input type="checkbox" value="pert"> Com componente tosse convulsa (DTPa, Tdpa)</label>
+        </div>
+        <div class="grp-lbl">Situações presentes</div>
+        <div class="chk-list" id="triCond"></div>
+        <div id="triOut"></div>
+      </div>
+      <div class="subpanel" id="c-ci">
+        <div class="info-block red"><div class="ib-title">Contraindicações (não vacinar)</div><ul>
+          <li><b>Reação anafilática</b> a dose anterior da mesma vacina, a um dos seus constituintes ou a vestígios (ex.: neomicina, gelatina, canamicina, látex na seringa de algumas vacinas) → não administrar essa vacina; <b>referenciar a Imunoalergologia</b> para investigação.</li>
+          <li><b>Vacinas vivas</b> (VASPR, varicela, BCG, rotavírus, febre amarela): <b>gravidez</b> e <b>imunodepressão grave</b> (congénita ou adquirida — quimioterapia, corticoterapia em dose elevada, biológicos/DMARD, VIH com imunossupressão grave, transplantados).</li>
+          <li><b>Encefalopatia</b> (coma, convulsões prolongadas, alteração do estado de consciência) nos 7 dias após vacina com componente pertussis, sem outra causa → contraindica Pa. Em &lt;7 anos com contraindicação absoluta à Pa usa-se <b>Td por prescrição médica</b>.</li>
+        </ul></div>
+        <div class="info-block orange"><div class="ib-title">Precauções (avaliar / adiar / prescrição médica)</div><ul>
+          <li><b>Doença aguda grave</b>, com ou sem febre → adiar até recuperação completa.</li>
+          <li><b>Síndrome de Guillain-Barré ou neurite braquial</b> nas 6 semanas após vacina contra o tétano → vacinação apenas por prescrição médica.</li>
+          <li><b>Doença neurológica em evolução</b> (ex.: epilepsia não controlada, encefalopatia progressiva) → prescrição médica; ponderar adiar Pa até estabilização.</li>
+          <li><b>Imunoglobulinas, sangue ou hemoderivados</b> recentes → adiar VASPR/varicela (intervalo de 3 a 11 meses consoante produto e dose — ver Livro Azul). Inativadas: sem restrição.</li>
+          <li><b>Trombocitopenia ou púrpura trombocitopénica</b> após dose anterior de VASPR → avaliar risco/benefício.</li>
+          <li><b>Teste tuberculínico</b>: fazer no mesmo dia da VASPR ou ≥4–6 semanas depois (a VASPR pode dar falso negativo).</li>
+          <li><b>Coagulopatia / trombocitopenia / anticoagulação</b>: IM com agulha ≤23G, pressão firme 5 min sem friccionar, reduzir mobilidade do membro 24 h. Não usar IM se INR &gt;3,0 (varfarina) ou anti-Xa &gt;0,5 UI/mL (HBPM) 4 h após a toma; se anticoagulação curta, preferir adiar. Algumas vacinas (Pn20, Pn23, MenACWY) admitem via SC.</li>
+          <li><b>Pré-termo ≤28 semanas</b> (internado ou já com alta): primeiras vacinas em meio hospitalar, com vigilância cardiorrespiratória 6–8 horas.</li>
+          <li><b>Pessoas com alterações imunitárias, doença neurológica em evolução, anafilaxia prévia, Tdpa após 36 semanas</b>, esquemas acelerados ou diferentes do recomendado → requerem <b>prescrição médica</b>.</li>
+        </ul></div>
+        <div class="info-block navy"><div class="ib-title">Após a vacinação</div><p>Vigilância de 30 minutos no ponto de vacinação. Registo na plataforma <b>VACINAS</b> durante a sessão (ou até 24 h se indisponível) e no Boletim Individual de Saúde. Suspeitas de reações adversas: notificar no Portal RAM do INFARMED (registar nome e lote).</p></div>
+      </div>
+      <div class="subpanel" id="c-false">
+        <div class="info-block green"><div class="ib-title">NÃO são contraindicações — vacinar</div><ul>
+          <li>Doença aguda ligeira (IVAS, diarreia ligeira, otite), com ou sem febre baixa.</li>
+          <li>Antibioticoterapia em curso; fase de convalescença.</li>
+          <li>Prematuridade (vacinar pela idade cronológica) e baixo peso.</li>
+          <li>Amamentação; contacto com grávida (incluindo VASPR na criança).</li>
+          <li>Reações locais ligeiras/moderadas ou febre a dose anterior.</li>
+          <li>Alergias não anafiláticas; história de alergia na família; asma, eczema.</li>
+          <li><b>Alergia ao ovo</b> (mesmo grave) não contraindica VASPR.</li>
+          <li>Convulsões febris prévias ou história familiar de convulsões, de SMSL ou de reações adversas.</li>
+          <li>Doença neurológica estável (ex.: paralisia cerebral).</li>
+          <li>Corticoides tópicos, inalados ou em dose de substituição; corticoterapia em dose baixa.</li>
+          <li>Doença crónica estável (cardíaca, renal, hepática, pulmonar, diabetes) — são até, frequentemente, indicação para vacinas adicionais.</li>
+          <li>Infeção prévia pela doença (ex.: tosse convulsa, VSR) — vacinar/imunizar na mesma.</li>
+          <li>Coabitantes de imunodeprimidos ou de grávidas: devem ser vacinados (incluindo vacinas vivas, exceto situações muito particulares).</li>
+        </ul></div>
+      </div>
+      <div class="subpanel" id="c-imuno">
+        <div class="info-block purple"><div class="ib-title">Pessoas com alterações imunitárias</div><ul>
+          <li>Vacinação sob <b>orientação e prescrição do médico assistente</b> (esquemas personalizados). Vacinas gratuitas nos grupos definidos.</li>
+          <li><b>Inativadas</b>: podem ser dadas (resposta possivelmente menor). Idealmente <b>até 2 semanas antes</b> do início da imunossupressão; se dadas depois/durante, ponderar revacinação após recuperação imunitária.</li>
+          <li><b>Vivas</b>: contraindicadas na imunodepressão grave; se possível, dar <b>≥4 semanas antes</b> da imunossupressão.</li>
+          <li>Após terapêutica: vacinação ≥3 meses após quimioterapia/radioterapia; <b>≥6 meses</b> após depletores de linfócitos B (ex.: rituximab) ou anti-TNF.</li>
+          <li>Corticoterapia de dose elevada: ≥20 mg/dia de prednisolona (ou ≥2 mg/kg/dia se &lt;10 kg) durante ≥14 dias.</li>
+          <li><b>Pneumocócica</b>: Pn20 + Pn23 (Pn23 6–12 meses após Pn20; mínimo 8 semanas). <b>HPV</b>: 3 doses (≥10 e &lt;27 anos). <b>MenB/MenACWY</b> na asplenia e défice do complemento.</li>
+          <li>Transplante de células estaminais: considerar como não vacinado; reiniciar esquemas 6–12 meses após o transplante.</li>
+          <li><b>Coabitantes</b>: vacinação completa recomendada (inclui VASPR, varicela, gripe).</li>
+        </ul></div>
+        <p class="tbl-note">Consultar o Cap. 6 (Vacinação no imunocomprometido) do Livro Azul, atualizado a 14/04/2026 e em revisão para cada doença.</p>
+      </div>
+      <div class="subpanel" id="c-grav">
+        <div class="tbl-wrap"><table class="data-table">
+          <tr><th>Vacina</th><th>Na gravidez</th></tr>
+          <tr><td class="term">Tdpa</td><td><b>Recomendada em cada gravidez</b>, 20–36 semanas, após a ecografia morfológica, idealmente até às 32 semanas. Após 36 semanas: por prescrição médica (só proteção indireta).</td></tr>
+          <tr><td class="term">Gripe, COVID-19</td><td>Recomendadas (vacinação sazonal), em qualquer trimestre.</td></tr>
+          <tr><td class="term">Td, VHB, VIP, MenACWY, Pn20, Pn23</td><td>Administrar se indicadas.</td></tr>
+          <tr><td class="term">VSR (Abrysvo®)</td><td>Disponível em farmácia comunitária. Se dada &gt;14 dias antes do parto, o RN não necessita, na maioria dos casos, de nirsevimab.</td></tr>
+          <tr><td class="term">HPV</td><td>Não recomendada (evidência insuficiente) — adiar para o pós-parto.</td></tr>
+          <tr><td class="term">VASPR (e outras vivas)</td><td><b>Contraindicada.</b> Vacinar no pós-parto. Não é necessária serologia prévia para vacinar.</td></tr>
+        </table></div>
+        <div class="info-block blue"><div class="ib-title">Tétano na mulher em idade fértil</div><p>Cada mulher deve ter ≥3 doses de vacina contra o tétano antes da 1.ª gravidez; se incompleto, completar o maior número possível durante a gravidez (a Tdpa conta como dose). <b>Amamentação</b> não interfere com qualquer vacina do PNV (da lactente ou do lactente). Vacinas inativadas na grávida podem ser dadas com imunoglobulina anti-D, em locais diferentes. Registar também no Boletim de Saúde da Grávida.</p></div>
+      </div>
+      <div class="subpanel" id="c-rules">
+        <div class="info-block navy"><div class="ib-title">Regras gerais do PNV</div><ul>
+          <li><b>Universalidade:</b> quem se apresente em qualquer unidade do SNS deve ser vacinado ou encaminhado, mesmo inscrito noutra unidade ou sem registo no RNU. Não é exigida prescrição para os grupos abrangidos, salvo quando o Livro Azul o prevê.</li>
+          <li><b>Sem registo = não vacinado</b> para essa vacina.</li>
+          <li><b>Consentimento:</b> próprio a partir dos 16 anos (apresentar-se informado para vacinar equivale a consentimento). &lt;16 anos: presença de quem tenha a guarda do menor ou a quem tenha sido confiado.</li>
+          <li><b>Recusa</b>: declaração escrita, arquivada na unidade e registada no VACINAS.</li>
+          <li>O <b>PNV prevalece sobre os RCM</b>. Alterações individuais ao esquema são excecionais, prescritas e fundamentadas pelo médico assistente, e arquivadas.</li>
+          <li>Informar previamente sobre a vacina, benefícios, reações adversas possíveis e risco de não vacinar.</li>
+          <li>O primeiro ano de vida (incluindo os 12 meses) deve ser cumprido <b>sem atrasos</b> — período de maior vulnerabilidade.</li>
+          <li>Dúvidas: coordenadores locais/regionais de vacinação → DGS (vacinas@dgs.min-saude.pt).</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="mgf-painel mk-painel" id="tab-saz" role="tabpanel" aria-labelledby="sep-saz" hidden>
+    <div class="card">
+      <div class="card-title"><span class="icon" aria-hidden="true"></span>Campanha sazonal outono-inverno 2026/2027</div>
+      <p class="section-intro">Normas publicadas pela DGS em setembro de 2026. Confirmar sempre os grupos elegíveis e procedimentos nas normas em vigor.</p>
+      <div id="sazList"></div>
+    </div>
+  </div>
+  <div class="tool-footer">
+    <b>Fontes:</b> DGS — <a href="https://www.dgs.pt/publicacoes/livro-azul-de-vacinas-programa-nacional-de-vacinacao-e-outras-estrategias-de-imunizacao.aspx" target="_blank" rel="noopener">Livro Azul de Vacinas</a> (Cap. 2 e Quadro 1: 03/10/2025; Cap. 3: 14/04/2026; Cap. 4: 29/07/2026; Cap. 18: 22/07/2026; Cap. 19) ·
+    <a href="https://www.dgs.pt/normas-orientacoes-e-informacoes/normas-e-circulares-normativas/norma-n-0022026-de-08042026-atualizacao-da-estrategia-de-vacinacao-contra-o-virus-do-papiloma-humano-hpv-no-programa-nacional-de-vacinacao-pdf.aspx" target="_blank" rel="noopener">Norma 002/2026 (HPV)</a> ·
+    <a href="https://www.dgs.pt/normas-orientacoes-e-informacoes/normas-e-circulares-normativas/norma-n-0042026-de-02092026-campanha-de-imunizacao-sazonal-contra-o-virus-sincicial-respiratorio-vsr-em-idade-pediatrica-outono-inverno-2026-2027-pdf.aspx" target="_blank" rel="noopener">Norma 004/2026 (VSR)</a> ·
+    <a href="https://www.dgs.pt/normas-orientacoes-e-informacoes/normas-e-circulares-normativas.aspx" target="_blank" rel="noopener">Normas DGS</a> (campanha gripe/COVID-19 2026/27).<br>
+    Informação revista em setembro de 2026. Ferramenta de apoio à decisão clínica — não dispensa a consulta das normas oficiais.
+  </div>
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <div class="modal-head"><div><h3 id="modalTitle" style="color:#FFFFFF;"></h3><div class="msub" id="modalSub"></div></div><button type="button" class="modal-x" id="modalX" aria-label="Fechar">✕</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+  </div>
+  </div>
+</main>
+
+<script data-mgf="ferramenta">
+/* Dados e regras: os da versão original. */
+(function(){
+'use strict';
+var root = document.querySelector('#ferramenta');
+function $(s, c){ return (c||root).querySelector(s); }
+function $$(s, c){ return Array.prototype.slice.call((c||root).querySelectorAll(s)); }
+function ul(arr){ return '<ul>' + arr.map(function(x){ return '<li>'+x+'</li>'; }).join('') + '</ul>'; }
+
+/* ================= DADOS DAS VACINAS ================= */
+var VAX = [
+ { id:'vhb', sigla:'VHB', nome:'Hepatite B', cat:'geral', tipo:'inat', prod:'Monovalente (nascimento) · incluída na hexavalente (2 e 6 meses)',
+   esq: ul(['<b>Nascimento</b> – nas primeiras 24 h, na maternidade; se não, o mais cedo possível no período neonatal (ex.: no rastreio de doenças metabólicas).','<b>2 meses</b> – VHB 2 (hexavalente).','<b>6 meses</b> – VHB 3 (hexavalente).']),
+   rec: ul(['&lt;7 anos: VHB 1 → VHB 2 (4 semanas) → VHB 3 aos 6 meses de idade ou 6 meses após a anterior (respeitando mínimos).','≥7 anos: 3 doses (habitualmente 0, 1, 6 meses). <b>Dose de adulto a partir dos 16 anos.</b>']),
+   min: 'Idade mínima: nascimento. Intervalos: 1.ª→2.ª 4 semanas; 2.ª→3.ª 8 semanas; 1.ª→3.ª 16 semanas; VHB 3 com ≥6 meses de idade. A hexavalente não pode ser dada antes das 6 semanas.',
+   ci: 'Anafilaxia a dose anterior ou componente. Doença aguda grave: adiar.',
+   notas: ul(['<b>RN de mãe AgHBs positiva</b>: VHB + imunoglobulina anti-hepatite B nas primeiras 12 horas; seguir esquema e serologia pós-vacinal do Cap. 28.','Adultos em grupos de risco (ex.: hemodiálise, VIH, doença hepática crónica, contactos de portadores, exposição ocupacional): ver Cap. 28.']),
+   src:'Livro Azul, Cap. 2, 3 e 28' },
+
+ { id:'hib', sigla:'Hib', nome:'Haemophilus influenzae tipo b', cat:'geral', tipo:'inat', prod:'Hexavalente (2 e 6 m) · Pentavalente (4 e 18 m)',
+   esq: ul(['2, 4, 6 meses (primovacinação) e reforço aos 18 meses.']),
+   rec: ul(['6 semanas–6 meses: 3 doses + reforço aos 18 meses.','7–11 meses: 2 doses + reforço aos 18 meses (se a última da primovacinação for ≥12 meses, está completo).','12 meses–4 anos: 1 dose.','Intervalo de 8 semanas entre doses no recurso.']),
+   min: 'Idade mínima 6 semanas. 1.ª→2.ª e 2.ª→3.ª: 4 semanas; 3.ª→4.ª: 8 semanas. Última dose com ≥12 meses.',
+   ci: 'Anafilaxia prévia. Doença aguda grave: adiar.',
+   notas: ul(['Recomendada <b>&lt;5 anos</b>; em alterações imunitárias (ex.: asplenia) pode ser dada em qualquer idade.','Doença invasiva por Hib antes dos 2 anos: iniciar/completar ≥1 mês após o início da doença.']),
+   src:'Livro Azul, Cap. 2, 3 e 20' },
+
+ { id:'dtpa', sigla:'DTPa', nome:'Difteria, tétano e tosse convulsa (criança)', cat:'geral', tipo:'inat', prod:'Hexavalente · Pentavalente · Tetravalente (DTPaVIP)',
+   esq: ul(['2, 4, 6 meses; reforços aos 18 meses e 5 anos.']),
+   rec: ul(['≥3 meses e &lt;7 anos: DTPa 1 → 2 (4 sem) → 3 (6 meses de idade ou 4 sem) → 4 (18 meses de idade ou 6 meses após) → 5 (5 anos ou 6 meses após).','Se a DTPa 4 for dada com ≥4 anos, <b>não se dá a DTPa 5</b>.','≥7 e &lt;10 anos: usar <b>Tdpa</b>; ≥10 anos: <b>Td</b>.']),
+   min: 'Idade mínima 6 semanas (RN com parto em condições séticas: DTPa 1 às 4–6 semanas por prescrição). 1.ª→2.ª e 2.ª→3.ª: 4 semanas; 3.ª→4.ª: 6 meses (excecionalmente 4 meses); 4.ª→5.ª: 6 meses. DTPa 4 com ≥12 meses. Idade máxima: 6 anos.',
+   ci: 'Anafilaxia prévia. <b>Encefalopatia nos 7 dias</b> após dose com pertussis → contraindica Pa (usar Td em &lt;7 anos, por prescrição). Doença neurológica em evolução / SGB nas 6 semanas após vacina com tétano → prescrição médica.',
+   notas: ul(['Crianças que tiveram tosse convulsa devem ser vacinadas após a cura.']),
+   src:'Livro Azul, Cap. 2, 3, 17, 38 e 39' },
+
+ { id:'vip', sigla:'VIP', nome:'Poliomielite (inativada)', cat:'geral', tipo:'inat', prod:'Hexavalente · Pentavalente · Tetravalente',
+   esq: ul(['2, 4, 6 meses; reforços aos 18 meses e 5 anos.']),
+   rec: ul(['&lt;7 anos: como a DTPa. Se VIP 4 com ≥4 anos e ≥6 meses após a anterior → esquema completo.','≥7 anos: 3 doses (0, ≥4 semanas, 6 meses após a 2.ª). Se a 3.ª ou 4.ª for ≥4 anos com ≥6 meses de intervalo → completo.','Esquema misto VAP + VIP: 4 doses.','Adultos com risco acrescido de exposição: 3 doses em qualquer idade.']),
+   min: 'Idade mínima 6 semanas. 1.ª→2.ª e 2.ª→3.ª: 4 semanas; 3.ª→4.ª e 4.ª→5.ª: 6 meses.',
+   ci: 'Anafilaxia prévia (vestígios de neomicina, estreptomicina, polimixina B).', notas:'', src:'Livro Azul, Cap. 2, 3 e 33' },
+
+ { id:'pn20', sigla:'Pn20', nome:'Streptococcus pneumoniae (conjugada 20-valente)', cat:'geral', tipo:'inat', prod:'Pn20 (substituiu a Pn13 em 2024/2025)',
+   esq: ul(['2, 4 e 12 meses (esquema 2+1).','Se 1.ª dose &lt;6 meses (como recomendado), a 3.ª pode ser dada <b>a partir dos 11 meses</b>.','Quem iniciou com Pn13 completa com Pn20.']),
+   rec: ul(['6 semanas–9 meses: 2 doses (mín. 8 sem) + reforço a partir dos 12 meses (se a 2.ª for ≥12 meses, completo).','10–23 meses: 1 dose + 1 dose.','24 meses–4 anos: 1 dose.']),
+   min: 'Idade mínima 6 semanas. 1.ª→2.ª: 4 semanas; 2.ª→3.ª: 8 semanas. Idade máxima (universal): 4 anos.',
+   ci: 'Anafilaxia prévia. Doença aguda grave: adiar. Coagulopatia: pode ser SC. Coadministração com hexavalente pode aumentar febre transitória.',
+   notas: ul(['<b>Grupos de risco &lt;18 anos</b> (cardiopatia, doença respiratória/hepática/renal crónica, diabetes, implante coclear, fístula LCR, asplenia, VIH, imunodeficiência, transplante, neoplasia, imunossupressão, S. Down, síndrome nefrótico): esquema da idade com Pn20 e <b>Pn23 a partir dos 24 meses</b>, 6–12 meses após a última Pn20 (mín. 8 semanas). Declaração médica via PEM.','Doença invasiva pneumocócica: iniciar/completar ≥1 mês após o início, até ao dia antes dos 5 anos.']),
+   src:'Livro Azul, Cap. 2, 3 e 19; Norma 013/2024' },
+
+ { id:'menacwy', sigla:'MenACWY', nome:'Neisseria meningitidis A, C, W e Y', cat:'geral', tipo:'inat', prod:'Nimenrix® / MenQuadfi® (≥12 meses) · Menveo® (≥2 anos)',
+   esq: ul(['<b>Dose única aos 12 meses</b> (substituiu a MenC — Norma 005/2025).']),
+   rec: ul(['≥12 meses e &lt;18 anos que não fizeram MenC/MenACWY aos ≥12 meses (e &lt;3 doses no 1.º ano): <b>1 dose na primeira oportunidade</b>.','Idade máxima: 17 anos (inclusive).']),
+   min: 'Idade mínima 12 meses; a partir das 6 semanas só em pós-exposição (com dose adicional ≥12 meses).',
+   ci: 'Anafilaxia prévia. Doença aguda grave: adiar. Pode ser dada na gravidez, se indicada.',
+   notas: ul(['<b>Asplenia, hipoesplenismo, défice do complemento ou inibidores do complemento</b> (eculizumab, ravulizumab): MenACWY em qualquer idade, gratuita; idealmente ≥2 semanas antes de esplenectomia/terapêutica.','Viajantes para zonas endémicas (cinturão da meningite, Hajj/Umrah): MenACWY 10–14 dias antes da partida, mesmo se vacinados com MenC.','Doença invasiva ACWY antes dos 2 anos: vacinar ≥1 mês após, até aos 17 anos.']),
+   src:'Livro Azul, Cap. 2, 3 e 18; Norma 005/2025' },
+
+ { id:'menb', sigla:'MenB', nome:'Neisseria meningitidis B', cat:'geral', tipo:'inat', prod:'Bexsero® (&lt;5 anos no PNV) · Trumenba® (≥10 anos, fora do esquema infantil)',
+   esq: ul(['2, 4 e 12 meses. Aplicável aos <b>nascidos ≥2019</b>.']),
+   rec: ul(['2–11 meses: 2 doses (8 sem) + reforço ≥12 meses (se a 2.ª for ≥12 meses, completo).','12–23 meses: 2 doses.','24 meses–4 anos: 2 doses.','Quem iniciou por prescrição pode completar no PNV até ao dia antes dos 5 anos.']),
+   min: 'Idade mínima 8 semanas. 1.ª→2.ª e 2.ª→3.ª: 4 semanas. Última dose ≥12 meses. Idade máxima 4 anos.',
+   ci: 'Anafilaxia (incl. canamicina; a tampa da seringa pode conter látex). Doença aguda grave: adiar.',
+   notas: ul(['<b>Febre</b> frequente &lt;2 anos, sobretudo em coadministração — pode ser reduzida com paracetamol nas doses recomendadas.','Asplenia/défice do complemento/inibidores do complemento: MenB até aos 50 anos se não vacinados (gratuita).','Doença invasiva B antes dos 2 anos: vacinar ≥1 mês após, até aos 5 anos.']),
+   src:'Livro Azul, Cap. 2, 3 e 18' },
+
+ { id:'vaspr', sigla:'VASPR', nome:'Sarampo, parotidite epidémica e rubéola', cat:'geral', tipo:'viva', prod:'VASPR (vírus vivos atenuados) · SC ou IM',
+   esq: ul(['<b>12 meses</b> (VASPR 1) e <b>5 anos</b> (VASPR 2).']),
+   rec: ul(['Crianças/jovens: 2 doses, intervalo mínimo 4 semanas, sem limite de idade.','Adultos nascidos ≥1970, sem história credível de sarampo, não vacinados ou desconhecido: <b>1 dose</b>.','<b>Profissionais de saúde</b> com contacto com doentes: <b>2 doses</b>, qualquer ano de nascimento.','Mulheres em idade fértil: 2 doses de VAR/VASPR; vacinar ≥4 semanas antes de engravidar ou no pós-parto.']),
+   min: 'Idade mínima 12 meses. Se necessária proteção precoce (surto, viagem): "<b>dose zero</b>" a partir dos 6 meses — revacinar aos 12 meses e aos 5 anos. Intervalo mínimo entre doses: 4 semanas.',
+   ci: '<b>Gravidez</b> e <b>imunodepressão grave</b>. Anafilaxia a dose anterior, neomicina ou gelatina. Precauções: imunoglobulinas/hemoderivados recentes (adiar 3–11 meses), púrpura trombocitopénica após dose anterior, teste tuberculínico (mesmo dia ou 4–6 semanas depois). <b>A alergia ao ovo não é contraindicação.</b>',
+   notas: ul(['Vivas injetáveis: no mesmo dia ou com ≥4 semanas de intervalo.','Não é necessária serologia prévia contra a rubéola para vacinar.']),
+   src:'Livro Azul, Cap. 2, 3, 4, 32, 36 e 37' },
+
+ { id:'hpv', sigla:'HPV9', nome:'Vírus do papiloma humano', cat:'geral', tipo:'inat', prod:'Gardasil® 9 (nonavalente)',
+   esq: ul(['<b>10 anos, ambos os sexos</b>: 2 doses (0, 6 meses) — Norma 002/2026.']),
+   rec: ul(['&gt;10 e &lt;18 anos (ambos os sexos): 2 doses (0, 6 meses), idealmente completas em 1 ano.','♀ ≥18 e &lt;27 anos: 2 doses.','♂ das <b>coortes 2000–2002</b> (24–26 anos): 2 doses; alargamento faseado às coortes 2003–2008 nos anos seguintes.','<b>Imunocomprometidos ≥10 e &lt;27 anos (ambos os sexos): 3 doses (0, 1–2, 6 meses)</b>, independentemente da idade de início.','Quem iniciou com HPV9 completa com HPV9; esquema interrompido apenas se completa.']),
+   min: 'Idade mínima 9 anos. Iniciar até aos 26 anos; completar até aos 27. 2 doses: mínimo 5 meses. 3 doses: 1.ª→2.ª 1 mês, 2.ª→3.ª 4 meses, 1.ª→3.ª ≥5 meses.',
+   ci: 'Anafilaxia prévia (incl. levedura). <b>Gravidez: não recomendada</b> — adiar para o pós-parto. Vigilância de 30 min (síncope).',
+   notas: ul(['Imunossupressão grave: ponderar adiar até recuperação imunitária, segundo o médico assistente.']),
+   src:'Norma 002/2026; Livro Azul, Cap. 29' },
+
+ { id:'td', sigla:'Td', nome:'Tétano e difteria (adolescente/adulto)', cat:'geral', tipo:'inat', prod:'Td (doses reduzidas de toxoide diftérico)',
+   esq: ul(['<b>10, 25, 45 e 65 anos</b>; depois <b>de 10 em 10 anos</b>.','Em esquemas atualizados, a dose seguinte a uma dada em adulto é 20 anos depois; a partir dos 65 anos, vacinar se a última dose foi há ≥10 anos.']),
+   rec: ul(['≥10 anos: primovacinação com 3 doses de Td.','Adultos nunca vacinados / desconhecido / incompleto: 3 doses — 2.ª 4–6 semanas após a 1.ª, 3.ª 6–12 meses após a 2.ª; depois reforços.','Se a 3.ª dose de Td for dada entre os 10 e 17 anos, a seguinte é 15 anos depois.']),
+   min: 'Idade mínima 7 anos (no PNV recomendada ≥10 anos). 1.ª→2.ª: 4 semanas; 2.ª→3.ª: 6 meses.',
+   ci: 'Anafilaxia prévia. SGB ou neurite braquial nas 6 semanas após vacina com tétano → prescrição médica.',
+   notas: ul(['Profilaxia em feridas: ver Planeador → Td no adulto.']), src:'Livro Azul, Cap. 2, 3, 4 e 38' },
+
+ { id:'tdpa', sigla:'Tdpa', nome:'Tosse convulsa na grávida (e 7–9 anos)', cat:'geral', tipo:'inat', prod:'Tdpa (doses reduzidas de difteria e pertussis)',
+   esq: ul(['<b>Grávidas — uma dose em cada gravidez</b>, entre as <b>20 e as 36 semanas</b>, após a ecografia morfológica (20–22 sem + 6 dias), <b>idealmente até às 32 semanas</b>.','Independente de história de doença, vacinação prévia ou intervalo desde a última Td. Conta como dose de tétano.','Idade gestacional comprovada por Boletim de Saúde da Grávida, declaração médica ou informação clínica.']),
+   rec: ul(['Após as 36 semanas: por prescrição médica, gratuita (apenas proteção indireta do RN pela proteção da mãe).','Crianças ≥7 e &lt;10 anos com esquema DTPa incompleto: completar com Tdpa.']),
+   min: 'Idade mínima 7 anos. Intervalos iguais aos da Td.',
+   ci: 'Anafilaxia prévia; encefalopatia após pertussis (usar Td).',
+   notas: ul(['Registar no VACINAS, no Boletim Individual de Saúde e no <b>Boletim de Saúde da Grávida</b>.']), src:'Livro Azul, Cap. 2, 4 e 39' },
+
+ /* ---------- GRUPOS DE RISCO ---------- */
+ { id:'bcg', sigla:'BCG', nome:'Tuberculose', cat:'risco', tipo:'viva', prod:'BCG intradérmica — braço esquerdo',
+   esq: ul(['Não faz parte do esquema universal. Indicada a <b>crianças &lt;6 anos pertencentes a grupos de risco</b> definidos pela DGS (ex.: contacto com caso de TB, ligação a países/comunidades de elevada incidência) — ver Cap. 40.']),
+   rec: 'Avaliação individual; pode requerer rastreio prévio de infeção conforme idade/risco.',
+   min: '—', ci: 'Imunodepressão (incl. VIH), gravidez, RN de mãe sob imunossupressores biológicos na gravidez (avaliar). Não vacinar no mesmo braço nos 3 meses seguintes.', notas:'', src:'Livro Azul, Cap. 40' },
+
+ { id:'pnrisk', sigla:'Pn20 + Pn23', nome:'Pneumocócica — adultos e grupos de risco', cat:'risco', tipo:'inat', prod:'Pn20 (conjugada) · Pn23 (polissacárida)',
+   esq: ul(['<b>≥65 anos sem outros fatores de risco: 1 dose de Pn23</b> (vacinas recomendadas a adultos, PNV).','<b>Grupos de risco sem vacinação prévia: Pn20 + Pn23</b>, com Pn23 6–12 meses após Pn20 (mínimo 8 semanas).']),
+   rec: ul(['Já vacinados com Pn13+Pn23: imunocomprometidos → 1 dose de Pn20; imunocompetentes → consideram-se completos.','Sem conjugada ≥13 valências: 1 dose de Pn20; sem Pn23: 1 dose de Pn23.','Transplante de células hematopoiéticas: 3 doses de Pn20 (0, 2, 8 meses) a iniciar 6–12 meses após, + Pn23 aos 24 meses.']),
+   min: 'Pn23 só a partir dos 2 anos.',
+   ci: 'Anafilaxia prévia. Coagulopatia: via SC possível (Pn23 com mais reações locais).',
+   notas: ul(['<b>Gratuitidade</b>: imunocomprometidos (asplenia, VIH, neoplasia, transplante, imunodeficiência, imunossupressão), fístula de LCR, implante coclear, insuficiência respiratória crónica grave/OLD, entre outros — declaração médica via PEM. Nos restantes grupos (ex.: diabetes, DPOC, cardiopatia) é recomendada mas nem sempre gratuita: confirmar no Quadro 9 do Cap. 19.','Otimizar timing: ≥2 semanas antes de imunossupressão/esplenectomia eletiva; 3 meses após QT; ≥6 meses após anti-CD20/anti-TNF.']),
+   src:'Livro Azul, Cap. 4 e 19; Norma 013/2024' },
+
+ { id:'rota', sigla:'Rotavírus', nome:'Gastroenterite por rotavírus', cat:'risco', tipo:'viva', prod:'Vacina oral viva',
+   esq: ul(['No PNV, <b>gratuita apenas para crianças de grupos de risco</b> definidos pela DGS (Norma 007/2021, atualizada 2022; Cap. 35), mediante indicação médica.','Restantes crianças: opcional, por prescrição (ver Extra-PNV).']),
+   rec: 'Esquema de 2 ou 3 doses consoante a marca; 1.ª dose a partir das 6 semanas; limites etários estritos para 1.ª e última dose (ver RCM).',
+   min: 'Idade mínima 6 semanas; intervalo ≥4 semanas.', ci: 'Antecedentes de invaginação intestinal, malformação GI predisponente, imunodeficiência combinada grave. Adiar se gastroenterite aguda.', notas:'', src:'Livro Azul, Cap. 35; Norma 007/2021' },
+
+ { id:'vha', sigla:'VHA', nome:'Hepatite A', cat:'risco', tipo:'inat', prod:'Vacina inativada',
+   esq: ul(['Recomendada a <b>grupos de risco</b> e em contexto de surto/pós-exposição e viagem (Cap. 27). 2 doses com intervalo de 6–12 meses (ou segundo RCM).']),
+   rec: '—', min: 'A partir de 12 meses (segundo a vacina).', ci:'Anafilaxia prévia.', notas:'', src:'Livro Azul, Cap. 4 e 27' },
+
+ { id:'mpox', sigla:'MVA-BN', nome:'Mpox', cat:'risco', tipo:'inat', prod:'MVA-BN (vírus não replicativo)',
+   esq: ul(['Grupos específicos definidos pela DGS (pré e pós-exposição) — Cap. 31. Habitualmente 2 doses com ≥28 dias de intervalo.']),
+   rec:'—', min:'—', ci:'Anafilaxia prévia.', notas:'', src:'Livro Azul, Cap. 31' },
+
+ { id:'vgz', sigla:'VGZ', nome:'Gripe zoonótica', cat:'risco', tipo:'inat', prod:'Vacina contra gripe zoonótica (ex.: A/H5)',
+   esq: ul(['Grupos específicos com exposição profissional (ex.: contacto com aves ou animais potencialmente infetados), conforme Cap. 26.']),
+   rec:'—', min:'—', ci:'Anafilaxia prévia.', notas:'', src:'Livro Azul, Cap. 4 e 26' },
+
+ /* ---------- SAZONAIS ---------- */
+ { id:'gripe', sigla:'Gripe', nome:'Gripe sazonal — época 2026/27', cat:'sazonal', tipo:'inat', prod:'Trivalente inativada dose padrão · dose elevada (≥85 anos e residentes ≥60 anos em ERPI/RNCCI)',
+   esq: ul(['Campanha de <b>30/09/2026 a 31/03/2027</b> (SNS e farmácias aderentes).','Gratuita: <b>6–23 meses</b> e, <b>novidade 2026/27, 2–4 anos</b>; <b>≥60 anos</b>; grávidas; patologias de risco; residentes e profissionais de ERPI/RNCCI e similares; profissionais de saúde e outros grupos definidos na norma.','Farmácias: alargamento a adultos 18–59 anos com patologias de risco.']),
+   rec: ul(['Crianças nunca vacinadas (6–23 meses): <b>2 doses</b> com ≥4 semanas de intervalo (primovacinação); ver norma para restantes idades.']),
+   min: 'Idade mínima 6 meses.', ci: 'Anafilaxia a dose anterior. Alergia ao ovo não é contraindicação com as vacinas atuais (ver norma). Doença aguda grave: adiar.',
+   notas: ul(['Pode ser coadministrada com COVID-19 e com qualquer vacina do PNV.']), src:'Normas DGS campanha 2026/27 (set. 2026); Livro Azul, Cap. 25' },
+
+ { id:'covid', sigla:'COVID-19', nome:'COVID-19 — época 2026/27', cat:'sazonal', tipo:'inat', prod:'Vacinas mRNA adaptadas (segundo norma)',
+   esq: ul(['Campanha de <b>30/09/2026 a 31/03/2027</b>.','<b>Limiar etário sobe dos 60 para os 70 anos.</b> Mantém-se para pessoas com patologias de risco e residentes em contextos vulneráveis; profissionais de saúde com fatores de risco ou que cuidam de vulneráveis com abordagem mais dirigida.','Farmácias: 70–84 anos e (novo) 18–69 anos com patologias de risco.']),
+   rec: ul(['Primovacinação disponível todo o ano, mas <b>restrita a grupos de maior risco clínico</b>.']),
+   min:'Segundo a norma e a vacina.', ci:'Anafilaxia a dose anterior/componente; miocardite/pericardite prévia após mRNA — avaliar.', notas:'', src:'Normas DGS campanha 2026/27 (set. 2026); Livro Azul, Cap. 15' },
+
+ { id:'vsr', sigla:'Nirsevimab', nome:'VSR — imunização pediátrica 2026/27', cat:'sazonal', tipo:'mab', prod:'Anticorpo monoclonal (imunização passiva) — Norma 004/2026',
+   esq: ul(['Época <b>16/09/2026 a 31/03/2027</b>.','<b>Grupo A</b>: todas as crianças nascidas entre <b>01/04/2026 e 31/03/2027</b> (na maternidade se nascidas a partir de 16/09; nos CSP se nascidas 01/04–15/09/2026 — repescagem 16/09–30/10).','<b>Grupo B</b>: pré-termo ≤33 semanas + 6 dias nascidos 01/01–31/03/2026, se não imunizados.','<b>Grupo C</b>: fatores de risco para VSR grave a entrar na <b>2.ª época</b>, com &lt;24 meses a 30/09/2026 (200 mg).']),
+   rec: ul(['Grupo C inclui: cardiopatia hemodinamicamente significativa; HTP moderada/grave; displasia broncopulmonar moderada/grave; doença pulmonar crónica com tratamento contínuo nos 6 meses prévios; doença neuromuscular com compromisso respiratório; sequelas de hérnia diafragmática grave; imunodeficiência grave; anomalias cromossómicas/doenças metabólicas com compromisso imunitário ou respiratório; fibrose quística.']),
+   min: 'Dose única por época: 1.ª época 50 mg (&lt;5 kg) ou 100 mg (≥5 kg); 2.ª época 200 mg (confirmar RCM/norma). Proteção ≥5–6 meses.',
+   ci: 'Hipersensibilidade grave a dose anterior. Doença aguda: mesmas regras das vacinas do PNV. Infeção prévia por VSR não impede.',
+   notas: ul(['<b>Mãe vacinada com Abrysvo® &gt;14 dias antes do parto</b>: nirsevimab em regra não indicado (exceções: mãe imunossuprimida/VIH, perda de anticorpos — ECMO, exsanguineotransfusão —, grupos B/C que ultrapassam os 6 meses na época).','Coadministração possível com qualquer vacina (incluindo BCG e VHB), locais diferentes; &lt;12 meses na coxa.','Só disponível para elegíveis; não é vendido em farmácia.']),
+   src:'Norma 004/2026 de 02/09/2026; FAQ DGS VSR; Livro Azul, Cap. 43' },
+
+ /* ---------- EXTRA-PNV ---------- */
+ { id:'var', sigla:'VAR', nome:'Varicela', cat:'extra', tipo:'viva', prod:'Vacina viva (monovalente ou tetravírica)',
+   esq: ul(['Fora do esquema universal — por prescrição. Particularmente útil em suscetíveis (sem história de doença) com contactos de imunodeprimidos, mulheres em idade fértil não imunes, profissionais de saúde.','2 doses a partir dos 12 meses; intervalo mínimo 4–6 semanas conforme RCM.']),
+   rec:'—', min:'12 meses.', ci:'Gravidez (evitar gravidez 1 mês), imunodepressão grave, anafilaxia. Vivas injetáveis: mesmo dia ou ≥4 semanas.', notas:'', src:'RCM; Livro Azul (Cap. 41 em produção)' },
+
+ { id:'rotaextra', sigla:'Rotavírus', nome:'Rotavírus (crianças fora de grupos de risco)', cat:'extra', tipo:'viva', prod:'Vacina oral viva — por prescrição',
+   esq: ul(['Opcional para lactentes sem critérios de risco. Respeitar idade mínima (6 semanas) e idades máximas para início e conclusão definidas no RCM.']), rec:'—', min:'6 semanas.', ci:'Invaginação prévia, imunodeficiência combinada grave.', notas:'', src:'RCM' },
+
+ { id:'hz', sigla:'VZR', nome:'Herpes zóster', cat:'extra', tipo:'inat', prod:'Vacina recombinante adjuvada (Shingrix®)',
+   esq: ul(['Por prescrição. Adultos ≥50 anos e ≥18 anos com risco acrescido (imunossupressão). 2 doses com 2–6 meses de intervalo (1–2 meses em imunocomprometidos, conforme RCM).']),
+   rec:'—', min:'—', ci:'Anafilaxia prévia.', notas: ul(['Verificar condições de comparticipação em vigor.']), src:'RCM; Livro Azul (Cap. 41 em produção)' },
+
+ { id:'vsradult', sigla:'VSR (vacina)', nome:'VSR — vacina na grávida e no adulto', cat:'extra', tipo:'inat', prod:'Abrysvo® (grávida e adulto) · outras vacinas para adultos ≥60 anos',
+   esq: ul(['<b>Grávida</b>: disponível em farmácia comunitária; dose única no 3.º trimestre (janela do RCM). Se &gt;14 dias antes do parto, o RN em regra não necessita de nirsevimab.','<b>Adultos ≥60 anos</b> (e grupos de risco segundo RCM): dose única, por prescrição.']),
+   rec:'—', min:'—', ci:'Anafilaxia prévia.', notas:'', src:'FAQ DGS VSR 2026/27; RCM' },
+
+ { id:'viaj', sigla:'Viajante', nome:'Vacinação do viajante', cat:'extra', tipo:'inat', prod:'Febre amarela, febre tifoide, hepatite A, encefalite japonesa, raiva, cólera, MenACWY, VIP, chikungunya…',
+   esq: ul(['Consulta do viajante com avaliação do itinerário, duração, atividades e comorbilidades. Aproveitar para atualizar o PNV. Esquemas acelerados por prescrição.']), rec:'—', min:'—', ci:'Vivas (febre amarela, tifoide oral, chikungunya viva): contraindicadas na gravidez e imunodepressão.', notas:'', src:'Livro Azul, Parte 4 (Cap. 44)' }
+];
+var VBYID = {}; VAX.forEach(function(v){ VBYID[v.id]=v; });
+var CATLBL = { geral:['Esquema geral','t-geral'], risco:['Grupos de risco','t-risco'], sazonal:['Sazonal','t-sazonal'], extra:['Extra-PNV','t-extra'] };
+var TIPOLBL = { inat:['Inativada','t-inat'], viva:['Viva atenuada','t-viva'], mab:['Anticorpo monoclonal','t-inat'] };
+
+function vaxBody(v){
+  var h='';
+  function sec(l,t){ if(t && t!=='—') h+='<div class="dcb-sec"><div class="dcb-lbl">'+l+'</div><div class="dcb-txt">'+t+'</div></div>'; }
+  sec('Apresentação', v.prod);
+  sec(v.cat==='geral'?'Esquema geral recomendado':'Indicação / esquema', v.esq);
+  sec('Esquema de recurso / situações de atraso', v.rec);
+  sec('Idades e intervalos mínimos', v.min);
+  sec('Contraindicações e precauções', v.ci);
+  sec('Notas e situações especiais', v.notas);
+  if(v.src) h+='<div class="dcb-src">Fonte: '+v.src+'</div>';
+  return h;
+}
+function tagsHtml(v){
+  return '<span class="dc-tag '+CATLBL[v.cat][1]+'">'+CATLBL[v.cat][0]+'</span><span class="dc-tag '+TIPOLBL[v.tipo][1]+'">'+TIPOLBL[v.tipo][0]+'</span>';
+}
+
+/* ================= MODAL ================= */
+var mbg = $('#modalBg');
+function openVax(id){
+  var v = VBYID[id]; if(!v) return;
+  $('#modalTitle').innerHTML = v.sigla + ' — ' + v.nome;
+  $('#modalSub').innerHTML = CATLBL[v.cat][0] + ' · ' + TIPOLBL[v.tipo][0];
+  $('#modalBody').innerHTML = vaxBody(v);
+  mbg.classList.add('show');
+}
+$('#modalX').addEventListener('click', function(){ mbg.classList.remove('show'); });
+mbg.addEventListener('click', function(e){ if(e.target===mbg) mbg.classList.remove('show'); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') mbg.classList.remove('show'); });
+
+/* ================= MAPA ================= */
+var AGES = ['Nasc.','2 m','4 m','6 m','12 m','18 m','5 a','10 a','25 a','45 a','65 a','10/10 a'];
+var MAP = [
+ {id:'vhb', dis:'Hepatite B', sub:'VHB', c:{0:['VHB 1','mono'],1:['VHB 2','hexa'],3:['VHB 3','hexa']}},
+ {id:'hib', dis:'Haemophilus infl. b', sub:'Hib', c:{1:['Hib 1','hexa'],2:['Hib 2','penta'],3:['Hib 3','hexa'],5:['Hib 4','penta']}},
+ {id:'dtpa', dis:'Difteria, tétano, tosse convulsa', sub:'DTPa', c:{1:['DTPa 1','hexa'],2:['DTPa 2','penta'],3:['DTPa 3','hexa'],5:['DTPa 4','penta'],6:['DTPa 5','tetra']}},
+ {id:'vip', dis:'Poliomielite', sub:'VIP', c:{1:['VIP 1','hexa'],2:['VIP 2','penta'],3:['VIP 3','hexa'],5:['VIP 4','penta'],6:['VIP 5','tetra']}},
+ {id:'pn20', dis:'S. pneumoniae', sub:'Pn20', c:{1:['Pn20 1','pn'],2:['Pn20 2','pn'],4:['Pn20 3','pn']}},
+ {id:'menacwy', dis:'N. meningitidis ACWY', sub:'MenACWY', c:{4:['MenACWY','men']}},
+ {id:'menb', dis:'N. meningitidis B', sub:'MenB (nascidos ≥2019)', c:{1:['MenB 1','men'],2:['MenB 2','men'],4:['MenB 3','men']}},
+ {id:'vaspr', dis:'Sarampo, parotidite, rubéola', sub:'VASPR (viva)', c:{4:['VASPR 1','viva'],6:['VASPR 2','viva']}},
+ {id:'hpv', dis:'Vírus papiloma humano', sub:'HPV9 · ambos os sexos', c:{7:['HPV 1,2','hpv']}},
+ {id:'td', dis:'Tétano e difteria', sub:'Td', c:{7:['Td','td'],8:['Td','td'],9:['Td','td'],10:['Td','td'],11:['Td','td']}}
+];
+(function buildMap(){
+  var h = '<thead><tr><th>Doença / vacina</th>';
+  AGES.forEach(function(a,i){ h += '<th class="'+(i>=8?'age-adult':'')+'">'+a+'</th>'; });
+  h += '</tr></thead><tbody>';
+  MAP.forEach(function(r){
+    h += '<tr><td class="dis" data-v="'+r.id+'"><span class="dis-name">'+r.dis+'</span><span class="dis-sub">'+r.sub+'</span></td>';
+    for(var i=0;i<AGES.length;i++){
+      var c = r.c[i];
+      h += '<td class="'+(i>=8?'col-adult':'')+'">' + (c ? '<span class="pill p-'+c[1]+'" data-v="'+r.id+'" title="Ver detalhe">'+c[0]+'</span>' : '') + '</td>';
+    }
+    h += '</tr>';
+  });
+  h += '<tr class="preg-row"><td class="dis" data-v="tdpa" style="background:#FDECEA;"><span class="dis-name">Tosse convulsa (grávidas)</span><span class="dis-sub">Tdpa</span></td><td colspan="12" class="preg-cell"><span class="pill p-hpv" data-v="tdpa">Tdpa</span> &nbsp;Uma dose em <b>cada gravidez</b>, 20–36 semanas (após a ecografia morfológica; idealmente até às 32 semanas)</td></tr>';
+  h += '</tbody>';
+  $('#mapTable').innerHTML = h;
+  var L = [['mono','Monovalente'],['hexa','Hexavalente (DTPa-Hib-VIP-VHB)'],['penta','Pentavalente (DTPa-Hib-VIP)'],['tetra','Tetravalente (DTPa-VIP)'],['pn','Pneumocócica'],['men','Meningocócicas'],['viva','Viva atenuada'],['hpv','HPV / grávida'],['td','Td']];
+  $('#mapLegend').innerHTML = L.map(function(x){ return '<span class="legend-item"><span class="legend-sw p-'+x[0]+'"></span>'+x[1]+'</span>'; }).join('');
+})();
+$('#mapTable').addEventListener('click', function(e){ var t = e.target.closest('[data-v]'); if(t) openVax(t.getAttribute('data-v')); });
+
+/* ================= POR CONSULTA ================= */
+var VISITS = [
+ {age:'Nascimento', items:[['VHB 1','mono','vhb','Monovalente · coxa (nas primeiras 24 h)']], note:'Época VSR: nirsevimab na maternidade (pode ser coadministrado). BCG apenas em grupos de risco.'},
+ {age:'2 meses', items:[['Hexavalente','hexa','dtpa','DTPa 1 + Hib 1 + VIP 1 + VHB 2 · coxa esquerda'],['MenB 1','men','menb','Coxa esquerda (≥2,5 cm)'],['Pn20 1','pn','pn20','Coxa direita']], note:'Febre frequente com MenB em coadministração — pode ser reduzida com paracetamol nas doses recomendadas.'},
+ {age:'4 meses', items:[['Pentavalente','penta','dtpa','DTPa 2 + Hib 2 + VIP 2 · coxa esquerda'],['MenB 2','men','menb','Coxa esquerda (≥2,5 cm)'],['Pn20 2','pn','pn20','Coxa direita']]},
+ {age:'6 meses', items:[['Hexavalente','hexa','dtpa','DTPa 3 + Hib 3 + VIP 3 + VHB 3 · coxa esquerda']], note:'Completa a primovacinação para 7 das 12 infeções. Gripe gratuita a partir dos 6 meses (época sazonal).'},
+ {age:'12 meses', items:[['MenACWY','men','menacwy','Braço esquerdo'],['MenB 3','men','menb','Braço esquerdo (≥2,5 cm)'],['Pn20 3','pn','pn20','Braço direito (pode ser a partir dos 11 m)'],['VASPR 1','viva','vaspr','Braço direito (≥2,5 cm)']], note:'Completa a primovacinação para 11 das 12 infeções. Não atrasar.'},
+ {age:'18 meses', items:[['Pentavalente','penta','dtpa','DTPa 4 + Hib 4 + VIP 4 · braço esquerdo']]},
+ {age:'5 anos', items:[['Tetravalente','tetra','dtpa','DTPa 5 + VIP 5 · braço esquerdo'],['VASPR 2','viva','vaspr','Braço direito']]},
+ {age:'10 anos', items:[['Td','td','td','Braço esquerdo'],['HPV9 · 1.ª dose','hpv','hpv','Braço direito · 2.ª dose 6 meses depois']], note:'Completa o esquema recomendado para as 12 infeções.'},
+ {age:'25 e 45 anos', items:[['Td','td','td','Braço esquerdo · reforço']]},
+ {age:'≥65 anos', items:[['Td','td','td','Aos 65 anos (se última dose há ≥10 anos) e depois 10/10 anos'],['Pn23','pn','pnrisk','Dose única (≥65 anos)'],['Gripe · COVID-19','mono','gripe','Campanha sazonal (gripe ≥60; COVID-19 ≥70 anos)']]},
+ {age:'Gravidez', items:[['Tdpa','hpv','tdpa','20–36 semanas, em cada gravidez'],['Gripe · COVID-19','mono','gripe','Época sazonal, qualquer trimestre']], note:'Vacinas vivas contraindicadas. VSR materna (Abrysvo®) disponível em farmácia.'}
+];
+$('#visitGrid').innerHTML = VISITS.map(function(v){
+  return '<div class="visit"><div class="visit-head"><span class="vh-age" style="color:#FFFFFF;">'+v.age+'</span><span class="vh-inj" style="color:#FFFFFF;">'+v.items.length+' '+(v.items.length>1?'inoculações':'inoculação')+'</span></div><div class="visit-body">'+
+    v.items.map(function(i){ return '<div class="vrow"><span class="pill p-'+i[1]+'" data-v="'+i[2]+'">'+i[0]+'</span><span class="vrow-txt">'+i[3]+'</span></div>'; }).join('') +
+    '</div>' + (v.note ? '<div class="visit-note">'+v.note+'</div>' : '') + '</div>';
+}).join('');
+$('#visitGrid').addEventListener('click', function(e){ var t = e.target.closest('[data-v]'); if(t) openVax(t.getAttribute('data-v')); });
+
+/* ================= LISTA ================= */
+var curFilter = 'all';
+function renderList(){
+  var q = ($('#vaxSearch').value||'').toLowerCase().trim();
+  var items = VAX.filter(function(v){
+    if(curFilter!=='all' && v.cat!==curFilter) return false;
+    if(!q) return true;
+    var txt = (v.sigla+' '+v.nome+' '+v.prod+' '+v.esq+' '+v.notas+' '+v.rec).toLowerCase().replace(/<[^>]+>/g,' ');
+    return txt.indexOf(q) >= 0;
+  });
+  if(!items.length){ $('#vaxList').innerHTML = '<p class="muted" style="font-size:13px;">Sem resultados.</p>'; return; }
+  var order = ['geral','risco','sazonal','extra'], titles = {geral:'Esquema geral (universais)', risco:'Grupos de risco / situações especiais', sazonal:'Vacinação sazonal', extra:'Opcionais extra-PNV (por prescrição)'};
+  var h = '';
+  order.forEach(function(cat){
+    var sub = items.filter(function(v){ return v.cat===cat; });
+    if(!sub.length) return;
+    if(curFilter==='all') h += '<div class="tbl-cap" style="margin-top:6px;">'+titles[cat]+'</div>';
+    sub.forEach(function(v){
+      h += '<div class="dc-card" data-id="'+v.id+'"><div class="dc-head"><div><div class="dc-name">'+v.sigla+' <span class="muted" style="font-weight:500;">· '+v.nome+'</span></div><div class="dc-sub">'+v.prod+'</div></div><div style="display:flex;align-items:center;gap:8px;"><div class="dc-tags">'+tagsHtml(v)+'</div><span class="dc-toggle">›</span></div></div><div class="dc-body">'+vaxBody(v)+'</div></div>';
+    });
+  });
+  $('#vaxList').innerHTML = h;
+}
+$('#vaxList').addEventListener('click', function(e){ var hd = e.target.closest('.dc-head'); if(hd) hd.parentNode.classList.toggle('open'); });
+$('#vaxSearch').addEventListener('input', renderList);
+$$('#listFilters .subtab-btn').forEach(function(b){
+  b.addEventListener('click', function(){
+    $$('#listFilters .subtab-btn').forEach(function(x){ x.classList.remove('active'); });
+    b.classList.add('active'); curFilter = b.getAttribute('data-f'); renderList();
+  });
+});
+renderList();
+
+/* ================= SAZONAL ================= */
+(function(){
+  var ids = ['gripe','covid','vsr','vsradult'];
+  $('#sazList').innerHTML = ids.map(function(id){ var v=VBYID[id];
+    return '<div class="dc-card open"><div class="dc-head"><div><div class="dc-name">'+v.nome+'</div><div class="dc-sub">'+v.prod+'</div></div><div style="display:flex;align-items:center;gap:8px;"><div class="dc-tags">'+tagsHtml(v)+'</div><span class="dc-toggle">›</span></div></div><div class="dc-body">'+vaxBody(v)+'</div></div>';
+  }).join('') + '<div class="info-block navy"><div class="ib-title">Coadministração</div><p>Gripe, COVID-19 e vacinas do PNV podem ser administradas no mesmo dia, em locais anatómicos diferentes. O nirsevimab pode ser coadministrado com qualquer vacina viva ou inativada.</p></div>';
+  $('#sazList').addEventListener('click', function(e){ var hd = e.target.closest('.dc-head'); if(hd) hd.parentNode.classList.toggle('open'); });
+})();
+
+/* ================= TABS ================= */
+$$('.subtab-row[data-group]').forEach(function(row){
+  var btns = $$('.subtab-btn', row);
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){ x.classList.remove('active'); $('#'+x.getAttribute('data-sub')).classList.remove('active'); });
+      b.classList.add('active'); $('#'+b.getAttribute('data-sub')).classList.add('active');
+    });
+  });
+});
+
+/* ================= DATAS (UTC) ================= */
+var _n = new Date();
+var TODAY = new Date(Date.UTC(_n.getFullYear(), _n.getMonth(), _n.getDate()));
+function parseD(s){ if(!s) return null; var p=s.split('-').map(Number); if(p.length<3||!p[0]) return null; return new Date(Date.UTC(p[0],p[1]-1,p[2])); }
+function fmt(d){ return String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear(); }
+function addMonths(d,n){ var y=d.getUTCFullYear(), m=d.getUTCMonth()+n, day=d.getUTCDate(); var last=new Date(Date.UTC(y,m+1,0)).getUTCDate(); return new Date(Date.UTC(y,m,Math.min(day,last))); }
+function addYears(d,n){ return addMonths(d,12*n); }
+function addDays(d,n){ return new Date(d.getTime()+n*86400000); }
+function monthsBetween(a,b){ var m=(b.getUTCFullYear()-a.getUTCFullYear())*12+(b.getUTCMonth()-a.getUTCMonth()); if(b.getUTCDate()<a.getUTCDate()) m--; return m; }
+function ageTxt(dob){ var m=monthsBetween(dob,TODAY); if(m<0) return 'data futura'; if(m<24){ var dd=Math.round((TODAY-addMonths(dob,m))/86400000); return m+' meses'+(dd?' e '+dd+' dias':''); } var y=Math.floor(m/12), r=m%12; return y+' anos'+(r?' e '+r+' meses':''); }
+
+
+/* ================= REGRAS DE RECUPERAÇÃO POR IDADE ================= */
+function recRule(id, ageM, dob, sex){
+  var y = ageM/12, by = dob.getUTCFullYear();
+  switch(id){
+    case 'vhb': return ageM<84 ? 'Completar as 3 doses: 4 semanas entre 1.ª e 2.ª; VHB 3 ≥8 semanas após a 2.ª, ≥16 semanas após a 1.ª e com ≥6 meses de idade.' : 'Completar 3 doses (0, 1, 6 meses); dose de adulto a partir dos 16 anos.';
+    case 'hib': return ageM>=60 ? '<b>Já não indicada</b> (≥5 anos), exceto alterações imunitárias.' : 'Aplicar o Quadro Hib pela idade da 1.ª dose (6 sem–6 m: 3+1; 7–11 m: 2+1 aos 18 m; 12 m–4 a: 1 dose). Intervalo de 8 semanas.';
+    case 'dtpa': return ageM<84 ? 'Esquema em atraso &lt;7 anos: 4 semanas entre as 3 primeiras; DTPa 4 ≥6 meses após a 3.ª (≥12 meses de idade); DTPa 5 aos 5 anos. Se DTPa 4 ≥4 anos, não dar DTPa 5.' : (y<10 ? 'Completar com <b>Tdpa</b> (≥7 e &lt;10 anos).' : 'Completar com <b>Td</b> (≥10 anos) — 3 doses se primovacinação incompleta.');
+    case 'vip': return ageM<84 ? 'Como a DTPa; se VIP 4 com ≥4 anos e ≥6 meses após a anterior, esquema completo.' : 'Total de 3 doses (0, ≥4 sem, 6 meses após a 2.ª).';
+    case 'pn20': return ageM>=60 ? '<b>Já não indicada</b> (≥5 anos), exceto grupos de risco.' : (ageM>=24 ? '1 dose de Pn20 (se nenhuma dose ≥12 meses).' : (ageM>=10 ? 'Se sem doses: 2 doses com ≥8 semanas. Se já tem 2 doses &lt;12 meses: reforço agora (≥8 sem após a anterior).' : '2 doses (≥8 semanas) + reforço a partir dos 12 meses.'));
+    case 'menb': return by<2019 ? '<b>Não aplicável</b> no PNV (nascidos antes de 2019), exceto grupos de risco.' : (ageM>=60 ? '<b>Já não indicada</b> (≥5 anos), exceto grupos de risco.' : (ageM>=12 ? '2 doses com 8 semanas (se a 2.ª dose da primovacinação foi ≥12 meses, completo).' : '2 doses (8 sem) + reforço ≥12 meses.'));
+    case 'menacwy': return ageM<12 ? 'Aos 12 meses.' : (ageM<216 ? '1 dose na primeira oportunidade (se sem dose de MenC/MenACWY ≥12 meses).' : 'Não indicada no esquema geral (≥18 anos) — apenas grupos de risco/viagem.');
+    case 'vaspr': return ageM<12 ? 'A partir dos 12 meses.' : '2 doses no total, intervalo mínimo 4 semanas (sem limite de idade).';
+    case 'hpv':
+      if(y<9) return 'Aos 10 anos.';
+      if(y>=27) return '<b>Fora da idade</b> (máx. iniciar 26 anos; completar até 27).';
+      if(sex==='F' || y<18) return '2 doses (0, 6 meses; mínimo 5 meses). Imunocomprometidos: 3 doses.';
+      if(by>=2000 && by<=2002) return '♂ coorte 2000–2002: 2 doses (0, 6 meses).';
+      return '♂ ≥18 anos fora das coortes abrangidas: não elegível no PNV (salvo imunocomprometidos &lt;27 anos, 3 doses).';
+    case 'td': return 'Td segundo idade e última dose (ver Planeador → Td no adulto).';
+  }
+  return '';
+}
+
+/* ================= CALENDÁRIO ================= */
+var CAL = [
+ {lbl:'Nascimento', off:0, d:[['VHB 1','vhb','mono']]},
+ {lbl:'2 meses', off:2, d:[['DTPa 1','dtpa','hexa'],['Hib 1','hib','hexa'],['VIP 1','vip','hexa'],['VHB 2','vhb','hexa'],['Pn20 1','pn20','pn'],['MenB 1','menb','men']]},
+ {lbl:'4 meses', off:4, d:[['DTPa 2','dtpa','penta'],['Hib 2','hib','penta'],['VIP 2','vip','penta'],['Pn20 2','pn20','pn'],['MenB 2','menb','men']]},
+ {lbl:'6 meses', off:6, d:[['DTPa 3','dtpa','hexa'],['Hib 3','hib','hexa'],['VIP 3','vip','hexa'],['VHB 3','vhb','hexa']]},
+ {lbl:'12 meses', off:12, d:[['Pn20 3','pn20','pn'],['MenACWY','menacwy','men'],['MenB 3','menb','men'],['VASPR 1','vaspr','viva']]},
+ {lbl:'18 meses', off:18, d:[['DTPa 4','dtpa','penta'],['Hib 4','hib','penta'],['VIP 4','vip','penta']]},
+ {lbl:'5 anos', off:60, d:[['DTPa 5','dtpa','tetra'],['VIP 5','vip','tetra'],['VASPR 2','vaspr','viva']]},
+ {lbl:'10 anos', off:120, d:[['Td','td','td'],['HPV 1','hpv','hpv']]},
+ {lbl:'10 anos + 6 meses', off:126, d:[['HPV 2','hpv','hpv']]},
+ {lbl:'25 anos', off:300, d:[['Td','td','td']]},
+ {lbl:'45 anos', off:540, d:[['Td','td','td']]},
+ {lbl:'65 anos', off:780, d:[['Td (se última ≥10 anos)','td','td'],['Pn23','pnrisk','pn']]}
+];
+var calDone = {};
+function renderCal(){
+  var dob = parseD($('#calDob').value), sex = $('#calSex').value;
+  if(!dob){ $('#calOut').innerHTML = '<div class="result-row warn"><span class="rr-icon">!</span><div><div class="rr-title">Indique a data de nascimento.</div></div></div>'; return; }
+  if(dob>TODAY){ $('#calOut').innerHTML = '<div class="result-row warn"><span class="rr-icon">!</span><div><div class="rr-title">A data de nascimento é posterior a hoje.</div></div></div>'; return; }
+  var ageM = monthsBetween(dob,TODAY), by = dob.getUTCFullYear();
+  var h = '<div class="age-banner" style="color:#FFFFFF;">Idade atual: <b>'+ageTxt(dob)+'</b> <span>· nascido(a) a '+fmt(dob)+'</span></div>';
+  h += '<div class="tbl-wrap"><table class="data-table plan-table"><tr><th>Consulta</th><th>Data-alvo</th><th>Vacinas (assinale as registadas)</th><th>Estado</th></tr>';
+  var overdue = {};
+  CAL.forEach(function(v, vi){
+    var dt = addMonths(dob, v.off);
+    var doses = v.d.map(function(x, oi){ return [x, oi]; }).filter(function(p){
+      var x = p[0];
+      if(x[1]==='menb' && by<2019) return false;
+      if(x[1]==='hpv' && sex==='M' && by<2009 && !(by>=2000 && by<=2002)) return false;
+      return true;
+    });
+    if(!doses.length) return;
+    var allDone = true, anyMissing = false;
+    var cells = doses.map(function(p){
+      var x = p[0], key = vi+'_'+p[1], on = !!calDone[key];
+      if(!on){ allDone = false; if(dt<=TODAY){ anyMissing = true; overdue[x[1]] = (overdue[x[1]]||[]).concat(x[0]); } }
+      return '<label class="chk'+(on?' on':'')+'" style="display:inline-flex;padding:4px 8px;margin:2px;"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+'> <span class="pill p-'+x[2]+'" style="min-width:0;padding:2px 6px;">'+x[0]+'</span></label>';
+    }).join('');
+    var st;
+    if(allDone) st = '<span class="st-badge st-done">Feito</span>';
+    else if(anyMissing) st = '<span class="st-badge st-due">Em atraso</span>';
+    else if(dt <= addDays(TODAY,45)) st = '<span class="st-badge st-soon">Próxima</span>';
+    else st = '<span class="st-badge st-fut">Agendar</span>';
+    h += '<tr><td class="term">'+v.lbl+'</td><td>'+fmt(dt)+'</td><td>'+cells+'</td><td class="st">'+st+'</td></tr>';
+  });
+  h += '</table></div>';
+  if(sex==='M' && by<2009 && !(by>=2000 && by<=2002)) h += '<p class="tbl-note">HPV omitido: ♂ nascido antes de 2009 fora das coortes 2000–2002 — ver separador Elegibilidade.</p>';
+  var keys = Object.keys(overdue);
+  if(keys.length){
+    h += '<div class="tbl-cap">Doses em falta — regra de recuperação para a idade atual</div>';
+    keys.forEach(function(k){
+      var r = recRule(k, ageM, dob, sex), stop = /Já não indicada|Não aplicável|Fora da idade|não elegível/.test(r);
+      h += '<div class="result-row '+(stop?'na':'warn')+'"><span class="rr-icon">'+(stop?'–':'!')+'</span><div><div class="rr-title">'+VBYID[k].sigla+' — em falta: '+overdue[k].join(', ')+'</div><div class="rr-text">'+r+'</div></div></div>';
+    });
+    h += '<p class="tbl-note">Não reiniciar esquemas; completar respeitando idades e intervalos mínimos. Ver separador "Esquemas de recurso" para os quadros completos.</p>';
+  } else {
+    h += '<div class="result-row ok"><span class="rr-icon">✓</span><div><div class="rr-title">Sem doses em atraso assinaladas para a idade.</div></div></div>';
+  }
+  $('#calOut').innerHTML = h;
+}
+$('#calGo').addEventListener('click', renderCal);
+$('#calOut').addEventListener('change', function(e){ var k = e.target.getAttribute('data-k'); if(k){ calDone[k] = e.target.checked; renderCal(); } });
+$('#calAll').addEventListener('click', function(){
+  var dob = parseD($('#calDob').value); if(!dob){ renderCal(); return; }
+  CAL.forEach(function(v, vi){ if(addMonths(dob,v.off)<=TODAY) v.d.forEach(function(x,di){ calDone[vi+'_'+di]=true; }); });
+  renderCal();
+});
+
+/* ================= ELEGIBILIDADE ================= */
+$$('.chk-list').forEach(function(l){ l.addEventListener('change', function(e){ var c=e.target.closest('.chk'); if(c) c.classList.toggle('on', e.target.checked); }); });
+function row(lvl, title, text){ var ic={ok:'✓',warn:'!',stop:'✕',info:'i',na:'–'}[lvl]; return '<div class="result-row '+lvl+'"><span class="rr-icon">'+ic+'</span><div><div class="rr-title">'+title+'</div><div class="rr-text">'+text+'</div></div></div>'; }
+$('#elGo').addEventListener('click', function(){
+  var dob = parseD($('#elDob').value), sex = $('#elSex').value;
+  var f = {}; $$('#elFlags input').forEach(function(i){ f[i.value]=i.checked; });
+  if(!dob || dob>TODAY){ $('#elOut').innerHTML = row('warn','Indique uma data de nascimento válida.',''); return; }
+  var m = monthsBetween(dob,TODAY), y = Math.floor(m/12), by = dob.getUTCFullYear();
+  var h = '<div class="age-banner" style="color:#FFFFFF;">Idade: <b>'+ageTxt(dob)+'</b> <span>· ano de nascimento '+by+'</span></div>';
+  var R = { rec:[], risk:[], saz:[], na:[] };
+
+  if(m<84){
+    R.rec.push(row('info','Criança &lt;7 anos','Se houver doses em falta, completar com o <b>esquema em atraso (≥3 meses e &lt;7 anos)</b>: VHB, DTPa, VIP; Hib/Pn20/MenB pelo número de doses da idade de início. Use o separador "Calendário da criança" para identificar doses em falta.'));
+  }
+  if(m>=84 && m<216){
+    R.rec.push(row('info','Criança/jovem ≥7 e &lt;18 anos','Seguir o <b>esquema tardio</b>: '+(y<10?'Tdpa':'Td')+' (3 doses se sem primovacinação), VIP (3 doses), VHB (3 doses; dose de adulto ≥16 anos), VASPR (2 doses), MenACWY (1 dose se sem dose ≥12 meses), HPV.'));
+  }
+  // específicos
+  if(m<60){ R.rec.push(row('ok','Pn20 e Hib','Elegíveis até ao dia antes dos 5 anos. Pn20: '+recRule('pn20',m,dob,sex)+' Hib: '+recRule('hib',m,dob,sex))); }
+  else R.na.push(row('na','Hib / Pn20 / MenB (esquema universal)','Já não indicadas (≥5 anos)'+(f.imuno||f.asplenia||f.risco?' — <b>mas indicadas nos grupos de risco assinalados</b> (ver Lista).':'.')));
+  if(m<60){ if(by>=2019) R.rec.push(row('ok','MenB', recRule('menb',m,dob,sex))); else R.na.push(row('na','MenB','Nascido antes de 2019 — fora do PNV universal.')); }
+  if(m>=12 && m<216) R.rec.push(row('ok','MenACWY','1 dose se não tem dose de MenC/MenACWY com ≥12 meses (até aos 17 anos).'));
+  if(m>=12){
+    if(y<18) R.rec.push(row('ok','VASPR','2 doses no total (intervalo ≥4 semanas).'));
+    else if(f.profsaude) R.rec.push(row('ok','VASPR — profissional de saúde','<b>2 doses</b>, independentemente do ano de nascimento, se sem registo.'));
+    else if(by>=1970) R.rec.push(row('ok','VASPR — adulto nascido ≥1970','<b>1 dose</b> se sem história credível de sarampo e sem registo de vacinação'+(sex==='F'&&y<50?'; mulher em idade fértil: 2 doses de VAR/VASPR':'')+'.'));
+    else R.na.push(row('na','VASPR','Nascido antes de 1970: considerado imune (99,6% seropositivos).'));
+    if(f.gravida) R.rec.push(row('stop','VASPR na grávida','<b>Contraindicada</b> — vacinar no pós-parto.'));
+  }
+  // HPV
+  if(y>=9 && y<27){
+    var hpvTxt=null;
+    if(f.imuno && y>=10) hpvTxt='<b>3 doses</b> (0, 1–2, 6 meses) — imunocomprometido ≥10 e &lt;27 anos, ambos os sexos.';
+    else if(y<18) hpvTxt = y<10 ? 'Programar aos 10 anos (2 doses, 0 e 6 meses).' : '2 doses (0, 6 meses).';
+    else if(sex==='F') hpvTxt='♀ ≥18 e &lt;27 anos: 2 doses (0, 6 meses).';
+    else if(sex==='M' && by>=2000 && by<=2002) hpvTxt='♂ coorte 2000–2002: 2 doses (0, 6 meses).';
+    if(hpvTxt){ R.rec.push(row(f.gravida?'warn':'ok','HPV9', hpvTxt + (f.gravida?' <b>Na gravidez: adiar para o pós-parto.</b>':''))); }
+    else R.na.push(row('na','HPV9', sex? '♂ ≥18 anos fora das coortes 2000–2002: não elegível no PNV (alargamento faseado às coortes 2003–2008).' : 'Indique o sexo para avaliar a elegibilidade HPV.'));
+  } else if(y>=27) R.na.push(row('na','HPV9','Fora da idade (iniciar até 26; completar até 27 anos).'));
+  // Td / Tdpa
+  if(y>=10) R.rec.push(row('ok','Td','Reforços aos 10, 25, 45, 65 anos e depois 10/10 anos; primovacinação de 3 doses se incompleta/desconhecida. Use "Td no adulto" para a data exata.'));
+  else if(y>=7) R.rec.push(row('ok','Tdpa','Se esquema DTPa incompleto: completar com Tdpa (≥7 e &lt;10 anos).'));
+  if(f.gravida) R.rec.push(row('ok','Tdpa na gravidez','1 dose entre as 20 e as 36 semanas (após a ecografia morfológica; idealmente até às 32).'));
+  // adultos / risco
+  if(y>=65) R.rec.push(row('ok','Pn23 (≥65 anos)','1 dose de Pn23'+(f.risco||f.imuno||f.asplenia?'; com fator de risco: esquema Pn20 + Pn23 (Pn23 6–12 meses depois).':'.')));
+  else if((f.risco||f.imuno||f.asplenia) && y>=2) R.risk.push(row('warn','Pneumocócica (grupo de risco)','Pn20 + Pn23 (Pn23 6–12 meses após Pn20; mín. 8 semanas); em &lt;2 anos seguir o esquema da idade com Pn20. Declaração médica via PEM; confirmar gratuitidade para a condição.'));
+  if(f.asplenia) R.risk.push(row('warn','Meningocócicas (asplenia / complemento)','MenACWY em qualquer idade e MenB até aos 50 anos, se não vacinados; Hib em qualquer idade se não vacinado. Idealmente ≥2 semanas antes de esplenectomia/inibidor do complemento.'));
+  if(f.imuno) R.risk.push(row('warn','Imunocomprometido','Vacinas vivas contraindicadas se imunodepressão grave; inativadas ≥2 semanas antes da imunossupressão. Esquema personalizado pelo médico assistente (Cap. 6). Coabitantes devem estar vacinados.'));
+  // sazonal
+  var gripe = (m>=6 && m<60) || y>=60 || f.gravida || f.risco || f.imuno || f.asplenia || f.profsaude || f.erpi;
+  if(gripe) R.saz.push(row('ok','Gripe 2026/27 (30/09/2026–31/03/2027)', (m>=6&&m<24?'6–23 meses: 2 doses se nunca vacinado. ':'') + (m>=24&&m<60?'2–4 anos: gratuita (novidade 2026/27). ':'') + (y>=85||(f.erpi&&y>=60)?'<b>Vacina de dose elevada</b>. ':'') + 'Gratuita para este grupo.'));
+  else if(m<6) R.na.push(row('na','Gripe','Idade mínima 6 meses.'));
+  var covid = y>=70 || f.risco || f.imuno || f.erpi || (f.profsaude && (f.risco||f.imuno));
+  if(covid && y>=0.5) R.saz.push(row('ok','COVID-19 2026/27','Elegível (≥70 anos, patologia de risco ou contexto vulnerável) — confirmar critérios na norma.'));
+  else if(y>=18) R.na.push(row('na','COVID-19 2026/27','Sem critério de elegibilidade assinalado (limiar etário passou para 70 anos).'));
+  var vsrA = dob>=parseD('2026-04-01') && dob<=parseD('2027-03-31');
+  if(vsrA) R.saz.push(row('ok','VSR — nirsevimab (Grupo A)','Nascido entre 01/04/2026 e 31/03/2027: elegível na época 2026/27 (se mãe não vacinada &gt;14 dias antes do parto).'));
+  else if(dob>=parseD('2026-01-01') && dob<parseD('2026-04-01')) R.saz.push(row('warn','VSR — nirsevimab (Grupo B?)','Elegível só se pré-termo ≤33 semanas + 6 dias e não imunizado previamente.'));
+  else if(dob>parseD('2024-09-30') && dob<parseD('2026-01-01')) R.saz.push(row('warn','VSR — nirsevimab (Grupo C?)','Elegível (200 mg) apenas se fator de risco para VSR grave e &lt;24 meses a 30/09/2026.'));
+
+  function blk(t, arr){ return arr.length ? '<div class="tbl-cap">'+t+'</div>'+arr.join('') : ''; }
+  h += blk('Recomendadas / a completar (PNV)', R.rec) + blk('Grupos de risco', R.risk) + blk('Sazonais — época 2026/27', R.saz) + blk('Não aplicáveis', R.na);
+  h += '<p class="tbl-note">Resultado orientador com base na idade e nas situações assinaladas; confirmar registo vacinal (VACINAS/BIS) e critérios específicos no Livro Azul.</p>';
+  $('#elOut').innerHTML = h;
+});
+
+/* ================= TD NO ADULTO ================= */
+$('#tdGo').addEventListener('click', function(){
+  var dob = parseD($('#tdDob').value), last = parseD($('#tdLast').value), prim = $('#tdPrim').value;
+  if(!dob || dob>TODAY){ $('#tdOut').innerHTML = row('warn','Indique a data de nascimento.',''); return; }
+  var age = Math.floor(monthsBetween(dob,TODAY)/12);
+  if(age<7){ $('#tdOut').innerHTML = row('info','Criança &lt;7 anos','Usar vacinas com DTPa segundo o esquema da idade (ver Esquemas de recurso).'); return; }
+  if(prim!=='sim' || !last){
+    var t = prim==='nao' ? 'Completar até 3 doses de '+(age<10?'Tdpa':'Td')+': 2.ª dose ≥4 semanas (idealmente 4–6 semanas) após a 1.ª; 3.ª dose 6–12 meses após a 2.ª. Contar as doses já registadas — não reiniciar.' : 'Sem registo = não vacinado. <b>Iniciar primovacinação</b> com '+(age<10?'Tdpa':'Td')+': dose 1 hoje ('+fmt(TODAY)+'), dose 2 a partir de '+fmt(addDays(TODAY,28))+' (4–6 semanas), dose 3 entre '+fmt(addMonths(addDays(TODAY,28),6))+' e '+fmt(addMonths(addDays(TODAY,42),12))+' (6–12 meses após a 2.ª).';
+    if(prim==='sim' && !last) t = 'Indique a data da última dose para calcular o próximo reforço.';
+    $('#tdOut').innerHTML = row(prim==='sim'?'warn':'stop', prim==='sim'?'Falta a data da última dose':'Primovacinação por completar', t);
+    return;
+  }
+  if(last>TODAY || last<dob){ $('#tdOut').innerHTML = row('warn','Data da última dose inválida.',''); return; }
+  var ageLast = Math.floor(monthsBetween(dob,last)/12), next, why;
+  if(ageLast<10){ next = addYears(dob,10); why='Última dose antes dos 10 anos → dose dos 10 anos.'; }
+  else {
+    var intv = ageLast<18 ? 15 : 20;
+    var a = addYears(last,intv);
+    var d65 = addYears(dob,65), l10 = addYears(last,10);
+    var b = d65>l10 ? d65 : l10;
+    if(a<=b){ next=a; why='Última dose aos '+ageLast+' anos → próxima '+intv+' anos depois.'; }
+    else { next=b; why='A partir dos 65 anos: vacinar se última dose há ≥10 anos; depois de 10 em 10 anos.'; }
+  }
+  var late = next<=TODAY;
+  var h = row(late?'stop':'ok', late?'Reforço de Td em atraso — vacinar agora':'Próximo reforço de Td: '+fmt(next), why + (late?' Data prevista era '+fmt(next)+'.':' Idade nessa data: '+Math.floor(monthsBetween(dob,next)/12)+' anos.'));
+  if(age>=65) h += row('info','≥65 anos','Após esta dose, reforços de 10 em 10 anos. Verificar também Pn23 e vacinação sazonal.');
+  $('#tdOut').innerHTML = h;
+});
+
+/* ================= TRIAGEM ================= */
+var COND = [
+ {id:'anaf', l:'Reação anafilática a dose anterior ou a um componente da vacina', f:function(s){ return ['stop','Não administrar essa vacina','Referenciar a consulta de Imunoalergologia para investigação. Outras vacinas sem esse componente podem ser dadas.']; }},
+ {id:'grave', l:'Doença aguda grave (com ou sem febre)', f:function(){ return ['warn','Adiar','Vacinar após recuperação completa; agendar de imediato para não perder a oportunidade.']; }},
+ {id:'lig', l:'Doença ligeira / febre baixa / antibiótico / convalescença', f:function(){ return ['ok','Não é contraindicação','Vacinar.']; }},
+ {id:'grav', l:'Gravidez', f:function(s){ return (s.vivai||s.vivao) ? ['stop','Vacinas vivas contraindicadas','VASPR, varicela, BCG: adiar para o pós-parto. Inativadas indicadas podem ser dadas (Tdpa 20–36 sem; gripe/COVID-19). HPV: adiar.'] : ['ok','Inativadas podem ser dadas se indicadas','Tdpa recomendada 20–36 semanas. HPV não recomendada na gravidez.']; }},
+ {id:'imuno', l:'Imunodepressão grave (QT, corticoides ≥20 mg/dia ≥14 d, biológicos/DMARD, transplante, VIH grave, IDP)', f:function(s){ return (s.vivai||s.vivao) ? ['stop','Vacinas vivas contraindicadas','Inativadas podem ser dadas (resposta pode ser menor). Esquema e timing sob orientação/prescrição do médico assistente.'] : ['warn','Inativadas permitidas — prescrição/orientação médica','Idealmente ≥2 semanas antes de iniciar imunossupressão; ponderar revacinação após recuperação imunitária.']; }},
+ {id:'ig', l:'Recebeu imunoglobulina, sangue ou hemoderivados nos últimos 11 meses', f:function(s){ return s.vivai ? ['warn','Adiar VASPR/varicela','Intervalo de 3 a 11 meses consoante o produto e a dose (ver Livro Azul). Inativadas: sem restrição.'] : ['ok','Sem impacto em inativadas','Pode vacinar.']; }},
+ {id:'viva4', l:'Outra vacina viva injetável há menos de 4 semanas', f:function(s){ return s.vivai ? ['warn','Aguardar até completar 4 semanas','Duas vivas injetáveis: no mesmo dia ou com ≥4 semanas. Se não respeitado, repetir a última.'] : ['ok','Sem impacto','Inativadas e vivas orais: qualquer intervalo.']; }},
+ {id:'ence', l:'Encefalopatia nos 7 dias após vacina com componente tosse convulsa', f:function(s){ return s.pert ? ['stop','Contraindica componente pertussis','&lt;7 anos: Td por prescrição médica. Outras vacinas podem ser dadas.'] : ['info','Relevante apenas para DTPa/Tdpa','Restantes vacinas: pode vacinar.']; }},
+ {id:'sgb', l:'Guillain-Barré ou neurite braquial nas 6 semanas após vacina com tétano', f:function(){ return ['warn','Apenas com prescrição médica','Avaliar risco/benefício das vacinas com toxoide tetânico.']; }},
+ {id:'neuro', l:'Doença neurológica em evolução / não controlada', f:function(s){ return ['warn','Prescrição médica','Ponderar adiar vacinas com pertussis até estabilização; doença neurológica estável não é contraindicação.']; }},
+ {id:'coag', l:'Trombocitopenia, coagulopatia ou anticoagulação', f:function(){ return ['warn','Precauções na via IM','Agulha ≤23G, pressão firme ≥5 min sem friccionar, limitar mobilidade 24 h. Evitar IM se INR &gt;3 ou anti-Xa &gt;0,5 UI/mL. Pn20, Pn23 e MenACWY podem ser SC.']; }},
+ {id:'ptv', l:'Púrpura trombocitopénica após dose anterior de VASPR', f:function(s){ return s.vivai ? ['warn','Precaução para VASPR','Avaliar risco/benefício (eventual serologia).'] : ['ok','Sem impacto','Pode vacinar.']; }},
+ {id:'ppd', l:'Prova tuberculínica / IGRA prevista', f:function(s){ return s.vivai ? ['info','Coordenar com a VASPR','Fazer o teste no mesmo dia da VASPR ou ≥4–6 semanas depois.'] : ['ok','Sem impacto','Pode vacinar.']; }},
+ {id:'invag', l:'Antecedentes de invaginação intestinal / malformação GI', f:function(s){ return s.vivao ? ['stop','Rotavírus contraindicada',''] : ['ok','Sem impacto','Pode vacinar.']; }},
+ {id:'prem', l:'Pré-termo ≤28 semanas (primeiras vacinas)', f:function(){ return ['info','Vacinar pela idade cronológica, em meio hospitalar','Vigilância cardiorrespiratória 6–8 h após as primeiras vacinas.']; }},
+ {id:'coab', l:'Coabita com grávida ou pessoa imunodeprimida', f:function(){ return ['ok','Não é contraindicação — vacinar','A vacinação dos coabitantes (incl. VASPR e varicela) protege o imunodeprimido.']; }},
+ {id:'ovo', l:'Alergia ao ovo', f:function(){ return ['ok','Não contraindica VASPR','Vacinar no local habitual com vigilância de 30 min.']; }}
+];
+$('#triCond').innerHTML = COND.map(function(c){ return '<label class="chk"><input type="checkbox" value="'+c.id+'"> '+c.l+'</label>'; }).join('');
+function triage(){
+  var s = {}; $$('#triVax input').forEach(function(i){ s[i.value]=i.checked; });
+  if(s.pert) s.inat = true;
+  var sel = $$('#triCond input').filter(function(i){ return i.checked; }).map(function(i){ return i.value; });
+  var res = sel.map(function(id){ var c = COND.filter(function(x){ return x.id===id; })[0]; var r = c.f(s); return {lvl:r[0], t:r[1], x:r[2], l:c.l}; });
+  var worst = res.some(function(r){ return r.lvl==='stop'; }) ? 'stop' : (res.some(function(r){ return r.lvl==='warn'; }) ? 'warn' : 'ok');
+  var V = {ok:['Pode vacinar','Sem contraindicações assinaladas. Vigilância de 30 min e registo no VACINAS.'], warn:['Vacinar com precaução, adiar ou por prescrição médica','Ver detalhe abaixo.'], stop:['Não administrar a(s) vacina(s) indicada(s) abaixo','As restantes podem ser dadas se não houver outras restrições.']}[worst];
+  var h = '<div class="verdict '+worst+'" style="color:#FFFFFF;">'+V[0]+'<span>'+V[1]+'</span></div>';
+  h += res.map(function(r){ return row(r.lvl, r.t, '<span class="muted">'+r.l+'.</span> '+r.x); }).join('');
+  $('#triOut').innerHTML = h;
+}
+$('#triCond').addEventListener('change', triage); $('#triVax').addEventListener('change', triage); triage();
+
+/* ================= IMPRESSÃO (Squarespace) ================= */
+
+})();
+
+/* ── Ligação à página do MGF no Plural ── */
+function mkAlternar(b){ var c=b.parentNode; c.classList.toggle('open'); b.setAttribute('aria-expanded', c.classList.contains('open') ? 'true' : 'false'); }
+function mkAviso(msg){
+  var b=document.activeElement, alvo=b && b.closest ? b.closest('.btn-row') : null;
+  if(!alvo) alvo=document.querySelector('#ferramenta .mgf-painel:not([hidden]) .btn-row');
+  if(!alvo) return;
+  var m=alvo.parentNode.querySelector('.mk-mensagem');
+  if(!m){ m=document.createElement('p'); m.className='mgf-mensagem mk-mensagem'; m.setAttribute('role','alert'); alvo.parentNode.insertBefore(m, alvo.nextSibling); }
+  m.textContent=msg;
+}
+(function(){
+  var raiz=document.getElementById('ferramenta');
+  raiz.addEventListener('click', function(e){ if(e.target.closest('button')) raiz.querySelectorAll('.mk-mensagem').forEach(function(m){ m.textContent=''; }); }, true);
+  MGF.separadores(raiz);
+  function sincronizar(){ raiz.querySelectorAll('.mk-cabeca').forEach(function(b){ b.setAttribute('aria-expanded', b.parentNode.classList.contains('open') ? 'true' : 'false'); }); }
+  sincronizar();
+  new MutationObserver(sincronizar).observe(raiz, { childList: true, subtree: true });
+})();
+</script>
+</body>
+</html>

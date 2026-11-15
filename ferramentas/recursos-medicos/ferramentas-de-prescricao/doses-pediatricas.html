@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Doses pediátricas · MGF no Plural</title>
+<meta name="description" content="Calcula a prescrição de antibióticos, analgésicos e outros fármacos em suspensão oral a partir do peso: dose por toma, volume, frascos e texto da receita.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* Proposta B (mockup aprovado a 2026-11-10): formulário à esquerda, receita à direita */
+.ped-formulario { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+.ped-linha-1 { display: grid; grid-template-columns: minmax(140px, 180px) minmax(0, 1fr); gap: 16px; align-items: end; }
+.ped-linha-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ped-peso-caixa { display: flex; align-items: center; gap: 8px; height: 56px; box-sizing: border-box; background: var(--cor-branco); border: 1.5px solid var(--cor-campo); border-radius: 12px; padding: 0 14px; }
+.ped-peso-caixa:focus-within { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.mgf-ferramenta .ped-peso-caixa input { flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 24px; font-weight: 700; color: var(--cor-tinta); padding: 0; min-height: 0; height: auto; -moz-appearance: textfield; }
+.ped-peso-caixa input::-webkit-inner-spin-button, .ped-peso-caixa input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.ped-peso-caixa input:focus { outline: 0; }
+.ped-peso-caixa > span, .ped-sufixo > span { font-weight: 400; color: var(--cor-texto-3); }
+.ped-linha-1 select { height: 56px; }
+.ped-sufixo { position: relative; display: block; }
+.mgf-ferramenta .ped-sufixo input { width: 100%; box-sizing: border-box; padding-right: 52px; }
+.ped-sufixo > span { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.ped-rotulo { display: block; font-size: 15px; font-weight: 700; color: var(--cor-tinta); margin: 0 0 8px; }
+.ped-deslizador { display: none; }
+.ped-deslizador.visible { display: flex; flex-direction: column; gap: 8px; }
+.ped-deslizador-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.ped-deslizador-topo label { font-size: 15px; font-weight: 700; color: var(--cor-tinta); }
+.ped-deslizador-valor { font-size: 20px; font-weight: 700; color: var(--cor-verde); }
+.ped-deslizador-unidade { font-size: 15px; color: var(--cor-texto-2); margin-left: 5px; }
+.ped-deslizador input[type="range"] { width: 100%; margin: 0; accent-color: var(--cor-verde); cursor: pointer; }
+.ped-deslizador-linha { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--cor-texto-3); }
+.ped-pilulas { display: flex; flex-wrap: wrap; gap: 6px; }
+.ped-pilulas .spill { display: inline-flex; gap: 4px; align-items: center; background: var(--cor-papel); border-radius: 99px; padding: 2px 10px; font-size: 14px; color: var(--cor-texto-2); }
+.ped-pilulas .spill strong { color: var(--cor-tinta); }
+.ped-pilulas .spill.capped { background: var(--clin-alerta-fundo); color: var(--clin-alerta); }
+.ped-pilulas .spill.capped strong { color: var(--clin-alerta); }
+.ped-tomas { display: flex; border: 1.5px solid var(--cor-linha); border-radius: 12px; overflow: hidden; }
+.ped-toma { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 52px; padding: 6px; border: 0; border-right: 1.5px solid var(--cor-linha); background: var(--cor-branco); color: var(--cor-tinta); font-family: inherit; cursor: pointer; }
+.ped-toma:last-child { border-right: 0; }
+.ped-toma strong { font-size: 16px; font-weight: 700; line-height: 1.2; }
+.ped-toma span { font-size: 13px; color: var(--cor-texto-3); }
+.ped-toma:hover { background: var(--cor-papel); }
+.ped-toma[aria-pressed="true"] { background: var(--cor-verde); color: var(--cor-branco); }
+.ped-toma[aria-pressed="true"] span { color: var(--cor-menta-clara); }
+.ped-tomas[aria-invalid="true"], .mgf-campo [aria-invalid="true"] { border-color: var(--clin-alerta-borda); }
+#ped-alert-max:not(.visible) { display: none; }
+#ped-obs-box:not(.visible) { display: none; }
+.ped-receita-painel { background: var(--cor-menta-clara); border: 1px solid #CDE7DF; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.ped-receita-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ped-receita-topo h2 { font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 0; }
+.ped-receita-topo span { font-size: 14px; color: var(--cor-texto-2); }
+.ped-vazio { background: var(--cor-branco); border-radius: 14px; padding: 20px 18px; color: var(--cor-texto-2); font-size: 16px; }
+.ped-resultado { display: flex; flex-direction: column; gap: 14px; }
+.ped-frase { background: var(--cor-branco); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.ped-frase-med { font-size: 15px; color: var(--cor-texto-3); }
+.ped-frase-dose { font-family: var(--letra-titulo); font-weight: 800; font-size: 32px; letter-spacing: -0.03em; line-height: 1.1; }
+.ped-frase-dur { font-size: 18px; }
+.ped-figuras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ped-figura { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; background: var(--cor-branco); border-radius: 12px; }
+.ped-figura span { font-size: 13px; font-weight: 700; color: var(--cor-texto-3); }
+.ped-figura b { font-size: 22px; }
+.ped-figura small { font-size: 14px; font-weight: 400; color: var(--cor-texto-3); }
+.ped-figura[data-nivel="atencao"] { background: var(--clin-atencao-fundo); }
+.ped-nota { background: var(--cor-branco); color: var(--clin-info); border-radius: 12px; padding: 12px 14px; font-size: 15px; }
+.ped-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.ped-botoes .mgf-botao { min-height: 48px; }
+.ped-botoes .ped-copiar { flex: 1 1 auto; justify-content: center; }
+.ped-mais summary { cursor: pointer; font-weight: 700; color: var(--cor-verde); font-size: 15px; }
+.ped-receita { margin: 10px 0 0; background: var(--cor-branco); border-radius: 12px; padding: 12px 14px; font-family: inherit; font-size: 16px; line-height: 1.6; white-space: pre-wrap; color: var(--cor-tinta); }
+.ped-detalhes { list-style: none; margin: 8px 0 0; padding: 0; }
+.ped-detalhes li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #CDE7DF; font-size: 15px; }
+.ped-detalhes li:last-child { border-bottom: 0; }
+.ped-detalhes li span:first-child { color: var(--cor-texto-2); }
+.ped-detalhes li span:last-child { text-align: right; }
+@media (max-width: 520px) { .ped-linha-1, .ped-linha-3 { grid-template-columns: minmax(0, 1fr); } .ped-toma span { font-size: 12px; } }
+@media print {
+  .mgf-comandos, .ped-receita-topo span, .ped-botoes, .ped-mais { display: none !important; }
+  .ped-receita-painel { background: none; border: 0; padding: 0; }
+}
+</style>
+</head>
+<body data-ferramenta="doses-pediatricas" data-titulo="Doses pediátricas">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/calculadora-ampa.html">Calculadora AMPA</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/programas-e-valencias/index.html"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/saude-infantil.html" target="_blank" rel="noopener">Saúde infantil e juvenil ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/vigilancia-gravidez.html" target="_blank" rel="noopener">Vigilância da gravidez ↗</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/combinar-listas.html">Combinar listas de Excel</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/index.html"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/nota-soap.html" target="_blank" rel="noopener">Nota SOAP ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/vigilancia-mgf.html" target="_blank" rel="noopener">Vigilância MGF ↗</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/recursos-externos/index.html"><img src="../../../assets/img/icones/sites.svg" alt="">Recursos externos</a><a class="menu-ligacao" href="https://www.pocusmgf.com/" target="_blank" rel="noopener noreferrer">POCUS MGF ↗</a></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><a class="menu-outra-area" href="../../../ferramentas/documentacao/index.html"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação</span></a><a class="menu-outra-area" href="../../../ferramentas/mapa-de-recursos/index.html"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos</span></a><a class="menu-outra-area" href="../../../ferramentas/plataforma-de-indicadores/index.html"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores</span></a></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-ambar">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Ferramentas de prescrição <span>· 5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a>
+<ul><li><a href="guia-antibioterapia.html">Guia de antibioterapia</a></li><li><a href="apoio-a-prescricao.html">Apoio à prescrição</a></li><li><a href="doses-pediatricas.html" aria-current="page">Doses pediátricas</a></li><li><a href="farmacos-na-gravidez.html">Fármacos na gravidez</a></li><li><a href="guia-terapeutico.html">Guia terapêutico</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/doses-pediatricas.svg" alt="">
+<div class="ficha-titulo">
+<h1>Doses pediátricas</h1>
+<p class="ficha-meta">Dose por peso e receita das suspensões orais · <strong>Miguel Henriques</strong> · v1.0 · 8 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/doses-pediatricas.html" download="doses-pediatricas.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Doses%20pedi%C3%A1tricas%20%28v1.0%29&body=Ferramenta%3A%20Doses%20pedi%C3%A1tricas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+  <form class="mgf-cartao ped-formulario" id="ped-dados" novalidate>
+    <div class="ped-linha-1">
+      <label class="mgf-campo ped-peso">Peso
+        <span class="ped-peso-caixa"><input type="number" id="ped-peso" min="1" max="80" step="0.1" inputmode="decimal" placeholder="0,0"><span>kg</span></span>
+      </label>
+      <label class="mgf-campo">Medicamento
+          <select id="ped-medicamento">
+            <option value="">Escolhe o medicamento</option>
+            <optgroup label="Antibióticos">
+            <option value="amoxicilina">Amoxicilina</option>
+            <option value="amoxicilina_ac">Amoxicilina + Ác. Clavulânico</option>
+            <option value="azitromicina">Azitromicina</option>
+            <option value="cefalexina">Cefalexina</option>
+            <option value="cefuroxima">Cefuroxima</option>
+            <option value="claritromicina">Claritromicina</option>
+            <option value="cotrimoxazol">Cotrimoxazol (TMP-SMX)</option>
+            <option value="eritromicina">Eritromicina</option>
+            <option value="flucloxacilina">Flucloxacilina</option>
+            <option value="metronidazol">Metronidazol</option>
+            <option value="nitrofurantoina">Nitrofurantoína</option>
+            </optgroup>
+            <optgroup label="Analgésicos / Antipiréticos">
+            <option value="paracetamol">Paracetamol</option>
+            <option value="ibuprofeno">Ibuprofeno</option>
+            </optgroup>
+            <optgroup label="Antifúngicos">
+            <option value="fluconazol">Fluconazol</option>
+            </optgroup>
+            <optgroup label="Outros">
+            <option value="prednisolona">Prednisolona</option>
+            <option value="dexametasona">Dexametasona</option>
+            <option value="salbutamol_oral">Salbutamol (oral)</option>
+            </optgroup>
+          </select>
+      </label>
+    </div>
+    <label class="mgf-campo">Indicação
+      <select id="ped-indicacao"><option value="">Escolhe a indicação</option></select>
+    </label>
+
+    <div class="ped-deslizador" id="ped-slider-block">
+      <div class="ped-deslizador-topo">
+        <label for="ped-dose-slider">Dose</label>
+        <span><span class="ped-deslizador-valor" id="ped-slider-display">—</span><span class="ped-deslizador-unidade" id="ped-slider-unit"></span></span>
+      </div>
+      <input type="range" id="ped-dose-slider" min="0" max="100" step="1">
+      <div class="ped-deslizador-linha">
+        <span id="ped-slider-min-label"></span>
+        <span class="ped-deslizador-meio">intervalo recomendado</span>
+        <span id="ped-slider-max-label"></span>
+      </div>
+      <div class="ped-pilulas" id="ped-slider-pills" aria-live="polite"></div>
+    </div>
+
+    <div class="ped-tomas-bloco">
+      <span class="ped-rotulo" id="ped-tomas-rotulo">Tomas por dia</span>
+      <div class="ped-tomas" id="ped-tomas-grid" role="group" aria-labelledby="ped-tomas-rotulo">
+        <button type="button" class="ped-toma" data-n="1" aria-pressed="false"><strong>1×</strong><span>24/24 h</span></button>
+        <button type="button" class="ped-toma" data-n="2" aria-pressed="false"><strong>2×</strong><span>12/12 h</span></button>
+        <button type="button" class="ped-toma" data-n="3" aria-pressed="false"><strong>3×</strong><span>8/8 h</span></button>
+        <button type="button" class="ped-toma" data-n="4" aria-pressed="false"><strong>4×</strong><span>6/6 h</span></button>
+      </div>
+    </div>
+
+    <div class="ped-linha-3">
+      <label class="mgf-campo">Concentração<select id="ped-concentracao"><option value="">—</option></select></label>
+      <label class="mgf-campo">Frasco
+        <select id="ped-volume">
+          <option value="100">100 ml</option>
+          <option value="150">150 ml</option>
+          <option value="200" selected>200 ml</option>
+        </select>
+      </label>
+      <label class="mgf-campo">Duração
+        <span class="ped-sufixo"><input type="number" id="ped-duracao" min="1" max="30" value="7" step="1" inputmode="numeric"><span>dias</span></span>
+      </label>
+    </div>
+
+    <p class="mgf-aviso" id="ped-alert-max"><strong>Atenção:</strong> a dose calculada ultrapassa o teto máximo. Foi aplicada a dose máxima permitida.</p>
+    <p class="mgf-mensagem" id="ped-mensagem" role="alert"></p>
+  </form>
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+  <div class="mgf-resposta">
+  <section class="ped-receita-painel" aria-labelledby="ped-receita-titulo">
+    <div class="ped-receita-topo"><h2 id="ped-receita-titulo">Receita</h2><span>atualiza enquanto preenches</span></div>
+    <div class="ped-vazio" id="ped-card-empty" aria-live="polite">Preenche o peso, o medicamento e a indicação.</div>
+    <div class="ped-resultado" id="ped-card-resultado" style="display:none">
+      <div class="ped-frase">
+        <span class="ped-frase-med" id="ped-frase-med"></span>
+        <span class="ped-frase-dose" id="ped-frase-dose"></span>
+        <span class="ped-frase-dur" id="ped-frase-dur"></span>
+      </div>
+      <div class="ped-figuras" id="ped-chips-row"></div>
+      <div class="ped-nota" id="ped-obs-box"></div>
+      <div class="ped-botoes">
+        <button type="button" class="mgf-botao mgf-botao-principal ped-copiar" id="ped-btn-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Copiar receita</button>
+        <button type="button" class="mgf-botao" id="ped-imprimir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Imprimir</button>
+      </div>
+      <details class="ped-mais">
+        <summary>Detalhes do cálculo</summary>
+        <pre class="ped-receita" id="ped-rx-box"></pre>
+        <ul class="ped-detalhes" id="ped-detail-list"></ul>
+      </details>
+    </div>
+  </section>
+  </div>
+  </div>
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>INFARMED. Resumo das Características do Medicamento (RCM) das suspensões orais referidas.</li><li>DGS. Normas de orientação clínica sobre antibioterapia em ambulatório em idade pediátrica.</li><li>BNF for Children (BNFc), edição em vigor.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 8 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Doses%20pedi%C3%A1tricas%20%28v1.0%29&body=Ferramenta%3A%20Doses%20pedi%C3%A1tricas%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="apoio-a-prescricao.html">← Apoio à prescrição</a><a class="seguinte" href="farmacos-na-gravidez.html">Fármacos na gravidez →</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v1.0 · 2026-11-15</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+(function () {
+"use strict";
+/* Doses pediátricas — a base de dados e os cálculos são os da versão original.
+   Mudou só a ligação à página: identificadores com prefixo "ped-", mensagens no ecrã em vez de
+   abanar o campo, e o botão Copiar usa o MGF.copiar (funciona também sem ligação segura). */
+
+// ─── BASE DE DADOS ───────────────────────────────────────────────────────────
+// doseMin / doseMax / doseDefault: sempre na unidade de doseUnit
+// doseUnit: "mg/kg/toma" OU "mg/kg/dia" (a conversão é feita internamente)
+// maxMgKgDia: teto em mg/kg/dia (opcional)
+// maxDiaAbsoluto: teto absoluto em mg/dia
+const MEDS = {
+  paracetamol: {
+    nome: "Paracetamol", apresentacao: "Suspensão oral",
+    concentracoes: ["40"], concentracaoDefault: "40",
+    volumes: [100,150,200], unidade: "mg/ml",
+    indicacoes: {
+      "Febre / Analgesia": {
+        doseMin:5, doseMax:15, doseDefault:15, doseUnit:"mg/kg/toma",
+        maxMgKgDia:60, maxDiaAbsoluto:4000,
+        tomasDefault:3, duracaoDefault:3, tomasPermitidas:[3,4],
+        obs:"Administrar durante ou após as refeições. Manter hidratação adequada."
+      }
+    }
+  },
+  ibuprofeno: {
+    nome: "Ibuprofeno", apresentacao: "Suspensão oral",
+    concentracoes: ["20","40"], concentracaoDefault: "20",
+    volumes: [100,150,200], unidade: "mg/ml",
+    indicacoes: {
+      "Febre / Analgesia": {
+        doseMin:5, doseMax:10, doseDefault:10, doseUnit:"mg/kg/toma",
+        maxMgKgDia:30, maxDiaAbsoluto:1200,
+        tomasDefault:3, duracaoDefault:3, tomasPermitidas:[3,4],
+        obs:"Administrar com alimentos ou leite. Não usar em crianças < 3 meses ou com insuficiência renal."
+      }
+    }
+  },
+  amoxicilina: {
+    nome: "Amoxicilina", apresentacao: "Suspensão oral",
+    concentracoes: ["50","100"], concentracaoDefault: "100",
+    volumes: [100,150,200], unidade: "mg/ml",
+    indicacoes: {
+      "Otite Média Aguda": {
+        doseMin:80, doseMax:90, doseDefault:80, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:3000,
+        tomasDefault:2, duracaoDefault:5, tomasPermitidas:[2,3],
+        obs:"Dose alta (80-90 mg/kg/dia) recomendada como 1.ª linha para cobrir S. pneumoniae com resistência intermédia. Dividir em 2-3 tomas."
+      },
+      "Faringoamigdalite (GAS)": {
+        doseMin:40, doseMax:50, doseDefault:50, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1000,
+        tomasDefault:2, duracaoDefault:10, tomasPermitidas:[1,2],
+        obs:"10 dias de tratamento essenciais para erradicação do Streptococcus do grupo A e prevenção de febre reumática."
+      },
+      "Pneumonia (ambulatório)": {
+        doseMin:80, doseMax:100, doseDefault:80, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:3000,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[2,3],
+        obs:"Dose alta (80-100 mg/kg/dia) para cobrir S. pneumoniae com resistência intermédia. Reavaliar em 48-72h."
+      },
+      "Sinusite Bacteriana": {
+        doseMin:45, doseMax:90, doseDefault:80, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:3000,
+        tomasDefault:2, duracaoDefault:10, tomasPermitidas:[2,3],
+        obs:"Manter antibioterapia por pelo menos 7 dias após melhoria clínica."
+      },
+      "Infecção Urinária (baixa)": {
+        doseMin:30, doseMax:90, doseDefault:80, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:3000,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[2,3],
+        obs:"Confirmar sensibilidade em urocultura. Reavaliar antibiograma ao fim de 48-72h."
+      }
+    }
+  },
+  amoxicilina_ac: {
+    nome: "Amoxicilina + Ác. Clavulânico", apresentacao: "Suspensão oral (Duo 400/57)",
+    concentracoes: ["80"], concentracaoDefault: "80",
+    volumes: [70,100,140], unidade: "mg/ml amox.",
+    indicacoes: {
+      "Otite Média Aguda (2ª linha)": {
+        doseMin:40, doseMax:90, doseDefault:40, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1750,
+        tomasDefault:2, duracaoDefault:5, tomasPermitidas:[2],
+        obs:"Dose referida ao componente amoxicilina. Usar formulação 8:1 para posologia 2×/dia. Administrar no início das refeições."
+      },
+      "Sinusite Bacteriana (2ª linha)": {
+        doseMin:40, doseMax:90, doseDefault:45, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1750,
+        tomasDefault:2, duracaoDefault:10, tomasPermitidas:[2,3],
+        obs:"Útil quando falha de amoxicilina ou suspeita de S. aureus. Dose referida ao componente amoxicilina."
+      },
+      "Mordedura (profilaxia/tratamento)": {
+        doseMin:40, doseMax:40, doseDefault:40, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1750,
+        tomasDefault:3, duracaoDefault:5, tomasPermitidas:[3],
+        obs:"Cobertura para Pasteurella e anaeróbios. Lavar exaustivamente a ferida. Avaliar profilaxia antitetânica."
+      },
+      "Pneumonia (aspirativa)": {
+        doseMin:40, doseMax:50, doseDefault:50, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:2000,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[3],
+        obs:"Cobertura de anaeróbios na pneumonia aspirativa. Reavaliar em 48-72h."
+      }
+    }
+  },
+  azitromicina: {
+    nome: "Azitromicina", apresentacao: "Suspensão oral",
+    concentracoes: ["40"], concentracaoDefault: "40",
+    volumes: [15,22.5,30], unidade: "mg/ml",
+    indicacoes: {
+      "Faringoamigdalite (alergia Pen.)": {
+        doseMin:12, doseMax:12, doseDefault:12, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:500,
+        tomasDefault:1, duracaoDefault:5, tomasPermitidas:[1],
+        obs:"Administrar 1×/dia durante 5 dias. Atenção ao prolongamento do QT."
+      },
+      "Pneumonia Atípica": {
+        doseMin:5, doseMax:10, doseDefault:10, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:500,
+        tomasDefault:1, duracaoDefault:5, tomasPermitidas:[1],
+        obs:"Cobertura de Mycoplasma e Chlamydophila. Alguns protocolos: 10 mg/kg no 1.º dia, 5 mg/kg/dia nos dias 2-5."
+      },
+      "Coqueluche (tratamento/profilaxia)": {
+        doseMin:10, doseMax:10, doseDefault:10, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:500,
+        tomasDefault:1, duracaoDefault:5, tomasPermitidas:[1],
+        obs:"Tratamento precoce reduz transmissibilidade mas não altera curso clínico após fase catarral."
+      }
+    }
+  },
+  cefalexina: {
+    nome: "Cefalexina", apresentacao: "Suspensão oral",
+    concentracoes: ["25","50"], concentracaoDefault: "25",
+    volumes: [100,150,200], unidade: "mg/ml",
+    indicacoes: {
+      "Infecção cutânea / Impetigo": {
+        doseMin:25, doseMax:50, doseDefault:25, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:2000,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[3,4],
+        obs:"1ª linha para infecções de pele por S. aureus sensível à meticilina (MSSA). Não cobre MRSA."
+      },
+      "Infecção Urinária (baixa)": {
+        doseMin:25, doseMax:50, doseDefault:25, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:2000,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[3,4],
+        obs:"Confirmar sensibilidade em urocultura. Reavaliar antibiograma ao fim de 48-72h."
+      }
+    }
+  },
+  cefuroxima: {
+    nome: "Cefuroxima", apresentacao: "Suspensão oral",
+    concentracoes: ["25","50"], concentracaoDefault: "25",
+    volumes: [50,70,100], unidade: "mg/ml",
+    indicacoes: {
+      "Otite Média Aguda (2ª linha)": {
+        doseMin:20, doseMax:30, doseDefault:30, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1000,
+        tomasDefault:2, duracaoDefault:5, tomasPermitidas:[2],
+        obs:"Cefalosporina de 2ª geração. Administrar com alimentos para melhorar absorção."
+      },
+      "Sinusite Bacteriana (2ª linha)": {
+        doseMin:20, doseMax:30, doseDefault:30, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1000,
+        tomasDefault:2, duracaoDefault:10, tomasPermitidas:[2],
+        obs:"Alternativa quando falha de amoxicilina. Sabor amargo — pode misturar com sumo de fruta."
+      }
+    }
+  },
+  claritromicina: {
+    nome: "Claritromicina", apresentacao: "Suspensão oral",
+    concentracoes: ["25","50"], concentracaoDefault: "50",
+    volumes: [60,100], unidade: "mg/ml",
+    indicacoes: {
+      "Pneumonia Atípica": {
+        doseMin:15, doseMax:15, doseDefault:15, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:500,
+        tomasDefault:2, duracaoDefault:7, tomasPermitidas:[2],
+        obs:"Alternativa à azitromicina para Mycoplasma. Administrar 12/12h, com ou sem alimentos."
+      },
+      "Faringoamigdalite (alergia Pen.)": {
+        doseMin:15, doseMax:15, doseDefault:15, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:500,
+        tomasDefault:2, duracaoDefault:10, tomasPermitidas:[2],
+        obs:"Taxa de resistência de S. pyogenes em Portugal >15% — confirmar antibiograma se disponível."
+      }
+    }
+  },
+  cotrimoxazol: {
+    nome: "Cotrimoxazol (TMP-SMX)", apresentacao: "Suspensão oral",
+    concentracoes: ["8"], concentracaoDefault: "8",
+    volumes: [100,200], unidade: "mg/ml (TMP)",
+    indicacoes: {
+      "Infecção Urinária (baixa)": {
+        doseMin:4, doseMax:6, doseDefault:6, doseUnit:"mg/kg/dia (TMP)",
+        maxMgKgDia:null, maxDiaAbsoluto:320,
+        tomasDefault:2, duracaoDefault:7, tomasPermitidas:[2],
+        obs:"Dose referida ao componente TMP. Confirmar sensibilidade — resistência crescente em E. coli. Hidratação abundante."
+      },
+      "Pneumocistose (profilaxia)": {
+        doseMin:5, doseMax:5, doseDefault:5, doseUnit:"mg/kg/dia (TMP)",
+        maxMgKgDia:null, maxDiaAbsoluto:320,
+        tomasDefault:1, duracaoDefault:0, tomasPermitidas:[1],
+        obs:"Profilaxia em imunocomprometidos. Administrar 3×/semana (2.ª, 4.ª, 6.ª). Duração conforme orientação do especialista."
+      }
+    }
+  },
+  eritromicina: {
+    nome: "Eritromicina", apresentacao: "Suspensão oral",
+    concentracoes: ["25","50"], concentracaoDefault: "50",
+    volumes: [100,200], unidade: "mg/ml",
+    indicacoes: {
+      "Coqueluche (tratamento)": {
+        doseMin:40, doseMax:40, doseDefault:40, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:2000,
+        tomasDefault:4, duracaoDefault:14, tomasPermitidas:[4],
+        obs:"Alternativa mais antiga à azitromicina. Administrar com alimentos para reduzir intolerância GI."
+      }
+    }
+  },
+  flucloxacilina: {
+    nome: "Flucloxacilina", apresentacao: "Suspensão oral",
+    concentracoes: ["50"], concentracaoDefault: "50",
+    volumes: [100], unidade: "mg/ml",
+    indicacoes: {
+      "Infecção cutânea / Impetigo": {
+        doseMin:25, doseMax:50, doseDefault:25, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:2000,
+        tomasDefault:4, duracaoDefault:7, tomasPermitidas:[4],
+        obs:"1ª linha para infecções por S. aureus sensível (MSSA). Administrar em jejum (30 min antes das refeições)."
+      }
+    }
+  },
+  metronidazol: {
+    nome: "Metronidazol", apresentacao: "Suspensão oral",
+    concentracoes: ["25"], concentracaoDefault: "25",
+    volumes: [100,120], unidade: "mg/ml base",
+    indicacoes: {
+      "Giardíase": {
+        doseMin:15, doseMax:15, doseDefault:15, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1500,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[3],
+        obs:"Evitar álcool durante e 48h após. Pode causar sabor metálico. Administrar com alimentos."
+      },
+      "Infecção anaerobia": {
+        doseMin:20, doseMax:30, doseDefault:20, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:1500,
+        tomasDefault:3, duracaoDefault:7, tomasPermitidas:[3],
+        obs:"Duração conforme indicação clínica."
+      }
+    }
+  },
+  nitrofurantoina: {
+    nome: "Nitrofurantoína", apresentacao: "Suspensão oral",
+    concentracoes: ["5"], concentracaoDefault: "5",
+    volumes: [100,200], unidade: "mg/ml",
+    indicacoes: {
+      "Infecção Urinária (baixa)": {
+        doseMin:5, doseMax:7, doseDefault:5, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:300,
+        tomasDefault:4, duracaoDefault:7, tomasPermitidas:[4],
+        obs:"Apenas para IU baixa — não trata pielonefrite. Não usar < 1 mês ou insuficiência renal. Urina pode ficar amarelada."
+      }
+    }
+  },
+  fluconazol: {
+    nome: "Fluconazol", apresentacao: "Suspensão oral",
+    concentracoes: ["10","40"], concentracaoDefault: "10",
+    volumes: [35], unidade: "mg/ml",
+    indicacoes: {
+      "Candidíase oral": {
+        doseMin:3, doseMax:6, doseDefault:3, doseUnit:"mg/kg/toma",
+        maxMgKgDia:null, maxDiaAbsoluto:200,
+        tomasDefault:1, duracaoDefault:7, tomasPermitidas:[1],
+        obs:"Dose de carga 6 mg/kg no 1.º dia, depois 3 mg/kg/dia. Confirmar com médico."
+      }
+    }
+  },
+  prednisolona: {
+    nome: "Prednisolona", apresentacao: "Solução oral",
+    concentracoes: ["1","3"], concentracaoDefault: "3",
+    volumes: [30,100,200], unidade: "mg/ml",
+    indicacoes: {
+      "Croup (laringotraqueíte)": {
+        doseMin:1, doseMax:2, doseDefault:1, doseUnit:"mg/kg/toma",
+        maxMgKgDia:null, maxDiaAbsoluto:40,
+        tomasDefault:1, duracaoDefault:1, tomasPermitidas:[1],
+        obs:"Dose única. Pode repetir às 12h se necessário (raramente). Vigilância de agravamento respiratório."
+      },
+      "Asma (exacerbação)": {
+        doseMin:1, doseMax:2, doseDefault:1, doseUnit:"mg/kg/dia",
+        maxMgKgDia:null, maxDiaAbsoluto:40,
+        tomasDefault:1, duracaoDefault:3, tomasPermitidas:[1,2],
+        obs:"Manter 3-5 dias. Não necessita desmame se < 7 dias."
+      }
+    }
+  },
+  dexametasona: {
+    nome: "Dexametasona", apresentacao: "Solução oral / elixir",
+    concentracoes: ["0.1","0.4","2"], concentracaoDefault: "2",
+    volumes: [30,100], unidade: "mg/ml",
+    indicacoes: {
+      "Croup (laringotraqueíte)": {
+        doseMin:0.15, doseMax:0.6, doseDefault:0.15, doseUnit:"mg/kg/toma",
+        maxMgKgDia:null, maxDiaAbsoluto:10,
+        tomasDefault:1, duracaoDefault:1, tomasPermitidas:[1],
+        obs:"Dose única. Efeito prolongado (t½ longa). Alternativa à prednisolona com boa evidência no croup."
+      }
+    }
+  },
+  salbutamol_oral: {
+    nome: "Salbutamol (oral)", apresentacao: "Xarope",
+    concentracoes: ["0.4"], concentracaoDefault: "0.4",
+    volumes: [100,150,200], unidade: "mg/ml",
+    indicacoes: {
+      "Broncoespasmo": {
+        doseMin:0.1, doseMax:0.15, doseDefault:0.1, doseUnit:"mg/kg/toma",
+        maxMgKgDia:null, maxDiaAbsoluto:8,
+        tomasDefault:3, duracaoDefault:5, tomasPermitidas:[3,4],
+        obs:"Preferir via inalatória sempre que possível. Pode causar taquicardia e tremor."
+      }
+    }
+  }
+};
+
+// ─── ESTADO ──────────────────────────────────
+let tomasActivas = null;
+let doseActual   = null;   // valor actual no slider (na unidade de doseUnit)
+let indActual    = null;   // objecto indicação
+
+// ─── HELPERS ─────────────────────────────────
+const r1 = n => Math.round(n * 10) / 10;
+const r2 = n => Math.round(n * 100) / 100;
+// vírgula decimal no que se mostra (os cálculos usam os números)
+const vg = n => String(n).replace('.', ',');
+
+// Converte o valor do slider (na unidade de doseUnit) para mg/kg/toma
+function toMgKgToma(val, unit, tomas) {
+  return unit.includes('/dia') ? val / tomas : val;
+}
+
+// Devolve o teto efectivo em mg/dia (o mais restritivo)
+function calcMaxDia(ind, peso) {
+  let max = Infinity;
+  if (ind.maxDiaAbsoluto) max = Math.min(max, ind.maxDiaAbsoluto);
+  if (ind.maxMgKgDia)     max = Math.min(max, ind.maxMgKgDia * peso);
+  return max === Infinity ? null : max;
+}
+
+// ─── SLIDER ──────────────────────────────────
+function initSlider(ind) {
+  const block  = document.getElementById('ped-slider-block');
+  const slider = document.getElementById('ped-dose-slider');
+  const fixo   = (ind.doseMin === ind.doseMax);
+
+  if (fixo) { block.classList.remove('visible'); doseActual = ind.doseDefault; return; }
+
+  block.classList.add('visible');
+  // step: pequeno para valores decimais, 1 para valores inteiros altos
+  const step = ind.doseMax <= 1 ? 0.05 : ind.doseMax <= 15 ? 0.5 : 1;
+  slider.min   = ind.doseMin;
+  slider.max   = ind.doseMax;
+  slider.step  = step;
+  slider.value = ind.doseDefault;
+  doseActual   = ind.doseDefault;
+
+  // Labels dos extremos com a unidade simplificada
+  const unitShort = ind.doseUnit.replace('mg/kg/', '').replace(' (TMP)', '');
+  document.getElementById('ped-slider-min-label').textContent = vg(r2(ind.doseMin)) + ' ' + unitShort;
+  document.getElementById('ped-slider-max-label').textContent = vg(r2(ind.doseMax)) + ' ' + unitShort;
+  document.getElementById('ped-slider-unit').textContent = ' ' + ind.doseUnit;
+
+  updateSliderTrack(slider, ind);
+  renderSliderPills(ind);
+}
+
+function onSliderChange() {
+  const slider = document.getElementById('ped-dose-slider');
+  doseActual = parseFloat(slider.value);
+  document.getElementById('ped-slider-display').textContent = vg(r2(doseActual));
+  updateSliderTrack(slider, indActual);
+  renderSliderPills(indActual);
+}
+
+function updateSliderTrack(slider, ind) {
+  if (!ind) return;
+  const pct = ((parseFloat(slider.value) - ind.doseMin) / (ind.doseMax - ind.doseMin)) * 100;
+  slider.style.background = `linear-gradient(to right, var(--cor-verde-medio) ${pct}%, var(--cor-linha) ${pct}%)`;
+  document.getElementById('ped-slider-display').textContent = vg(r2(parseFloat(slider.value)));
+}
+
+function renderSliderPills(ind) {
+  const el = document.getElementById('ped-slider-pills');
+  if (!ind) { el.innerHTML = ''; return; }
+  const peso  = parseFloat(document.getElementById('ped-peso').value);
+  const tomas = tomasActivas || ind.tomasDefault;
+  const val   = doseActual ?? ind.doseDefault;
+  const mgKgToma = toMgKgToma(val, ind.doseUnit, tomas);
+  const doseDia  = mgKgToma * tomas;
+
+  if (!peso || peso <= 0) {
+    // Sem peso: mostra só o contexto mg/kg
+    const mgKgDia = mgKgToma * tomas;
+    el.innerHTML = `<span class="spill"><strong>${vg(r2(mgKgToma))} mg/kg/toma</strong>&nbsp;·&nbsp;${vg(r2(mgKgDia))} mg/kg/dia</span>`;
+    return;
+  }
+
+  const maxDia   = calcMaxDia(ind, peso);
+  const doseDiaMg  = Math.min(doseDia * peso, maxDia ?? Infinity);
+  const doseTomaMg = doseDiaMg / tomas;
+  const capped     = maxDia && (doseDia * peso) > maxDia;
+
+  let html = `<span class="spill"><strong>${vg(r2(mgKgToma))} mg/kg/toma</strong>&nbsp;·&nbsp;${vg(r2(mgKgToma * tomas))} mg/kg/dia</span>`;
+  html += `<span class="spill${capped ? ' capped' : ''}"><strong>${vg(r1(doseTomaMg))} mg/toma</strong> (${vg(peso)} kg)${capped ? ' (teto)' : ''}</span>`;
+  if (maxDia) html += `<span class="spill">teto: ${vg(r1(maxDia))} mg/dia</span>`;
+  el.innerHTML = html;
+}
+
+function onPesoChange() { if (indActual) renderSliderPills(indActual); }
+
+// ─── POPULAR SELECTS ─────────────────────────
+function onMedChange() {
+  const medKey  = document.getElementById('ped-medicamento').value;
+  const med     = MEDS[medKey];
+  const selInd  = document.getElementById('ped-indicacao');
+  const selConc = document.getElementById('ped-concentracao');
+  const selVol  = document.getElementById('ped-volume');
+
+  selInd.innerHTML  = '<option value="">— Indicação —</option>';
+  selConc.innerHTML = '';
+  document.getElementById('ped-card-resultado').style.display = 'none';
+  document.getElementById('ped-card-empty').style.display = '';
+  document.getElementById('ped-slider-block').classList.remove('visible');
+  tomasActivas = null; indActual = null; doseActual = null;
+  updateTomasBtns();
+  if (!med) return;
+
+  Object.keys(med.indicacoes).forEach(k => {
+    selInd.innerHTML += `<option value="${k}">${k}</option>`;
+  });
+  if (Object.keys(med.indicacoes).length === 1) {
+    selInd.value = Object.keys(med.indicacoes)[0];
+    onIndicacaoChange();
+  }
+
+  med.concentracoes.forEach(c => {
+    selConc.innerHTML += `<option value="${c}"${c===med.concentracaoDefault?' selected':''}>${c} ${med.unidade}</option>`;
+  });
+
+  selVol.innerHTML = '';
+  (med.volumes || [100,150,200]).forEach(v => {
+    selVol.innerHTML += `<option value="${v}"${v===200?' selected':''}>${v} ml</option>`;
+  });
+  if (!selVol.value && selVol.options.length) selVol.options[0].selected = true;
+}
+
+function onIndicacaoChange() {
+  const medKey = document.getElementById('ped-medicamento').value;
+  const indKey = document.getElementById('ped-indicacao').value;
+  if (!medKey || !indKey) return;
+  const ind = MEDS[medKey].indicacoes[indKey];
+  indActual  = ind;
+  doseActual = ind.doseDefault;
+  document.getElementById('ped-duracao').value = ind.duracaoDefault || 7;
+  setToma(ind.tomasDefault);
+  initSlider(ind);
+}
+
+// ─── TOMAS ───────────────────────────────────
+function setToma(n) {
+  tomasActivas = n;
+  updateTomasBtns();
+  if (indActual) renderSliderPills(indActual);
+}
+function updateTomasBtns() {
+  document.querySelectorAll('.ped-toma').forEach(b => {
+    const ativo = parseInt(b.dataset.n) === tomasActivas;
+    b.classList.toggle('active', ativo);
+    b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+  });
+}
+
+// ─── CALCULAR ────────────────────────────────
+function calcular() {
+  const pesoEl    = document.getElementById('ped-peso');
+  const medKey    = document.getElementById('ped-medicamento').value;
+  const indKey    = document.getElementById('ped-indicacao').value;
+  const concVal   = parseFloat(document.getElementById('ped-concentracao').value);
+  const volFrasco = parseFloat(document.getElementById('ped-volume').value);
+  const duracao   = parseInt(document.getElementById('ped-duracao').value);
+  const peso      = parseFloat(pesoEl.value);
+
+  if (!peso || peso <= 0) return falta('Indica o peso da criança.');
+  if (!medKey)            return falta('Escolhe o medicamento.');
+  if (!indKey)            return falta('Escolhe a indicação.');
+  if (!tomasActivas)      return falta('Escolhe o número de tomas por dia.');
+  if (!concVal)           return falta('Escolhe a concentração.');
+  const med  = MEDS[medKey];
+  const ind  = med.indicacoes[indKey];
+  const val  = doseActual ?? ind.doseDefault;
+
+  // Converter slider → mg/kg/toma
+  const mgKgToma = toMgKgToma(val, ind.doseUnit, tomasActivas);
+  let doseTomaMg = mgKgToma * peso;
+  let doseDiaMg  = doseTomaMg * tomasActivas;
+
+  // Aplicar teto
+  const maxDia  = calcMaxDia(ind, peso);
+  let limitada  = false;
+  if (maxDia && doseDiaMg > maxDia) {
+    doseDiaMg  = maxDia;
+    doseTomaMg = doseDiaMg / tomasActivas;
+    limitada   = true;
+  }
+  document.getElementById('ped-alert-max').classList.toggle('visible', limitada);
+
+  // Volume e frascos
+  const volToma       = doseTomaMg / concVal;
+  const mgFrasco      = concVal * volFrasco;
+  const duracaoFrasco = mgFrasco / doseDiaMg;
+  const nrFrascos     = Math.ceil(duracao / duracaoFrasco);
+  const intervalo     = {1:'24/24h',2:'12/12h',3:'8/8h',4:'6/6h'}[tomasActivas];
+  const volStr        = vg(volToma    % 1 === 0 ? volToma.toFixed(0)    : volToma.toFixed(1));
+  const mgStr         = vg(doseTomaMg % 1 === 0 ? doseTomaMg.toFixed(0) : doseTomaMg.toFixed(1));
+
+  // Descrição da dose usada
+  const doseLabel = ind.doseUnit.includes('/dia')
+    ? `${vg(r2(val))} ${ind.doseUnit} → ${vg(r2(mgKgToma))} mg/kg/toma`
+    : `${vg(r2(val))} ${ind.doseUnit}`;
+
+  // Prescrição
+  const rxLines = [
+    'Rp/',
+    med.nome,
+    `  ${med.apresentacao} ${vg(concVal)} ${med.unidade}`,
+    `  ${nrFrascos > 1 ? nrFrascos + ' frascos de ' : ''}${vg(volFrasco)} ml`,
+    '',
+    `  ${volStr} ml (${mgStr} mg) de ${intervalo}`,
+    `  durante ${duracao} dia${duracao>1?'s':''}`
+  ];
+
+  // Figuras do painel (os mesmos valores, arrumados como no mockup)
+  const figuras = [
+    { label:'Por toma',      value:`${mgStr} mg` },
+    { label:'Por dia',       value:`${vg(r1(doseDiaMg))} mg` },
+    { label:'Por kg e toma', value:`${vg(r2(mgKgToma))} mg` },
+    { label:'Frascos',       value:`${nrFrascos}`, extra:`1 frasco dura ${vg(r1(duracaoFrasco))} dias`, nivel: nrFrascos > 1 ? 'atencao' : '' }
+  ];
+
+  // Detalhes
+  const details = [
+    { l:'Peso',                 v:`${vg(peso)} kg` },
+    { l:'Dose utilizada',       v: doseLabel },
+    { l:'mg/kg/toma efetivo',  v:`${vg(r2(mgKgToma))} mg/kg/toma` },
+    { l:'mg/kg/dia efetivo',   v:`${vg(r2(mgKgToma * tomasActivas))} mg/kg/dia` },
+    { l:'Dose por toma',        v:`${mgStr} mg` },
+    { l:'Dose diária total',    v:`${vg(r1(doseDiaMg))} mg/dia` },
+  ];
+  if (limitada) details.push({ l:'Teto aplicado', v:`${vg(r1(maxDia))} mg/dia` });
+  details.push(
+    { l:'Concentração',         v:`${vg(concVal)} ${med.unidade}` },
+    { l:'Tomas diárias',        v:`${tomasActivas}× (${intervalo})` },
+    { l:'Duração',              v:`${duracao} dias` },
+    { l:'Duração 1 frasco',     v:`${vg(r1(duracaoFrasco))} dias` },
+    { l:'Frascos necessários',  v:`${nrFrascos}` }
+  );
+
+  // Render
+  document.getElementById('ped-rx-box').textContent = rxLines.join('\n');
+  document.getElementById('ped-chips-row').innerHTML = figuras.map(c =>
+    `<div class="ped-figura"${c.nivel ? ' data-nivel="' + c.nivel + '"' : ''}><span>${c.label}</span><b>${c.value}</b>${c.extra ? '<small>' + c.extra + '</small>' : ''}</div>`
+  ).join('');
+  document.getElementById('ped-frase-med').textContent = `${med.nome} · ${med.apresentacao.toLowerCase()} ${vg(concVal)} ${med.unidade} · ${nrFrascos > 1 ? nrFrascos + ' frascos de ' : ''}${vg(volFrasco)} ml`;
+  document.getElementById('ped-frase-dose').textContent = `${volStr} ml de ${intervalo.replace('h', ' h')}`;
+  document.getElementById('ped-frase-dur').textContent = `durante ${duracao} dia${duracao>1?'s':''}`;
+  document.getElementById('ped-detail-list').innerHTML = details.map(d =>
+    `<li><span>${d.l}</span><span>${d.v}</span></li>`
+  ).join('');
+
+  const obsBox = document.getElementById('ped-obs-box');
+  if (ind.obs) { obsBox.innerHTML = `<strong>Nota clínica:</strong> ${ind.obs}`; obsBox.classList.add('visible'); }
+  else obsBox.classList.remove('visible');
+
+  document.getElementById('ped-card-empty').style.display = 'none';
+  const cardRes = document.getElementById('ped-card-resultado');
+  cardRes.style.display = '';
+  rxTexto = rxLines.join('\n');
+}
+
+// ─── LIGAR À PÁGINA ─────────────────────────
+let rxTexto = '';
+function falta(msg) {
+  rxTexto = '';
+  document.getElementById('ped-alert-max').classList.remove('visible');
+  document.getElementById('ped-card-resultado').style.display = 'none';
+  const vazio = document.getElementById('ped-card-empty');
+  vazio.textContent = msg;
+  vazio.style.display = '';
+}
+function aviso(el, msg) {
+  document.querySelectorAll('#ferramenta [aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
+  if (el) el.setAttribute('aria-invalid', 'true');
+  document.getElementById('ped-mensagem').textContent = msg;
+  if (el && el.focus && el.tagName !== 'DIV') el.focus();
+}
+document.getElementById('ped-peso').addEventListener('input', onPesoChange);
+document.getElementById('ped-medicamento').addEventListener('change', onMedChange);
+document.getElementById('ped-indicacao').addEventListener('change', onIndicacaoChange);
+document.getElementById('ped-dose-slider').addEventListener('input', onSliderChange);
+document.querySelectorAll('.ped-toma').forEach(b => b.addEventListener('click', () => setToma(parseInt(b.dataset.n))));
+['input', 'change', 'click'].forEach(ev => document.getElementById('ped-dados').addEventListener(ev, () => calcular()));
+document.getElementById('ped-dados').addEventListener('submit', e => { e.preventDefault(); calcular(); });
+document.getElementById('ped-btn-copy').addEventListener('click', function () { if (rxTexto) MGF.copiar(rxTexto, this); });
+document.getElementById('ped-imprimir').addEventListener('click', () => window.print());
+
+onMedChange();
+})();
+</script>
+</body>
+</html>

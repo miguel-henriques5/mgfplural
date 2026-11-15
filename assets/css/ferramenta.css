@@ -1,0 +1,393 @@
+/* =====================================================================
+   MGF no Plural — componentes das ferramentas
+   Tudo dentro de .mgf-ferramenta. Usar estas classes antes de criar novas.
+   Requer tokens.css. Ver GUIA-DESIGN.md.
+   ===================================================================== */
+
+.mgf-ferramenta {
+  font-family: var(--letra-texto);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--cor-tinta);
+}
+.mgf-ferramenta *, .mgf-ferramenta *::before, .mgf-ferramenta *::after { box-sizing: border-box; }
+.mgf-ferramenta h2, .mgf-ferramenta h3, .mgf-ferramenta h4 {
+  font-family: var(--letra-titulo);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--cor-tinta);
+}
+.mgf-ferramenta p { margin: 0; }
+.mgf-ferramenta a { color: var(--cor-verde); }
+.mgf-ferramenta a:hover { color: var(--cor-verde-fundo); }
+.mgf-ferramenta :focus-visible { outline: 3px solid var(--cor-ambar); outline-offset: 2px; }
+.mgf-ferramenta .mgf-so-leitor {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Separadores (tabs) ---------- */
+.mgf-separadores {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 0 0 20px;
+}
+.mgf-separador {
+  font-family: var(--letra-texto); font-size: 15px; font-weight: 700;
+  background: var(--cor-branco); color: var(--cor-tinta);
+  border: 1.5px solid var(--cor-linha); border-radius: var(--raio-p);
+  padding: 9px 16px; min-height: 44px; cursor: pointer;
+  transition: border-color .2s, background .2s, transform .25s var(--mola);
+}
+.mgf-separador:hover { border-color: var(--cor-verde); transform: translateY(-1px); }
+.mgf-separador[aria-selected="true"] {
+  background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco);
+}
+.mgf-painel[hidden] { display: none; }
+
+/* ---------- Título de cada escala ---------- */
+.mgf-titulo-escala { margin: 0 0 16px; display: flex; flex-direction: column; gap: 4px; }
+.mgf-titulo-escala h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.025em; }
+.mgf-titulo-escala p { color: var(--cor-texto-2); font-size: 16px; }
+
+/* ---------- Cartões ---------- */
+.mgf-cartao {
+  background: var(--cor-branco); border: 1px solid var(--cor-linha-suave);
+  border-radius: var(--raio); margin: 0 0 12px; overflow: hidden;
+}
+.mgf-cartao-titulo {
+  font-family: var(--letra-titulo); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; line-height: 1.25;
+  padding: 14px 18px 4px; background: none; color: var(--cor-tinta);
+}
+.mgf-cartao-corpo { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+
+/* ---------- Opções (caixas e botões de opção) ---------- */
+.mgf-opcao {
+  position: relative; display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 12px; border-radius: var(--raio-p); cursor: pointer;
+  border: 1.5px solid transparent; user-select: none;
+  transition: background .15s, border-color .15s;
+}
+.mgf-opcao:hover { background: var(--cor-papel); border-color: var(--cor-linha); }
+.mgf-opcao input {
+  position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none;
+}
+.mgf-opcao-marca {
+  flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px;
+  border: 2px solid var(--cor-campo); border-radius: 6px; background: var(--cor-branco);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s, transform .25s var(--mola);
+}
+.mgf-opcao input[type="radio"] + .mgf-opcao-marca { border-radius: 50%; }
+.mgf-opcao input:focus-visible + .mgf-opcao-marca { outline: 3px solid var(--cor-ambar); outline-offset: 2px; }
+.mgf-opcao input:checked + .mgf-opcao-marca { background: var(--cor-verde); border-color: var(--cor-verde); transform: scale(1.08); }
+.mgf-opcao input[type="checkbox"]:checked + .mgf-opcao-marca::after {
+  content: ""; width: 6px; height: 11px; margin-top: -2px;
+  border: solid var(--cor-branco); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+}
+.mgf-opcao input[type="radio"]:checked + .mgf-opcao-marca::after {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cor-branco);
+}
+.mgf-opcao.marcada { background: var(--cor-menta-clara); border-color: var(--cor-menta); }
+.mgf-opcao-texto { flex: 1; font-size: 17px; line-height: 1.45; }
+.mgf-opcao-pontos {
+  flex: 0 0 auto; font-size: 15px; font-weight: 700;
+  color: var(--cor-verde); padding-top: 2px; white-space: nowrap;
+}
+.mgf-opcao-negativa .mgf-opcao-pontos { color: var(--clin-alerta); }
+.mgf-opcao-negativa { border-color: var(--cor-linha); }
+.mgf-separacao { height: 6px; }
+
+/* ---------- Resultado ---------- */
+.mgf-resultado {
+  background: var(--cor-branco); border: 2px solid var(--cor-verde);
+  border-radius: var(--raio-g); margin-top: 8px; overflow: hidden;
+}
+.mgf-resultado-topo {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 20px 4px; background: none; color: var(--cor-tinta);
+}
+.mgf-resultado-topo h3 { color: var(--cor-tinta); font-size: 20px; font-weight: 800; }
+.mgf-pontuacao { font-family: var(--letra-texto); font-size: 40px; font-weight: 700; line-height: 1; color: var(--cor-tinta); }
+.mgf-pontuacao small { font-size: 17px; font-weight: 400; color: var(--cor-texto-3); margin-left: 4px; }
+.mgf-resultado-corpo { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.mgf-barra { height: 8px; background: var(--cor-linha-suave); border-radius: 99px; overflow: hidden; }
+.mgf-barra > span { display: block; height: 100%; width: 0; background: var(--cor-verde-medio); border-radius: 99px; transition: width .4s var(--mola); }
+
+/* Interpretação: data-nivel = normal | atencao | alerta | info */
+.mgf-interp {
+  border-radius: var(--raio-p); padding: 12px 14px; font-size: 16px; line-height: 1.45;
+  border-left: 5px solid;
+}
+.mgf-interp[hidden] { display: none; }
+.mgf-interp[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal);  border-color: var(--clin-normal-borda); }
+.mgf-interp[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+.mgf-interp[data-nivel="elevado"] { background: var(--clin-elevado-fundo); color: var(--clin-elevado); border-color: var(--clin-elevado-borda); }
+.mgf-interp[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta);  border-color: var(--clin-alerta-borda); }
+.mgf-interp[data-nivel="info"]    { background: var(--clin-info-fundo);    color: var(--clin-info);    border-color: var(--clin-info-borda); }
+
+/* ---------- Tabelas ---------- */
+.mgf-tabela-caixa { overflow-x: auto; }
+.mgf-tabela { width: 100%; border-collapse: collapse; font-size: 15px; }
+.mgf-tabela th {
+  text-align: left; font-weight: 700; padding: 8px 12px;
+  background: var(--cor-papel); color: var(--cor-texto-2); border-bottom: 1.5px solid var(--cor-linha);
+}
+.mgf-tabela td { padding: 8px 12px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; }
+.mgf-tabela tr:last-child td { border-bottom: 0; }
+.mgf-nivel-normal  { color: var(--clin-normal);  font-weight: 700; }
+.mgf-nivel-atencao { color: var(--clin-atencao); font-weight: 700; }
+.mgf-nivel-elevado { color: var(--clin-elevado); font-weight: 700; }
+.mgf-nivel-alerta  { color: var(--clin-alerta);  font-weight: 700; }
+
+/* ---------- Nota ---------- */
+.mgf-nota {
+  background: var(--cor-papel); border-radius: var(--raio-p); padding: 12px 14px;
+  font-size: 15px; line-height: 1.5; color: var(--cor-texto-2);
+}
+.mgf-nota strong:first-child { color: var(--cor-tinta); }
+
+/* ---------- Referências dentro de uma escala ---------- */
+.mgf-refs { font-size: 13px; color: var(--cor-texto-3); line-height: 1.5; }
+.mgf-refs h4 { font-family: var(--letra-texto); font-size: 13px; font-weight: 700; color: var(--cor-texto-3); margin-bottom: 4px; }
+.mgf-refs ol { margin: 0; padding-left: 18px; }
+
+/* ---------- Botões ---------- */
+.mgf-botoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+.mgf-botao {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  font-family: var(--letra-texto); font-size: 15px; font-weight: 700;
+  padding: 10px 16px; border-radius: var(--raio-p); cursor: pointer;
+  background: var(--cor-branco); color: var(--cor-tinta); border: 1.5px solid var(--cor-tinta);
+  transition: transform .25s var(--mola), background .2s;
+}
+.mgf-botao:hover { transform: translateY(-2px); background: var(--cor-papel); }
+.mgf-botao-principal { background: var(--cor-verde); color: var(--cor-branco); border-color: var(--cor-verde); }
+.mgf-botao-principal:hover { background: var(--cor-verde-fundo); }
+.mgf-botao svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.mgf-botao.copiado { background: var(--clin-normal-fundo); border-color: var(--clin-normal); color: var(--clin-normal); }
+
+@media (max-width: 520px) {
+  .mgf-pontuacao { font-size: 32px; }
+  .mgf-titulo-escala h2 { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgf-ferramenta *, .mgf-ferramenta *::before, .mgf-ferramenta *::after { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .mgf-separadores, .mgf-botoes, .mgf-espera { display: none !important; }
+  .mgf-bancada { display: block !important; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
+  .mgf-painel[hidden] { display: none !important; }
+  .mgf-cartao, .mgf-resultado { break-inside: avoid; }
+  .mgf-opcao:not(.marcada) { color: var(--cor-texto-3); }
+  .mgf-ferramenta * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Cartões que são grupos de perguntas (fieldset + legend) */
+.mgf-ferramenta fieldset.mgf-cartao { padding: 0; min-width: 0; border-width: 1px; border-style: solid; }
+.mgf-ferramenta legend.mgf-cartao-titulo { float: left; width: 100%; margin: 0; }
+.mgf-ferramenta legend.mgf-cartao-titulo + .mgf-cartao-corpo,
+.mgf-ferramenta legend + .mgf-cartao-titulo + .mgf-cartao-corpo { clear: both; }
+.mgf-ferramenta legend.mgf-so-leitor { float: left; }
+
+/* Opções lado a lado (p. ex. pontuações 0–3 de um item) */
+.mgf-cartao-corpo.mgf-em-linha { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+.mgf-em-linha .mgf-opcao { flex: 1 1 52px; gap: 8px; padding: 10px 8px; justify-content: center; align-items: center; border-color: var(--cor-linha); }
+.mgf-em-linha .mgf-opcao-texto { flex: 0 0 auto; font-weight: 700; }
+
+/* Aviso de direitos de autor dentro de uma escala */
+.mgf-direitos { background: var(--clin-info-fundo); color: var(--clin-info); border-radius: var(--raio-p); padding: 12px 14px; font-size: 15px; line-height: 1.5; margin: 0 0 12px; }
+.mgf-direitos a { color: var(--clin-info); font-weight: 700; }
+
+/* Campos numéricos e de data */
+.mgf-campo { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 700; }
+.mgf-campo input, .mgf-campo select {
+  font-family: var(--letra-texto); font-size: 16px; font-weight: 400; color: var(--cor-tinta);
+  min-height: 48px; padding: 8px 14px; border: 1.5px solid var(--cor-campo); border-radius: 12px; background: var(--cor-branco);
+  font-size: 17px; box-sizing: border-box;
+}
+.mgf-campo input:focus, .mgf-campo select:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+.mgf-campo small { font-weight: 400; color: var(--cor-texto-3); font-size: 13px; }
+.mgf-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+
+/* Etiquetas de nível (p. ex. em tabelas de fármacos) */
+.mgf-etiqueta { display: inline-block; font-size: 13px; font-weight: 700; line-height: 1.3; padding: 3px 8px; border-radius: 6px; white-space: nowrap; border: 1px solid; }
+.mgf-etiqueta[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal);  border-color: var(--clin-normal-borda); }
+.mgf-etiqueta[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+.mgf-etiqueta[data-nivel="elevado"] { background: var(--clin-elevado-fundo); color: var(--clin-elevado); border-color: var(--clin-elevado-borda); }
+.mgf-etiqueta[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta);  border-color: var(--clin-alerta-borda); }
+.mgf-etiqueta[data-nivel="info"]    { background: var(--clin-info-fundo);    color: var(--clin-info);    border-color: var(--clin-info-borda); }
+
+/* Resumo de resultados em caixas (p. ex. TFGe, UACR, risco) */
+.mgf-resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.mgf-resumo > div { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-left: 5px solid var(--cor-linha); border-radius: var(--raio-p); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.mgf-resumo > div[data-nivel="normal"]  { border-left-color: var(--clin-normal-borda); }
+.mgf-resumo > div[data-nivel="atencao"] { border-left-color: var(--clin-atencao-borda); }
+.mgf-resumo > div[data-nivel="elevado"] { border-left-color: var(--clin-elevado-borda); }
+.mgf-resumo > div[data-nivel="alerta"]  { border-left-color: var(--clin-alerta-borda); }
+.mgf-resumo-rotulo { font-size: 14px; font-weight: 700; color: var(--cor-texto-3); }
+.mgf-resumo-valor { font-size: 26px; font-weight: 700; line-height: 1.15; }
+.mgf-resumo-sub { font-size: 14px; color: var(--cor-texto-2); }
+
+/* Grupo de botões de escolha (filtros) */
+.mgf-filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+.mgf-filtros button { font-family: var(--letra-texto); font-size: 14px; font-weight: 700; min-height: 40px; padding: 7px 12px; border-radius: var(--raio-p); border: 1.5px solid var(--cor-linha); background: var(--cor-branco); color: var(--cor-tinta); cursor: pointer; }
+.mgf-filtros button[aria-pressed="true"] { background: var(--cor-verde); border-color: var(--cor-verde); color: var(--cor-branco); }
+
+/* Aviso importante dentro de uma ferramenta */
+.mgf-aviso { background: var(--clin-alerta-fundo); color: var(--clin-alerta); border-left: 5px solid var(--clin-alerta-borda); border-radius: var(--raio-p); padding: 12px 14px; font-size: 15px; line-height: 1.5; }
+.mgf-mensagem { color: var(--clin-alerta); font-weight: 700; font-size: 15px; }
+.mgf-mensagem:empty { display: none; }
+
+/* =====================================================================
+   Guias de consulta (antibioterapia, prescrição, exames…)
+   Pesquisa, filtros, secções, cartões que abrem e fecham, notas e rótulos.
+   ===================================================================== */
+.mgf-guia-intro { color: var(--cor-texto-2); font-size: 17px; margin: 0 0 14px; }
+.mgf-guia-controlos { display: flex; flex-direction: column; gap: 10px; margin: 0 0 20px; }
+
+/* Caixa de pesquisa com lupa */
+.mgf-pesquisa { position: relative; display: block; }
+.mgf-pesquisa svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--cor-texto-3); pointer-events: none; }
+.mgf-pesquisa input {
+  width: 100%; font-family: var(--letra-texto); font-size: 16px; color: var(--cor-tinta);
+  min-height: 48px; padding: 10px 14px 10px 42px; border: 1.5px solid var(--cor-campo);
+  border-radius: var(--raio); background: var(--cor-branco);
+}
+.mgf-pesquisa input:focus { outline: 3px solid var(--cor-menta); border-color: var(--cor-verde); }
+
+/* Secções de um guia */
+.mgf-seccao { margin: 0 0 24px; }
+.mgf-seccao[hidden] { display: none; }
+.mgf-seccao-titulo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1.5px solid var(--cor-linha); }
+.mgf-seccao-titulo h3 { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; }
+.mgf-seccao-titulo span { font-size: 15px; color: var(--cor-texto-3); }
+.mgf-grelha { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+/* Cartão que abre e fecha (botão com aria-expanded + corpo com hidden) */
+.mgf-dobra { background: var(--cor-branco); border: 1px solid var(--cor-linha-suave); border-radius: var(--raio); overflow: hidden; }
+.mgf-dobra[hidden] { display: none; }
+.mgf-dobra-topo {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px;
+  padding: 13px 18px; margin: 0; border: 0; background: var(--cor-branco); color: var(--cor-tinta);
+  font-family: var(--letra-texto); font-size: 16px; cursor: pointer; transition: background .15s;
+}
+.mgf-dobra-topo:hover { background: var(--cor-papel); }
+.mgf-dobra-topo[aria-expanded="true"] { background: var(--cor-papel); }
+.mgf-dobra:has(> .mgf-dobra-topo[aria-expanded="true"]) { border-color: var(--cor-menta); }
+.mgf-dobra-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mgf-dobra-titulo { font-family: var(--letra-titulo); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; line-height: 1.2; }
+.mgf-dobra-sub { font-size: 15px; color: var(--cor-texto-3); line-height: 1.4; }
+.mgf-dobra-seta { width: 20px; height: 20px; flex: 0 0 auto; color: var(--cor-verde); transition: transform .25s var(--mola); }
+.mgf-dobra-topo[aria-expanded="true"] .mgf-dobra-seta { transform: rotate(180deg); }
+.mgf-dobra-corpo { padding: 14px 18px 18px; border-top: 1px solid var(--cor-linha-suave); display: flex; flex-direction: column; gap: 12px; }
+.mgf-dobra-corpo[hidden] { display: none; }
+
+/* Sem resultados */
+.mgf-vazio { text-align: center; padding: 28px 16px; color: var(--cor-texto-3); background: var(--cor-branco); border: 1.5px dashed var(--cor-linha); border-radius: var(--raio); }
+.mgf-vazio[hidden] { display: none; }
+
+/* Notas com tom: atenção (âmbar), info (azul) e realce da marca (menta) */
+.mgf-nota[data-nivel] { border-left: 5px solid; }
+.mgf-nota[data-nivel="atencao"] { background: var(--clin-atencao-fundo); color: var(--clin-atencao); border-color: var(--clin-atencao-borda); }
+.mgf-nota[data-nivel="info"]    { background: var(--clin-info-fundo);    color: var(--clin-info);    border-color: var(--clin-info-borda); }
+.mgf-nota[data-nivel="alerta"]  { background: var(--clin-alerta-fundo);  color: var(--clin-alerta);  border-color: var(--clin-alerta-borda); }
+.mgf-nota[data-nivel="normal"]  { background: var(--clin-normal-fundo);  color: var(--clin-normal);  border-color: var(--clin-normal-borda); }
+.mgf-nota[data-tom="menta"] { background: var(--cor-menta-clara); color: var(--cor-verde-fundo); border-left: 5px solid var(--cor-verde-medio); }
+.mgf-nota[data-nivel] strong:first-child, .mgf-nota[data-tom] strong:first-child { color: inherit; }
+
+/* Rótulos neutros (população, via, tipo). Não têm significado clínico. */
+.mgf-rotulo { display: inline-block; font-size: 13px; font-weight: 700; line-height: 1.3; padding: 2px 8px; border-radius: 6px; white-space: nowrap; background: var(--cor-papel); color: var(--cor-texto-2); border: 1px solid var(--cor-linha); }
+.mgf-rotulo[data-tom="menta"] { background: var(--cor-menta-clara); color: var(--cor-verde-fundo); border-color: var(--cor-menta); }
+.mgf-rotulo[data-tom="ambar"] { background: var(--cor-ambar-claro); color: var(--cor-ambar-texto); border-color: var(--cor-mostarda); }
+.mgf-rotulo[data-tom="areia"] { background: var(--cor-areia); color: var(--cor-tinta); border-color: var(--cor-linha); }
+
+/* Fármacos dentro de tabelas */
+.mgf-farmaco { font-weight: 700; color: var(--cor-tinta); }
+.mgf-farmaco-alt { font-weight: 700; color: var(--cor-texto-2); }
+.mgf-ou { display: block; font-style: italic; font-size: 13px; color: var(--cor-texto-3); margin: 2px 0; }
+
+@media print {
+  .mgf-guia-controlos, .mgf-vazio { display: none !important; }
+  .mgf-dobra { break-inside: avoid; }
+  .mgf-dobra-seta { display: none; }
+}
+
+
+/* =====================================================================
+   Bancada (proposta B, aprovada a 2026-11-10): comandos à esquerda, resposta à direita.
+   <div class="mgf-bancada">            calculadora: perguntas largas, resultado estreito e sempre à vista
+   <div class="mgf-bancada mgf-bancada-guia">   guia: pesquisa, filtros ou capítulos numa coluna estreita
+     <div class="mgf-comandos"> … </div>
+     <div class="mgf-resposta"> … </div>
+   </div>
+   No telemóvel passa a uma só coluna. Quando a bancada não faz sentido, a ferramenta usa
+   "corpo": "coluna" na ficha (proposta C: uma coluna, uma pergunta de cada vez).
+   ===================================================================== */
+.mgf-bancada {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: 28px; align-items: start;
+}
+.mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.mgf-bancada > .mgf-comandos > *, .mgf-bancada > .mgf-resposta > * { margin-top: 0; margin-bottom: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-resultado { margin-top: 0; }
+.mgf-bancada:not(.mgf-bancada-guia) > .mgf-resposta .mgf-botoes { margin-top: 0; }
+
+.mgf-bancada-guia { grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); }
+.mgf-bancada-guia > .mgf-comandos {
+  position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 2px;
+}
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-intro { font-size: 15px; color: var(--cor-texto-3); }
+.mgf-bancada-guia > .mgf-comandos .mgf-nota { font-size: 14px; }
+.mgf-bancada-guia > .mgf-comandos .mgf-guia-controlos { gap: 14px; }
+
+/* Separadores e filtros na coluna da esquerda: lista vertical */
+.mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: column; flex-wrap: nowrap; gap: 2px; margin: 0; }
+.mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button {
+  justify-content: flex-start; text-align: left; width: 100%; min-height: 42px; padding: 8px 12px;
+  border: 0; border-radius: 10px; background: none; font-size: 16px; font-weight: 400; color: var(--cor-tinta);
+}
+.mgf-comandos .mgf-separador:hover, .mgf-comandos .mgf-filtros button:hover { background: var(--cor-branco); transform: none; }
+.mgf-comandos .mgf-separador[aria-selected="true"], .mgf-comandos .mgf-filtros button[aria-pressed="true"] {
+  background: var(--cor-verde); color: var(--cor-branco); font-weight: 700;
+}
+
+/* Lugar do resultado antes de haver resultado (fica escondido quando o elemento anterior aparece) */
+.mgf-espera { display: none; }
+[hidden] + .mgf-espera {
+  display: block; text-align: center; padding: 28px 16px; color: var(--cor-texto-3); font-size: 16px;
+  border: 1.5px dashed var(--cor-linha); border-radius: var(--raio);
+}
+
+/* Pergunta grande (proposta C) */
+.mgf-ferramenta .mgf-pergunta { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.12; margin: 8px 0 24px; }
+
+@media (max-width: 900px) {
+  .mgf-bancada, .mgf-bancada-guia { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .mgf-bancada > .mgf-comandos, .mgf-bancada > .mgf-resposta { position: static !important; max-height: none !important; overflow: visible !important; }
+  .mgf-comandos .mgf-separadores, .mgf-comandos .mgf-filtros { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .mgf-comandos .mgf-separador, .mgf-comandos .mgf-filtros button { width: auto; border: 1.5px solid var(--cor-linha); background: var(--cor-branco); font-size: 15px; }
+}
+
+/* Aviso clínico: no fim da coluna dos comandos (proposta B) */
+.aviso-clinico { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; font-family: var(--letra-texto); font-size: 14px; line-height: 1.35; color: var(--cor-texto-3); }
+.aviso-clinico svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+.mgf-ferramenta > .aviso-clinico { margin: 0 0 14px; }
+
+/* Caixas de seleção como no mockup: linha leve e uma só seta para baixo */
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]) {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  min-height: 48px; padding: 0 44px 0 14px; box-sizing: border-box;
+  border: 1.5px solid var(--cor-campo); border-radius: 12px;
+  background: var(--cor-branco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2313201E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center / 18px 18px;
+  font-family: var(--letra-texto); font-size: 17px; font-weight: 400; line-height: 1.3; color: var(--cor-tinta); cursor: pointer;
+}
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):hover { border-color: var(--cor-verde-medio); }
+html #ferramenta.mgf-ferramenta select:not([multiple]):not([size]):focus { outline: 3px solid var(--cor-menta); outline-offset: 0; border-color: var(--cor-verde); }
+html #ferramenta.mgf-ferramenta select:disabled { background-color: var(--cor-papel); color: var(--cor-texto-3); cursor: not-allowed; }

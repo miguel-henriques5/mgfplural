@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="pt-PT" data-raiz="../../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Calculadora AMPA · MGF no Plural</title>
+<meta name="description" content="Média da automedição da pressão arterial no domicílio (AMPA): regista as medições da manhã e da noite, exclui o 1.º dia e compara a média com o limiar de hipertensão (135/85 mmHg), com folha para imprimir.">
+<link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/ferramenta.css">
+<style>
+/* Calculadora AMPA — a partir do original (bloco do Squarespace), em proposta B. */
+#ferramenta .ampa-registo { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; align-items: end; }
+#ferramenta .ampa-registo .ampa-data { grid-column: span 2; }
+#ferramenta .ampa-registo .mgf-botao { margin: 0; min-height: 46px; justify-content: center; }
+#ferramenta .mgf-campo small { display: inline; }
+#ferramenta .ampa-opcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; align-items: end;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cor-linha-suave); }
+#ferramenta .ampa-check { align-self: center; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+#ferramenta .ampa-check input { width: 20px; height: 20px; margin: 0; accent-color: var(--cor-verde); flex: none; }
+#ferramenta .ampa-tabela td, #ferramenta .ampa-tabela th { white-space: nowrap; }
+#ferramenta .ampa-tabela .ampa-ta { font-weight: 700; font-variant-numeric: tabular-nums; }
+#ferramenta .ampa-tabela tr.excluida td:not(.ampa-acao) { color: var(--cor-texto-3); text-decoration: line-through; }
+#ferramenta .ampa-tabela .ampa-acao { text-align: right; width: 1%; }
+#ferramenta .ampa-excl { display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 10px;
+  background: var(--clin-atencao-fundo); color: var(--clin-atencao); text-decoration: none; }
+#ferramenta .ampa-apagar { font: inherit; font-size: 14px; font-weight: 700; background: none; border: 1px solid var(--cor-linha); color: var(--cor-texto-2);
+  border-radius: var(--raio-p); padding: 4px 10px; cursor: pointer; }
+#ferramenta .ampa-apagar:hover { border-color: var(--clin-alerta-borda); color: var(--clin-alerta); background: var(--clin-alerta-fundo); }
+#ferramenta .ampa-vazio { text-align: center; color: var(--cor-texto-3); padding: 18px 8px; white-space: normal; }
+#ferramenta .ampa-limpar.armado { border-color: var(--clin-alerta-borda); color: var(--clin-alerta); background: var(--clin-alerta-fundo); }
+#ferramenta .ampa-media { font-variant-numeric: tabular-nums; }
+#ferramenta .ampa-media-sub { font-size: 15px; color: var(--cor-texto-2); margin: 6px 0 0; }
+#ferramenta .mgf-resumo { margin-top: 14px; }
+#ferramenta .mgf-resumo-valor { font-variant-numeric: tabular-nums; }
+#ferramenta .mgf-resultado-corpo > * + * { margin-top: 12px; }
+#ferramenta .ampa-so-impressao { display: none; }
+
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+  #ferramenta .ampa-so-impressao { display: block; }
+  #ferramenta .ampa-impressao-topo { border-bottom: 2px solid var(--cor-verde); padding-bottom: 6px; margin-bottom: 10px; }
+  #ferramenta .ampa-impressao-topo h2 { font-family: var(--letra-titulo); font-size: 22px; margin: 0; }
+  #ferramenta .ampa-impressao-topo p { margin: 2px 0 0; color: var(--cor-texto-2); font-size: 13px; }
+  #ferramenta .ampa-utente { display: flex; justify-content: space-between; gap: 12px; background: var(--cor-menta-clara); border-radius: 6px;
+    padding: 6px 10px; margin: 0 0 10px; font-size: 13px; }
+  #ferramenta .ampa-nao-imprimir, #ferramenta .ampa-acao { display: none !important; }
+  #ferramenta .mgf-bancada { display: flex !important; flex-direction: column-reverse; gap: 10px; }
+  #ferramenta .mgf-bancada > .mgf-comandos, #ferramenta .mgf-bancada > .mgf-resposta { width: 100% !important; max-width: none !important; }
+  #ferramenta .mgf-cartao { break-inside: auto !important; box-shadow: none !important; }
+  #ferramenta .ampa-tabela tr { break-inside: avoid; }
+  #ferramenta .mgf-resultado-corpo { gap: 6px; padding: 8px 14px 10px; }
+  #ferramenta .mgf-resultado-corpo > * + * { margin-top: 0; }
+  #ferramenta .mgf-resumo { margin-top: 0; }
+  #ferramenta .mgf-resultado-topo { padding: 8px 14px 6px !important; }
+  #ferramenta .mgf-resumo { gap: 8px; }
+  #ferramenta .mgf-resumo > div { padding: 6px 10px; }
+  #ferramenta .mgf-resumo-rotulo, #ferramenta .mgf-resumo-sub, #ferramenta .ampa-media-sub { font-size: 12px; }
+  #ferramenta .mgf-interp, #ferramenta .mgf-nota { font-size: 12px; padding: 6px 10px; line-height: 1.4; }
+  #ferramenta .mgf-cartao-titulo { font-size: 14px; padding-top: 8px; padding-bottom: 6px; }
+  #ferramenta .ampa-tabela td, #ferramenta .ampa-tabela th { padding: 1px 8px; line-height: 1.25; font-size: 11.5px; }
+  #ferramenta .ampa-tabela { font-size: 12px; }
+  #ferramenta .mgf-resumo-valor { font-size: 20px; }
+  #ferramenta .mgf-pontuacao { font-size: 30px; }
+}
+</style>
+</head>
+<body data-ferramenta="calculadora-ampa" data-titulo="Calculadora AMPA" data-impressao="doente">
+<a class="saltar" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo"><div class="contentor">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<nav class="nav-principal" aria-label="Principal">
+<details class="menu-ferramentas ativo"><summary>Ferramentas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="menu-painel"><div class="menu-painel-interior"><div><a class="menu-area-titulo" href="../../../ferramentas/recursos-medicos/index.html"><img src="../../../assets/img/icones/medico.svg" alt="">Recursos médicos →</a><div class="menu-grupos"><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/index.html"><img src="../../../assets/img/icones/escala.svg" alt="">Escalas e calculadoras</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/planificacao-vigilancia-gravidez.html">Planificação da vigilância da gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-cardiovasculares.html">Escalas cardiovasculares</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-doencas-respiratorias.html">Escalas de doenças respiratórias</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-saude-mental.html">Escalas de saúde mental</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/escalas-e-calculadoras/escalas-urologia-nefrologia.html">Escalas de urologia e nefrologia</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/index.html"><img src="../../../assets/img/icones/comprimidos.svg" alt="">Ferramentas de prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-antibioterapia.html">Guia de antibioterapia</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/apoio-a-prescricao.html">Apoio à prescrição</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/doses-pediatricas.html">Doses pediátricas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/farmacos-na-gravidez.html">Fármacos na gravidez</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/ferramentas-de-prescricao/guia-terapeutico.html">Guia terapêutico</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/interpretar-exames/index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/interpretar-analises.html">Análises clínicas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecg-e-holter.html">ECG e Holter</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/espirometria.html">Espirometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/audiograma-e-timpanograma.html">Audiograma e timpanograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecocardiograma.html">Ecocardiograma</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/tc-cerebral-e-coluna.html">TC cerebral e da coluna</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/interpretar-exames/calculadora-ampa.html">Calculadora AMPA</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/programas-e-valencias/index.html"><img src="../../../assets/img/icones/programas.svg" alt="">Programas e valências</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/saude-infantil.html" target="_blank" rel="noopener">Saúde infantil e juvenil ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/programas-e-valencias/vigilancia-gravidez.html" target="_blank" rel="noopener">Vigilância da gravidez ↗</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/cabulas/index.html"><img src="../../../assets/img/icones/folheto.svg" alt="">Cábulas</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/menopausa.html">Menopausa</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/cabulas/osteoporose.html">Osteoporose</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/canivete/index.html"><img src="../../../assets/img/icones/checklist.svg" alt="">Canivete</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/pesquisa-icpc2.html">Pesquisa de códigos ICPC-2</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/consulta-resultados-exames.html">Consulta rápida de resultados</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/formulario-referenciacao.html">Formulário de referenciação</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/construir-horario.html">Construir horário</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/canivete/combinar-listas.html">Combinar listas de Excel</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/index.html"><img src="../../../assets/img/icones/nota-soap.svg" alt="">Registo e vigilância</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/nota-soap.html" target="_blank" rel="noopener">Nota SOAP ↗</a><a class="menu-ligacao" href="../../../ferramentas/recursos-medicos/registo-e-vigilancia/vigilancia-mgf.html" target="_blank" rel="noopener">Vigilância MGF ↗</a></div><div><a class="menu-grupo-titulo" href="../../../ferramentas/recursos-medicos/recursos-externos/index.html"><img src="../../../assets/img/icones/sites.svg" alt="">Recursos externos</a><a class="menu-ligacao" href="https://www.pocusmgf.com/" target="_blank" rel="noopener noreferrer">POCUS MGF ↗</a></div></div></div><div class="menu-lateral"><span class="etiqueta-mono">Outras áreas</span><a class="menu-outra-area" href="../../../ferramentas/recursos-de-enfermagem/index.html"><img src="../../../assets/img/icones/enfermagem.svg" alt=""><span>Recursos de enfermagem</span></a><a class="menu-outra-area" href="../../../ferramentas/documentacao/index.html"><img src="../../../assets/img/icones/pasta.svg" alt=""><span>Documentação</span></a><a class="menu-outra-area" href="../../../ferramentas/mapa-de-recursos/index.html"><img src="../../../assets/img/icones/mapa.svg" alt=""><span>Mapa de recursos</span></a><a class="menu-outra-area" href="../../../ferramentas/plataforma-de-indicadores/index.html"><img src="../../../assets/img/icones/indicadores.svg" alt=""><span>Plataforma de indicadores</span></a></div></div></div></details>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html">Acerca</a>
+<a class="botao-escuro" href="../../../acerca.html#offline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Usar offline</a>
+</nav>
+</div></header>
+<div class="contentor ferramenta-pagina pagina-tom-areia">
+<nav class="migalhas-ferramenta" aria-label="Estás aqui">
+<ol class="migalhas">
+<li><a href="../../../index.html">Início</a></li>
+<li><a href="../index.html">Recursos médicos</a></li>
+<li><details class="grupo-menu"><summary>Interpretar exames <span>· 8</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
+<div class="grupo-menu-painel"><a class="grupo-menu-titulo" href="index.html"><img src="../../../assets/img/icones/analises.svg" alt="">Interpretar exames</a>
+<ul><li><a href="interpretar-analises.html">Análises clínicas</a></li><li><a href="ecg-e-holter.html">ECG e Holter</a></li><li><a href="espirometria.html">Espirometria</a></li><li><a href="audiograma-e-timpanograma.html">Audiograma e timpanograma</a></li><li><a href="ecocardiograma.html">Ecocardiograma</a></li><li><a href="ecografia-renal-vesical-urofluxometria.html">Ecografia renal e vesical e urofluxometria</a></li><li><a href="tc-cerebral-e-coluna.html">TC cerebral e da coluna</a></li><li><a href="calculadora-ampa.html" aria-current="page">Calculadora AMPA</a></li></ul></div></details></li>
+</ol>
+</nav>
+<header class="ficha" id="conteudo">
+<img class="ficha-ilustracao" src="../../../assets/img/icones/tensiometro.svg" alt="">
+<div class="ficha-titulo">
+<h1>Calculadora AMPA</h1>
+<p class="ficha-meta">Média da automedição da PA e limiar de HTA · <strong>Miguel Henriques</strong> · v1.0 · 15 nov 2026</p>
+</div>
+<div class="ficha-acoes">
+<a class="botao" href="../../../descarregar/calculadora-ampa.html" download="calculadora-ampa.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg>Descarregar</a>
+<a class="botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Calculadora%20AMPA%20%28v1.0%29&body=Ferramenta%3A%20Calculadora%20AMPA%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Feedback</a>
+</div>
+</header>
+<div class="area-ferramenta corpo-bancada">
+<main class="mgf-ferramenta" id="ferramenta">
+
+  <div class="ampa-so-impressao">
+    <div class="ampa-impressao-topo"><h2>Automedição da pressão arterial (AMPA)</h2><p>Média das medições feitas no domicílio</p></div>
+    <div class="ampa-utente"><span>Utente: <strong id="printName">—</strong></span><span>Data de emissão: <strong id="printDate"></strong></span></div>
+  </div>
+
+  <div class="mgf-bancada">
+  <div class="mgf-comandos">
+
+    <div class="mgf-cartao ampa-nao-imprimir">
+      <div class="mgf-cartao-titulo">Registar medição</div>
+      <div class="mgf-cartao-corpo">
+        <div class="ampa-registo">
+          <label class="mgf-campo ampa-data"><span>Data <small>(opcional)</small></span><input type="date" id="inDate"></label>
+          <label class="mgf-campo">Período
+            <select id="inPer">
+              <option value="M">Manhã</option>
+              <option value="N">Noite</option>
+            </select>
+          </label>
+          <label class="mgf-campo"><span>Sistólica <small>mmHg</small></span><input type="number" id="inSys" inputmode="numeric" min="50" max="300"></label>
+          <label class="mgf-campo"><span>Diastólica <small>mmHg</small></span><input type="number" id="inDia" inputmode="numeric" min="30" max="200"></label>
+          <label class="mgf-campo"><span>Pulso <small>bpm (opc.)</small></span><input type="number" id="inPul" inputmode="numeric" min="30" max="220"></label>
+          <button type="button" class="mgf-botao mgf-botao-principal" id="btnAdd">Adicionar</button>
+        </div>
+        <p class="mgf-mensagem" id="msg" role="alert"></p>
+        <div class="ampa-opcoes">
+          <label class="ampa-check"><input type="checkbox" id="chkFirst" checked> Excluir o 1.º dia (precisa das datas)</label>
+          <label class="mgf-campo"><span>Nome ou n.º de utente <small>(opcional, só para a impressão)</small></span><input type="text" id="inName" maxlength="60" autocomplete="off"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mgf-cartao">
+      <div class="mgf-cartao-titulo">Medições registadas (<span id="countAll">0</span>)</div>
+      <div class="mgf-cartao-corpo">
+        <div class="mgf-tabela-caixa">
+          <table class="mgf-tabela ampa-tabela">
+            <thead><tr><th scope="col">Data</th><th scope="col">Período</th><th scope="col">PA (mmHg)</th><th scope="col">Pulso</th><th scope="col" class="ampa-acao"><span class="mgf-so-leitor">Apagar</span></th></tr></thead>
+            <tbody id="list"><tr><td colspan="5" class="ampa-vazio">Ainda sem medições. Adiciona a primeira.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="mgf-botoes ampa-nao-imprimir">
+          <button type="button" class="mgf-botao" id="btnPrint">Imprimir ou guardar PDF</button>
+          <button type="button" class="mgf-botao ampa-limpar" id="btnClear">Limpar tudo</button>
+        </div>
+      </div>
+    </div>
+
+  <p class="aviso-clinico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Apoia, não substitui, o juízo clínico.</p>
+</div>
+
+  <div class="mgf-resposta">
+  <div class="mgf-resultado">
+    <div class="mgf-resultado-topo">
+      <h3>Média AMPA</h3>
+      <div class="mgf-pontuacao ampa-media" id="rAvg" aria-live="polite">—</div>
+    </div>
+    <div class="mgf-resultado-corpo">
+      <p class="ampa-media-sub" id="rAvgSub">mmHg</p>
+      <div class="mgf-resumo">
+        <div><span class="mgf-resumo-rotulo">Manhã</span><span class="mgf-resumo-valor" id="rM">—</span><span class="mgf-resumo-sub" id="rMn"></span></div>
+        <div><span class="mgf-resumo-rotulo">Noite</span><span class="mgf-resumo-valor" id="rN">—</span><span class="mgf-resumo-sub" id="rNn"></span></div>
+        <div><span class="mgf-resumo-rotulo">Pulso médio</span><span class="mgf-resumo-valor" id="rP">—</span><span class="mgf-resumo-sub">bpm</span></div>
+      </div>
+      <div class="mgf-interp" id="verdict" hidden></div>
+      <p class="mgf-nota" data-nivel="atencao" id="notice" hidden></p>
+      <p class="mgf-nota"><strong>Protocolo habitual.</strong> 7 dias seguidos, 2 medições de manhã (antes da medicação e do pequeno-almoço) e 2 à noite (antes do jantar), com 1–2 min de intervalo, sentado e em repouso. O 1.º dia costuma ser excluído; recomendam-se pelo menos 12 leituras válidas (idealmente 24–28). Limiar de HTA em AMPA: média ≥ 135 e/ou ≥ 85 mmHg. Os dados não são guardados nem enviados: desaparecem ao fechar ou recarregar a página.</p>
+    </div>
+  </div>
+  </div>
+  </div>
+
+</main>
+</div>
+<footer class="ferramenta-pe">
+<section class="bibliografia" aria-labelledby="bib-titulo"><h2 id="bib-titulo">Bibliografia</h2><ol><li>Stergiou GS, Palatini P, Parati G, et al. 2021 European Society of Hypertension practice guidelines for office and out-of-office blood pressure measurement. J Hypertens. 2021;39(7):1293-1302.</li><li>Parati G, Stergiou GS, Bilo G, et al. Home blood pressure monitoring: methodology, clinical relevance and practical application: a 2021 position paper by the Working Group on Blood Pressure Monitoring and Cardiovascular Variability of the European Society of Hypertension. J Hypertens. 2021;39(9):1742-1767.</li><li>Mancia G, Kreutz R, Brunström M, et al. 2023 ESH Guidelines for the management of arterial hypertension. J Hypertens. 2023;41(12):1874-2071.</li></ol><p>Criado por Miguel Henriques · v1.0 · revisto a 15 nov 2026</p></section>
+<div class="feedback">
+<strong>Encontraste um erro? Escreve-nos e corrigimos juntos.</strong>
+<div class="feedback-linha"><a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Calculadora%20AMPA%20%28v1.0%29&body=Ferramenta%3A%20Calculadora%20AMPA%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">Enviar feedback por email</a> · <span class="mono">mgfplural@gmail.com</span> <button type="button" class="botao-texto" data-copiar="mgfplural@gmail.com">Copiar endereço</button></div>
+</div>
+</footer>
+<nav class="anterior-seguinte" aria-label="Outras ferramentas do grupo"><a href="tc-cerebral-e-coluna.html">← TC cerebral e da coluna</a></nav>
+</div>
+<footer class="rodape"><div class="contentor">
+<div class="rodape-linha">
+<div class="rodape-contacto">
+<a class="logo" href="../../../index.html"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#8FCFC0" stroke-width="13" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#F6F7F4" stroke-width="13" stroke-linejoin="round"/></svg><span class="logo-texto"><span>mgf no </span><b>plural</b></span><span class="so-leitor"> — página inicial</span></a>
+<span>Miguel Cachinho Henriques<br>Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra</span>
+<a href="mailto:mgfplural@gmail.com">mgfplural@gmail.com</a>
+</div>
+<nav aria-label="Rodapé">
+<a href="../../../acerca.html">Acerca</a>
+<a href="../../../acerca.html#contribuir">Contribuir</a>
+<a href="../../../acerca.html#escalas">Escalas não incluídas</a>
+<a href="../../../acerca.html#offline">Usar offline</a>
+<a href="../../../acerca.html#privacidade">Privacidade</a>
+<a href="https://github.com/miguel-henriques5/mgfplural">Código no GitHub</a>
+</nav>
+</div>
+<div class="rodape-fim">
+<span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
+<span class="mono">licença MIT · site v1.0 · 2026-11-15</span>
+</div>
+</div></footer>
+<script src="../../../assets/js/catalogo.js"></script>
+<script src="../../../assets/js/site.js"></script>
+<script src="../../../assets/js/ferramenta.js"></script>
+<script>
+/* Cálculos e regras: os do original (Calculadora AMPA). Mudou a apresentação (proposta B), o tratamento por «tu»,
+   «Limpar tudo» com segundo clique em vez da janela do browser, e sem as adaptações ao Squarespace. */
+(function () {
+  "use strict";
+  var readings = [];
+  var uid = 0;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function fmt(s) { var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+  function mean(a) { if (!a.length) return null; return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+
+  function showMsg(t) { $('msg').textContent = t; }
+  function hideMsg() { $('msg').textContent = ''; }
+
+  function add() {
+    var date = $('inDate').value, per = $('inPer').value;
+    var sys = parseInt($('inSys').value, 10), dia = parseInt($('inDia').value, 10);
+    var pulRaw = $('inPul').value, pul = pulRaw === '' ? null : parseInt(pulRaw, 10);
+    if (isNaN(sys) || isNaN(dia)) return showMsg('Preenche a sistólica e a diastólica.');
+    if (sys < 50 || sys > 300) return showMsg('Sistólica fora do intervalo plausível (50–300 mmHg).');
+    if (dia < 30 || dia > 200) return showMsg('Diastólica fora do intervalo plausível (30–200 mmHg).');
+    if (sys <= dia) return showMsg('A sistólica deve ser superior à diastólica.');
+    if (pul !== null && (isNaN(pul) || pul < 30 || pul > 220)) return showMsg('Pulso fora do intervalo plausível (30–220 bpm).');
+    hideMsg();
+    readings.push({ id: ++uid, date: date, per: per, sys: sys, dia: dia, pul: pul });
+    $('inSys').value = ''; $('inDia').value = ''; $('inPul').value = '';
+    $('inSys').focus();
+    render();
+  }
+
+  function sorted() {
+    return readings.slice().sort(function (a, b) {
+      if (a.date && b.date) {
+        if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+        if (a.per !== b.per) return a.per === 'M' ? -1 : 1;
+        return a.id - b.id;
+      }
+      if (a.date) return -1;
+      if (b.date) return 1;
+      return a.id - b.id;
+    });
+  }
+
+  function render() {
+    var all = sorted();
+    $('countAll').textContent = all.length;
+
+    var dates = [];
+    all.forEach(function (r) { if (r.date && dates.indexOf(r.date) === -1) dates.push(r.date); });
+    var skipFirst = $('chkFirst').checked && dates.length > 1;
+    var firstDate = dates[0];
+    var undated = all.some(function (r) { return !r.date; });
+
+    // Lista
+    if (!all.length) {
+      $('list').innerHTML = '<tr><td colspan="5" class="ampa-vazio">Ainda sem medições. Adiciona a primeira.</td></tr>';
+    } else {
+      $('list').innerHTML = all.map(function (r) {
+        var ex = skipFirst && r.date && r.date === firstDate;
+        return '<tr' + (ex ? ' class="excluida"' : '') + '>' +
+          '<td>' + (r.date ? fmt(r.date) : '—') + '</td>' +
+          '<td>' + (r.per === 'M' ? 'Manhã' : 'Noite') + (ex ? '<span class="ampa-excl">excl.</span>' : '') + '</td>' +
+          '<td class="ampa-ta">' + r.sys + '/' + r.dia + '</td>' +
+          '<td>' + (r.pul !== null ? r.pul : '—') + '</td>' +
+          '<td class="ampa-acao"><button type="button" class="ampa-apagar" data-del="' + r.id + '" aria-label="Apagar a medição ' + r.sys + '/' + r.dia + '">×</button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    // Cálculos
+    var used = all.filter(function (r) { return !(skipFirst && r.date && r.date === firstDate); });
+    var usedDays = dates.length - (skipFirst ? 1 : 0);
+    var S = used.map(function (r) { return r.sys; }), D = used.map(function (r) { return r.dia; });
+    var P = used.filter(function (r) { return r.pul !== null; }).map(function (r) { return r.pul; });
+    var Sm = used.filter(function (r) { return r.per === 'M'; }), Sn = used.filter(function (r) { return r.per === 'N'; });
+
+    function pair(a) {
+      if (!a.length) return '—';
+      return Math.round(mean(a.map(function (r) { return r.sys; }))) + '/' + Math.round(mean(a.map(function (r) { return r.dia; })));
+    }
+
+    var verdict = $('verdict'), notice = $('notice');
+    if (!used.length) {
+      $('rAvg').textContent = '—'; $('rAvgSub').textContent = 'mmHg';
+      $('rM').textContent = '—'; $('rN').textContent = '—'; $('rP').textContent = '—';
+      $('rMn').textContent = ''; $('rNn').textContent = '';
+      verdict.hidden = true; notice.hidden = true;
+      return;
+    }
+
+    var ms = Math.round(mean(S)), md = Math.round(mean(D));
+    $('rAvg').textContent = ms + '/' + md;
+    $('rAvgSub').textContent = 'mmHg · ' + used.length + ' leitura' + (used.length === 1 ? '' : 's') +
+      (dates.length && !undated ? ' em ' + usedDays + ' dia' + (usedDays === 1 ? '' : 's') : '');
+    $('rM').textContent = pair(Sm); $('rMn').textContent = Sm.length ? Sm.length + ' leituras' : '';
+    $('rN').textContent = pair(Sn); $('rNn').textContent = Sn.length ? Sn.length + ' leituras' : '';
+    $('rP').textContent = P.length ? Math.round(mean(P)) : '—';
+
+    var high = ms >= 135 || md >= 85;
+    verdict.hidden = false;
+    verdict.dataset.nivel = high ? 'alerta' : 'normal';
+    verdict.textContent = high
+      ? 'Média igual ou superior ao limiar de HTA em AMPA (≥ 135 e/ou ≥ 85 mmHg).'
+      : 'Média inferior ao limiar de HTA em AMPA (< 135 e < 85 mmHg).';
+
+    var notes = [];
+    if (used.length < 12) notes.push('Apenas ' + used.length + ' leituras válidas: recomendam-se pelo menos 12 (idealmente 24–28) para uma média fiável.');
+    if (dates.length && !undated && usedDays < 3) notes.push('Menos de 3 dias de registos considerados na média.');
+    if (dates.length > 1 && !$('chkFirst').checked) notes.push('O 1.º dia está incluído na média (habitualmente é excluído).');
+    if (!dates.length) notes.push('Sem datas: todas as leituras entram na média. Se o utente trouxe o 1.º dia, não o introduzas (ou indica as datas para o excluir automaticamente).');
+    else if (undated) notes.push('Há leituras sem data: entram sempre na média e não contam para os dias nem para a exclusão do 1.º dia.');
+    notice.textContent = notes.join(' ');
+    notice.hidden = !notes.length;
+  }
+
+  $('btnAdd').addEventListener('click', add);
+  ['inSys', 'inDia', 'inPul'].forEach(function (id) {
+    $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+  });
+  $('chkFirst').addEventListener('change', render);
+  $('list').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-del]') : null;
+    if (!b) return;
+    var id = parseInt(b.getAttribute('data-del'), 10);
+    readings = readings.filter(function (r) { return r.id !== id; });
+    render();
+  });
+  /* «Limpar tudo»: em vez da janela do browser, pede um segundo clique no mesmo botão. */
+  var limpar = $('btnClear');
+  limpar.addEventListener('click', function () {
+    if (!readings.length) return;
+    if (limpar._armado) {
+      clearTimeout(limpar._armado); limpar._armado = null;
+      limpar.textContent = 'Limpar tudo'; limpar.classList.remove('armado');
+      readings = []; render(); return;
+    }
+    limpar.textContent = 'Carrega outra vez para apagar todas'; limpar.classList.add('armado');
+    limpar._armado = setTimeout(function () { limpar._armado = null; limpar.textContent = 'Limpar tudo'; limpar.classList.remove('armado'); }, 4000);
+  });
+  $('btnPrint').addEventListener('click', function () { window.print(); });
+
+  function prepareForPrint() {
+    $('printName').textContent = $('inName').value.trim() || '—';
+    var n = new Date();
+    $('printDate').textContent = String(n.getDate()).padStart(2, '0') + '/' + String(n.getMonth() + 1).padStart(2, '0') + '/' + n.getFullYear();
+  }
+  window.addEventListener('beforeprint', prepareForPrint);
+
+  render();
+})();
+</script>
+</body>
+</html>
