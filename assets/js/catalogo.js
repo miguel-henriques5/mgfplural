@@ -500,6 +500,31 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "calculadora-ampa",
+  "titulo": "Calculadora AMPA",
+  "descricao": "Média da automedição da pressão arterial no domicílio (AMPA): regista as medições da manhã e da noite, exclui o 1.º dia e compara a média com o limiar de hipertensão (135/85 mmHg), com folha para imprimir.",
+  "area": "Recursos médicos",
+  "grupo": "Interpretar exames",
+  "icone": "tensiometro",
+  "url": "ferramentas/recursos-medicos/interpretar-exames/calculadora-ampa.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "externo": false,
+  "palavras": [
+   "AMPA",
+   "automedição",
+   "pressão arterial",
+   "tensão arterial",
+   "hipertensão",
+   "HTA",
+   "medição no domicílio",
+   "MAPA",
+   "bata branca",
+   "hipertensão mascarada",
+   "135/85"
+  ]
+ },
+ {
   "id": "saude-infantil",
   "titulo": "Saúde infantil e juvenil",
   "descricao": "Consultas de vigilância dos 0 aos 18 anos (PNSIJ): guia S-O-A-P com registo para o SClínico, desenvolvimento, crescimento com percentis OMS, vacinação, doses, patologias frequentes e referenciação.",
