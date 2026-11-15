@@ -54,7 +54,7 @@
       if (!achados.length) {
         var vazio = document.createElement("p");
         vazio.className = "pesquisa-vazia";
-        vazio.textContent = "Nada encontrado. Ainda estamos a migrar ferramentas para o site.";
+        vazio.textContent = "Nada encontrado. Experimenta outra palavra ou escreve-nos a sugerir uma ferramenta.";
         lista.appendChild(vazio);
       }
       achados.forEach(function (x) {

@@ -941,7 +941,7 @@ def pagina_inicio(ferramentas):
 <span class="etiqueta-mono">Abertas recentemente · só neste browser</span>
 </section>
 <section class="contentor seccao" id="areas">
-<div class="seccao-cabeca"><h2>Por onde começar</h2><span class="mono">{total} ferramenta{"s" if total != 1 else ""} publicada{"s" if total != 1 else ""} · migração em curso</span></div>
+<div class="seccao-cabeca"><h2>Por onde começar</h2><span class="mono">{total} ferramenta{"s" if total != 1 else ""} publicada{"s" if total != 1 else ""} · gratuitas e abertas</span></div>
 {"".join(blocos)}
 </section>
 <section class="circulo" id="contribuir"><div class="contentor">
@@ -1035,7 +1035,7 @@ def pagina_area(area, ferramentas):
     em_falta = [g["nome"] for g in area["grupos"] if not [f for f in fs_area if f["grupo"] == g["id"]]]
     aviso = ""
     if em_falta:
-        aviso = (f'<p class="aviso-migracao">Estamos a migrar as restantes ferramentas para o site. '
+        aviso = (f'<p class="aviso-migracao">Há grupos ainda sem ferramentas. '
                  f'Em breve: {e(", ".join(em_falta))}.</p>')
     return f"""{cabeca(area["nome"] + " · MGF no Plural", prefixo, area["descricao"])}
 <body>
@@ -1121,7 +1121,7 @@ def pagina_acerca(ferramentas):
 <tbody>{escalas}</tbody>
 </table>
 </div>
-<p style="margin:0;color:var(--cor-texto-2)">Alternativas livres para rastreio cognitivo: GPCOG e Mini-Cog (em migração para o site).</p>
+<p style="margin:0;color:var(--cor-texto-2)">Alternativas livres para rastreio cognitivo: GPCOG e Mini-Cog, nas Escalas de saúde mental (só a calculadora de pontuação).</p>
 </section>
 
 <section class="contentor seccao" id="offline" style="padding-top:0">
