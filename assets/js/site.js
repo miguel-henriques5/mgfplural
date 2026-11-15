@@ -60,8 +60,9 @@
       achados.forEach(function (x) {
         var a = document.createElement("a");
         a.className = "pesquisa-resultado";
-        a.href = raiz + x.f.url;
-        if (x.f.layout === "completa") { a.target = "_blank"; a.rel = "noopener"; }
+        a.href = x.f.externo ? x.f.url : raiz + x.f.url;
+        if (x.f.externo) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+        else if (x.f.layout === "completa") { a.target = "_blank"; a.rel = "noopener"; }
         var img = document.createElement("img");
         img.src = raiz + "assets/img/icones/" + x.f.icone + ".svg"; img.alt = "";
         var bloco = document.createElement("span");

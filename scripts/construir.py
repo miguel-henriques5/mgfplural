@@ -128,6 +128,49 @@ def ler_ferramentas():
     return ferramentas
 
 
+# Ligações a sites de fora (grupo «Recursos externos»): não são ferramentas do site, não têm página nem versão para
+# descarregar. Estão em fonte/ligacoes.json e aparecem no menu, nas páginas de área e de grupo e na pesquisa, com ↗.
+def ler_ligacoes():
+    caminho = FONTE / "ligacoes.json"
+    if not caminho.exists():
+        return []
+    ligacoes = []
+    for i, x in enumerate(json.loads(caminho.read_text(encoding="utf-8"))):
+        for c in ("id", "titulo", "descricao", "url", "area", "grupo", "fonte"):
+            if not x.get(c):
+                erro(f"ligacoes.json: falta '{c}' na ligação {i + 1}")
+        if not re.match(r"https://[^\s\"'<>]+$", x["url"]):
+            erro(f"ligacoes.json: {x['id']}: o endereço tem de começar por https://")
+        grupo_por_id(area_por_id(x["area"]), x["grupo"])
+        ligacoes.append(dict(x, layout="ligacao", caminho=x["url"], autor=x["fonte"], versao="", ordem=x.get("ordem", i + 1)))
+    return ligacoes
+
+
+def ligacao(f):
+    return f["layout"] == "ligacao"
+
+
+def href_de(f, prefixo):
+    return f["caminho"] if ligacao(f) else prefixo + f["caminho"]
+
+
+def alvo_de(f):
+    if ligacao(f):
+        return ' target="_blank" rel="noopener noreferrer"'
+    return ' target="_blank" rel="noopener"' if f["layout"] == "completa" else ""
+
+
+def dominio(url):
+    return re.sub(r"^https://(www\.)?", "", url).split("/")[0]
+
+
+def contagem(fs):
+    n = len(fs)
+    if fs and all(ligacao(f) for f in fs):
+        return f"{n} {'ligação' if n == 1 else 'ligações'}"
+    return f"{n} ferramenta{'s' if n != 1 else ''}"
+
+
 def area_por_id(aid):
     for a in ESTRUTURA["areas"]:
         if a["id"] == aid:
@@ -173,9 +216,8 @@ def menu_ferramentas(prefixo, ferramentas, ativo=False):
         else:
             partes.append(f'<div><span class="menu-grupo-titulo"><img src="{icone(prefixo, g["icone"])}" alt="">{e(g["nome"])}</span>')
         for f in fs:
-            seta = " ↗" if f["layout"] == "completa" else ""
-            alvo = ' target="_blank" rel="noopener"' if f["layout"] == "completa" else ""
-            partes.append(f'<a class="menu-ligacao" href="{prefixo}{f["caminho"]}"{alvo}>{e(f["titulo"])}{seta}</a>')
+            seta = " ↗" if f["layout"] in ("completa", "ligacao") else ""
+            partes.append(f'<a class="menu-ligacao" href="{e(href_de(f, prefixo))}"{alvo_de(f)}>{e(f["titulo"])}{seta}</a>')
         if not fs:
             partes.append('<span class="menu-em-breve">Em breve</span>')
         partes.append('</div>')
@@ -844,7 +886,7 @@ TONS = ["menta", "ambar", "papel", "areia"]
 
 def pagina_inicio(ferramentas):
     p = ""
-    total = len(ferramentas)
+    total = len([f for f in ferramentas if not ligacao(f)])
     blocos = []
     principal = ESTRUTURA["areas"][0]
     n_principal = len([f for f in ferramentas if f["area"] == principal["id"]])
@@ -924,6 +966,11 @@ def pagina_inicio(ferramentas):
 # ---------------------------------------------------------------- cartão de ferramenta e página de grupo
 
 def cartao_ferramenta(f, prefixo, pasta):
+    if ligacao(f):
+        return (f'<a class="cartao-ferramenta" href="{e(f["caminho"])}"{alvo_de(f)}>'
+                f'<span class="cartao-ferramenta-cabeca"><img src="{icone(prefixo, icone_ferramenta(f))}" alt=""><strong>{e(f["titulo"])}</strong></span>'
+                f'<span class="etiqueta-completa">↗ site externo</span><p>{e(f["descricao"])}</p>'
+                f'<span class="cartao-ferramenta-rodape"><span>{e(f["fonte"])} · {e(dominio(f["caminho"]))}</span><span aria-hidden="true">↗</span></span></a>')
     completa = f["layout"] == "completa"
     alvo = ' target="_blank" rel="noopener"' if completa else ""
     etiqueta = '<span class="etiqueta-completa">↗ separador novo</span>' if completa else ""
@@ -953,7 +1000,7 @@ def pagina_grupo(area, grupo, ferramentas):
 <div class="contentor area-topo">
 <ol class="migalhas" aria-label="Estás aqui"><li><a href="{prefixo}index.html">Início</a></li><li><a href="../index.html">{e(area["nome"])}</a></li><li aria-current="page">{e(grupo["nome"])}</li></ol>
 <div class="area-titulo grupo-titulo {FUNDO_TOM[grupo["tom"]]}"><img src="{icone(prefixo, grupo["icone"])}" alt="">
-<div><h1>{e(grupo["nome"])}</h1><p>{len(fs)} ferramenta{"s" if len(fs) != 1 else ""} · {e(area["nome"])}</p></div></div>
+<div><h1>{e(grupo["nome"])}</h1><p>{contagem(fs)} · {e(area["nome"])}</p></div></div>
 </div>
 <div class="grupos-chips"><nav class="contentor" aria-label="Outros grupos de ferramentas">{"".join(botoes)}</nav></div>
 <div class="contentor seccao">
@@ -1109,7 +1156,7 @@ def escrever_catalogo(ferramentas):
         dados.append({
             "id": f["id"], "titulo": f["titulo"], "descricao": f["descricao"],
             "area": area["nome"], "grupo": grupo["nome"], "icone": icone_ferramenta(f),
-            "url": f["caminho"], "layout": f["layout"], "autor": f["autor"],
+            "url": f["caminho"], "layout": f["layout"], "autor": f["autor"], "externo": ligacao(f),
             "palavras": f.get("palavras", []),
         })
     js = ("/* Gerado por scripts/construir.py — não editar à mão. */\n"
@@ -1133,7 +1180,7 @@ def escrever(caminho, texto):
 
 
 def main():
-    ferramentas = ler_ferramentas()
+    ferramentas = ler_ferramentas() + ler_ligacoes()
     ordem = {(a["id"], g["id"]): (i, j) for i, a in enumerate(ESTRUTURA["areas"]) for j, g in enumerate(a["grupos"])}
     ferramentas.sort(key=lambda f: (ordem[(f["area"], f["grupo"])], f.get("ordem", 99), f["titulo"]))
 
@@ -1142,6 +1189,8 @@ def main():
 
     css = css_autonomo()
     for f in ferramentas:
+        if ligacao(f):
+            continue
         if f["layout"] == "completa":
             escrever(RAIZ / f["caminho"], pagina_completa(f, ferramentas))
             escrever(RAIZ / "descarregar" / f"{f['id']}.html", pagina_completa(f, ferramentas, css))
@@ -1166,7 +1215,8 @@ def main():
     escrever(RAIZ / "acerca.html", pagina_acerca(ferramentas))
     escrever_catalogo(ferramentas)
     gerar_modelo(css)
-    print(f"Site construído: {len(ferramentas)} ferramenta(s).")
+    n_lig = len([f for f in ferramentas if ligacao(f)])
+    print(f"Site construído: {len(ferramentas) - n_lig} ferramenta(s) e {n_lig} ligação(ões) externa(s).")
 
 
 if __name__ == "__main__":
