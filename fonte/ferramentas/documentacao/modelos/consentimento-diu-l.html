@@ -12,8 +12,8 @@
  "area": "documentacao",
  "grupo": "modelos",
  "autor": "Miguel Henriques",
- "versao": "1.0",
- "revisto": "2026-11-11",
+ "versao": "1.1",
+ "revisto": "2026-11-15",
  "layout": "completa",
  "aviso_clinico": false,
  "icone": "mulher",
@@ -393,6 +393,26 @@ body {
   .form-page .doctor-select { display: none !important; }
 }
 
+
+/* MGF no Plural (2026-11-15): o folheto do DIU-L é mais longo do que o do DIU e o do implante. Na impressão fica mais
+   compacto, para o folheto e a via da utente caberem em 2 folhas A4 (com folga, mesmo com representante legal) e o
+   documento todo em 4. */
+@media print {
+  .brochure-page .info-card-body { font-size: 11px !important; line-height: 1.42 !important; padding: 6px 12px 7px !important; }
+  .brochure-page .bullet-cols li { font-size: 10.8px !important; line-height: 1.33 !important; margin-bottom: 2px !important; }
+  .brochure-page .info-card { margin-bottom: 6px !important; }
+  .brochure-page .leaflet-lede { font-size: 11px !important; line-height: 1.42 !important; margin-bottom: 8px !important; }
+  .brochure-page .title-area { padding-top: 6px !important; padding-bottom: 6px !important; }
+  .user-copy-page .uc-section { margin-bottom: 6px !important; }
+  .brochure-page .info-card-head { padding: 6px 12px !important; }
+  .user-copy-page .uc-body { padding-bottom: 8px !important; }
+  .user-copy-page .uc-label { margin-bottom: 8px !important; padding-top: 6px !important; }
+  .user-copy-page .uc-sig-block { padding: 6px 9px !important; }
+  /* as assinaturas da via da utente podem passar de folha entre o médico/utente e o representante legal */
+  .user-copy-page .uc-section { break-inside: auto !important; page-break-inside: auto !important; }
+  .user-copy-page .uc-sig-row, .user-copy-page #uc_repBlock, .user-copy-page .uc-heading { break-inside: avoid !important; page-break-inside: avoid !important; }
+  .user-copy-page .uc-heading { break-after: avoid !important; page-break-after: avoid !important; }
+}
 
 /* ── MGF no Plural: campos da unidade e logótipo escolhido por quem usa ── */
 .mgf-campo-doc { outline: 1px dashed #B9C6C2; outline-offset: 1px; border-radius: 3px; padding: 0 3px; background: #FFF8E6; cursor: text; }

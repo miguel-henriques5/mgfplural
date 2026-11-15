@@ -368,6 +368,26 @@ body {
 }
 
 
+/* MGF no Plural (2026-11-15): o folheto do DIU-L é mais longo do que o do DIU e o do implante. Na impressão fica mais
+   compacto, para o folheto e a via da utente caberem em 2 folhas A4 (com folga, mesmo com representante legal) e o
+   documento todo em 4. */
+@media print {
+  .brochure-page .info-card-body { font-size: 11px !important; line-height: 1.42 !important; padding: 6px 12px 7px !important; }
+  .brochure-page .bullet-cols li { font-size: 10.8px !important; line-height: 1.33 !important; margin-bottom: 2px !important; }
+  .brochure-page .info-card { margin-bottom: 6px !important; }
+  .brochure-page .leaflet-lede { font-size: 11px !important; line-height: 1.42 !important; margin-bottom: 8px !important; }
+  .brochure-page .title-area { padding-top: 6px !important; padding-bottom: 6px !important; }
+  .user-copy-page .uc-section { margin-bottom: 6px !important; }
+  .brochure-page .info-card-head { padding: 6px 12px !important; }
+  .user-copy-page .uc-body { padding-bottom: 8px !important; }
+  .user-copy-page .uc-label { margin-bottom: 8px !important; padding-top: 6px !important; }
+  .user-copy-page .uc-sig-block { padding: 6px 9px !important; }
+  /* as assinaturas da via da utente podem passar de folha entre o médico/utente e o representante legal */
+  .user-copy-page .uc-section { break-inside: auto !important; page-break-inside: auto !important; }
+  .user-copy-page .uc-sig-row, .user-copy-page #uc_repBlock, .user-copy-page .uc-heading { break-inside: avoid !important; page-break-inside: avoid !important; }
+  .user-copy-page .uc-heading { break-after: avoid !important; page-break-after: avoid !important; }
+}
+
 /* ── MGF no Plural: campos da unidade e logótipo escolhido por quem usa ── */
 .mgf-campo-doc { outline: 1px dashed #B9C6C2; outline-offset: 1px; border-radius: 3px; padding: 0 3px; background: #FFF8E6; cursor: text; }
 .mgf-campo-doc.mgf-vazio { color: #845406; font-style: italic; }
@@ -788,17 +808,17 @@ body {
 </main>
 <aside class="barra-completa" aria-label="MGF no Plural" data-lado="direita" style="--bc-acima:0px">
 <a class="bc-simbolo" href="../../../index.html" title="MGF no Plural — todas as ferramentas"><svg viewBox="-3 -3 378 262" aria-hidden="true" focusable="false"><path d="M5.2 86.6L10.8 63.4Q16.0 42.0 30.2 25.2L33.8 20.8Q48.0 4.0 70.0 2.9L108.0 1.1Q130.0 0.0 150.9 7.0L157.1 9.0Q178.0 16.0 186.0 36.5L198.0 67.5Q206.0 88.0 209.0 103.0L209.0 103.0Q212.0 118.0 204.9 138.8L203.1 144.2Q196.0 165.0 177.8 177.3L168.2 183.7Q150.0 196.0 128.9 202.1L126.1 202.9Q105.0 209.0 88.5 203.0L88.5 203.0Q72.0 197.0 54.0 184.3L26.0 164.7Q8.0 152.0 4.1 130.4L3.9 129.6Q0.0 108.0 5.2 86.6Z" fill="none" stroke="#0F6E64" stroke-width="14" stroke-linejoin="round"/><path d="M56.9 112.7L61.1 102.3Q70.0 80.0 86.6 62.7L103.4 45.3Q120.0 28.0 143.8 25.3L166.2 22.7Q190.0 20.0 210.6 32.3L249.4 55.7Q270.0 68.0 277.9 90.7L280.1 97.3Q288.0 120.0 284.1 143.7L279.9 168.3Q276.0 192.0 264.9 213.3L263.1 216.7Q252.0 238.0 228.3 241.9L173.7 251.1Q150.0 255.0 127.6 246.4L117.4 242.6Q95.0 234.0 82.3 213.6L67.7 190.4Q55.0 170.0 51.5 152.5L51.5 152.5Q48.0 135.0 56.9 112.7Z" fill="#DE9B2C"/><path d="M169.0 97.5L169.0 97.5Q175.0 75.0 194.2 60.6L195.8 59.4Q215.0 45.0 238.2 38.7L246.8 36.3Q270.0 30.0 292.2 39.2L307.8 45.8Q330.0 55.0 344.9 73.8L357.1 89.2Q372.0 108.0 368.2 131.7L365.8 146.3Q362.0 170.0 349.0 190.2L335.0 211.8Q322.0 232.0 298.4 236.5L293.6 237.5Q270.0 242.0 247.0 235.3L245.0 234.7Q222.0 228.0 201.8 215.1L198.2 212.9Q178.0 200.0 173.0 182.5L173.0 182.5Q168.0 165.0 165.5 142.5L165.5 142.5Q163.0 120.0 169.0 97.5Z" fill="none" stroke="#13201E" stroke-width="14" stroke-linejoin="round"/></svg><span class="so-leitor">MGF no Plural — todas as ferramentas</span></a>
-<button type="button" class="bc-info" aria-expanded="false" aria-controls="bc-painel"><span class="bc-info-texto"><strong>Miguel Henriques</strong> · v1.0</span><span class="so-leitor"> — sobre esta ferramenta</span> ⓘ</button>
+<button type="button" class="bc-info" aria-expanded="false" aria-controls="bc-painel"><span class="bc-info-texto"><strong>Miguel Henriques</strong> · v1.1</span><span class="so-leitor"> — sobre esta ferramenta</span> ⓘ</button>
 <a class="bc-botao" href="../../../descarregar/consentimento-diu-l.html" download="consentimento-diu-l.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><polyline points="7 10 12 15 17 10"/><path d="M4 19h16"/></svg><span>Descarregar</span></a>
-<a class="bc-botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.0%29&body=Ferramenta%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Feedback</span></a>
+<a class="bc-botao" href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.1%29&body=Ferramenta%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.1%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Feedback</span></a>
 <button type="button" class="bc-fechar" aria-label="Esconder esta barra">×</button>
 <div class="bc-painel" id="bc-painel" hidden>
 <h2>Consentimento informado — DIU-L</h2>
-<p class="bc-meta">Criado por Miguel Henriques · v1.0 · revisto a 11 nov 2026 · licença MIT</p>
+<p class="bc-meta">Criado por Miguel Henriques · v1.1 · revisto a 15 nov 2026 · licença MIT</p>
 <p class="bc-aviso">O que escreves nesta ferramenta não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</p>
 <details><summary>Bibliografia · 4 referências</summary><ol><li>Administração Regional de Saúde do Norte — documento original de consentimento informado em que o texto se baseia.</li><li>Direção-Geral da Saúde — Saúde Reprodutiva e Planeamento Familiar.</li><li>INFARMED — resumos das características dos medicamentos.</li><li>Patient UK — informação para doentes sobre contraceção.</li></ol></details>
 <h3>Encontraste um erro?</h3>
-<p>Escreve-nos e corrigimos juntos: <a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.0%29&body=Ferramenta%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.0%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">mgfplural@gmail.com</a> · <button type="button" class="bc-copiar" data-copiar="mgfplural@gmail.com">Copiar endereço</button></p>
+<p>Escreve-nos e corrigimos juntos: <a href="mailto:mgfplural@gmail.com?subject=Feedback%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.1%29&body=Ferramenta%3A%20Consentimento%20informado%20%E2%80%94%20DIU-L%20%28v1.1%29%0A%0AO%20que%20encontrei%20ou%20sugiro%3A%0A%0A%0APor%20favor%2C%20n%C3%A3o%20incluas%20dados%20que%20identifiquem%20doentes.">mgfplural@gmail.com</a> · <button type="button" class="bc-copiar" data-copiar="mgfplural@gmail.com">Copiar endereço</button></p>
 <p><a href="../../../index.html">Todas as ferramentas do MGF no Plural</a></p>
 </div>
 </aside>
