@@ -953,7 +953,7 @@ def pagina_inicio(ferramentas):
 </div>
 <div class="circulo-botoes">
 <a class="botao-branco" href="acerca.html#contribuir">Como contribuir</a>
-<a class="botao-contorno" href="{SITE["repositorio"]}/blob/main/GUIA-DESIGN.md">Guia de design</a>
+<a class="botao-contorno" href="guia-design.html">Guia de design</a>
 </div>
 </div></section>
 </main>
@@ -1107,8 +1107,8 @@ def pagina_acerca(ferramentas):
 </div>
 <div class="circulo-botoes">
 <a class="botao-branco" href="modelos/modelo-ferramenta.html" download>Descarregar o modelo</a>
-<a class="botao-contorno" href="{SITE["repositorio"]}/blob/main/GUIA-DESIGN.md">Guia de design</a>
-<a class="botao-contorno" href="{SITE["repositorio"]}/blob/main/CONTRIBUIR.md">Guia para contribuir</a>
+<a class="botao-contorno" href="guia-design.html">Guia de design</a>
+<a class="botao-contorno" href="contribuir.html">Guia para contribuir</a>
 </div>
 </div></section>
 
@@ -1141,6 +1141,187 @@ def pagina_acerca(ferramentas):
 </section>
 </main>
 {rodape(p)}
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------- guias (GUIA-DESIGN.md e CONTRIBUIR.md como páginas do site)
+#
+# Quem contribui não precisa do GitHub: os dois guias passam a páginas do site (guia-design.html e contribuir.html),
+# com um botão para descarregar cada um num ficheiro que funciona sem internet (descarregar/<guia>.html).
+# Conversão de Markdown simples: títulos, parágrafos, listas (também de tarefas), tabelas, blocos de código,
+# `código`, **negrito** e [ligações](...). O bloco «text» (o prompt para a IA) leva um botão Copiar.
+
+GUIAS = [
+    ("GUIA-DESIGN.md", "guia-design", "Guia de design", "Regras, cores, letras, componentes e o prompt para a tua IA, para fazeres uma ferramenta nova com o aspeto do site."),
+    ("CONTRIBUIR.md", "contribuir", "Guia para contribuir", "Como dar feedback, fazer uma ferramenta nova e enviá-la por email. Não precisas de saber programar nem do GitHub."),
+]
+LIGACOES_GUIAS = {"GUIA-DESIGN.md": "guia-design.html", "CONTRIBUIR.md": "contribuir.html"}
+
+
+def md_ligacao(url, prefixo, autonomo):
+    if url in LIGACOES_GUIAS:
+        url = LIGACOES_GUIAS[url]
+    m = re.match(r"fonte/ferramentas/(.+)$", url)
+    if m:
+        url = "ferramentas/" + m.group(1)
+    if re.match(r"(https?:|mailto:|#)", url):
+        return url
+    return (SITE["url"] if autonomo else prefixo) + url
+
+
+def md_linha(t, prefixo, autonomo):
+    partes = re.split(r"(`[^`]+`)", t)
+    saida = []
+    for parte in partes:
+        if parte.startswith("`") and parte.endswith("`") and len(parte) > 1:
+            saida.append(f"<code>{e(parte[1:-1])}</code>")
+            continue
+        x = e(parte)
+        x = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", x)
+        x = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", lambda m: f'<a href="{e(md_ligacao(html.unescape(m.group(2)), prefixo, autonomo))}">{m.group(1)}</a>', x)
+        saida.append(x)
+    return "".join(saida)
+
+
+def md_html(texto, prefixo, autonomo=False):
+    linhas = texto.split("\n")
+    out, i = [], 0
+    lista = None   # "ul" ou "ol"
+
+    def fechar():
+        nonlocal lista
+        if lista:
+            out.append(f"</{lista}>")
+            lista = None
+    while i < len(linhas):
+        ln = linhas[i]
+        if ln.startswith("```"):
+            fechar()
+            tipo = ln[3:].strip()
+            bloco = []
+            i += 1
+            while i < len(linhas) and not linhas[i].startswith("```"):
+                bloco.append(linhas[i])
+                i += 1
+            codigo = "\n".join(bloco)
+            if tipo == "text":
+                out.append(f'<div class="guia-codigo"><button type="button" class="guia-copiar" data-copiar="{e(codigo)}">Copiar</button>'
+                           f'<pre class="guia-prompt"><code>{e(codigo)}</code></pre></div>')
+            else:
+                out.append(f'<div class="guia-codigo"><pre><code>{e(codigo)}</code></pre></div>')
+        elif ln.startswith("|"):
+            fechar()
+            filas = []
+            while i < len(linhas) and linhas[i].startswith("|"):
+                filas.append([c.strip() for c in linhas[i].strip().strip("|").split("|")])
+                i += 1
+            i -= 1
+            cab, corpo = filas[0], [f for f in filas[1:] if not all(re.fullmatch(r":?-+:?", c) for c in f)]
+            out.append('<div class="guia-tabela"><table><thead><tr>' + "".join(f"<th>{md_linha(c, prefixo, autonomo)}</th>" for c in cab)
+                       + "</tr></thead><tbody>" + "".join("<tr>" + "".join(f"<td>{md_linha(c, prefixo, autonomo)}</td>" for c in f) + "</tr>" for f in corpo)
+                       + "</tbody></table></div>")
+        elif re.match(r"#{1,3} ", ln):
+            fechar()
+            n = len(ln.split(" ")[0])
+            out.append(f"<h{n}>{md_linha(ln[n + 1:], prefixo, autonomo)}</h{n}>")
+        elif re.match(r"(- |\d+\. )", ln):
+            tipo = "ul" if ln.startswith("- ") else "ol"
+            if lista != tipo:
+                fechar()
+                out.append(f"<{tipo}>")
+                lista = tipo
+            item = re.sub(r"^(- |\d+\. )", "", ln)
+            m = re.match(r"\[[ x]\] (.*)", item)
+            if m:
+                out.append(f'<li class="tarefa">{md_linha(m.group(1), prefixo, autonomo)}</li>')
+            else:
+                out.append(f"<li>{md_linha(item, prefixo, autonomo)}</li>")
+        elif not ln.strip():
+            if lista and i + 1 < len(linhas) and re.match(r"(- |\d+\. )", linhas[i + 1]):
+                pass
+            else:
+                fechar()
+        else:
+            fechar()
+            par = [ln.strip()]
+            while i + 1 < len(linhas) and linhas[i + 1].strip() and not re.match(r"(#{1,3} |- |\d+\. |```|\|)", linhas[i + 1]):
+                i += 1
+                par.append(linhas[i].strip())
+            out.append(f"<p>{md_linha(' '.join(par), prefixo, autonomo)}</p>")
+        i += 1
+    fechar()
+    return "\n".join(out)
+
+
+def css_guia():
+    css = (ASSETS / "css" / "site.css").read_text(encoding="utf-8")
+    m = re.search(r"\[guia\].*?\*/\n(.*?)/\* \[/guia\] \*/", css, re.S)
+    if not m:
+        erro("site.css: bloco [guia] em falta")
+    return m.group(1)
+
+
+def pagina_guia(ficheiro, gid, titulo, descricao, ferramentas):
+    p = ""
+    corpo = md_html((RAIZ / ficheiro).read_text(encoding="utf-8"), p)
+    acoes = (f'<div class="guia-acoes"><a class="botao-claro" href="descarregar/{gid}.html" download>{SVG_DESCARREGAR}Descarregar este guia</a>'
+             + ('<a class="botao-claro" href="modelos/modelo-ferramenta.html" download>Descarregar o modelo de ferramenta</a>' if gid == "guia-design" else "")
+             + "</div>")
+    return f"""{cabeca(titulo + " · MGF no Plural", p, descricao)}
+<body>
+{topo(p, ferramentas)}
+<main id="conteudo">
+<section class="contentor area-topo">
+<ol class="migalhas" aria-label="Estás aqui"><li><a href="index.html">Início</a></li><li><a href="acerca.html#contribuir">Contribuir</a></li><li aria-current="page">{e(titulo)}</li></ol>
+</section>
+<section class="contentor seccao" style="padding-top:0">
+<article class="guia">
+{acoes}
+{corpo}
+</article>
+</section>
+</main>
+{rodape(p)}
+</body>
+</html>
+"""
+
+
+def guia_autonomo(ficheiro, gid, titulo, descricao):
+    corpo = md_html((RAIZ / ficheiro).read_text(encoding="utf-8"), "", autonomo=True)
+    url = SITE["url"] + gid + ".html"
+    return f"""<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; font-src data:; img-src data:; base-uri 'none'; form-action 'none'">
+<title>{e(titulo)} · MGF no Plural</title>
+<meta name="description" content="{e(descricao)}">
+<!-- {e(titulo)} do MGF no Plural. Versão mais recente: {url} -->
+<style>
+{tokens_css()}
+body {{ margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-family: var(--letra-texto); }}
+.guia-pagina {{ max-width: 860px; margin: 0 auto; padding: 28px 24px 56px; }}
+.guia-marca {{ display: flex; align-items: center; gap: 8px; font-family: var(--letra-titulo); font-size: 16px; color: var(--cor-tinta); margin: 0 0 22px; }}
+.guia-marca svg {{ width: 34px; height: 24px; }}
+.guia-fim {{ border-top: 1px solid var(--cor-linha); margin-top: 32px; padding-top: 14px; font-size: 14px; color: var(--cor-texto-3); }}
+.guia-fim a {{ color: var(--cor-verde); }}
+.guia .guia-copiar {{ display: none !important; }}   /* sem JavaScript no ficheiro descarregado: copia-se à mão */
+.guia .guia-codigo:has(.guia-copiar) pre {{ padding-top: 14px !important; }}
+{css_guia()}
+</style>
+</head>
+<body>
+<div class="guia-pagina">
+<div class="guia-marca">{simbolo(13)}<span>mgf no <b>plural</b></span></div>
+<article class="guia">
+{corpo}
+</article>
+<p class="guia-fim">MGF no Plural · versão mais recente deste guia em <a href="{url}">{e(url)}</a> · contacto: <a href="mailto:{SITE["email"]}">{SITE["email"]}</a></p>
+</div>
 </body>
 </html>
 """
@@ -1213,6 +1394,9 @@ def main():
                     escrever(RAIZ / "ferramentas" / a["id"] / g["id"] / "index.html", pagina_grupo(a, g, ferramentas))
     escrever(RAIZ / "index.html", pagina_inicio(ferramentas))
     escrever(RAIZ / "acerca.html", pagina_acerca(ferramentas))
+    for ficheiro, gid, titulo, descricao in GUIAS:
+        escrever(RAIZ / f"{gid}.html", pagina_guia(ficheiro, gid, titulo, descricao, ferramentas))
+        escrever(RAIZ / "descarregar" / f"{gid}.html", guia_autonomo(ficheiro, gid, titulo, descricao))
     escrever_catalogo(ferramentas)
     gerar_modelo(css)
     n_lig = len([f for f in ferramentas if ligacao(f)])

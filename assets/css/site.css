@@ -366,3 +366,37 @@ a.cartao-grupo:hover img, a.cartao-area:hover img { transform: rotate(-8deg) sca
 .modelo-mapa-ajuda pre code { background: none; padding: 0; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
 .mono-nota { font-size: 14px !important; color: var(--cor-ambar-texto) !important; font-weight: 700; }
 @media (max-width: 640px) { .cartao-zona { grid-template-columns: 56px 1fr; } .cartao-zona-mapa { width: 56px; height: 56px; } .cartao-zona-mapa img { width: 40px; height: 40px; } .mapa-passo { font-size: 22px; } }
+
+/* ===== Guias (guia de design e guia para contribuir), páginas geradas a partir dos .md =====
+   [guia] O construir.py copia este bloco para as versões para descarregar dos guias. */
+.guia { max-width: 820px; font-size: 17px; line-height: 1.6; color: var(--cor-texto-2); }
+.guia h1 { font-family: var(--letra-titulo); font-weight: 800; font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -0.035em; line-height: 1.05; color: var(--cor-tinta); margin: 0 0 16px; }
+.guia h2 { font-family: var(--letra-titulo); font-weight: 800; font-size: 26px; letter-spacing: -0.02em; color: var(--cor-tinta); margin: 36px 0 10px; }
+.guia h3 { font-family: var(--letra-texto); font-weight: 700; font-size: 19px; color: var(--cor-tinta); margin: 24px 0 6px; }
+.guia p { margin: 0 0 12px; }
+.guia ul, .guia ol { margin: 0 0 14px; padding-left: 24px; }
+.guia li { margin-bottom: 6px; }
+.guia li.tarefa { list-style: none; margin-left: -22px; }
+.guia li.tarefa::before { content: ""; display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--cor-texto-3); border-radius: 3px; margin-right: 9px; vertical-align: -1px; }
+.guia a { color: var(--cor-verde); }
+.guia code { font-family: var(--letra-mono); font-size: .85em; background: var(--cor-linha-suave); border-radius: 4px; padding: 1px 5px; color: var(--cor-tinta); }
+.guia .guia-codigo { position: relative; margin: 0 0 16px; }
+.guia pre { margin: 0; background: var(--cor-branco); border: 1px solid var(--cor-linha); border-radius: var(--raio-p); padding: 14px 16px; overflow-x: auto; font-family: var(--letra-mono); font-size: 13.5px; line-height: 1.55; color: var(--cor-tinta); white-space: pre; }
+.guia pre.guia-prompt { white-space: pre-wrap; }
+.guia pre code { background: none; padding: 0; font-size: inherit; }
+.guia .guia-copiar { position: absolute; top: 8px; right: 8px; font: inherit; font-size: 14px; font-weight: 700; background: var(--cor-verde); color: var(--cor-branco); border: 0; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.guia .guia-copiar:hover { background: var(--cor-verde-fundo); }
+.guia .guia-tabela { overflow-x: auto; margin: 0 0 16px; }
+.guia table { border-collapse: collapse; width: 100%; font-size: 15px; background: var(--cor-branco); }
+.guia th, .guia td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--cor-linha-suave); }
+.guia th { background: var(--cor-papel); color: var(--cor-tinta); border-bottom: 1px solid var(--cor-linha); }
+.guia-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; }
+.guia-acoes .botao-claro svg { width: 18px; height: 18px; flex: none; }
+.guia .guia-codigo:has(.guia-copiar) pre { padding-top: 50px; }
+@media print {
+  .guia-acoes, .guia .guia-copiar { display: none !important; }
+  .guia { max-width: none; font-size: 12px; }
+  .guia pre { font-size: 10px; white-space: pre-wrap; }
+  .guia h2 { font-size: 18px; margin-top: 18px; } .guia h1 { font-size: 26px; }
+}
+/* [/guia] */
