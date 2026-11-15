@@ -869,5 +869,31 @@ window.MGF_CATALOGO = [
    "Amadora",
    "mapa"
   ]
+ },
+ {
+  "id": "plataforma-de-indicadores",
+  "titulo": "Plataforma de indicadores",
+  "descricao": "Monitorização dos indicadores e do IDE (Portaria 411-A/2023) por microequipa, a partir das exportações do MIM@UF: IDE por microequipa, mapa de calor, detalhe por indicador, evolução mensal, relatório e apresentação para imprimir. E listagens de utentes a contactar, por médico e indicador, com marcação de contactos e lista para imprimir.",
+  "area": "Plataforma de indicadores",
+  "grupo": "Plataforma de indicadores",
+  "icone": "indicadores",
+  "url": "ferramentas/plataforma-de-indicadores/geral/plataforma-de-indicadores.html",
+  "layout": "completa",
+  "autor": "Miguel Henriques",
+  "palavras": [
+   "indicadores",
+   "IDE",
+   "índice de desempenho da equipa",
+   "Portaria 411-A/2023",
+   "USF modelo B",
+   "microequipa",
+   "MIM@UF",
+   "mapa de calor",
+   "contratualização",
+   "convocatória",
+   "não-cumpridores",
+   "lista de chamada",
+   "relatório"
+  ]
  }
 ];
