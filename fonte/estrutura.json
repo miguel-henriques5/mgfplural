@@ -1,13 +1,13 @@
 {
   "site": {
     "nome": "MGF no Plural",
-    "url": "https://miguel-henriques5.github.io/mgfplural/",
+    "url": "https://mgfplural.pt/",
     "repositorio": "https://github.com/miguel-henriques5/mgfplural",
     "zip": "https://github.com/miguel-henriques5/mgfplural/archive/refs/heads/main.zip",
     "email": "mgfplural@gmail.com",
     "contacto_nome": "Miguel Cachinho Henriques",
     "contacto_funcao": "Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra",
-    "versao": "0.1"
+    "versao": "1.0"
   },
   "areas": [
     {

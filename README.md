@@ -4,7 +4,7 @@
 
 Site nacional de recursos para Médicos de Família: escalas, guias de prescrição, interpretação de exames, programas de saúde e modelos, feitos em comunidade. É gratuito, aberto e não recolhe dados.
 
-- Site: https://miguel-henriques5.github.io/mgfplural/
+- Site: https://mgfplural.pt/
 - Contacto: Miguel Cachinho Henriques, Médico de Família na USF Conde da Lousã, ULS Amadora-Sintra · mgfplural@gmail.com
 
 ## Usar
@@ -23,6 +23,7 @@ Não precisas de saber programar nem de usar o GitHub. Lê o [CONTRIBUIR.md](CON
 | --- | --- |
 | `fonte/ferramentas/` | As ferramentas, uma por ficheiro. **É aqui que se edita.** |
 | `fonte/estrutura.json` | Áreas e grupos do site (nomes, ícones, ordem). |
+| `fonte/ligacoes.json` | Ligações a sites úteis de fora (grupo «Recursos externos»). |
 | `fonte/modelo/` | O modelo de ferramenta para colegas. |
 | `assets/` | Cores, letras, ícones e o JavaScript do site. |
 | `scripts/construir.py` | Gera o site a partir de `fonte/`. |

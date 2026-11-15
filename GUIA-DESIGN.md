@@ -79,6 +79,10 @@ Ferramentas grandes, que ocupam o ecrã todo, levam `"layout": "completa"` na fi
 - Tudo o que é da zona (nome, descrição, centro do mapa, notas, fontes e recursos) está num só bloco do script, entre `/* {{ZONA}}` e `/* {{FIM-ZONA}} */`. O modelo para outras zonas é o mesmo mapa com o bloco de `fonte/modelo/mapa-de-recursos-zona.js` (sem recursos). Para publicar o mapa que um colega enviar, tira-se o bloco ZONA do ficheiro dele e cria-se uma ficha nova.
 - O mapa é a única exceção ao «nada sai da página»: `"dados_externos": ["https://tiles.openfreemap.org"]` (mapa de fundo vetorial), `"imagens_externas": ["https://services.arcgisonline.com"]` (alternativa) e `"workers": true` (a biblioteca desenha num worker). Sem internet, a pesquisa, as categorias e a lista funcionam, e o mapa avisa que o fundo não aparece.
 
+### Recursos externos (ligações a outros sites)
+
+Sites úteis de fora (por exemplo o POCUS MGF) não são ferramentas do site: não têm página nem versão para descarregar. Estão em `fonte/ligacoes.json`, um por entrada, com `id`, `titulo`, `descricao`, `url` (sempre `https://`), `area`, `grupo` (`recursos-externos`), `fonte` (quem faz o site) e, se quiseres, `icone` e `palavras`. Aparecem no menu, nas páginas de área e de grupo e na pesquisa, com ↗, e abrem num separador novo.
+
 ## Cores
 
 Usa sempre as variáveis, nunca códigos de cor soltos.
