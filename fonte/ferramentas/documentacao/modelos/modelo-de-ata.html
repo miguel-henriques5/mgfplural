@@ -893,7 +893,7 @@ function doPrint() {
 /* ── SAVE HTML ── */
 function doSaveHTML() {
   var clone = document.documentElement.cloneNode(true);
-  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], script[data-mgf="pwa"], link[rel="manifest"], meta[name="theme-color"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
   // Simple inputs
   document.querySelectorAll('input[type="text"]').forEach(function(orig) {
     if (!orig.id) return;
