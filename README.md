@@ -11,6 +11,7 @@ Site nacional de recursos para Médicos de Família: escalas, guias de prescriç
 
 - **No browser:** abre o site e escolhe a ferramenta.
 - **Uma ferramenta offline:** em cada ferramenta, carrega em "Descarregar HTML". O ficheiro funciona sozinho, sem internet.
+- **Como aplicação:** no Chrome ou no Edge, instala o site (Acerca → Usar offline → Instalar). Abre numa janela própria e, com «Disponibilizar tudo offline», funciona sem internet. Com ligação, vai sempre buscar a versão mais recente.
 - **O site inteiro offline:** descarrega o [ZIP do repositório](https://github.com/miguel-henriques5/mgfplural/archive/refs/heads/main.zip), descomprime e abre `index.html`.
 
 ## Contribuir
@@ -27,7 +28,8 @@ Não precisas de saber programar nem de usar o GitHub. Lê o [CONTRIBUIR.md](CON
 | `fonte/modelo/` | O modelo de ferramenta para colegas. |
 | `assets/` | Cores, letras, ícones e o JavaScript do site. |
 | `scripts/construir.py` | Gera o site a partir de `fonte/`. |
-| `index.html`, `acerca.html`, `ferramentas/`, `descarregar/`, `modelos/` | **Gerados.** Não editar à mão. |
+| `scripts/sw.js` | Modelo do service worker da aplicação instalável (o `construir.py` gera o `/sw.js` com a lista de ficheiros e o resumo de cada um). |
+| `index.html`, `acerca.html`, `offline.html`, `ferramentas/`, `descarregar/`, `modelos/`, `sw.js`, `manifest.webmanifest` | **Gerados.** Não editar à mão. |
 
 Para gerar o site depois de alterar uma ferramenta: `python3 scripts/construir.py` (só precisa de Python 3).
 
