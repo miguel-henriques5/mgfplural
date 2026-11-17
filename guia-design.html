@@ -8,6 +8,9 @@
 <title>Guia de design · MGF no Plural</title>
 <meta name="description" content="Regras, cores, letras, componentes e o prompt para a tua IA, para fazeres uma ferramenta nova com o aspeto do site.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F6F7F4">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
@@ -86,6 +89,7 @@
 <li><strong>Ferramentas do site dentro de um programa:</strong> em vez de copiar o HTML de outra ferramenta, escreve <code>&quot;{{FERRAMENTA:&lt;id&gt;}}&quot;</code> (com as aspas) no JavaScript. O site troca-o pela versão para descarregar atual dessa ferramenta, como texto, para pôr num <code>&lt;iframe srcdoc&gt;</code>. Para esconder o cabeçalho dela dentro do programa, usa <code>.autonomo-topo{display:none}</code>. Exemplo: a Saúde infantil e juvenil leva a Vacinação e as Doses pediátricas; a Vigilância da gravidez leva a Planificação e os Fármacos na gravidez.</li>
 <li><strong>Imagens de fora</strong> (só quando não podem ir no ficheiro, por exemplo fotografias do Wikimedia Commons): lista os servidores em <code>&quot;imagens_externas&quot;: [&quot;https://upload.wikimedia.org&quot;]</code>. Cada imagem leva autor, licença e ligação para a origem na legenda, e a ferramenta tem de continuar a funcionar sem internet (mostra a legenda com a ligação). Os pedidos de dados continuam bloqueados.</li>
 <li>**Sem <code>alert()</code> nem <code>confirm()</code>:** para limpar tudo, pede um segundo clique no mesmo botão.</li>
+<li><strong>Aplicação instalável:</strong> o site junta sozinho o manifesto e o registo do service worker (não é preciso fazer nada na ferramenta). As páginas com <code>&quot;workers&quot;: true</code> não o registam, por causa da CSP, mas ficam igualmente disponíveis offline. Quem guarda uma cópia da página (como os modelos de documentos) deve tirar também <code>link[rel=&quot;manifest&quot;]</code>, <code>meta[name=&quot;theme-color&quot;]</code> e <code>script[data-mgf=&quot;pwa&quot;]</code>.</li>
 <li><strong>Bibliotecas com folha de estilo</strong> (por exemplo <code>leaflet.css</code>): lista-as em <code>&quot;bibliotecas&quot;</code> como os ficheiros <code>.js</code>. No site ficam ligadas; na versão para descarregar vão lá dentro.</li>
 </ul>
 <h3>Modelos de documentos (Documentação)</h3>
@@ -168,10 +172,11 @@ A ferramenta que quero: [descreve o problema da consulta, a escala ou o cálculo
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v1.0 · 2026-11-15</span>
+<span class="mono">licença MIT · site v1.0 · 2026-11-17</span>
 </div>
 </div></footer>
 <script src="assets/js/catalogo.js"></script>
 <script src="assets/js/site.js"></script>
+<script src="assets/js/pwa.js"></script>
 </body>
 </html>

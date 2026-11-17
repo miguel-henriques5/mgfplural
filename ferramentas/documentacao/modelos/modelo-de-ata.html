@@ -8,6 +8,9 @@
 <title>Modelo de ata · MGF no Plural</title>
 <meta name="description" content="Agenda e ata de reunião: pontos de agenda, ata com texto formatado, tabelas, imagens e votações, presenças por grupo profissional, com impressão e gravação em HTML.">
 <link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#F6F7F4">
+<link rel="apple-touch-icon" href="../../../assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="../../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../../assets/css/completa.css">
 <style>
@@ -344,6 +347,7 @@ body { font-family: var(--font); background: #F2F2EF; color: var(--gray-dark); f
   }
 })();
 </script>
+<script data-mgf="pwa" src="../../../assets/js/pwa.js"></script>
 <script>
 var ataCount = 0;
 var agendaCount = 1;
@@ -916,7 +920,7 @@ function doPrint() {
 /* ── SAVE HTML ── */
 function doSaveHTML() {
   var clone = document.documentElement.cloneNode(true);
-  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], script[data-mgf="pwa"], link[rel="manifest"], meta[name="theme-color"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
   // Simple inputs
   document.querySelectorAll('input[type="text"]').forEach(function(orig) {
     if (!orig.id) return;

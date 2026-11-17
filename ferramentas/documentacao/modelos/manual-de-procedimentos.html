@@ -8,6 +8,9 @@
 <title>Manual de procedimentos · MGF no Plural</title>
 <meta name="description" content="Modelo para escrever procedimentos da unidade (objetivos, âmbito, siglas, responsabilidades, sequência lógica, indicadores, referências e assinaturas), com impressão e gravação em HTML.">
 <link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#F6F7F4">
+<link rel="apple-touch-icon" href="../../../assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="../../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../../assets/css/completa.css">
 <style>
@@ -709,6 +712,7 @@ body {
   }
 })();
 </script>
+<script data-mgf="pwa" src="../../../assets/js/pwa.js"></script>
 <script>
 /* ── auto-resize textareas ── */
 function autoResize(el) {
@@ -1047,7 +1051,7 @@ function doPrint() {
    Textarea values are written into textContent so they survive the clone. ── */
 function doSaveHTML() {
   const clone = document.documentElement.cloneNode(true);
-  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], script[data-mgf="pwa"], link[rel="manifest"], meta[name="theme-color"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
   // Simple text inputs by id
   document.querySelectorAll('input[type="text"]').forEach(orig => {
     const c = orig.id ? clone.querySelector('#' + orig.id) : null;

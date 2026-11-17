@@ -956,7 +956,7 @@ window.MGF_CATALOGO = [
  {
   "id": "plataforma-de-indicadores",
   "titulo": "Plataforma de indicadores",
-  "descricao": "Monitorização dos indicadores e do IDE (Portaria 411-A/2023) por microequipa, a partir das exportações do MIM@UF: IDE por microequipa, mapa de calor, detalhe por indicador, evolução mensal, relatório e apresentação para imprimir. E listagens de utentes a contactar, por médico e indicador, com marcação de contactos e lista para imprimir.",
+  "descricao": "Monitorização dos indicadores e do IDE (Portaria 411-A/2023; matriz em vigor em 2026) por microequipa, a partir das exportações do MIM@UF: IDE por microequipa, mapa de calor, detalhe por indicador, evolução mensal, relatório e apresentação para imprimir. E listagens de utentes a contactar, por médico e indicador, com marcação de contactos e lista para imprimir.",
   "area": "Plataforma de indicadores",
   "grupo": "Plataforma de indicadores",
   "icone": "indicadores",

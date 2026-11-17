@@ -1178,7 +1178,7 @@ function doPrint() {
    Textarea values are written into textContent so they survive the clone. ── */
 function doSaveHTML() {
   const clone = document.documentElement.cloneNode(true);
-  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], script[data-mgf="pwa"], link[rel="manifest"], meta[name="theme-color"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
   // Simple text inputs by id
   document.querySelectorAll('input[type="text"]').forEach(orig => {
     const c = orig.id ? clone.querySelector('#' + orig.id) : null;

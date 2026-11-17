@@ -12,8 +12,8 @@
  "area": "recursos-medicos",
  "grupo": "registo-e-vigilancia",
  "autor": "Miguel Henriques",
- "versao": "1.0",
- "revisto": "2026-11-12",
+ "versao": "1.1",
+ "revisto": "2026-11-17",
  "layout": "completa",
  "icone": "indicadores",
  "ordem": 2,
@@ -253,6 +253,23 @@
 /* ===== MGF no Plural ===== */
 .brand{font-family:'Bricolage Grotesque',var(--sans);font-weight:800}
 h1{font-family:'Bricolage Grotesque',var(--sans);font-weight:800}
+/* v6: títulos que ordenam (Utentes) e combinação de rastreios */
+.tb-rolar{overflow-x:auto;border-radius:var(--radius)}
+table.tb-ordenar th{padding:0}
+table.tb-ordenar td.meta{white-space:nowrap}
+table.tb-ordenar td:first-child{min-width:190px}
+.age{white-space:nowrap}
+.th-ord{all:unset;box-sizing:border-box;display:flex;gap:6px;align-items:center;width:100%;padding:11px 12px;cursor:pointer;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;white-space:nowrap}
+.th-ord:hover{color:var(--ink)}
+.th-ord:focus-visible{outline:2px solid var(--verde,#0F6E64);outline-offset:-2px}
+.th-ord .seta{font-size:10px;opacity:.35}
+.th-ord[data-ativo] .seta{opacity:1;color:var(--ink)}
+.comb-ras{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 14px}
+.comb-ras label{display:flex;gap:7px;align-items:center;width:auto;font-weight:500}
+.comb-ras label small{color:var(--ink3)}
+.comb-op{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:4px 14px 12px}
+.comb-op > span{color:var(--ink3);font-size:12.5px}
+.cel-ras .meta{display:block;margin-top:3px}
 /* página completa: o <main> do site não pode partir a grelha da aplicação */
 .pagina-completa .mgf-ferramenta{display:contents}
 .search .icn{top:8px}
@@ -352,7 +369,7 @@ let S = { patients: [], settings:{ retinaMeses:12 }, crossSets:[], v:1 };
    silêncio, isso tem de ser assinalado ao médico antes de avançar, para
    que decida — nunca deve acontecer sem aviso.
    ------------------------------------------------------------------------- */
-const SCHEMA_VERSION = 5; // v5: dados do SDM (p.sdm: última consulta e gastos por ano) · v4: telefone, módulos Obesidade e Domicílios, cruzamentos personalizados (S.crossSets) — tudo aditivo
+const SCHEMA_VERSION = 6; // v6: email do utente (p.email) e combinação de rastreios nas definições (S.settings.rasComb) · v5: dados do SDM (p.sdm: última consulta e gastos por ano) · v4: telefone, módulos Obesidade e Domicílios, cruzamentos personalizados (S.crossSets) — tudo aditivo
 function applyLoadedData(d){
   if(!d) return;
   S.settings = Object.assign({retinaMeses:12}, d.settings||{});
@@ -553,7 +570,7 @@ const SM_VAC = [
 function newPatient(o={}){
   return {
     id: o.id || 'p'+Math.random().toString(36).slice(2,10),
-    nome: o.nome||'', dob: o.dob||'', sns: o.sns||'', sexo: o.sexo||'', telefone: o.telefone||'', notas: o.notas||'',
+    nome: o.nome||'', dob: o.dob||'', sns: o.sns||'', sexo: o.sexo||'', telefone: o.telefone||'', email: o.email||'', notas: o.notas||'',
     prog: Object.assign({si:false,sm:false,dm:false,hta:false,dpoc:false,asma:false,obesidade:false,dom:false,ras:false}, o.prog||{}),
     si:{cons:{},aval:{},marcada:{date:''},obs:''},
     sm:{ativa:true,dum:'',dppc:'',rh:'',parto:'',cons:{},eco:{},lab:{},vac:{},antid:{},puerp:{},marcada:{date:''},obs:''},
@@ -575,6 +592,7 @@ function ensure(p){ const t=newPatient({id:p.id});
   if(!p.sdm.gastos || typeof p.sdm.gastos!=='object') p.sdm.gastos={};
   p.prog=Object.assign({si:false,sm:false,dm:false,hta:false,dpoc:false,asma:false,obesidade:false,dom:false,ras:false},p.prog||{});
   p.telefone = p.telefone || '';
+  p.email = typeof p.email==='string' ? p.email : '';
   p.notas = p.notas || '';
   return p; }
 
@@ -1470,7 +1488,7 @@ function filterList(list){
   if(!q) return list;
   const sa=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');   /* nome sem acentos */
   const qa=sa(q);
-  return list.filter(p=>sa(p.nome).includes(qa) || (p.sns||'').toLowerCase().includes(q));
+  return list.filter(p=>sa(p.nome).includes(qa) || (p.sns||'').toLowerCase().includes(q) || (p.email||'').toLowerCase().includes(q) || (q.replace(/\D/g,'').length>=3 && (p.telefone||'').replace(/\D/g,'').includes(q.replace(/\D/g,''))));
 }
 /* Ordenação das tabelas gerais. 'idade' usa meses de vida, exceto em Saúde
    Materna, onde usa a idade gestacional em dias — quem não tem idade
@@ -1481,6 +1499,13 @@ function sortList(list, k, mode){
   const ageOf=(p)=> k==='sm' ? igDias(p.sm) : ageMonths(p.dob);
   const out=list.slice();
   if(mode==='nome'){ out.sort(byName); return out; }
+  if(mode==='anos_asc'||mode==='anos_desc'){
+    const dir = mode==='anos_asc' ? 1 : -1;
+    out.sort((a,b)=>{ const av=ageMonths(a.p.dob), bv=ageMonths(b.p.dob);
+      if(av==null && bv==null) return byName(a,b); if(av==null) return 1; if(bv==null) return -1;
+      return dir*(av-bv) || byName(a,b); });
+    return out;
+  }
   if(mode==='idade_asc'||mode==='idade_desc'){
     const dir = mode==='idade_asc' ? 1 : -1;
     out.sort((a,b)=>{
@@ -1511,18 +1536,20 @@ function viewProg(k){
     const t=p.hta.ta||{}; return t.sis?`<span class="meta">${esc(t.sis)}/${esc(t.dia)} · ${fmtPT(t.data)}</span>`:'<span class="meta">—</span>';
   };
   const mkCell = (p)=>`<td onclick="event.stopPropagation()"><input type="text" inputmode="numeric" autocomplete="off" placeholder="dd/mm/aaaa" class="din" style="width:104px" data-mk="${k}:${p.id}" value="${ptForInput((p[k].marcada||{}).date)}"></td>`;
+  const comIdade = !(k==='si'||k==='ras');   /* em SI e Rastreios a idade já é a coluna própria */
   const rows=list.map(({p,s})=>`<tr data-open="${p.id}" data-tab="${k}">
-      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${[p.sns,p.telefone].filter(Boolean).map(esc).join(' · ')}</div></td>
-      <td>${cell(p)}</td><td>${esc(s.next)}</td><td>${statusPill(s.st)}</td>
+      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${contactosTxt(p)}</div></td>
+      ${comIdade?`<td><span class="age">${fmtAge(p.dob)||'—'}</span></td>`:''}<td>${cell(p)}</td><td>${esc(s.next)}</td><td>${statusPill(s.st)}</td>
       ${mkCell(p)}
       <td style="text-align:right">${tags(p)}</td></tr>`).join('');
   const segs=['todos','late','now','ok'].map(f=>`<button data-f="${f}" class="${ui.filter===f?'on':''}">${
     f==='todos'?'Todos':f==='late'?'Em atraso':f==='now'?'A fazer':'Em dia'}</button>`).join('');
 
   const canGroup = k==='si'||k==='sm';
-  const modeSeg = canGroup ? `<div class="seg">
+  if(k==='ras' && ui.group) return viewRasComb();
+  const modeSeg = (canGroup||k==='ras') ? `<div class="seg">
       <button data-mode="lista" class="${!ui.group?'on':''}">Lista</button>
-      <button data-mode="grupo" class="${ui.group?'on':''}">${k==='si'?'Por idade':'Por trimestre'}</button>
+      <button data-mode="grupo" class="${ui.group?'on':''}">${k==='si'?'Por idade':k==='sm'?'Por trimestre':'Combinar rastreios'}</button>
     </div>` : '';
   const isTable = !(canGroup && ui.group);
   const idadeLb = k==='sm' ? 'Idade gestacional' : 'Idade';
@@ -1530,17 +1557,20 @@ function viewProg(k){
       <option value="prioridade"${ui.sort==='prioridade'?' selected':''}>Ordenar: Prioridade</option>
       <option value="nome"${ui.sort==='nome'?' selected':''}>Ordenar: Nome (A–Z)</option>
       <option value="idade_asc"${ui.sort==='idade_asc'?' selected':''}>Ordenar: ${idadeLb} crescente</option>
-      <option value="idade_desc"${ui.sort==='idade_desc'?' selected':''}>Ordenar: ${idadeLb} decrescente</option>
+      <option value="idade_desc"${ui.sort==='idade_desc'?' selected':''}>Ordenar: ${idadeLb} decrescente</option>${k==='sm'?`
+      <option value="anos_asc"${ui.sort==='anos_asc'?' selected':''}>Ordenar: Idade crescente</option>
+      <option value="anos_desc"${ui.sort==='anos_desc'?' selected':''}>Ordenar: Idade decrescente</option>`:''}
     </select>` : '';
 
   const body = (canGroup && ui.group)
     ? (k==='si' ? renderGroupSI(list) : renderGroupSM(list))
-    : (list.length? `<table><thead><tr><th>Utente</th><th>${extra}</th><th>Próximo passo</th><th>Estado</th><th>Consulta marcada</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
+    : (list.length? `<table><thead><tr><th>Utente</th>${comIdade?'<th>Idade</th>':''}<th>${extra}</th><th>Próximo passo</th><th>Estado</th><th>Consulta marcada</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
        : `<div class="empty"><b>Sem utentes aqui</b>Importa a tua lista em Utentes ou associa utentes a este programa.</div>`);
 
   return `<h1>${PROGS[k].lb}</h1><p class="sub">${listOf(k).length} utentes neste programa</p>
    <div class="toolbar"><div class="seg">${segs}</div>${modeSeg}${sortSel}<div class="grow"></div>
      <button class="btn" data-act="print" data-k="${k}">Imprimir lista</button>
+     <button class="btn" data-act="xlsprog" data-k="${k}">Exportar Excel</button>
      <button class="btn" data-act="addto" data-k="${k}">Adicionar utente existente</button>
      <button class="btn pri" data-act="importto" data-k="${k}">Importar Excel para este programa</button></div>
    ${body}`;
@@ -1593,7 +1623,7 @@ function renderGroupSM(list){
 function groupBlock(title, items, k){
   const sub = k==='si'
     ? (x)=>fmtAge(x.p.dob)
-    : (x)=>{ const d=igDias(x.p.sm); return x.p.sm.parto?'pós-parto':fmtIG(d); };
+    : (x)=>{ const d=igDias(x.p.sm); return [fmtAge(x.p.dob), x.p.sm.parto?'pós-parto':fmtIG(d)].filter(Boolean).join(' · '); };
   return `<div class="block"><h4 style="display:flex;justify-content:space-between;align-items:center">
       <span>${esc(title)}</span><span class="chip">${items.length}</span></h4>
     ${items.map(x=>`<div class="item iclick" data-open="${x.p.id}" data-tab="${k}">
@@ -1638,7 +1668,7 @@ function viewCruz(){
     const cells = sel.map(k=>{ const s=progStatus(p,k); return `<td>${statusPill(s.st)}<div class="meta">${esc(s.next)}</div></td>`; }).join('');
     const partilha = consultasComuns(p, sel);
     return `<tr data-open="${p.id}" data-tab="${sel[0]}">
-      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${[fmtAge(p.dob),p.telefone].filter(Boolean).map(esc).join(' · ')}</div></td>
+      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${[fmtAge(p.dob),p.sns,p.telefone,p.email].filter(Boolean).map(esc).join(' · ')}</div></td>
       ${cells}
       <td class="meta">${partilha.length? partilha.map(fmtPT).join(' · ') : '—'}</td></tr>`;
   }).join('');
@@ -1646,18 +1676,20 @@ function viewCruz(){
   return `<h1>Cruzamentos</h1>
    <p class="sub">${list.length} utente(s) em comum entre ${sel.map(k=>PROGS[k].lb).join(' + ')}. Consultas registadas na mesma data contam para todos os programas selecionados.</p>
    ${painelSelecao}
-   <div class="toolbar"><div class="grow"></div><button class="btn" data-act="printcruz">Imprimir lista</button></div>
+   <div class="toolbar"><div class="grow"></div><button class="btn" data-act="printcruz">Imprimir lista</button><button class="btn" data-act="xlscruz">Exportar Excel</button></div>
    ${list.length? `<table><thead><tr><th>Utente</th>${cols}<th>Consultas comuns</th></tr></thead><tbody>${rows}</tbody></table>`
    : `<div class="empty"><b>Nenhum utente em comum</b>Ninguém está associado a todos os programas selecionados.</div>`}`;
 }
 
 function viewUtentes(){
   const sdmCols=sdmColunas();
-  const list=filterList(S.patients).slice().sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt'));
+  const list=ordenarUtentes(filterList(S.patients), sdmCols);
   const rows=list.map(p=>`<tr data-open="${p.id}" data-tab="ficha">
-      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${esc(p.sns||'')}</div></td>
+      <td><div class="nm">${esc(p.nome)}</div></td>
+      <td class="meta">${esc(p.sns||'—')}</td>
       <td class="meta">${fmtPT(p.dob)}</td><td class="meta">${fmtAge(p.dob)}</td>
       <td class="meta">${esc(p.telefone||'—')}</td>
+      <td class="meta">${esc(p.email||'—')}</td>
       <td>${tags(p)||'<span class="meta">sem programa</span>'}</td>${sdmCelulas(p,sdmCols)}</tr>`).join('');
   return `<h1>Utentes</h1><p class="sub">${S.patients.length} utentes na lista</p>
    <div class="toolbar">
@@ -1668,7 +1700,7 @@ function viewUtentes(){
      <button class="btn" data-act="expxls">Exportar Excel</button>
      <button class="btn" data-act="expjson">Guardar cópia de segurança</button>
    </div>
-   ${list.length? `<table><thead><tr><th>Nome</th><th>Data de nascimento</th><th>Idade</th><th>Telefone</th><th>Programas</th>${sdmCabec(sdmCols)}</tr></thead><tbody>${rows}</tbody></table>`
+   ${list.length? `<div class="tb-rolar"><table class="tb-ordenar"><thead><tr>${cabecUtentes(sdmCols)}</tr></thead><tbody>${rows}</tbody></table></div>`
    : `<div class="empty"><b>Lista vazia</b>Importa um Excel com nome e data de nascimento — as colunas são reconhecidas automaticamente.</div>${DEMO.on?'':demoConvite()}`}`;
 }
 
@@ -1747,7 +1779,7 @@ function renderDrawer(){
   const p=S.patients.find(x=>x.id===ui.open); if(!p) return;
   if(rasSync(p)) markDirty();
   document.getElementById('dName').textContent=p.nome||'(sem nome)';
-  const bits=[fmtPT(p.dob), fmtAge(p.dob)]; if(p.sns) bits.push('nº '+p.sns);
+  const bits=[fmtPT(p.dob), fmtAge(p.dob)]; if(p.sns) bits.push('nº '+p.sns); if(p.telefone) bits.push(p.telefone); if(p.email) bits.push(p.email);
   document.getElementById('dMeta').textContent=bits.join(' · ');
   const tabs=[['ficha','Ficha']].concat(Object.keys(PROGS).filter(k=>p.prog[k] || (k==='ras' && rasHasData(p))).map(k=>[k,PROGS[k].lb]));
   document.getElementById('dTabs').innerHTML=tabs.map(([k,l])=>`<button data-t="${k}" class="${ui.tab===k?'on':''}">${l}</button>`).join('');
@@ -1764,6 +1796,7 @@ function tabFicha(p){
     <div class="field"><label>Nome</label><input style="flex:1" data-f="nome" value="${esc(p.nome)}"></div>
     <div class="field"><label>Data de nascimento</label><input type="text" inputmode="numeric" autocomplete="off" placeholder="dd/mm/aaaa" class="din" data-f="dob" value="${ptForInput(p.dob)}"><span class="meta">${fmtAge(p.dob)}</span></div>
     <div class="field"><label>Telefone</label><input data-f="telefone" value="${esc(p.telefone)}" placeholder="9xx xxx xxx"></div>
+    <div class="field"><label>Email</label><input type="email" data-f="email" value="${esc(p.email)}" placeholder="nome@exemplo.pt" autocomplete="off" style="flex:1;min-width:0"></div>
     <div class="field"><label>Nº de utente</label><input data-f="sns" value="${esc(p.sns)}"></div>
     <div class="field"><label>Sexo</label><select data-f="sexo">
       <option value="">—</option><option value="F"${p.sexo==='F'?' selected':''}>F</option><option value="M"${p.sexo==='M'?' selected':''}>M</option></select></div>
@@ -2452,6 +2485,7 @@ function wire(){
   });
   document.querySelectorAll('#view [data-sort]').forEach(s=>s.onchange=()=>{ ui.sort=s.value; render(); });
   wireExtra();
+  wireV6();
   document.querySelectorAll('#view [data-crosschk]').forEach(c=>c.onchange=()=>{
     const k=c.dataset.crosschk;
     if(c.checked){ if(!ui.crossSel.includes(k)) ui.crossSel.push(k); }
@@ -2620,6 +2654,10 @@ function actions(a,k){
   if(a==='importto'){ if(typeof XLSX==='undefined') return toast('Leitor de Excel indisponível — recarrega a página'); (k==='ras'?rasImportDialog():importDialog(k)); }
   if(a==='print') printList(k);
   if(a==='printcruz') printCruz();
+  if(a==='xlsprog') xlsPrograma(k);
+  if(a==='xlscruz') xlsCruz();
+  if(a==='printcomb') printRasComb();
+  if(a==='xlscomb') xlsRasComb();
   if(a==='savecross'){
     const inp=document.getElementById('crossName');
     const name=(inp&&inp.value||'').trim();
@@ -2707,6 +2745,8 @@ function importDialog(forceProg){
       const head=rows[hi].map(h=>String(h).trim());
       const body=rows.slice(hi+1).filter(r=>r.some(c=>String(c).trim()));
       const guess=(...pats)=>{ const i=head.findIndex(h=>pats.some(p=>h.toLowerCase().includes(p))); return i<0?'':String(i); };
+      /* telefone: «contacto» só se não for o email */
+      const guessTel=()=>{ const i=head.findIndex(h=>{ const l=h.toLowerCase(); return ['telefone','telemóvel','telemovel','tlm','telm'].some(p=>l.includes(p)) || (l.includes('contacto') && !l.includes('mail')); }); return i<0?'':String(i); };
       const sel=(id,val)=>`<select id="${id}" style="flex:1"><option value="">—</option>${
         head.map((h,i)=>`<option value="${i}"${String(i)===val?' selected':''}>${esc(h||'coluna '+(i+1))}</option>`).join('')}</select>`;
       const titulo = forceProg ? `Importar para ${PROGS[forceProg].lb}` : 'Importar lista de utentes';
@@ -2732,7 +2772,8 @@ function importDialog(forceProg){
          <div class="field" style="border:0"><label>Data de nascimento</label>${sel('cDob',guess('nascimento','nasc','dn','dob','data de nasc'))}</div>
          <div class="field" style="border:0"><label>Nº de utente</label>${sel('cSns',guess('nº utente','n.º','sns','numero','número','snsutente'))}</div>
          <div class="field" style="border:0"><label>Sexo</label>${sel('cSex',guess('sexo','género','genero'))}</div>
-         <div class="field" style="border:0"><label>Telefone</label>${sel('cTel',guess('telefone','telemóvel','telemovel','contacto','tlm','telm'))}</div>
+         <div class="field" style="border:0"><label>Telefone</label>${sel('cTel',guessTel())}</div>
+         <div class="field" style="border:0"><label>Email</label>${sel('cMail',guess('email','e-mail','correio eletr','correio electr','mail'))}</div>
          <details class="sdm-imp"${temSdm?' open':''}><summary>Dados do SDM (opcional): última consulta e gastos do ano</summary>
            <div class="hint">Se a lista vier do SDM, podes juntar a data da última consulta na USF e os gastos do utente no ano com medicação e com MCDT. Datas sem separadores (ex.: 05072012) são reconhecidas. Em utentes já existentes, a data da última consulta fica sempre a mais recente.</div>
            <div class="field" style="border:0"><label>Última consulta na USF</label>${sel('cUlt',gUlt)}</div>
@@ -2743,7 +2784,7 @@ function importDialog(forceProg){
          ${opcoes}`,
         [{lb:'Cancelar'},{lb:'Importar',pri:true,fn:()=>{
           const gi=id=>{const v=document.getElementById(id).value; return v===''?-1:+v;};
-          const cN=gi('cNome'), cD=gi('cDob'), cS=gi('cSns'), cX=gi('cSex'), cT=gi('cTel');
+          const cN=gi('cNome'), cD=gi('cDob'), cS=gi('cSns'), cX=gi('cSex'), cT=gi('cTel'), cE=gi('cMail');
           const cU=gi('cUlt'), cM=gi('cMed'), cC=gi('cMcdt'), anoV=parseInt(document.getElementById('cAno').value,10);
           const anoG=String(anoV>=2000&&anoV<=2100?anoV:YEAR);
           const autoSI = forceProg ? false : document.getElementById('autoSI').checked;
@@ -2758,6 +2799,7 @@ function importDialog(forceProg){
             const sns  = cS<0?'':String(r[cS]||'').trim();
             const sexo = cX<0?'':sexNorm(r[cX]);
             const telefone = cT<0?'':String(r[cT]||'').trim();
+            const email = cE<0?'':String(r[cE]||'').trim();
             const ult = cU<0?'':parseAnyDate(r[cU]), gM = cM<0?null:parseEuro(r[cM]), gC = cC<0?null:parseEuro(r[cC]);
             const existing = findExisting(nome, dob, sns);
             if(existing){
@@ -2769,12 +2811,13 @@ function importDialog(forceProg){
                 if(sns      && (existMode==='substituir' ? existing.sns!==sns           : !existing.sns))      { existing.sns=sns;           touched=true; }
                 if(sexo     && (existMode==='substituir' ? existing.sexo!==sexo         : !existing.sexo))     { existing.sexo=sexo;         touched=true; }
                 if(telefone && (existMode==='substituir' ? existing.telefone!==telefone : !existing.telefone)) { existing.telefone=telefone; touched=true; }
+                if(email    && (existMode==='substituir' ? existing.email!==email       : !existing.email))    { existing.email=email;       touched=true; }
                 if(sdmAplicar(existing, ult, anoG, gM, gC, existMode)) touched=true;
                 if(touched) updated++;
               } else if(!forceProg) skip++;
               return;
             }
-            const p=newPatient({nome, dob, sns, sexo, telefone});
+            const p=newPatient({nome, dob, sns, sexo, telefone, email});
             sdmAplicar(p, ult, anoG, gM, gC, 'substituir');
             if(forceProg){ p.prog[forceProg]=true; if(forceProg==='si' && naPast) markPastSI(p); }
             else{
@@ -2802,7 +2845,7 @@ function saidaUtentes(lista){
     `<p style="margin-top:0">${lista.length} utente(s) da aplicação não constam do Excel.</p><p class="hint">(Por segurança, nenhum utente é eliminado da aplicação. Se quiseres, elimina-os à mão.)</p>`,
     [{lb:'Descarregar lista de inconformidades (Excel)',pri:true,fn:()=>{
       if(typeof XLSX==='undefined'){ toast('Leitor de Excel indisponível'); return false; }
-      const rows=lista.map(p=>({Nome:p.nome,'Data de nascimento':fmtPT(p.dob),Idade:fmtAge(p.dob),'Nº de utente':p.sns||'',Sexo:p.sexo||'',Telefone:p.telefone||'',
+      const rows=lista.map(p=>({Nome:p.nome,'Data de nascimento':fmtPT(p.dob),Idade:fmtAge(p.dob),'Nº de utente':p.sns||'',Sexo:p.sexo||'',Telefone:p.telefone||'',Email:p.email||'',
         'Programas em que está':Object.keys(PROGS).filter(k=>p.prog[k]).map(k=>PROGS[k].lb).join(', ')}));
       const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Inconformidades');
       XLSX.writeFile(wb,'saída-de-utentes_'+todayISO()+'.xlsx'); return false; }},
@@ -2861,7 +2904,7 @@ function printCruz(){
   const rowsHtml = list.map(p=>{
     const cells = sel.map(k=>{ const s=progStatus(p,k); return `<td>${esc(ptSt(s.st))} — ${esc(s.next)}</td>`; }).join('');
     const partilha = consultasComuns(p, sel);
-    return `<tr><td>${esc(p.nome)}${p.telefone?`<br><span style="color:#666;font-size:9pt">${esc(p.telefone)}</span>`:''}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td><td>${esc(fmtAge(p.dob))}</td>${cells}
+    return `<tr><td>${esc(p.nome)}${contactosPrint(p)}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td><td>${esc(fmtAge(p.dob))}</td>${cells}
       <td>${partilha.length? partilha.map(fmtPT).join(', ') : '—'}</td></tr>`;
   }).join('');
   const quando = new Date().toLocaleString('pt-PT');
@@ -2879,14 +2922,15 @@ function printList(k){
   const sorted = sortList(filtered, k, ui.sort);
 
   const idadeLb = k==='sm' ? 'Idade gestacional' : (k==='dpoc'||k==='asma') ? 'Última espirometria' : k==='obesidade' ? 'Última análise' : k==='dom' ? 'Última visita' : 'Idade';
+  const comIdade = idadeLb!=='Idade';   /* coluna Idade à parte quando a coluna própria do programa é outra */
   const idadeVal = (p)=> k==='sm' ? (p.sm.parto?'pós-parto':fmtIG(igDias(p.sm)))
     : (k==='dpoc'||k==='asma') ? ((p[k].espiro&&p[k].espiro.date)?fmtPT(p[k].espiro.date):'—')
     : k==='obesidade' ? ((p.obesidade.lab&&p.obesidade.lab.date)?fmtPT(p.obesidade.lab.date):'—')
     : k==='dom' ? ((p.dom.visita&&p.dom.visita.date)?fmtPT(p.dom.visita.date):'—')
     : fmtAge(p.dob);
-  const thead = `<thead><tr><th>Nome</th><th>Nº utente</th><th>${idadeLb}</th><th>Próximo passo</th><th>Estado</th></tr></thead>`;
+  const thead = `<thead><tr><th>Nome</th><th>Nº utente</th>${comIdade?'<th>Idade</th>':''}<th>${idadeLb}</th><th>Próximo passo</th><th>Estado</th></tr></thead>`;
   const rowsHtml = arr => arr.map(({p,s})=>`<tr>
-      <td>${esc(p.nome)}${p.telefone?`<br><span style="color:#666;font-size:9pt">${esc(p.telefone)}</span>`:''}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td><td>${esc(idadeVal(p))}</td>
+      <td>${esc(p.nome)}${contactosPrint(p)}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td>${comIdade?`<td>${esc(fmtAge(p.dob)||'—')}</td>`:''}<td>${esc(idadeVal(p))}</td>
       <td>${esc(s.next)}</td><td>${esc(ptSt(s.st))}</td></tr>`).join('');
 
   const grouped = (k==='si'||k==='sm') && ui.group;
@@ -2903,7 +2947,7 @@ function printList(k){
   }
 
   const filtroLb = {todos:'Todos os estados', late:'Em atraso', now:'A fazer', ok:'Em dia'}[ui.filter];
-  const ordLb = {prioridade:'Prioridade', nome:'Nome (A–Z)', idade_asc:idadeLb+' crescente', idade_desc:idadeLb+' decrescente'}[ui.sort];
+  const ordLb = {prioridade:'Prioridade', nome:'Nome (A–Z)', idade_asc:idadeLb+' crescente', idade_desc:idadeLb+' decrescente', anos_asc:'Idade crescente', anos_desc:'Idade decrescente'}[ui.sort];
   const quando = new Date().toLocaleString('pt-PT');
 
   document.getElementById('printArea').innerHTML = `
@@ -2917,14 +2961,14 @@ function printList(k){
 function exportXlsx(){
   if(typeof XLSX==='undefined') return toast('Leitor de Excel indisponível — usa a cópia .json');
   const wb=XLSX.utils.book_new();
-  const ut=S.patients.map(p=>({Nome:p.nome,'Data de nascimento':fmtPT(p.dob),Idade:fmtAge(p.dob),'Nº utente':p.sns,Sexo:p.sexo,Telefone:p.telefone||'',
+  const ut=S.patients.map(p=>({Nome:p.nome,'Data de nascimento':fmtPT(p.dob),Idade:fmtAge(p.dob),'Nº utente':p.sns,Sexo:p.sexo,Telefone:p.telefone||'',Email:p.email||'',
     'Saúde Infantil':p.prog.si?'Sim':'', 'Saúde Materna':p.prog.sm?'Sim':'', Diabetes:p.prog.dm?'Sim':'', Hipertensão:p.prog.hta?'Sim':'',
     DPOC:p.prog.dpoc?'Sim':'', Asma:p.prog.asma?'Sim':'', Obesidade:p.prog.obesidade?'Sim':'', Domicílios:p.prog.dom?'Sim':'', Rastreios:p.prog.ras?'Sim':'',
     'Recusa vacinas PNV':(p.vac&&p.vac.pnv)?'Sim':'', 'Recusa vacinas extra-plano':(p.vac&&p.vac.extra)?(p.vac.extraTxt||'Sim'):''}));
   sdmExportar(ut);
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ut), 'Utentes');
 
-  const si=listOf('si').map(p=>{ const o={Nome:p.nome,Idade:fmtAge(p.dob),Estado:ptSt(progStatus(p,'si').st),'Em falta':progStatus(p,'si').next};
+  const si=listOf('si').map(p=>{ const o={Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),Estado:ptSt(progStatus(p,'si').st),'Em falta':progStatus(p,'si').next};
     SI_CONS.forEach(c=>o[c.lb]=p.si.cons[c.id]&&p.si.cons[c.id].done?fmtPT(p.si.cons[c.id].date):'');
     SI_AVAL.forEach(c=>o[c.lb]=p.si.aval[c.id]&&p.si.aval[c.id].done?fmtPT(p.si.aval[c.id].date):'');
     o['Cheques-dentista']=SI_CHEQ.filter(q=>chequeOn(p,q)).map(q=>q.n).join(', ');
@@ -2933,7 +2977,7 @@ function exportXlsx(){
     const pnvSt=siItems(p).find(i=>i.key==='pnv'); o['PNV atualizado (estado)']=pnvSt&&pnvSt.rec.done&&pnvSt.st==='ok'?'Sim':(pnvSt&&pnvSt.st==='late'?'Desatualizado':''); return o;});
   if(si.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(si), 'Saúde Infantil');
 
-  const sm=listOf('sm').map(p=>{ const o={Nome:p.nome,DUM:fmtPT(p.sm.dum),'IG':fmtIG(igDias(p.sm)),DPP:fmtPT(dpp(p.sm)),Rh:p.sm.rh||'',
+  const sm=listOf('sm').map(p=>{ const o={Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),DUM:fmtPT(p.sm.dum),'IG':fmtIG(igDias(p.sm)),DPP:fmtPT(dpp(p.sm)),Rh:p.sm.rh||'',
       Estado:ptSt(progStatus(p,'sm').st),'Em falta':progStatus(p,'sm').next};
     SM_CONS.forEach(c=>o[c.lb]=p.sm.cons[c.id]&&p.sm.cons[c.id].done?fmtPT(p.sm.cons[c.id].date):'');
     SM_ECO.forEach(c=>o[c.lb]=p.sm.eco[c.id]&&p.sm.eco[c.id].done?fmtPT(p.sm.eco[c.id].date):'');
@@ -2941,7 +2985,7 @@ function exportXlsx(){
     SM_VAC.forEach(c=>o[c.lb]=p.sm.vac[c.id]&&p.sm.vac[c.id].done?fmtPT(p.sm.vac[c.id].date):''); return o;});
   if(sm.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sm), 'Saúde Materna');
 
-  const dm=listOf('dm').map(p=>{ const a=p.dm.ultimoA1c||{}; const o={Nome:p.nome,Idade:fmtAge(p.dob),
+  const dm=listOf('dm').map(p=>{ const a=p.dm.ultimoA1c||{}; const o={Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),
       'Última HbA1c':a.valor||'','Data HbA1c':fmtPT(a.data),
       'Retinopatia':fmtPT((p.dm.retina||{}).date),'Pé diabético':fmtPT((p.dm.pe||{}).date),'Análises':fmtPT((p.dm.lab||{}).date),
       'Também HTA':p.prog.hta?'Sim':'', Estado:ptSt(progStatus(p,'dm').st),'Em falta':progStatus(p,'dm').next};
@@ -2949,16 +2993,19 @@ function exportXlsx(){
     Object.keys(p.dm.a1c).forEach(k=>o['HbA1c '+k]=p.dm.a1c[k].done?fmtPT(p.dm.a1c[k].date):''); return o;});
   if(dm.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dm), 'Diabetes');
 
-  const ht=listOf('hta').map(p=>{ const t=p.hta.ta||{}; return {Nome:p.nome,Idade:fmtAge(p.dob),
+  const ht=listOf('hta').map(p=>{ const t=p.hta.ta||{}; return {Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),
       'TA':t.sis?`${t.sis}/${t.dia}`:'','Data TA':fmtPT(t.data),'Análises':fmtPT((p.hta.lab||{}).date),
       ['Consulta '+YEAR]:(p.hta.cons[String(YEAR)]||{}).done?fmtPT(p.hta.cons[String(YEAR)].date):'',
       'Também Diabetes':p.prog.dm?'Sim':'', Estado:ptSt(progStatus(p,'hta').st),'Em falta':progStatus(p,'hta').next};});
   if(ht.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ht), 'Hipertensão');
 
-  const ra=listOf('ras').map(p=>{ const s=rasStatus(p); const o={Nome:p.nome,Idade:fmtAge(p.dob),Sexo:p.sexo,Fumador:p.ras.fumador?'Sim':'',Estado:ptSt(s.st),'Em falta':s.next};
+  const ra=listOf('ras').map(p=>{ const s=rasStatus(p); const o={Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),Sexo:p.sexo,Fumador:p.ras.fumador?'Sim':'',Estado:ptSt(s.st),'Em falta':s.next};
     rasList(p).map(i=>rasEval(p,i)).forEach(e=>{ o[e.d.short+' — última']=e.r.date?fmtPT(e.r.date):'';
       o[e.d.short+' — próxima']=e.st==='na'?'Não elegível':(e.next?fmtPT(e.next):e.msg); }); return o;});
   if(ra.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ra), 'Rastreios');
+  /* DPOC, Asma, Obesidade e Domicílios: a mesma lista que se vê no programa */
+  ['dpoc','asma','obesidade','dom'].forEach(k=>{ const l=listOf(k); if(l.length) XLSX.utils.book_append_sheet(wb, folhaPrograma(k, l.map(p=>({p,s:progStatus(p,k)}))), PROGS[k].lb); });
+  wb.SheetNames.forEach(n=>larguras(wb.Sheets[n]));
 
   XLSX.writeFile(wb,'vigilancia-utentes-'+todayISO()+'.xlsx');
   toast('Excel exportado');
@@ -3115,6 +3162,13 @@ function gerarDemo(){
     }
   });
   lista.sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
+  /* nº de utente e email fictícios (100000001…, @example.com), sem gastar números do gerador: o resto da lista fica igual */
+  const semAc=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  lista.forEach((p,i)=>{ p.sns=String(100000001+i); const n=p.nome.split(' ');
+    if(i%5!==3) p.email=semAc(n[0])+'.'+semAc(n[n.length-1])+(i%7===0?String(i):'')+'@example.com'; });
+  /* algumas utentes com o RCCU e o RCM em atraso ao mesmo tempo, para se ver a combinação de rastreios */
+  lista.filter(p=>p.sexo==='F' && rasGeneral(p) && ageYears(p.dob)>=46 && ageYears(p.dob)<=68).forEach((p,i)=>{ if(i%6) return;
+    p.ras.rec=p.ras.rec||{}; p.ras.rec.rccu={date:atras(365*6+40), res:'neg'}; p.ras.rec.rcm={date:atras(365*2+120)}; });
   return { patients:lista, settings:{retinaMeses:12},
     crossSets:[{id:'cxdemo', name:'Diabetes + Hipertensão + Obesidade', progs:['dm','hta','obesidade']}] };
 }
@@ -3492,6 +3546,214 @@ function wireExtra(){
     ui.relSel=(ui.relSel||[]).filter(x=>x!==k); if(c.checked) ui.relSel.push(k); render(); });
   document.querySelectorAll('#view [data-relmodo]').forEach(b=>b.onclick=()=>{ ui.relModo=b.dataset.relmodo; render(); });
   const ano=document.querySelector('#view [data-relano]'); if(ano) ano.onchange=()=>{ ui.relAno=ano.value; render(); };
+}
+
+/* =======================================================================
+   v6 (2026-11-17): idade em todas as listas, ordenar utentes por coluna, email,
+   Excel em cada programa e combinação de rastreios em atraso.
+   ======================================================================= */
+function contactosTxt(p){ return [p.sns,p.telefone,p.email].filter(Boolean).map(esc).join(' · '); }
+function contactosPrint(p){ const c=[p.telefone,p.email].filter(Boolean); return c.length?`<br><span style="color:#666;font-size:9pt">${esc(c.join(' · '))}</span>`:''; }
+function contactosXls(p){ return {'Nº utente':p.sns||'', Telefone:p.telefone||'', Email:p.email||''}; }
+/* nº de utente como texto (não perde zeros nem passa a notação científica) e colunas com largura legível */
+function larguras(ws){
+  if(!ws || !ws['!ref']) return ws;
+  const r=XLSX.utils.decode_range(ws['!ref']), w=[];
+  for(let c=r.s.c;c<=r.e.c;c++){ let m=6;
+    for(let l=r.s.r;l<=r.e.r;l++){ const cel=ws[XLSX.utils.encode_cell({r:l,c})]; if(cel && cel.v!=null) m=Math.max(m,String(cel.v).length); }
+    w.push({wch:Math.min(60,m+2)}); }
+  ws['!cols']=w;
+  return ws;
+}
+function folha(linhas){ return larguras(XLSX.utils.json_to_sheet(linhas.length?linhas:[{'Sem utentes':''}])); }
+function ficheiroXls(nome, folhas){
+  if(typeof XLSX==='undefined'){ toast('Leitor de Excel indisponível'); return; }
+  const wb=XLSX.utils.book_new();
+  folhas.forEach(([n,ws])=>XLSX.utils.book_append_sheet(wb, ws, n.slice(0,31)));
+  XLSX.writeFile(wb, nome);
+  toast('Excel exportado');
+}
+const SLUG={si:'saude-infantil',sm:'saude-materna',dm:'diabetes',hta:'hipertensao',dpoc:'dpoc',asma:'asma',obesidade:'obesidade',dom:'domicilios',ras:'rastreios'};
+
+/* valor da coluna própria de cada programa, em texto */
+function colunaPrograma(k,p){
+  if(k==='sm') return ['Idade gestacional', p.sm.parto?'pós-parto':(fmtIG(igDias(p.sm))||'')];
+  if(k==='dm'){ const a=p.dm.ultimoA1c||{}; return ['Última HbA1c', a.valor?(String(a.valor).replace('.',',')+'% · '+fmtPT(a.data)):'']; }
+  if(k==='dpoc'||k==='asma'){ const e=p[k].espiro||{}; return ['Última espirometria', e.date?fmtPT(e.date):'']; }
+  if(k==='obesidade'){ const l=p.obesidade.lab||{}; return ['Última análise', l.date?fmtPT(l.date):'']; }
+  if(k==='dom'){ const v=p.dom.visita||{}; return ['Última visita', v.date?fmtPT(v.date)+' · '+(DOM_PERIODOS_LB[p.dom.periodicidade]||''):'']; }
+  if(k==='hta'){ const t=p.hta.ta||{}; return ['Última TA', t.sis?`${t.sis}/${t.dia} · ${fmtPT(t.data)}`:'']; }
+  return null;
+}
+function linhaPrograma(k,{p,s},grupo){
+  const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||''};
+  if(grupo) o.Grupo=grupo;
+  const c=colunaPrograma(k,p); if(c) o[c[0]]=c[1];
+  o['Próximo passo']=s.next; o.Estado=ptSt(s.st);
+  if(k==='ras') rasList(p).map(i=>rasEval(p,i)).forEach(e=>{ o[e.d.short+' — estado']=e.st==='na'?'Não elegível':ptSt(e.st); o[e.d.short+' — última']=e.r.date?fmtPT(e.r.date):''; o[e.d.short+' — próxima']=e.next?fmtPT(e.next):(e.msg||''); });
+  o['Consulta marcada']=fmtPT((p[k].marcada||{}).date)||'';
+  o['Programas']=Object.keys(PROGS).filter(x=>p.prog[x]).map(x=>PROGS[x].lb).join(', ');
+  return o;
+}
+function folhaPrograma(k,lista,grupos){
+  const linhas=[];
+  if(grupos) grupos.forEach(g=>g.items.forEach(x=>linhas.push(linhaPrograma(k,x,g.title))));
+  else lista.forEach(x=>linhas.push(linhaPrograma(k,x)));
+  return folha(linhas);
+}
+/* lista atual do programa: respeita a pesquisa, o filtro de estado, a ordenação e o agrupamento */
+function xlsPrograma(k){
+  const list0 = filterList(listOf(k)).map(p=>({p,s:progStatus(p,k)}));
+  const filtered = ui.filter==='todos' ? list0 : list0.filter(x=>x.s.st===ui.filter);
+  const sorted = sortList(filtered, k, ui.sort);
+  const grupos = (k==='si'||k==='sm') && ui.group ? (k==='si'?groupSIBuckets(sorted):groupSMBuckets(sorted)) : null;
+  const filtroLb = {todos:'todos', late:'em-atraso', now:'a-fazer', ok:'em-dia'}[ui.filter]||'todos';
+  ficheiroXls(`vigilancia-${SLUG[k]}-${filtroLb}-${todayISO()}.xlsx`, [[PROGS[k].lb, folhaPrograma(k, sorted, grupos)]]);
+}
+function xlsCruz(){
+  const sel = (ui.crossSel && ui.crossSel.filter(k=>PROGS[k]).length>=2) ? ui.crossSel.filter(k=>PROGS[k]) : ['dm','hta'];
+  const list = filterList(S.patients.filter(p=> sel.every(k=>p.prog[k])));
+  const linhas = list.map(p=>{ const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||''};
+    sel.forEach(k=>{ const s=progStatus(p,k); o[PROGS[k].lb+' — estado']=ptSt(s.st); o[PROGS[k].lb+' — próximo passo']=s.next; });
+    o['Consultas comuns']=consultasComuns(p,sel).map(fmtPT).join(', ');
+    return o; });
+  ficheiroXls(`vigilancia-cruzamento-${sel.map(k=>SLUG[k]).join('+')}-${todayISO()}.xlsx`, [['Cruzamento', folha(linhas)]]);
+}
+
+/* ---- Utentes: ordenar por qualquer coluna (clicar no título; outro clique inverte) ---- */
+const UT_COLS = [
+  ['nome','Nome'], ['sns','Nº de utente'], ['dob','Data de nascimento'], ['idade','Idade'],
+  ['telefone','Telefone'], ['email','Email'], ['progs','Programas']
+];
+function cabecUtentes(c){
+  const cols = UT_COLS.slice();
+  if(c.ult) cols.push(['ult','Última consulta']);
+  if(c.ano) cols.push(['gastos','Gastos '+c.ano]);
+  const o = ui.uSort || {col:'nome',dir:1};
+  return cols.map(([id,lb])=>{ const at=o.col===id;
+    return `<th aria-sort="${at?(o.dir>0?'ascending':'descending'):'none'}"><button type="button" class="th-ord" data-usort="${id}"${at?' data-ativo':''} title="Ordenar por ${esc(lb.toLowerCase())}">${esc(lb)}<span class="seta" aria-hidden="true">${at?(o.dir>0?'▲':'▼'):'▲▼'}</span></button></th>`; }).join('');
+}
+function ordenarUtentes(lista, c){
+  const o = ui.uSort || {col:'nome',dir:1};
+  const nome=(a,b)=>(a.nome||'').localeCompare(b.nome||'','pt');
+  const txt=v=>String(v||'').trim();
+  const val = p => {
+    switch(o.col){
+      case 'nome': return txt(p.nome) || null;
+      case 'sns': { const d=txt(p.sns).replace(/\D/g,''); return d ? Number(d) : (txt(p.sns)||null); }
+      case 'dob': return p.dob || null;
+      case 'idade': { const m=ageMonths(p.dob); return m==null?null:m; }
+      case 'telefone': return txt(p.telefone).replace(/\s/g,'') || null;
+      case 'email': return txt(p.email).toLowerCase() || null;
+      case 'progs': { const ks=Object.keys(PROGS).filter(k=>p.prog[k]); return ks.length ? ks.map(k=>PROGS[k].lb).join(', ') : null; }
+      case 'ult': return p.sdm.ultConsulta || null;
+      case 'gastos': { const g=c.ano && p.sdm.gastos[c.ano]; return g&&(g.med!=null||g.mcdt!=null) ? (g.med||0)+(g.mcdt||0) : null; }
+    }
+    return null;
+  };
+  const cmp=(a,b)=> typeof a==='number' && typeof b==='number' ? a-b : String(a).localeCompare(String(b),'pt',{numeric:true});
+  /* quem não tem o valor fica sempre no fim, seja qual for a direção */
+  return lista.map(p=>({p,v:val(p)})).sort((x,y)=>{
+    if(x.v==null && y.v==null) return nome(x.p,y.p);
+    if(x.v==null) return 1; if(y.v==null) return -1;
+    return o.dir*cmp(x.v,y.v) || nome(x.p,y.p);
+  }).map(x=>x.p);
+}
+
+/* ---- Rastreios → Combinar rastreios: utentes com vários rastreios desatualizados ao mesmo tempo ---- */
+function rasComb(){
+  const c = Object.assign({sel:['rccu','rcm'], modo:'todos', est:'late'}, S.settings.rasComb||{});
+  c.sel = (Array.isArray(c.sel)?c.sel:[]).filter(id=>RAS_DEFS.some(d=>d.id===id));
+  if(!['todos','algum'].includes(c.modo)) c.modo='todos';
+  if(!['late','pend'].includes(c.est)) c.est='late';
+  return c;
+}
+function rasCombLista(){
+  const c=rasComb(), quer = st => c.est==='late' ? st==='late' : (st==='late'||st==='now');
+  if(!c.sel.length) return {c, list:[]};
+  const list = filterList(listOf('ras')).map(p=>{
+    const ev={}; rasList(p).map(i=>rasEval(p,i)).forEach(e=>{ if(e.active && e.st!=='na') ev[e.d.id]=e; });
+    const bate=c.sel.filter(id=>ev[id] && quer(ev[id].st));
+    const ok = c.modo==='todos' ? bate.length===c.sel.length : bate.length>0;
+    return ok ? {p, ev, n:bate.length} : null;
+  }).filter(Boolean);
+  list.sort((a,b)=> b.n-a.n || (a.p.nome||'').localeCompare(b.p.nome||'','pt'));
+  return {c, list};
+}
+function rasCombTitulo(c){
+  const nomes=c.sel.map(id=>RAS_DEFS.find(d=>d.id===id).short);
+  const est = c.est==='late' ? 'em atraso' : 'em atraso ou a fazer';
+  if(c.sel.length===1) return nomes[0]+' '+est;
+  return (c.modo==='todos' ? nomes.join(' + ')+' — todos '+est+' ao mesmo tempo' : nomes.join(' ou ')+' — pelo menos um '+est);
+}
+function rasCelula(e){
+  if(!e) return '<span class="meta">não se aplica</span>';
+  const quando = e.next ? (e.st==='late'?'desde ':'até ')+fmtPT(e.next) : (e.r && e.r.date ? 'último '+fmtPT(e.r.date) : (e.msg||'sem registo'));
+  return statusPill(e.st)+`<span class="meta">${esc(quando)}</span>`;
+}
+function rasTexto(e){
+  if(!e) return 'Não se aplica';
+  return ptSt(e.st)+(e.next?(e.st==='late'?' desde ':' até ')+fmtPT(e.next):(e.r&&e.r.date?' · último '+fmtPT(e.r.date):(e.msg?' · '+e.msg:'')));
+}
+function viewRasComb(){
+  const {c, list} = rasCombLista();
+  const checks = RAS_DEFS.map(d=>`<label title="${esc(d.lb)}"><input type="checkbox" class="chk" data-combras="${d.id}" ${c.sel.includes(d.id)?'checked':''}> ${esc(d.short)}${d.smoker?' <small>(fumadores)</small>':''}</label>`).join('');
+  const seg=(attr,val,lb,cur)=>`<button data-${attr}="${val}" class="${cur===val?'on':''}">${lb}</button>`;
+  const cols = c.sel.map(id=>`<th>${esc(RAS_DEFS.find(d=>d.id===id).short)}</th>`).join('');
+  const rows = list.map(({p,ev})=>`<tr data-open="${p.id}" data-tab="ras">
+      <td><div class="nm">${esc(p.nome)}</div><div class="meta">${contactosTxt(p)}</div></td>
+      <td><span class="age">${fmtAge(p.dob)||'—'}</span></td>
+      ${c.sel.map(id=>`<td class="cel-ras">${rasCelula(ev[id])}</td>`).join('')}
+      <td onclick="event.stopPropagation()"><input type="text" inputmode="numeric" autocomplete="off" placeholder="dd/mm/aaaa" class="din" style="width:104px" data-mk="ras:${p.id}" value="${ptForInput((p.ras.marcada||{}).date)}"></td></tr>`).join('');
+  return `<h1>${PROGS.ras.lb}</h1><p class="sub">${listOf('ras').length} utentes neste programa · combinação de rastreios</p>
+   <div class="toolbar"><div class="seg"><button data-mode="lista">Lista</button><button data-mode="grupo" class="on">Combinar rastreios</button></div><div class="grow"></div>
+     <button class="btn" data-act="printcomb"${list.length?'':' disabled'}>Imprimir lista</button>
+     <button class="btn" data-act="xlscomb"${list.length?'':' disabled'}>Exportar Excel</button></div>
+   <div class="block"><h4>Rastreios a combinar</h4>
+     <div class="comb-ras">${checks}</div>
+     <div class="comb-op"><span>Utentes com</span>
+       <div class="seg">${seg('combmodo','todos','todos ao mesmo tempo',c.modo)}${seg('combmodo','algum','pelo menos um',c.modo)}</div>
+       <div class="seg">${seg('combest','late','em atraso',c.est)}${seg('combest','pend','em atraso ou a fazer',c.est)}</div></div>
+     <div class="hint" style="padding:0 14px 12px">Conta só os rastreios que se aplicam a cada utente (idade, sexo e, nos do fumador, hábitos tabágicos). Quem não é elegível ou tem seguimento hospitalar não entra.</div>
+   </div>
+   ${!c.sel.length ? `<div class="empty"><b>Escolhe pelo menos um rastreio</b>Por exemplo, RCCU e RCM para as utentes com os dois rastreios em atraso.</div>`
+     : list.length ? `<p class="sub" style="margin:4px 0 10px">${list.length} utente(s) · ${esc(rasCombTitulo(c))}</p>
+       <table><thead><tr><th>Utente</th><th>Idade</th>${cols}<th>Consulta marcada</th></tr></thead><tbody>${rows}</tbody></table>`
+     : `<div class="empty"><b>Ninguém com esta combinação</b>${esc(rasCombTitulo(c))}.</div>`}`;
+}
+function printRasComb(){
+  const {c, list} = rasCombLista();
+  const thead = `<thead><tr><th>Nome</th><th>Nº utente</th><th>Idade</th>${c.sel.map(id=>`<th>${esc(RAS_DEFS.find(d=>d.id===id).short)}</th>`).join('')}</tr></thead>`;
+  const rowsHtml = list.map(({p,ev})=>`<tr><td>${esc(p.nome)}${contactosPrint(p)}</td><td>${esc(p.sns||'—')}</td><td>${esc(fmtAge(p.dob)||'—')}</td>${c.sel.map(id=>`<td>${esc(rasTexto(ev[id]))}</td>`).join('')}</tr>`).join('');
+  const quando = new Date().toLocaleString('pt-PT');
+  document.getElementById('printArea').innerHTML = `
+    <h1>Rastreios — ${esc(rasCombTitulo(c))}</h1>
+    <p class="sub">${list.length} utente(s) · impresso em ${esc(quando)}</p>
+    ${list.length? `<table>${thead}<tbody>${rowsHtml}</tbody></table>` : '<p>Sem utentes para esta seleção.</p>'}`;
+  window.print();
+}
+function xlsRasComb(){
+  const {c, list} = rasCombLista();
+  const linhas = list.map(({p,ev})=>{ const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||''};
+    c.sel.forEach(id=>{ const d=RAS_DEFS.find(x=>x.id===id), e=ev[id];
+      o[d.short+' — estado']=e?ptSt(e.st):'Não se aplica'; o[d.short+' — última']=e&&e.r.date?fmtPT(e.r.date):''; o[d.short+' — próxima']=e?(e.next?fmtPT(e.next):(e.msg||'')):''; });
+    o['Consulta marcada']=fmtPT((p.ras.marcada||{}).date)||'';
+    return o; });
+  const resumo = folha([{Combinação:rasCombTitulo(c), Utentes:list.length, 'Exportado em':new Date().toLocaleString('pt-PT')}]);
+  ficheiroXls(`vigilancia-rastreios-${c.sel.join('+')}-${c.est==='late'?'em-atraso':'pendentes'}-${todayISO()}.xlsx`, [['Utentes', folha(linhas)], ['Combinação', resumo]]);
+}
+function wireV6(){
+  document.querySelectorAll('#view [data-usort]').forEach(b=>b.onclick=()=>{
+    const col=b.dataset.usort, o=ui.uSort||{col:'nome',dir:1};
+    ui.uSort = o.col===col ? {col, dir:-o.dir} : {col, dir:1};
+    render();
+    const n=document.querySelector(`#view [data-usort="${col}"]`); if(n) n.focus();
+  });
+  const guardar=c=>{ S.settings.rasComb=c; markDirty(); render(); };
+  document.querySelectorAll('#view [data-combras]').forEach(x=>x.onchange=()=>{ const c=rasComb();
+    c.sel = RAS_DEFS.map(d=>d.id).filter(id=> id===x.dataset.combras ? x.checked : c.sel.includes(id)); guardar(c); });
+  document.querySelectorAll('#view [data-combmodo]').forEach(b=>b.onclick=()=>{ const c=rasComb(); c.modo=b.dataset.combmodo; guardar(c); });
+  document.querySelectorAll('#view [data-combest]').forEach(b=>b.onclick=()=>{ const c=rasComb(); c.est=b.dataset.combest; guardar(c); });
 }
 
 /* ---------------- arranque ---------------- */
