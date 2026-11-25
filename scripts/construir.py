@@ -18,6 +18,7 @@ Só usa a biblioteca padrão do Python 3.8+. Não altera nada em fonte/.
 """
 import base64
 import datetime as dt
+import hashlib
 import html
 import json
 import re
@@ -43,6 +44,7 @@ CSP_AUTONOMO = ("default-src 'none'; script-src 'unsafe-inline'; style-src 'unsa
                 "font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'")
 
 e = html.escape
+COR_APP = "#F6F7F4"   # cor da janela da aplicação instalada (fundo do site, sem barras escuras)
 
 
 def erro(msg):
@@ -198,9 +200,16 @@ def cabeca(titulo, prefixo, descricao, csp=CSP_SITE, extra=""):
 <title>{e(titulo)}</title>
 <meta name="description" content="{e(descricao)}">
 <link rel="icon" href="{prefixo}assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="{prefixo}assets/css/tokens.css">
+{cabeca_app(prefixo)}<link rel="stylesheet" href="{prefixo}assets/css/tokens.css">
 <link rel="stylesheet" href="{prefixo}assets/css/site.css">
 {extra}</head>"""
+
+
+def cabeca_app(prefixo):
+    """Aplicação instalável (PWA): manifesto, cor da janela e ícone para o ecrã do iPhone."""
+    return (f'<link rel="manifest" href="{prefixo}manifest.webmanifest">\n'
+            f'<meta name="theme-color" content="{COR_APP}">\n'
+            f'<link rel="apple-touch-icon" href="{prefixo}assets/img/apple-touch-icon.png">\n')
 
 
 def menu_ferramentas(prefixo, ferramentas, ativo=False):
@@ -274,7 +283,8 @@ def rodape(prefixo):
 </div>
 </div></footer>
 <script src="{prefixo}assets/js/catalogo.js"></script>
-<script src="{prefixo}assets/js/site.js"></script>"""
+<script src="{prefixo}assets/js/site.js"></script>
+<script src="{prefixo}assets/js/pwa.js"></script>"""
 
 
 def iniciais(nome):
@@ -734,6 +744,7 @@ def pagina_completa(f, ferramentas, css=None):
     else:
         csp = csp_ferramenta(CSP_SITE, f)
         cabeca_css = (f'<link rel="icon" href="{prefixo}assets/img/favicon.svg" type="image/svg+xml">\n'
+                      + cabeca_app(prefixo) +
                       f'<link rel="stylesheet" href="{prefixo}assets/css/tokens.css">\n'
                       f'<link rel="stylesheet" href="{prefixo}assets/css/completa.css">\n'
                       + bibliotecas_css(f, prefixo, False)
@@ -757,7 +768,7 @@ def pagina_completa(f, ferramentas, css=None):
 {bibliotecas_js(f, prefixo, autonomo)}<script data-mgf="barra">
 {JS_BARRA}
 </script>
-<script>
+{'' if autonomo or f.get("workers") else f'<script data-mgf="pwa" src="{prefixo}assets/js/pwa.js"></script>' + chr(10)}<script>
 {script}
 </script>
 </body>
@@ -1127,6 +1138,8 @@ def pagina_acerca(ferramentas):
 <section class="contentor seccao" id="offline" style="padding-top:0">
 <div class="seccao-cabeca"><h2>Usar offline</h2></div>
 <div class="grelha">
+<div class="cartao-area" style="min-height:0"><strong style="margin-top:0">Instalar como aplicação</strong><p>Abre o MGF no Plural numa janela própria, com ícone no ambiente de trabalho ou no ecrã do telemóvel. No Chrome e no Edge, carrega em Instalar (ou, no menu do browser, «Instalar MGF no Plural»). No iPhone e no iPad, no Safari: Partilhar → Adicionar ao ecrã principal.</p><button type="button" class="botao-escuro" data-pwa-instalar hidden>Instalar</button><span class="etiqueta-mono" data-pwa-instalada hidden>Já estás a usar a aplicação</span></div>
+<div class="cartao-area" style="min-height:0" data-pwa-offline hidden><strong style="margin-top:0">Disponibilizar tudo offline</strong><p>Guarda neste browser todas as páginas e ferramentas do site, para funcionarem sem internet. Com ligação, o site vai sempre buscar a versão mais recente e atualiza a cópia guardada, para não ficares com ferramentas desatualizadas.</p><p data-pwa-estado role="status" style="font-size:15px;color:var(--cor-texto-2)"></p><progress hidden style="width:100%"></progress><div style="display:flex;flex-wrap:wrap;gap:10px"><button type="button" class="botao-escuro" data-pwa-tudo>Disponibilizar tudo offline</button><button type="button" class="botao-texto" data-pwa-apagar hidden>Apagar a cópia offline</button></div></div>
 <div class="cartao-area" style="min-height:0"><strong style="margin-top:0">Uma ferramenta</strong><p>Em cada ferramenta, carrega em "Descarregar HTML". O ficheiro funciona sem internet e mantém o aspeto do site.</p></div>
 <a class="cartao-area" style="min-height:0" href="{SITE["zip"]}"><strong style="margin-top:0">O site inteiro (ZIP)</strong><p>Descomprime e abre o ficheiro index.html. Útil em computadores com restrições de internet.</p><span class="etiqueta-mono">Descarregar →</span></a>
 </div>
@@ -1329,6 +1342,99 @@ body {{ margin: 0; background: var(--cor-papel); color: var(--cor-tinta); font-f
 
 # ---------------------------------------------------------------- catálogo
 
+def pagina_offline(ferramentas):
+    """Mostrada pela aplicação instalada quando não há ligação e a página pedida ainda não foi guardada."""
+    p = ""
+    return f"""{cabeca("Sem ligação · MGF no Plural", p, "Sem ligação à internet.")}
+<body>
+{topo(p, ferramentas)}
+<main id="conteudo">
+<section class="contentor area-topo">
+<span class="etiqueta-mono">Sem ligação</span>
+<h1 style="font-weight:800;font-size:clamp(2.2rem,5vw,3.2rem);letter-spacing:-0.035em">Esta página ainda não está neste computador.</h1>
+<div class="texto-longo">
+<p>Não há ligação à internet e esta página ainda não foi guardada para usar offline. As páginas que já abriste com ligação continuam a funcionar.</p>
+<p>Quando voltares a ter ligação, em <a href="acerca.html#offline">Acerca → Usar offline</a>, carrega em «Disponibilizar tudo offline» para guardar o site inteiro neste browser.</p>
+<p><a class="botao-escuro" href="index.html">Voltar ao início</a></p>
+</div>
+</section>
+</main>
+{rodape(p)}
+</body>
+</html>
+"""
+
+
+def manifesto(ferramentas):
+    atalhos = []
+    for a in ESTRUTURA["areas"]:
+        for g in a["grupos"]:
+            if g.get("atalhos_inicio"):
+                for f in ferramentas:
+                    if f["area"] == a["id"] and f["grupo"] == g["id"] and not ligacao(f):
+                        atalhos.append({"name": f["titulo"], "short_name": f["titulo"], "description": f.get("resumo", f["descricao"]),
+                                        "url": "./" + f["caminho"],
+                                        "icons": [{"src": "./assets/img/app-192.png", "sizes": "192x192", "type": "image/png"}]})
+    m = {
+        "id": "./",
+        "name": SITE["nome"],
+        "short_name": SITE["nome"],
+        "description": "Ferramentas clínicas para Medicina Geral e Familiar, feitas em comunidade. Gratuitas, abertas e sem recolha de dados.",
+        "lang": "pt-PT",
+        "dir": "ltr",
+        "start_url": "./index.html",
+        "scope": "./",
+        "display": "standalone",
+        "background_color": COR_APP,
+        "theme_color": COR_APP,
+        "categories": ["medical", "health", "productivity"],
+        "icons": [
+            {"src": "./assets/img/app-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": "./assets/img/app-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+            {"src": "./assets/img/app-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+            {"src": "./assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+        ],
+        "shortcuts": atalhos[:4],
+    }
+    return json.dumps(m, ensure_ascii=False, indent=1) + "\n"
+
+
+# Ficheiros que a aplicação pode guardar para usar sem internet: as páginas do site e os assets. Ficam de fora as
+# versões para descarregar (descarregar/, modelos/), as fontes, os scripts e os ficheiros do repositório.
+PWA_FORA = ("descarregar/", "modelos/", "fonte/", "scripts/", ".git", ".github/")
+PWA_ESSENCIAIS_PASTAS = ("assets/css/", "assets/js/", "assets/fonts/", "assets/img/icones/")
+
+
+def escrever_sw():
+    """Gera /sw.js a partir de scripts/sw.js, com a lista de ficheiros e o resumo (hash) de cada um. Corre no fim,
+    depois de todas as páginas escritas. Se nada mudar no site, o sw.js fica igual e o browser não volta a descarregar."""
+    ficheiros, tamanho = {}, 0
+    for c in sorted(RAIZ.rglob("*")):
+        rel = c.relative_to(RAIZ).as_posix()
+        if not c.is_file() or rel.startswith(PWA_FORA) or rel == "sw.js":
+            continue
+        no_site = rel.startswith(("assets/", "ferramentas/")) or ("/" not in rel and rel.endswith((".html", ".webmanifest")))
+        if not no_site or rel.endswith(".txt"):
+            continue
+        dados = c.read_bytes()
+        ficheiros[rel] = hashlib.sha256(dados).hexdigest()[:12]
+        tamanho += len(dados)
+    essenciais = ["index.html", "acerca.html", "offline.html", "manifest.webmanifest"]
+    essenciais += [r for r in ficheiros if r.startswith(PWA_ESSENCIAIS_PASTAS)]
+    essenciais += [r for r in ficheiros if r.startswith("assets/img/") and r.count("/") == 2]
+    resumo = hashlib.sha256(json.dumps(ficheiros, sort_keys=True).encode()).hexdigest()[:8]
+    versao = f"{SITE['versao']}-{HOJE}-{resumo}"
+    sw = (RAIZ / "scripts" / "sw.js").read_text(encoding="utf-8")
+    sw = (sw.replace("{{VERSAO}}", versao)
+            .replace("{{FICHEIROS}}", json.dumps(ficheiros, separators=(",", ":")))
+            .replace("{{ESSENCIAIS}}", json.dumps(essenciais, separators=(",", ":")))
+            .replace("{{TAMANHO}}", str(tamanho)))
+    sw = sw.replace("   Gerado por scripts/construir.py a partir de scripts/sw.js: não editar o /sw.js à mão.",
+                    "   GERADO por scripts/construir.py a partir de scripts/sw.js — não editar à mão.")
+    escrever(RAIZ / "sw.js", sw)
+    return len(ficheiros), tamanho
+
+
 def escrever_catalogo(ferramentas):
     dados = []
     for f in ferramentas:
@@ -1397,10 +1503,14 @@ def main():
     for ficheiro, gid, titulo, descricao in GUIAS:
         escrever(RAIZ / f"{gid}.html", pagina_guia(ficheiro, gid, titulo, descricao, ferramentas))
         escrever(RAIZ / "descarregar" / f"{gid}.html", guia_autonomo(ficheiro, gid, titulo, descricao))
+    escrever(RAIZ / "offline.html", pagina_offline(ferramentas))
+    escrever(RAIZ / "manifest.webmanifest", manifesto(ferramentas))
     escrever_catalogo(ferramentas)
     gerar_modelo(css)
+    n_pwa, t_pwa = escrever_sw()
     n_lig = len([f for f in ferramentas if ligacao(f)])
     print(f"Site construído: {len(ferramentas) - n_lig} ferramenta(s) e {n_lig} ligação(ões) externa(s).")
+    print(f"Aplicação (PWA): {n_pwa} ficheiros para usar offline ({t_pwa / 1048576:.1f} MB).")
 
 
 if __name__ == "__main__":

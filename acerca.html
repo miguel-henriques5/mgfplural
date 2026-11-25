@@ -8,6 +8,9 @@
 <title>Acerca · MGF no Plural</title>
 <meta name="description" content="Quem faz o MGF no Plural, como contribuir, privacidade e uso offline.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F6F7F4">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
@@ -68,6 +71,8 @@
 <section class="contentor seccao" id="offline" style="padding-top:0">
 <div class="seccao-cabeca"><h2>Usar offline</h2></div>
 <div class="grelha">
+<div class="cartao-area" style="min-height:0"><strong style="margin-top:0">Instalar como aplicação</strong><p>Abre o MGF no Plural numa janela própria, com ícone no ambiente de trabalho ou no ecrã do telemóvel. No Chrome e no Edge, carrega em Instalar (ou, no menu do browser, «Instalar MGF no Plural»). No iPhone e no iPad, no Safari: Partilhar → Adicionar ao ecrã principal.</p><button type="button" class="botao-escuro" data-pwa-instalar hidden>Instalar</button><span class="etiqueta-mono" data-pwa-instalada hidden>Já estás a usar a aplicação</span></div>
+<div class="cartao-area" style="min-height:0" data-pwa-offline hidden><strong style="margin-top:0">Disponibilizar tudo offline</strong><p>Guarda neste browser todas as páginas e ferramentas do site, para funcionarem sem internet. Com ligação, o site vai sempre buscar a versão mais recente e atualiza a cópia guardada, para não ficares com ferramentas desatualizadas.</p><p data-pwa-estado role="status" style="font-size:15px;color:var(--cor-texto-2)"></p><progress hidden style="width:100%"></progress><div style="display:flex;flex-wrap:wrap;gap:10px"><button type="button" class="botao-escuro" data-pwa-tudo>Disponibilizar tudo offline</button><button type="button" class="botao-texto" data-pwa-apagar hidden>Apagar a cópia offline</button></div></div>
 <div class="cartao-area" style="min-height:0"><strong style="margin-top:0">Uma ferramenta</strong><p>Em cada ferramenta, carrega em "Descarregar HTML". O ficheiro funciona sem internet e mantém o aspeto do site.</p></div>
 <a class="cartao-area" style="min-height:0" href="https://github.com/miguel-henriques5/mgfplural/archive/refs/heads/main.zip"><strong style="margin-top:0">O site inteiro (ZIP)</strong><p>Descomprime e abre o ficheiro index.html. Útil em computadores com restrições de internet.</p><span class="etiqueta-mono">Descarregar →</span></a>
 </div>
@@ -99,10 +104,11 @@
 </div>
 <div class="rodape-fim">
 <span class="rodape-aviso">As ferramentas apoiam, não substituem, o juízo clínico. O que escreves nelas não sai do teu computador; mesmo assim, não escrevas dados que identifiquem doentes, porque o computador e o browser podem ser usados por outras pessoas.</span>
-<span class="mono">licença MIT · site v1.0 · 2026-11-15</span>
+<span class="mono">licença MIT · site v1.0 · 2026-11-17</span>
 </div>
 </div></footer>
 <script src="assets/js/catalogo.js"></script>
 <script src="assets/js/site.js"></script>
+<script src="assets/js/pwa.js"></script>
 </body>
 </html>

@@ -8,6 +8,9 @@
 <title>Consentimento informado — DIU · MGF no Plural</title>
 <meta name="description" content="Folheto informativo e consentimento informado, livre e esclarecido para a colocação de DIU (cobre ou cobre e prata), com via para a utente e para o processo.">
 <link rel="icon" href="../../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#F6F7F4">
+<link rel="apple-touch-icon" href="../../../assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="../../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../../assets/css/completa.css">
 <style>
@@ -826,6 +829,7 @@ body {
   }
 })();
 </script>
+<script data-mgf="pwa" src="../../../assets/js/pwa.js"></script>
 <script>
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -946,7 +950,7 @@ window.addEventListener('beforeprint', syncUserCopy);
 
 function doSaveHTML() {
   const clone = document.documentElement.cloneNode(true);
-  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
+  clone.querySelectorAll('.barra-completa, .bc-mostrar, #mgfLogoFicheiro, script[data-mgf="barra"], script[data-mgf="pwa"], link[rel="manifest"], meta[name="theme-color"], link[href*="assets/"]').forEach(function (n) { n.remove(); });
   const origIn = document.querySelectorAll('#formPage input[type="text"], #formPage select');
   const cloneIn = clone.querySelectorAll('#formPage input[type="text"], #formPage select');
   cloneIn.forEach((el, i) => {
