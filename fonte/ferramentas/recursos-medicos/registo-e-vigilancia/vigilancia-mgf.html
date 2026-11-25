@@ -12,8 +12,8 @@
  "area": "recursos-medicos",
  "grupo": "registo-e-vigilancia",
  "autor": "Miguel Henriques",
- "versao": "1.1",
- "revisto": "2026-11-17",
+ "versao": "1.2",
+ "revisto": "2026-11-25",
  "layout": "completa",
  "icone": "indicadores",
  "ordem": 2,
@@ -26,7 +26,8 @@
  "bibliotecas": [
   "xlsx.full.min.js",
   "jspdf.umd.min.js",
-  "jspdf.plugin.autotable.min.js"
+  "jspdf.plugin.autotable.min.js",
+  "caop2025-freguesias.js"
  ],
  "palavras": [
   "vigilância",
@@ -52,6 +53,7 @@
   "Direção-Geral da Saúde. Programa Nacional de Saúde Infantil e Juvenil. Norma n.º 010/2013, de 31/05/2013. Lisboa: DGS; 2013.",
   "Direção-Geral da Saúde. Programa Nacional para a Vigilância da Gravidez de Baixo Risco. Lisboa: DGS; 2015.",
   "Instituto Nacional de Estatística. Sistema de Metainformação — conceitos: índice de dependência de jovens, de idosos e total; índice de envelhecimento; índice de longevidade.",
+  "Direção-Geral do Território. Carta Administrativa Oficial de Portugal — CAOP 2025: códigos e nomes das freguesias, municípios e distritos (versão de 31/12/2025; inclui as freguesias repostas pela Lei n.º 25-A/2025).",
   "Bibliotecas incluídas: SheetJS 0.18.5 (licença Apache 2.0), jsPDF 2.5.1 e jsPDF-AutoTable 3.8.2 (licença MIT)."
  ]
 }
@@ -270,6 +272,14 @@ table.tb-ordenar td:first-child{min-width:190px}
 .comb-op{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:4px 14px 12px}
 .comb-op > span{color:var(--ink3);font-size:12.5px}
 .cel-ras .meta{display:block;margin-top:3px}
+/* v7: painéis de Custos, Utilização e População; ligações entre fichas do agregado */
+.tb-v7 td.num,.tb-v7 th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tb-v7 th.num .th-ord{justify-content:flex-end}
+.tb-v7 tfoot td{border-top:2px solid var(--line);background:#FAFBFD;padding:10px 12px}
+.lk{all:unset;cursor:pointer;color:var(--dm);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.lk:hover{color:var(--ink)}
+.lk:focus-visible{outline:2px solid var(--verde,#0F6E64);outline-offset:2px}
+.bi-imp{background:#F3F8F6}
 /* página completa: o <main> do site não pode partir a grelha da aplicação */
 .pagina-completa .mgf-ferramenta{display:contents}
 .search .icn{top:8px}
@@ -369,7 +379,7 @@ let S = { patients: [], settings:{ retinaMeses:12 }, crossSets:[], v:1 };
    silêncio, isso tem de ser assinalado ao médico antes de avançar, para
    que decida — nunca deve acontecer sem aviso.
    ------------------------------------------------------------------------- */
-const SCHEMA_VERSION = 6; // v6: email do utente (p.email) e combinação de rastreios nas definições (S.settings.rasComb) · v5: dados do SDM (p.sdm: última consulta e gastos por ano) · v4: telefone, módulos Obesidade e Domicílios, cruzamentos personalizados (S.crossSets) — tudo aditivo
+const SCHEMA_VERSION = 7; // v7: agregado (p.agregado) e ficha do BI-CSP/RNU (p.bi: residência, nacionalidade, utilização, custos de 12 meses) · v6: email do utente (p.email) e combinação de rastreios nas definições (S.settings.rasComb) · v5: dados do SDM (p.sdm: última consulta e gastos por ano) · v4: telefone, módulos Obesidade e Domicílios, cruzamentos personalizados (S.crossSets) — tudo aditivo
 function applyLoadedData(d){
   if(!d) return;
   S.settings = Object.assign({retinaMeses:12}, d.settings||{});
@@ -570,7 +580,7 @@ const SM_VAC = [
 function newPatient(o={}){
   return {
     id: o.id || 'p'+Math.random().toString(36).slice(2,10),
-    nome: o.nome||'', dob: o.dob||'', sns: o.sns||'', sexo: o.sexo||'', telefone: o.telefone||'', email: o.email||'', notas: o.notas||'',
+    nome: o.nome||'', dob: o.dob||'', sns: o.sns||'', sexo: o.sexo||'', telefone: o.telefone||'', email: o.email||'', agregado: o.agregado||'', bi: o.bi||null, notas: o.notas||'',
     prog: Object.assign({si:false,sm:false,dm:false,hta:false,dpoc:false,asma:false,obesidade:false,dom:false,ras:false}, o.prog||{}),
     si:{cons:{},aval:{},marcada:{date:''},obs:''},
     sm:{ativa:true,dum:'',dppc:'',rh:'',parto:'',cons:{},eco:{},lab:{},vac:{},antid:{},puerp:{},marcada:{date:''},obs:''},
@@ -593,6 +603,8 @@ function ensure(p){ const t=newPatient({id:p.id});
   p.prog=Object.assign({si:false,sm:false,dm:false,hta:false,dpoc:false,asma:false,obesidade:false,dom:false,ras:false},p.prog||{});
   p.telefone = p.telefone || '';
   p.email = typeof p.email==='string' ? p.email : '';
+  p.agregado = p.agregado==null ? '' : String(p.agregado);
+  p.bi = p.bi && typeof p.bi==='object' && !Array.isArray(p.bi) ? p.bi : null;
   p.notas = p.notas || '';
   return p; }
 
@@ -1415,6 +1427,9 @@ function renderNav(){
     it('cruz','Cruzamentos','var(--ink3)',0)+
     `<div class="grp">Gestão</div>`+
     it('utentes','Utentes','')+
+    it('custos','Custos','')+
+    it('utilizacao','Utilização','')+
+    it('populacao','População e agregados','')+
     it('relatorio','Relatório da lista','')+
     it('def','Definições','');
   n.querySelectorAll('button').forEach(b=>b.onclick=()=>{ ui.view=b.dataset.v; ui.filter='todos'; ui.group=false; ui.sort='prioridade'; render(); });
@@ -1448,6 +1463,9 @@ function render(){
   else if(ui.view==='cruz') v.innerHTML=viewCruz();
   else if(ui.view==='utentes') v.innerHTML=viewUtentes();
   else if(ui.view==='relatorio') v.innerHTML=viewRelatorio();
+  else if(ui.view==='custos') v.innerHTML=viewCustos();
+  else if(ui.view==='utilizacao') v.innerHTML=viewUtil();
+  else if(ui.view==='populacao') v.innerHTML=viewPop();
   else v.innerHTML=viewDef();
   if(DEMO.on) v.insertAdjacentHTML('afterbegin', demoFaixa());
   wire();
@@ -1472,7 +1490,7 @@ function viewPainel(){
   acoes.sort((a,b)=>a.p.nome.localeCompare(b.p.nome,'pt'));
 
   const linhas = acoes.slice(0,40).map(a=>`<tr data-open="${a.p.id}" data-tab="${a.k}">
-     <td class="nm">${esc(a.p.nome)}</td><td class="meta">${fmtAge(a.p.dob)}</td>
+     <td class="nm">${esc(a.p.nome)}</td><td class="meta">${idadeLista(a.k,a.p)}</td>
      <td><span class="tag ${PROGS[a.k].tag}">${PROGS[a.k].lb}</span></td>
      <td>${esc(a.txt)}</td><td>${statusPill('late')}</td></tr>`).join('');
 
@@ -1488,7 +1506,7 @@ function filterList(list){
   if(!q) return list;
   const sa=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');   /* nome sem acentos */
   const qa=sa(q);
-  return list.filter(p=>sa(p.nome).includes(qa) || (p.sns||'').toLowerCase().includes(q) || (p.email||'').toLowerCase().includes(q) || (q.replace(/\D/g,'').length>=3 && (p.telefone||'').replace(/\D/g,'').includes(q.replace(/\D/g,''))));
+  return list.filter(p=>sa(p.nome).includes(qa) || (p.sns||'').toLowerCase().includes(q) || (p.email||'').toLowerCase().includes(q) || (!!p.agregado && String(p.agregado).toLowerCase()===q) || (q.replace(/\D/g,'').length>=3 && (p.telefone||'').replace(/\D/g,'').includes(q.replace(/\D/g,''))));
 }
 /* Ordenação das tabelas gerais. 'idade' usa meses de vida, exceto em Saúde
    Materna, onde usa a idade gestacional em dias — quem não tem idade
@@ -1539,7 +1557,7 @@ function viewProg(k){
   const comIdade = !(k==='si'||k==='ras');   /* em SI e Rastreios a idade já é a coluna própria */
   const rows=list.map(({p,s})=>`<tr data-open="${p.id}" data-tab="${k}">
       <td><div class="nm">${esc(p.nome)}</div><div class="meta">${contactosTxt(p)}</div></td>
-      ${comIdade?`<td><span class="age">${fmtAge(p.dob)||'—'}</span></td>`:''}<td>${cell(p)}</td><td>${esc(s.next)}</td><td>${statusPill(s.st)}</td>
+      ${comIdade?`<td><span class="age">${idadeLista(k,p)}</span></td>`:''}<td>${cell(p)}</td><td>${esc(s.next)}</td><td>${statusPill(s.st)}</td>
       ${mkCell(p)}
       <td style="text-align:right">${tags(p)}</td></tr>`).join('');
   const segs=['todos','late','now','ok'].map(f=>`<button data-f="${f}" class="${ui.filter===f?'on':''}">${
@@ -1623,7 +1641,7 @@ function renderGroupSM(list){
 function groupBlock(title, items, k){
   const sub = k==='si'
     ? (x)=>fmtAge(x.p.dob)
-    : (x)=>{ const d=igDias(x.p.sm); return [fmtAge(x.p.dob), x.p.sm.parto?'pós-parto':fmtIG(d)].filter(Boolean).join(' · '); };
+    : (x)=>{ const d=igDias(x.p.sm); return [idadeLista('sm',x.p), x.p.sm.parto?'pós-parto':fmtIG(d)].filter(Boolean).join(' · '); };
   return `<div class="block"><h4 style="display:flex;justify-content:space-between;align-items:center">
       <span>${esc(title)}</span><span class="chip">${items.length}</span></h4>
     ${items.map(x=>`<div class="item iclick" data-open="${x.p.id}" data-tab="${k}">
@@ -1802,6 +1820,7 @@ function tabFicha(p){
       <option value="">—</option><option value="F"${p.sexo==='F'?' selected':''}>F</option><option value="M"${p.sexo==='M'?' selected':''}>M</option></select></div>
   </div>
   ${fichaSdm(p)}
+  ${fichaV7(p)}
   <div class="block"><h4>Programas de vigilância</h4>
     <div class="field" style="gap:0;flex-wrap:wrap">${chk('si','Saúde Infantil')}${chk('sm','Saúde Materna')}${chk('dm','Diabetes')}${chk('hta','Hipertensão')}${chk('dpoc','DPOC')}${chk('asma','Asma')}${chk('obesidade','Obesidade')}${chk('dom','Domicílios')}${chk('ras','Rastreios')}</div>
     <div class="hint">Um utente pode estar em vários programas ao mesmo tempo. Diabetes e Hipertensão cruzam-se automaticamente.</div>
@@ -2486,6 +2505,7 @@ function wire(){
   document.querySelectorAll('#view [data-sort]').forEach(s=>s.onchange=()=>{ ui.sort=s.value; render(); });
   wireExtra();
   wireV6();
+  wireV7();
   document.querySelectorAll('#view [data-crosschk]').forEach(c=>c.onchange=()=>{
     const k=c.dataset.crosschk;
     if(c.checked){ if(!ui.crossSel.includes(k)) ui.crossSel.push(k); }
@@ -2584,6 +2604,7 @@ function wireDrawer(p){
   if(del) del.onclick=()=>openModal('Apagar utente', `<p>Apagar <b>${esc(p.nome||'este utente')}</b> e todos os registos? Não dá para desfazer.</p>`,
     [{lb:'Cancelar'},{lb:'Apagar',pri:true,fn:()=>{ S.patients=S.patients.filter(x=>x.id!==p.id); markDirty(); closeDrawer(); }}]);
   wireSdm(p);
+  wireFichaV7();
 }
 function store(p,kind){
   if(ui.tab==='si') return kind==='cons'?p.si.cons:p.si.aval;
@@ -2658,6 +2679,12 @@ function actions(a,k){
   if(a==='xlscruz') xlsCruz();
   if(a==='printcomb') printRasComb();
   if(a==='xlscomb') xlsRasComb();
+  if(a==='xlscustos') custoExcel();
+  if(a==='printcustos') custoPrint();
+  if(a==='xlsutil') utilExcel();
+  if(a==='printutil') utilPrint();
+  if(a==='xlspop') popExcel();
+  if(a==='printpop') popPrint();
   if(a==='savecross'){
     const inp=document.getElementById('crossName');
     const name=(inp&&inp.value||'').trim();
@@ -2750,8 +2777,9 @@ function importDialog(forceProg){
       const sel=(id,val)=>`<select id="${id}" style="flex:1"><option value="">—</option>${
         head.map((h,i)=>`<option value="${i}"${String(i)===val?' selected':''}>${esc(h||'coluna '+(i+1))}</option>`).join('')}</select>`;
       const titulo = forceProg ? `Importar para ${PROGS[forceProg].lb}` : 'Importar lista de utentes';
-      const gUlt=guess('última consulta','ultima consulta','últ. consulta','ult. consulta','ult consulta','data da consulta','data consulta'),
-            gMed=guess('medicament','medicação','medicacao','fármac','farmac'), gMcdt=guess('mcdt','meios complementares'), temSdm=!!(gUlt||gMed||gMcdt);
+      const BI=biMapa(head);
+      const gUlt=BI.ok?'':guess('última consulta','ultima consulta','últ. consulta','ult. consulta','ult consulta','data da consulta','data consulta'),
+            gMed=BI.ok?'':guess('medicament','medicação','medicacao','fármac','farmac'), gMcdt=BI.ok?'':guess('mcdt','meios complementares'), temSdm=!!(gUlt||gMed||gMcdt);
       const anoCab=((gMed!==''?head[+gMed]:'')+' '+(gMcdt!==''?head[+gMcdt]:'')).match(/\b(20\d{2})\b/), anoG0=anoCab?anoCab[1]:YEAR;
       const existOpts = `<div class="field" style="border:0;flex-direction:column;align-items:flex-start">
              <label style="width:auto">Utentes já existentes (mesmo nome, com nº de utente ou data a coincidir)</label>
@@ -2774,6 +2802,9 @@ function importDialog(forceProg){
          <div class="field" style="border:0"><label>Sexo</label>${sel('cSex',guess('sexo','género','genero'))}</div>
          <div class="field" style="border:0"><label>Telefone</label>${sel('cTel',guessTel())}</div>
          <div class="field" style="border:0"><label>Email</label>${sel('cMail',guess('email','e-mail','correio eletr','correio electr','mail'))}</div>
+         ${BI.ok?`<div class="sdm-imp bi-imp"><div style="padding:9px 12px"><label style="display:flex;gap:8px;align-items:center;width:auto;font-weight:600"><input type="checkbox" class="chk" id="cBi" checked> Ficha de utentes do BI-CSP: ${BI.n} colunas reconhecidas</label>
+           <div class="hint" style="padding:6px 0 0">Agregado familiar, nacionalidade, freguesia e morada, consultas médicas e de enfermagem (12, 36 e 60 meses), últimas consultas, urgências e hospital, custos de 12 meses (medicação e MCDT), benefícios e isenções. Não se guardam NIF, NISS nem documentos de identificação. É uma fotografia: substitui a anterior de cada utente (exceto em «Ignorar»). Se o telemóvel estiver vazio, usa o telefone 1 ou 2.</div>
+           <div class="field" style="border:0;padding-left:0"><label>Data da extração</label><input id="cBiData" type="text" inputmode="numeric" autocomplete="off" placeholder="dd/mm/aaaa" class="din" value="${ptForInput(todayISO())}" style="width:120px"></div></div></div>`:''}
          <details class="sdm-imp"${temSdm?' open':''}><summary>Dados do SDM (opcional): última consulta e gastos do ano</summary>
            <div class="hint">Se a lista vier do SDM, podes juntar a data da última consulta na USF e os gastos do utente no ano com medicação e com MCDT. Datas sem separadores (ex.: 05072012) são reconhecidas. Em utentes já existentes, a data da última consulta fica sempre a mais recente.</div>
            <div class="field" style="border:0"><label>Última consulta na USF</label>${sel('cUlt',gUlt)}</div>
@@ -2790,6 +2821,8 @@ function importDialog(forceProg){
           const autoSI = forceProg ? false : document.getElementById('autoSI').checked;
           const naPast = forceProg ? true  : document.getElementById('naPast').checked;
           const existMode = document.querySelector('input[name="existMode"]:checked').value;
+          const usaBi = BI.ok && document.getElementById('cBi') && document.getElementById('cBi').checked;
+          const dataBi = usaBi ? (parseAnyDate(document.getElementById('cBiData').value)||todayISO()) : '';
           if(cN<0) return toast('Escolhe a coluna do nome');
           let add=0, tagged=0, updated=0, skip=0;
           const vistos=new Set();   /* utentes ligados a uma linha do Excel ou criados agora */
@@ -2801,6 +2834,7 @@ function importDialog(forceProg){
             const telefone = cT<0?'':String(r[cT]||'').trim();
             const email = cE<0?'':String(r[cE]||'').trim();
             const ult = cU<0?'':parseAnyDate(r[cU]), gM = cM<0?null:parseEuro(r[cM]), gC = cC<0?null:parseEuro(r[cC]);
+            const LB = usaBi ? biLinha(r, BI, dataBi) : null;
             const existing = findExisting(nome, dob, sns);
             if(existing){
               vistos.add(existing);
@@ -2813,12 +2847,14 @@ function importDialog(forceProg){
                 if(telefone && (existMode==='substituir' ? existing.telefone!==telefone : !existing.telefone)) { existing.telefone=telefone; touched=true; }
                 if(email    && (existMode==='substituir' ? existing.email!==email       : !existing.email))    { existing.email=email;       touched=true; }
                 if(sdmAplicar(existing, ult, anoG, gM, gC, existMode)) touched=true;
+                if(LB && biAplicar(existing, LB, existMode)) touched=true;
                 if(touched) updated++;
               } else if(!forceProg) skip++;
               return;
             }
             const p=newPatient({nome, dob, sns, sexo, telefone, email});
             sdmAplicar(p, ult, anoG, gM, gC, 'substituir');
+            if(LB) biAplicar(p, LB, 'substituir');
             if(forceProg){ p.prog[forceProg]=true; if(forceProg==='si' && naPast) markPastSI(p); }
             else{
               const y=ageYears(dob);
@@ -2930,7 +2966,7 @@ function printList(k){
     : fmtAge(p.dob);
   const thead = `<thead><tr><th>Nome</th><th>Nº utente</th>${comIdade?'<th>Idade</th>':''}<th>${idadeLb}</th><th>Próximo passo</th><th>Estado</th></tr></thead>`;
   const rowsHtml = arr => arr.map(({p,s})=>`<tr>
-      <td>${esc(p.nome)}${contactosPrint(p)}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td>${comIdade?`<td>${esc(fmtAge(p.dob)||'—')}</td>`:''}<td>${esc(idadeVal(p))}</td>
+      <td>${esc(p.nome)}${contactosPrint(p)}${vacPrint(p)}</td><td>${esc(p.sns||'—')}</td>${comIdade?`<td>${esc(idadeLista(k,p))}</td>`:''}<td>${esc(idadeVal(p))}</td>
       <td>${esc(s.next)}</td><td>${esc(ptSt(s.st))}</td></tr>`).join('');
 
   const grouped = (k==='si'||k==='sm') && ui.group;
@@ -2962,6 +2998,7 @@ function exportXlsx(){
   if(typeof XLSX==='undefined') return toast('Leitor de Excel indisponível — usa a cópia .json');
   const wb=XLSX.utils.book_new();
   const ut=S.patients.map(p=>({Nome:p.nome,'Data de nascimento':fmtPT(p.dob),Idade:fmtAge(p.dob),'Nº utente':p.sns,Sexo:p.sexo,Telefone:p.telefone||'',Email:p.email||'',
+    'Código do agregado':p.agregado||'', Freguesia:p.bi?fregNome(p.bi.freg):'', Nacionalidade:p.bi&&p.bi.nac?paisNome(p.bi.nac):'',
     'Saúde Infantil':p.prog.si?'Sim':'', 'Saúde Materna':p.prog.sm?'Sim':'', Diabetes:p.prog.dm?'Sim':'', Hipertensão:p.prog.hta?'Sim':'',
     DPOC:p.prog.dpoc?'Sim':'', Asma:p.prog.asma?'Sim':'', Obesidade:p.prog.obesidade?'Sim':'', Domicílios:p.prog.dom?'Sim':'', Rastreios:p.prog.ras?'Sim':'',
     'Recusa vacinas PNV':(p.vac&&p.vac.pnv)?'Sim':'', 'Recusa vacinas extra-plano':(p.vac&&p.vac.extra)?(p.vac.extraTxt||'Sim'):''}));
@@ -2977,7 +3014,7 @@ function exportXlsx(){
     const pnvSt=siItems(p).find(i=>i.key==='pnv'); o['PNV atualizado (estado)']=pnvSt&&pnvSt.rec.done&&pnvSt.st==='ok'?'Sim':(pnvSt&&pnvSt.st==='late'?'Desatualizado':''); return o;});
   if(si.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(si), 'Saúde Infantil');
 
-  const sm=listOf('sm').map(p=>{ const o={Nome:p.nome,...contactosXls(p),Idade:fmtAge(p.dob),DUM:fmtPT(p.sm.dum),'IG':fmtIG(igDias(p.sm)),DPP:fmtPT(dpp(p.sm)),Rh:p.sm.rh||'',
+  const sm=listOf('sm').map(p=>{ const o={Nome:p.nome,...contactosXls(p),Idade:idadeLista('sm',p),DUM:fmtPT(p.sm.dum),'IG':fmtIG(igDias(p.sm)),DPP:fmtPT(dpp(p.sm)),Rh:p.sm.rh||'',
       Estado:ptSt(progStatus(p,'sm').st),'Em falta':progStatus(p,'sm').next};
     SM_CONS.forEach(c=>o[c.lb]=p.sm.cons[c.id]&&p.sm.cons[c.id].done?fmtPT(p.sm.cons[c.id].date):'');
     SM_ECO.forEach(c=>o[c.lb]=p.sm.eco[c.id]&&p.sm.eco[c.id].done?fmtPT(p.sm.eco[c.id].date):'');
@@ -3169,6 +3206,8 @@ function gerarDemo(){
   /* algumas utentes com o RCCU e o RCM em atraso ao mesmo tempo, para se ver a combinação de rastreios */
   lista.filter(p=>p.sexo==='F' && rasGeneral(p) && ageYears(p.dob)>=46 && ageYears(p.dob)<=68).forEach((p,i)=>{ if(i%6) return;
     p.ras.rec=p.ras.rec||{}; p.ras.rec.rccu={date:atras(365*6+40), res:'neg'}; p.ras.rec.rcm={date:atras(365*2+120)}; });
+  /* ficha do BI-CSP fictícia (agregados, freguesias da Amadora, consultas, custos de 12 meses), com outro gerador: o resto fica igual */
+  demoBiGerar(lista, hoje);
   return { patients:lista, settings:{retinaMeses:12},
     crossSets:[{id:'cxdemo', name:'Diabetes + Hipertensão + Obesidade', progs:['dm','hta','obesidade']}] };
 }
@@ -3441,6 +3480,7 @@ function viewRelatorio(){
   h+=`<h2>Registos clínicos atualizados</h2><p class="rel-explica">Do bloco «Histórico preenchido/ atualizado» da ficha de cada utente.</p>`+
     relTabela(['Registo','Utentes','% da lista','% de quem tem doença crónica'], D.hist.map(x=>[x.lb, x.n, fmtPct(x.p)+relBarra(x.p,100), fmtPct(x.pc)]), [1,2,3])+
     `<p class="rel-explica">Recusa de vacinas do PNV: ${D.vac.pnv} · recusa de vacinas extra-plano: ${D.vac.extra}.</p>`;
+  h+=relV7Html();
   /* SDM */
   h+=`<h2>Última consulta na USF</h2>`;
   if(D.ult){ h+=relTabela(['Última consulta','Utentes','% da lista'], D.ult.faixas.map(f=>[f.lb, f.n, fmtPct(f.p)+relBarra(f.p,100)]).concat([['Sem data importada', D.ult.semData, fmtPct(pct(D.ult.semData,N))]]), [1,2])+
@@ -3534,6 +3574,7 @@ function relPdf(){
       [`Parte do total dos ${G.top} que mais gastam (10%)`, fmtPct(G.partTop)]], [1], {0:90});
     tabela(['Doenças crónicas','Utentes','Medicação (média)','MCDT (média)','Total (média)','% do total'], G.porCron.map(g=>[g.lb, g.n, fmtEur(g.med), fmtEur(g.mcdt), fmtEur(g.t), fmtPct(pct(g.soma,G.soma))]), [1,2,3,4,5]);
     tabela(['Grupo etário','Utentes','Medicação (média)','MCDT (média)','Total (média)','% do total'], G.porFaixa.map(g=>[g.lb, g.n, fmtEur(g.med), fmtEur(g.mcdt), fmtEur(g.t), fmtPct(pct(g.soma,G.soma))]), [1,2,3,4,5]); }
+  relV7Pdf(titulo, nota, tabela);
   const n=doc.getNumberOfPages();
   for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(...CINZA);
     doc.text(t('Vigilância MGF · MGF no Plural · só números agregados, sem nomes nem números de utente'), M, H-7);
@@ -3586,7 +3627,7 @@ function colunaPrograma(k,p){
   return null;
 }
 function linhaPrograma(k,{p,s},grupo){
-  const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||''};
+  const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:k==='sm'?idadeLista('sm',p):fmtAge(p.dob), Sexo:p.sexo||''};
   if(grupo) o.Grupo=grupo;
   const c=colunaPrograma(k,p); if(c) o[c[0]]=c[1];
   o['Próximo passo']=s.next; o.Estado=ptSt(s.st);
@@ -3754,6 +3795,709 @@ function wireV6(){
     c.sel = RAS_DEFS.map(d=>d.id).filter(id=> id===x.dataset.combras ? x.checked : c.sel.includes(id)); guardar(c); });
   document.querySelectorAll('#view [data-combmodo]').forEach(b=>b.onclick=()=>{ const c=rasComb(); c.modo=b.dataset.combmodo; guardar(c); });
   document.querySelectorAll('#view [data-combest]').forEach(b=>b.onclick=()=>{ const c=rasComb(); c.est=b.dataset.combest; guardar(c); });
+}
+
+/* =======================================================================
+   v7 (2026-11-25): ficha de utentes do BI-CSP/RNU (Excel de 99 colunas),
+   painéis de Custos, Utilização e População e agregados; agregado familiar
+   na ficha; secções novas no Relatório da lista. Dados versão 7 (aditivos:
+   p.agregado e p.bi, uma fotografia da ficha do utente no dia da extração).
+   ======================================================================= */
+
+/* ---------------- 1. ficha de utentes do BI-CSP: colunas reconhecidas ----------------
+   [chave, título da coluna no Excel, tipo] — n: número · d: data (AAAAMMDD) · s: texto · b: S/N · e: euros.
+   Não se guardam NIF, NISS, documentos de identificação, vistos nem observações. */
+const BI_COLS = [
+  ['agregado','Prc. Famil.','s'], ['nElemFam','Nº Elem. Fam.','n'], ['up','UP','n'],
+  ['nac','Nacionalidade','s'], ['paisRes','País Residência','s'], ['morada','Rua do endereço postal','s'], ['cp','Cód. Post.','s'],
+  ['freg','Freguesia Residência','s'], ['densPop','Dens. Pop. Freg. Res.','n'],
+  ['telemovel','Telemóvel','s'], ['tel1','Telefone 1','s'], ['tel2','Telefone 2','s'], ['email','E-mail','s'],
+  ['insufEcon','Insuf. Econ.','b'], ['isencao','Isen. T. Mod.','b'], ['recm','RECM','b'], ['osecp','OSECP','b'], ['subsistema','Subs. Saúde','b'],
+  ['medFam','Médico Família','s'], ['enfFam','Enfermeiro Família','s'], ['uf','UF Inscr.','s'], ['tipoUF','Tipo UF','s'],
+  ['inscrCspM','Inscr. CSP (M)','n'], ['dataInscrCsp','Dta. 1ª inscr. CSP','d'], ['inscrMfM','Inscr. MdF Atual (M)','n'],
+  ['med12','Cons. Médic. 12M (N)','n'], ['med12min','Cons. Médic. 12M (Min.)','n'], ['med36','Cons. Médic. 36M (N)','n'], ['med60','Cons. Médic. 60M (N)','n'],
+  ['medNP12','Cons. Médic. n/ Pres. 12M (N)','n'], ['medDom12','Domic. Médic. 12M (N)','n'], ['medPres12','Cons. Médic. Pres. 12M (N)','n'],
+  ['medVig12','Cons. Médic. Vigil. 12M (N)','n'], ['medUF12','Cons. Médic. UF Inscr. 12M (N)','n'], ['medRec','Cons. Médic. Rec. (N)','n'], ['medAg','Ag. Cons. Médic.?','b'],
+  ['enf12','Cons. Enfer. 12M (N)','n'], ['enf12min','Cons. Enfer. 12M (Min.)','n'], ['enf36','Cons. Enfer. 36M (N)','n'], ['enf60','Cons. Enfer. 60M (N)','n'],
+  ['enfNP12','Cons. Enferm. n/ Pres. 12M (N)','n'], ['enfDom12','Domic. Enferm. 12M (N)','n'], ['enfPres12','Cons. Enferm. Pres. 12M (N)','n'],
+  ['enfVig12','Cons. Enferm. Vigil. 12M (N)','n'], ['enfUF12','Cons. Enferm. UF Inscr. 12M (N)','n'], ['enfRec','Cons. Enfer. Rec. (N)','n'], ['enfAg','Ag. Cons. Enfer.?','b'],
+  ['out12','Cons. Out. Prof. 12M (N)','n'], ['out12min','Cons. Out. Prof. 12M (Min.)','n'], ['out36','Cons. Out. Prof. 36M (N)','n'], ['out60','Cons. Out. Prof. 60M (N)','n'],
+  ['outRec','Cons. Out. Prof. Rec. (N)','n'], ['outAg','Ag. Cons. Out. Prof.?','b'],
+  ['cont12','Contactos CSP 12M (N)','n'], ['ultMed','Dta. Últ. Cons. Méd. CSP','d'], ['ultEnf','Dta. Últ. Cons. Enf. CSP','d'], ['ultCont','Dta. Últ. Cont. CSP','d'],
+  ['diasSemCont','Dias s/ Cont. CSP','n'], ['naoUtil','Ut. não Utiliz. CSP?','b'], ['famNaoUtil','Fam. não Utiliz. CSP?','b'],
+  ['ultUrg','Dta. Últ. Urg.','d'], ['ultConsHosp','Dta. Últ. Cons. Hosp.','d'], ['ultIntern','Dta. Últ. Internam.','d'], ['ultMedicHosp','Dta. Últ. Medic. Hosp. (Fatur. CCM)','d'],
+  ['ultMcdt','Dta. Últ. MCDT Compart.','d'], ['ultContHosp','Dta. Últ. Cont. Hosp.','d'], ['diasSemContHosp','Dias s/ Cont. Hospit. (N)','n'],
+  ['urg12','Epis. Urgência 12M (N)','n'], ['consHosp12','Cons. Hospit. 12M (N)','n'], ['mcdtHosp12','MCDTs Hospit. 12M (€)','e'],
+  ['intern12dias','Intern. Hosp. 12M (dias)','n'], ['intern12','Intern. Hosp. 12M (€)','e'], ['intern36dias','Intern. Hosp. 36M (dias)','n'], ['intern36','Intern. Hosp. 36M (€)','e'],
+  ['medic12','PVP Medicam. 12M (€)','e'], ['mcdt12','MCDTs Conv. 12M (€)','e'],
+  ['ultDispMedic','Dta. Últ. Disp. Medic. Comp.','d'], ['ultVacina','Dta. Últ. Vacina','d'], ['vacinas12','Inocul. Vacinas 12M (N)','n'],
+  ['ultSns24','Dta. Últ. Cont. SNS24','d'], ['sns24_12','Contactos SNS24 12M (N)','n'], ['ultSist','Dta. Últ. Cont. Sist. Saúde','d'], ['diasSemSist','Dias s/ Cont. Sist. Saúde','n'],
+  ['naoUtilSist','Ut. não-utiliz. Sist. Saúde?','b'], ['famNaoUtilSist','Fam. não-utiliz. Sist. Saúde?','b']
+];
+/* estes vão para os campos do próprio utente, não para p.bi */
+const BI_FORA = ['agregado','telemovel','tel1','tel2','email'];
+const biNorm = h => String(h==null?'':h).replace(/&euro;/gi,'€').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9€]+/g,' ').trim();
+const BI_IDX = new Map(BI_COLS.map(([k,h,t])=>[biNorm(h),[k,t]]));
+function biMapa(head){
+  const m={}; head.forEach((h,i)=>{ const x=BI_IDX.get(biNorm(h)); if(x && !(x[0] in m)) m[x[0]]={i, t:x[1]}; });
+  const n=Object.keys(m).length;
+  return {m, n, ok: n>=8 && ('agregado' in m || 'med12' in m || 'medic12' in m)};
+}
+function biData(v){
+  if(v==null||v==='') return '';
+  if(v instanceof Date) return isNaN(v)? '' : `${v.getFullYear()}-${pad(v.getMonth()+1)}-${pad(v.getDate())}`;
+  const s=String(v).trim();
+  const m=s.match(/^((?:19|20)\d{2})(\d{2})(\d{2})$/);
+  if(m){ const iso=isoIfValid(+m[1],+m[2],+m[3]); if(iso) return iso; }
+  return parseAnyDate(v)||'';
+}
+function biValor(v,t){
+  if(t==='e') return parseEuro(v);
+  if(t==='d') return biData(v);
+  if(t==='b'){ const s=String(v==null?'':v).trim().toLowerCase(); if(!s) return null; if(['s','sim','y','yes','true','1'].includes(s)) return true; if(['n','nao','não','no','false','0'].includes(s)) return false; return null; }
+  if(t==='n'){ if(v==null||v==='') return null; if(typeof v==='number') return isFinite(v)? v : null; const n=Number(String(v).replace(/\s/g,'').replace(',','.')); return isFinite(n)? n : null; }
+  if(v==null) return '';
+  if(typeof v==='number') return String(v);
+  return String(v).trim();
+}
+function biLinha(r, mapa, dataExt){
+  const bi={data:dataExt}, o={};
+  Object.entries(mapa.m).forEach(([k,{i,t}])=>{ const v=biValor(r[i],t); if(BI_FORA.includes(k)) o[k]=v; else bi[k]=v; });
+  if(bi.freg) bi.freg=normDicofre(bi.freg)||bi.freg;
+  if(bi.nac) bi.nac=String(bi.nac).toUpperCase();
+  if(bi.paisRes) bi.paisRes=String(bi.paisRes).toUpperCase();
+  if(bi.densPop!=null) bi.densPop=Math.round(bi.densPop*10)/10;
+  ['medic12','mcdt12','mcdtHosp12','intern12','intern36'].forEach(k=>{ if(bi[k]!=null) bi[k]=Math.round(bi[k]*100)/100; });
+  o.telefone = o.telemovel || o.tel1 || o.tel2 || '';
+  o.ult = [bi.ultMed, bi.ultEnf].filter(Boolean).sort().pop() || '';
+  o.bi=bi;
+  return o;
+}
+/* aplica a linha a um utente; a fotografia do BI substitui sempre a anterior (exceto «Ignorar») */
+function biAplicar(p, L, modo){
+  let mudou=false;
+  if(modo==='ignorar') return false;
+  p.bi=L.bi; mudou=true;
+  const ag=L.agregado||'';
+  if(ag && (modo==='substituir' ? p.agregado!==ag : !p.agregado)){ p.agregado=ag; }
+  if(L.telefone && (modo==='substituir' ? p.telefone!==L.telefone : !p.telefone)) p.telefone=L.telefone;
+  if(L.email && (modo==='substituir' ? p.email!==L.email : !p.email)) p.email=L.email;
+  if(L.ult) sdmAplicar(p, L.ult, null, null, null, 'complementar');
+  return mudou;
+}
+function temBi(){ return S.patients.some(p=>p.bi); }
+function biDataRef(lista){ const c={}; (lista||S.patients).forEach(p=>{ if(p.bi&&p.bi.data) c[p.bi.data]=(c[p.bi.data]||0)+1; });
+  const d=Object.keys(c).sort((a,b)=>c[b]-c[a]||(b<a?-1:1))[0]; return d||''; }
+const simNao = v => v===true?'Sim':v===false?'Não':'—';
+const fmtN = n => n==null||isNaN(n) ? '—' : (+n).toLocaleString('pt-PT',{maximumFractionDigits:1});
+
+/* ---------------- 2. freguesias (CAOP 2025, DGT) e países ---------------- */
+let CAOP=null;
+const CAOP_FONTE=(typeof window!=='undefined' && window.MGF_CAOP_FONTE) || '';
+function caop(){
+  if(CAOP) return CAOP;
+  CAOP={d:{},m:{},f:{}};
+  const t=(typeof window!=='undefined' && window.MGF_CAOP) || '';
+  t.split('\n').forEach(l=>{ if(!l) return; const c=l.split('|');
+    if(l[0]==='D'){ CAOP.d[c[0].slice(1)]=c[1]; return; }
+    const m=c[0]; CAOP.m[m]={nome:c[1], nuts3:c[2], nuts2:c[3]};
+    for(let i=4;i<c.length;i++){ const j=c[i].indexOf(':'); CAOP.f[m+c[i].slice(0,j)]=c[i].slice(j+1); } });
+  return CAOP;
+}
+function normDicofre(v){ let s=String(v==null?'':v).trim().toUpperCase().replace(/\s/g,''); if(/^\d{5}$/.test(s)) s='0'+s; return /^[0-9A-Z]{6}$/.test(s)? s : ''; }
+function fregInfo(cod){
+  const c=normDicofre(cod); if(!c) return null;
+  const C=caop(), m=C.m[c.slice(0,4)]||{};
+  return {cod:c, freg:C.f[c]||null, conc:m.nome||null, dist:C.d[c.slice(0,2)]||null, nuts3:m.nuts3||null, nuts2:m.nuts2||null};
+}
+function fregNome(cod){ const f=fregInfo(cod); if(!f) return ''; return f.freg || ('Freguesia '+f.cod+(f.conc?'':' (código desconhecido)')); }
+let _paises=null;
+function paisNome(c){ c=String(c||'').trim().toUpperCase(); if(!c) return '';
+  try{ _paises=_paises||new Intl.DisplayNames(['pt-PT'],{type:'region'}); const n=_paises.of(c); return n&&n!==c? n : c; }catch(e){ return c; } }
+
+/* ---------------- 3. utilidades dos painéis ---------------- */
+const nCron = p => REL_CRON.filter(k=>p.prog[k]).length;
+const nProgs = p => Object.keys(PROGS).filter(k=>p.prog[k]).length;
+const progsTxt = p => Object.keys(PROGS).filter(k=>p.prog[k]).map(k=>PROGS[k].lb).join(', ');
+function faixaDe(p){ const a=ageYears(p.dob); if(a==null) return null; const f=REL_FAIXAS.find(([x,y])=>a>=x&&a<=y); return f?f[2]:null; }
+function idadeLista(k,p){ if(k==='sm'){ const y=ageYears(p.dob); return y==null?'—':y+' anos'; } return fmtAge(p.dob)||'—'; }
+const somaDe = (l,f) => l.reduce((s,x)=>s+(f(x)||0),0);
+const mediana = l => quantil(l.slice().sort((a,b)=>a-b),.5);
+/* filtro por programa comum aos painéis */
+const FILTRO_PROG = () => [['todos','Todos os utentes'],['cron','Com doença crónica'],['semcron','Sem doença crónica'],['semprog','Sem programa']].concat(Object.keys(PROGS).map(k=>[k,PROGS[k].lb]));
+function passaProg(p,f){ if(!f||f==='todos') return true; if(f==='cron') return nCron(p)>0; if(f==='semcron') return nCron(p)===0; if(f==='semprog') return nProgs(p)===0; return !!p.prog[f]; }
+function passaFaixa(p,f){ return !f || f==='todas' || faixaDe(p)===f; }
+const selectHtml = (attr, val, ops) => `<select class="btn" ${attr} style="padding:6px 26px 6px 11px">${ops.map(([v,l])=>`<option value="${esc(v)}"${String(val)===String(v)?' selected':''}>${esc(l)}</option>`).join('')}</select>`;
+const faixaOps = () => [['todas','Todas as idades']].concat(REL_FAIXAS.map(f=>[f[2],f[2]]));
+
+/* tabela que ordena por qualquer coluna: cols = [{id, lb, num, v:linha=>valor, h:linha=>html}] */
+function tabelaOrd(id, cols, linhas, opt){
+  opt=opt||{};
+  const o=(ui.ord&&ui.ord[id]) || opt.def || {col:cols[0].id, dir:1};
+  const col=cols.find(c=>c.id===o.col)||cols[0];
+  const nome=(a,b)=>String((a.p&&a.p.nome)||'').localeCompare(String((b.p&&b.p.nome)||''),'pt');
+  const cmp=(a,b)=> typeof a==='number'&&typeof b==='number' ? a-b : String(a).localeCompare(String(b),'pt',{numeric:true});
+  const ord=linhas.map(l=>({l,v:col.v(l)})).sort((x,y)=>{ const a=x.v, b=y.v, va=a==null||a==='', vb=b==null||b==='';
+    if(va&&vb) return nome(x.l,y.l); if(va) return 1; if(vb) return -1; return o.dir*cmp(a,b) || nome(x.l,y.l); }).map(x=>x.l);
+  const lim=opt.limite||0, mostra=lim&&ord.length>lim? ord.slice(0,lim) : ord;
+  const th=cols.map(c=>{ const at=c.id===col.id;
+    return `<th${c.num?' class="num"':''} aria-sort="${at?(o.dir>0?'ascending':'descending'):'none'}"><button type="button" class="th-ord" data-ord="${id}:${c.id}"${at?' data-ativo':''} title="Ordenar por ${esc(c.lb.toLowerCase())}">${esc(c.lb)}<span class="seta" aria-hidden="true">${at?(o.dir>0?'▲':'▼'):'▲▼'}</span></button></th>`; }).join('');
+  const tr=mostra.map(l=>`<tr${l.p&&!opt.semAbrir?` data-open="${l.p.id}" data-tab="ficha"`:''}>${cols.map(c=>`<td${c.num?' class="num"':''}>${c.h(l)}</td>`).join('')}</tr>`).join('');
+  const tot=opt.totais? `<tfoot><tr>${cols.map(c=>`<td${c.num?' class="num"':''}>${opt.totais[c.id]!=null?opt.totais[c.id]:''}</td>`).join('')}</tr></tfoot>` : '';
+  return {html:`<div class="tb-rolar"><table class="tb-ordenar tb-v7">${'<thead><tr>'+th+'</tr></thead>'}<tbody>${tr}</tbody>${tot}</table></div>`
+    + (lim&&ord.length>lim?`<p class="meta" style="margin:6px 0 0">A mostrar ${lim} de ${ord.length}. O Excel tem todos.</p>`:''), ordenadas:ord};
+}
+const utenteCel = p => `<div class="nm">${esc(p.nome)}</div><div class="meta">${[p.sns,p.telefone].filter(Boolean).map(esc).join(' · ')}</div>`;
+const tile = (t,v,m) => `<div class="card"><div class="ttl">${t}</div><div class="big">${v}</div>${m?`<div class="meta">${m}</div>`:''}</div>`;
+const semBi = (o) => `<div class="empty"><b>${o||'Sem dados da ficha de utentes'}</b>Importa o Excel da ficha de utentes do BI-CSP (o ficheiro com as colunas «Prc. Famil.», «Cons. Médic. 12M», «PVP Medicam. 12M»…) em Utentes → Importar lista de Excel. Os dados ficam só neste computador.</div>`;
+function imprimirHtml(titulo, sub, corpo){
+  document.getElementById('printArea').innerHTML=`<h1>${esc(titulo)}</h1><p class="sub">${esc(sub)}</p>${corpo}`;
+  window.print();
+}
+const tabPrint = (cab, linhas) => `<table><thead><tr>${cab.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${linhas.map(l=>`<tr>${l.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const linhasXls = (cab, linhas) => linhas.map(l=>{ const o={}; cab.forEach((c,i)=>o[c]=l[i]); return o; });
+const num2 = x => x==null||isNaN(x)? '' : Math.round(x*100)/100;
+
+/* ---------------- 4. Custos ---------------- */
+function custoPeriodos(){
+  const per=[]; if(S.patients.some(p=>p.bi&&(p.bi.medic12!=null||p.bi.mcdt12!=null))) per.push('12m');
+  anosGastos().slice().reverse().forEach(a=>per.push(a)); return per;
+}
+function custoPer(){ const per=custoPeriodos(); return per.includes(ui.cPer)? ui.cPer : (per[0]||null); }
+function custoPerLb(per){ return per==='12m' ? `Últimos 12 meses (ficha de ${fmtPT(biDataRef())})` : 'Ano '+per; }
+function custoDe(p, per, hosp){
+  if(per==='12m'){ const b=p.bi; if(!b||(b.medic12==null&&b.mcdt12==null)) return null;
+    const o={med:b.medic12||0, mcdt:b.mcdt12||0, mcdtH:b.mcdtHosp12||0, int:b.intern12||0}; o.t=o.med+o.mcdt+(hosp?o.mcdtH+o.int:0); return o; }
+  const g=p.sdm.gastos[per]; if(!g||(g.med==null&&g.mcdt==null)) return null;
+  const o={med:g.med||0, mcdt:g.mcdt||0, mcdtH:null, int:null}; o.t=o.med+o.mcdt; return o;
+}
+function custoLinhas(){
+  const per=custoPer(), hosp=per==='12m'&&!!ui.cHosp, out=[];
+  filterList(S.patients).forEach(p=>{ if(!passaProg(p,ui.cProg)||!passaFaixa(p,ui.cFaixa)) return; const c=custoDe(p,per,hosp); if(c) out.push({p,c}); });
+  return {per, hosp, linhas:out};
+}
+function custoSemSeg(linhas){
+  const ts=linhas.map(l=>l.c.t).sort((a,b)=>a-b), p75=quantil(ts,.75);
+  return {p75, l: linhas.filter(l=> l.c.t>0 && l.c.t>=p75 && semConsulta12(l.p))};
+}
+function semConsulta12(p){ const u=(p.bi&&p.bi.ultMed)||p.sdm.ultConsulta; if(!u) return true; return daysBetween(u,todayISO())>365; }
+function custoAnalise(linhas, hosp, bi){
+  const tot={med:somaDe(linhas,l=>l.c.med), mcdt:somaDe(linhas,l=>l.c.mcdt), mcdtH:somaDe(linhas,l=>l.c.mcdtH), int:somaDe(linhas,l=>l.c.int)};
+  const soma=somaDe(linhas,l=>l.c.t), ts=linhas.map(l=>l.c.t).sort((a,b)=>a-b);
+  const conc=[1,5,10,20].map(q=>{ const n=Math.max(1,Math.round(ts.length*q/100)); const s=ts.slice(-n).reduce((a,b)=>a+b,0); return {q, n, s, p:pct(s,soma)}; });
+  const grupo=(lb,l,extra)=>Object.assign({lb, n:l.length, soma:somaDe(l,x=>x.c.t), media:media(l.map(x=>x.c.t)), mediana:mediana(l.map(x=>x.c.t)),
+    med:media(l.map(x=>x.c.med)), mcdt:media(l.map(x=>x.c.mcdt)), p:pct(somaDe(l,x=>x.c.t),soma)}, extra||{});
+  const porProg=Object.keys(PROGS).map(k=>grupo(PROGS[k].lb, linhas.filter(l=>l.p.prog[k]), {k}))
+    .concat([grupo('Sem programa', linhas.filter(l=>nProgs(l.p)===0), {k:'semprog'})]).sort((a,b)=>b.soma-a.soma);
+  const porCron=[0,1,2,3,4].map(c=>grupo(c<4?String(c):'4 ou mais', linhas.filter(l=> c<4? nCron(l.p)===c : nCron(l.p)>=4)));
+  const porFaixa=REL_FAIXAS.map(([a,b,lb])=>{ const l=linhas.filter(x=>faixaDe(x.p)===lb);
+    return grupo(lb, l, {F:media(l.filter(x=>x.p.sexo==='F').map(x=>x.c.t)), M:media(l.filter(x=>x.p.sexo==='M').map(x=>x.c.t))}); });
+  const comb=new Map(); linhas.forEach(l=>{ const ks=REL_CRON.filter(k=>l.p.prog[k]); if(!ks.length) return; const key=ks.join('+'); if(!comb.has(key)) comb.set(key,[]); comb.get(key).push(l); });
+  const porComb=[...comb.entries()].map(([key,l])=>grupo(key.split('+').map(k=>PROGS[k].lb).join(' + '), l)).sort((a,b)=>b.soma-a.soma);
+  const A={n:linhas.length, tot, soma, media:media(ts), mediana:quantil(ts,.5), p90:quantil(ts,.9), zero:ts.filter(x=>x===0).length, conc, porProg, porCron, porFaixa, porComb, hosp};
+  if(bi){
+    const comBi=linhas.filter(l=>l.p.bi);
+    const B=[['0',0,0],['1–2',1,2],['3–5',3,5],['6–11',6,11],['12 ou mais',12,1e9]];
+    A.porUtil=B.map(([lb,a,b])=>grupo(lb+' consultas', comBi.filter(l=>{ const m=l.p.bi.med12||0; return m>=a&&m<=b; })));
+    const ben=(lb,k)=>[grupo(lb+': sim', comBi.filter(l=>l.p.bi[k]===true)), grupo(lb+': não', comBi.filter(l=>l.p.bi[k]===false))];
+    A.porBenef=[].concat(ben('Regime especial de comparticipação (RECM)','recm'), ben('Insuficiência económica','insufEcon'), ben('Isenção de taxas moderadoras','isencao'));
+    const fr=new Map(); comBi.forEach(l=>{ const f=l.p.bi.freg||'—'; if(!fr.has(f)) fr.set(f,[]); fr.get(f).push(l); });
+    A.porFreg=[...fr.entries()].map(([f,l])=>grupo(f==='—'?'Sem freguesia':fregNome(f), l)).sort((a,b)=>b.soma-a.soma);
+  }
+  A.semSeg=custoSemSeg(linhas);
+  return A;
+}
+function viewCustos(){
+  const per=custoPer();
+  let h=`<h1>Custos</h1>`;
+  if(!per) return h+`<p class="sub">Medicação e MCDT por utente, por programa e na lista toda.</p>`+semBi('Sem custos importados');
+  const {hosp, linhas}=custoLinhas();
+  const modo=ui.cModo==='analise'?'analise':'lista';
+  const semDados=S.patients.length-S.patients.filter(p=>custoDe(p,per,hosp)).length;
+  h+=`<p class="sub">${esc(custoPerLb(per))} · ${linhas.length} utentes nesta seleção${semDados?` · ${semDados} sem dados de custos`:''}</p>
+   <div class="toolbar"><div class="seg"><button data-cmodo="lista" class="${modo==='lista'?'on':''}">Lista</button><button data-cmodo="analise" class="${modo==='analise'?'on':''}">Análises</button></div>
+     ${selectHtml('data-cper', per, custoPeriodos().map(x=>[x, x==='12m'?'Últimos 12 meses':'Ano '+x]))}
+     ${selectHtml('data-cprog', ui.cProg||'todos', FILTRO_PROG().concat([['semseg','Custo alto e sem consulta médica há 12 meses']]))}
+     ${selectHtml('data-cfaixa', ui.cFaixa||'todas', faixaOps())}
+     ${per==='12m'?`<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" class="chk" data-chosp ${hosp?'checked':''}> Incluir custos hospitalares</label>`:''}
+     <div class="grow"></div>
+     <button class="btn" data-act="printcustos">Imprimir relatório</button><button class="btn pri" data-act="xlscustos">Exportar Excel</button></div>`;
+  let L=linhas; if(ui.cProg==='semseg') L=custoSemSeg(custoLinhasTodas(per,hosp)).l.filter(l=>passaFaixa(l.p,ui.cFaixa));
+  const nota=`<div class="note">${per==='12m'?'Medicação: PVP dos medicamentos dispensados nos últimos 12 meses, segundo a ficha (preço de venda ao público, não o encargo do SNS). MCDT: meios complementares convencionados. ':'' }${hosp?'Com custos hospitalares: MCDT feitos no hospital e internamentos. ':''}Só números da ficha importada; a aplicação não calcula custos.</div>`;
+  if(modo==='lista'){
+    const A=custoAnalise(L,hosp,false);
+    h+=`<div class="rel"><div class="cards">${tile('Total', fmtEur(A.soma), `${L.length} utentes`)}${tile('Medicação', fmtEur(A.tot.med), fmtPct(pct(A.tot.med,A.soma))+' do total')}${tile('MCDT', fmtEur(A.tot.mcdt), fmtPct(pct(A.tot.mcdt,A.soma))+' do total')}${hosp?tile('Hospital', fmtEur(A.tot.mcdtH+A.tot.int), 'MCDT hospitalares e internamentos'):''}${tile('Por utente', fmtEur(A.media), 'mediana '+fmtEur(A.mediana))}</div></div>`;
+    const cols=[
+      {id:'nome', lb:'Utente', v:l=>l.p.nome, h:l=>utenteCel(l.p)},
+      {id:'idade', lb:'Idade', num:true, v:l=>ageMonths(l.p.dob), h:l=>`<span class="age">${fmtAge(l.p.dob)}</span>`},
+      {id:'cron', lb:'Doenças crónicas', num:true, v:l=>nCron(l.p), h:l=>String(nCron(l.p))},
+      {id:'progs', lb:'Programas', v:l=>nProgs(l.p)||null, h:l=>tags(l.p)||'<span class="meta">—</span>'},
+      {id:'ult', lb:'Última consulta na USF', v:l=>l.p.sdm.ultConsulta||null, h:l=>`<span class="meta">${l.p.sdm.ultConsulta?fmtPT(l.p.sdm.ultConsulta):'—'}</span>`},
+      {id:'mcdt', lb:'MCDT', num:true, v:l=>l.c.mcdt, h:l=>fmtEur(l.c.mcdt)},
+      {id:'med', lb:'Medicação', num:true, v:l=>l.c.med, h:l=>fmtEur(l.c.med)}]
+      .concat(hosp?[{id:'mcdtH', lb:'MCDT hospitalares', num:true, v:l=>l.c.mcdtH, h:l=>fmtEur(l.c.mcdtH)},{id:'int', lb:'Internamentos', num:true, v:l=>l.c.int, h:l=>fmtEur(l.c.int)}]:[])
+      .concat([{id:'t', lb:'Custo total', num:true, v:l=>l.c.t, h:l=>`<b>${fmtEur(l.c.t)}</b>`}]);
+    const T=tabelaOrd('custos', cols, L, {def:{col:'t',dir:-1}, totais:{nome:`<b>Total (${L.length})</b>`, mcdt:`<b>${fmtEur(A.tot.mcdt)}</b>`, med:`<b>${fmtEur(A.tot.med)}</b>`, mcdtH:hosp?`<b>${fmtEur(A.tot.mcdtH)}</b>`:null, int:hosp?`<b>${fmtEur(A.tot.int)}</b>`:null, t:`<b>${fmtEur(A.soma)}</b>`}});
+    ui._custosOrd=T.ordenadas;
+    h+= L.length? T.html : `<div class="empty"><b>Ninguém nesta seleção</b>Muda o programa, a idade ou a pesquisa.</div>`;
+    return h+nota;
+  }
+  const A=custoAnalise(L,hosp,temBi()&&per==='12m');
+  h+=nota+`<div class="rel">`+custoAnaliseHtml(A);
+  return h+'</div>';
+}
+function custoLinhasTodas(per,hosp){ const out=[]; filterList(S.patients).forEach(p=>{ const c=custoDe(p,per,hosp); if(c) out.push({p,c}); }); return out; }
+function custoAnaliseHtml(A){
+  if(!A.n) return `<div class="empty"><b>Ninguém nesta seleção</b>Muda o programa ou a idade.</div>`;
+  const maxP=Math.max(...A.porProg.map(g=>g.p||0)), top=A.porProg.filter(g=>g.n)[0];
+  let h=`<h2>Resumo</h2><div class="cards">${tile('Total', fmtEur(A.soma), A.n+' utentes')}${tile('Medicação', fmtEur(A.tot.med), fmtPct(pct(A.tot.med,A.soma)))}${tile('MCDT', fmtEur(A.tot.mcdt), fmtPct(pct(A.tot.mcdt,A.soma)))}
+    ${A.hosp?tile('Hospital', fmtEur(A.tot.mcdtH+A.tot.int), 'MCDT hospitalares '+fmtEur(A.tot.mcdtH)+' · internamentos '+fmtEur(A.tot.int)):''}
+    ${tile('Por utente', fmtEur(A.media), 'mediana '+fmtEur(A.mediana)+' · percentil 90 '+fmtEur(A.p90))}${tile('Sem custos', A.zero, fmtPct(pct(A.zero,A.n))+' dos utentes')}</div>`;
+  h+=`<h2>Concentração dos custos</h2><p class="rel-explica">Que parte do custo total vem dos utentes que mais custam.</p>`+
+    relTabela(['Utentes que mais custam','Utentes','Custo','% do total'], A.conc.map(c=>[`Os ${c.q}% que mais custam`, c.n, fmtEur(c.s), fmtPct(c.p)+relBarra(c.p,100)]), [1,2,3]);
+  h+=`<h2>Por programa</h2><p class="rel-explica">${top?`O programa com mais custo total é <b>${esc(top.lb)}</b> (${fmtEur(top.soma)}, ${fmtPct(top.p)} do total). `:''}Quem está em vários programas conta em cada um, por isso as percentagens somam mais de 100%.</p>`+
+    relTabela(['Programa','Utentes','Custo total','% do total','Média por utente','Mediana','Medicação (média)','MCDT (média)'],
+      A.porProg.map(g=>[esc(g.lb), g.n, fmtEur(g.soma), fmtPct(g.p)+relBarra(g.p,maxP), fmtEur(g.media), fmtEur(g.mediana), fmtEur(g.med), fmtEur(g.mcdt)]), [1,2,3,4,5,6,7]);
+  h+=`<h2>Por número de doenças crónicas</h2><p class="rel-explica">Diabetes, Hipertensão, DPOC, Asma e Obesidade.</p>`+
+    relTabela(['Doenças crónicas','Utentes','Custo total','% do total','Média por utente','Medicação (média)','MCDT (média)'], A.porCron.map(g=>[g.lb, g.n, fmtEur(g.soma), fmtPct(g.p)+relBarra(g.p,100), fmtEur(g.media), fmtEur(g.med), fmtEur(g.mcdt)]), [1,2,3,4,5,6]);
+  h+=`<h2>Por grupo etário e sexo</h2>`+
+    relTabela(['Grupo etário','Utentes','Custo total','% do total','Média','Média mulheres','Média homens'], A.porFaixa.map(g=>[g.lb, g.n, fmtEur(g.soma), fmtPct(g.p)+relBarra(g.p,100), fmtEur(g.media), fmtEur(g.F), fmtEur(g.M)]), [1,2,3,4,5,6]);
+  if(A.porComb.length) h+=`<h2>Por combinação de doenças crónicas</h2><p class="rel-explica">Combinação exata (cada utente conta uma vez). As 15 com mais custo total.</p>`+
+    relTabela(['Combinação','Utentes','Custo total','% do total','Média por utente'], A.porComb.slice(0,15).map(g=>[esc(g.lb), g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4]);
+  if(A.porUtil) h+=`<h2>Custo e utilização</h2><p class="rel-explica">Utentes agrupados pelo número de consultas médicas nos últimos 12 meses.</p>`+
+    relTabela(['Consultas médicas (12 meses)','Utentes','Custo total','% do total','Média por utente'], A.porUtil.map(g=>[g.lb, g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4]);
+  if(A.porBenef) h+=`<h2>Benefícios e isenções</h2>`+
+    relTabela(['Grupo','Utentes','Custo total','% do total','Média por utente'], A.porBenef.map(g=>[esc(g.lb), g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4]);
+  if(A.porFreg && A.porFreg.length>1) h+=`<h2>Por freguesia de residência</h2>`+
+    relTabela(['Freguesia','Utentes','Custo total','% do total','Média por utente'], A.porFreg.slice(0,15).map(g=>[esc(g.lb), g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4]);
+  const SS=A.semSeg;
+  h+=`<h2>Custo alto sem consulta médica</h2><div class="cards">${tile('Custo no quartil mais alto e sem consulta médica há 12 meses ou mais', SS.l.length, `custo a partir de ${fmtEur(SS.p75)}`)}</div>
+    ${SS.l.length?`<button class="btn" data-cver="semseg">Ver estes utentes</button>`:''}`;
+  return h;
+}
+function custoExcel(){
+  const per=custoPer(); if(!per) return toast('Sem custos importados');
+  const {hosp, linhas}=custoLinhas();
+  let L=linhas; if(ui.cProg==='semseg') L=custoSemSeg(custoLinhasTodas(per,hosp)).l.filter(l=>passaFaixa(l.p,ui.cFaixa));
+  const ord=ui.cModo!=='analise'&&ui._custosOrd&&ui._custosOrd.length===L.length? ui._custosOrd : L.slice().sort((a,b)=>b.c.t-a.c.t);
+  const lin=ord.map(({p,c})=>{ const o={Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||'',
+      'Doenças crónicas (nº)':nCron(p), 'Programas (nº)':nProgs(p), Programas:progsTxt(p), 'Última consulta na USF':p.sdm.ultConsulta?fmtPT(p.sdm.ultConsulta):'',
+      'MCDT (€)':num2(c.mcdt), 'Medicação (€)':num2(c.med)};
+    if(hosp){ o['MCDT hospitalares (€)']=num2(c.mcdtH); o['Internamentos (€)']=num2(c.int); }
+    o['Custo total (€)']=num2(c.t);
+    if(p.bi){ o['Freguesia']=fregNome(p.bi.freg); o['Consultas médicas 12M']=p.bi.med12; }
+    return o; });
+  const A=custoAnalise(L,hosp,temBi()&&per==='12m');
+  const g=(arr,lb)=>arr.map(x=>({[lb]:x.lb, Utentes:x.n, 'Custo total (€)':num2(x.soma), '% do total':num2(x.p), 'Média por utente (€)':num2(x.media), 'Mediana (€)':num2(x.mediana), 'Medicação, média (€)':num2(x.med), 'MCDT, média (€)':num2(x.mcdt)}));
+  const folhas=[['Utentes', folha(lin)], ['Por programa', folha(g(A.porProg,'Programa'))], ['Por doenças crónicas', folha(g(A.porCron,'Doenças crónicas'))],
+    ['Por grupo etário', folha(A.porFaixa.map(x=>Object.assign(g([x],'Grupo etário')[0], {'Média mulheres (€)':num2(x.F), 'Média homens (€)':num2(x.M)})))],
+    ['Combinações', folha(g(A.porComb,'Combinação'))],
+    ['Concentração', folha(A.conc.map(c=>({'Utentes que mais custam':`Os ${c.q}%`, Utentes:c.n, 'Custo (€)':num2(c.s), '% do total':num2(c.p)})))]];
+  if(A.porUtil) folhas.push(['Custo e utilização', folha(g(A.porUtil,'Consultas médicas 12M'))]);
+  if(A.porBenef) folhas.push(['Benefícios', folha(g(A.porBenef,'Grupo'))]);
+  if(A.porFreg) folhas.push(['Por freguesia', folha(g(A.porFreg,'Freguesia'))]);
+  folhas.push(['Sobre', folha([{Período:custoPerLb(per), Seleção:(FILTRO_PROG().concat([['semseg','Custo alto e sem consulta médica há 12 meses']]).find(x=>x[0]===(ui.cProg||'todos'))||[])[1]+' · '+(ui.cFaixa&&ui.cFaixa!=='todas'?ui.cFaixa:'todas as idades'),
+    'Custos hospitalares':hosp?'incluídos':'não incluídos', Utentes:L.length, Nota:'Medicação: PVP (preço de venda ao público) dos medicamentos dispensados, não o encargo do SNS. Valores da ficha importada.', 'Exportado em':new Date().toLocaleString('pt-PT')}])]);
+  ficheiroXls(`vigilancia-custos-${per==='12m'?'12-meses':per}-${(ui.cProg||'todos')}-${todayISO()}.xlsx`, folhas);
+}
+function custoPrint(){
+  const per=custoPer(); if(!per) return toast('Sem custos importados');
+  const {hosp, linhas}=custoLinhas(); const A=custoAnalise(linhas,hosp,temBi()&&per==='12m');
+  const g=x=>[x.lb, x.n, fmtEur(x.soma), fmtPct(x.p), fmtEur(x.media)];
+  imprimirHtml('Custos da lista', `${custoPerLb(per)} · ${A.n} utentes · ${hosp?'com':'sem'} custos hospitalares · impresso em ${new Date().toLocaleString('pt-PT')}`,
+    tabPrint(['Indicador','Valor'], [['Total',fmtEur(A.soma)],['Medicação',fmtEur(A.tot.med)],['MCDT',fmtEur(A.tot.mcdt)]].concat(hosp?[['MCDT hospitalares',fmtEur(A.tot.mcdtH)],['Internamentos',fmtEur(A.tot.int)]]:[])
+      .concat([['Média por utente',fmtEur(A.media)],['Mediana',fmtEur(A.mediana)],['Percentil 90',fmtEur(A.p90)]], A.conc.map(c=>[`Parte dos ${c.q}% que mais custam`, fmtPct(c.p)])))+
+    '<h2>Por programa</h2>'+tabPrint(['Programa','Utentes','Custo total','% do total','Média'], A.porProg.map(g))+
+    '<h2>Por número de doenças crónicas</h2>'+tabPrint(['Doenças crónicas','Utentes','Custo total','% do total','Média'], A.porCron.map(g))+
+    '<h2>Por grupo etário</h2>'+tabPrint(['Grupo etário','Utentes','Custo total','% do total','Média'], A.porFaixa.map(g))+
+    (A.porComb.length?'<h2>Por combinação de doenças crónicas</h2>'+tabPrint(['Combinação','Utentes','Custo total','% do total','Média'], A.porComb.slice(0,15).map(g)):'')+
+    (A.porUtil?'<h2>Custo e utilização</h2>'+tabPrint(['Consultas médicas (12 meses)','Utentes','Custo total','% do total','Média'], A.porUtil.map(g)):'')+
+    (A.porBenef?'<h2>Benefícios e isenções</h2>'+tabPrint(['Grupo','Utentes','Custo total','% do total','Média'], A.porBenef.map(g)):'')+
+    '<p class="sub">Só números agregados, sem nomes nem números de utente.</p>');
+}
+
+/* ---------------- 5. Utilização ---------------- */
+const UTIL_FILTROS = [['todos','Todos'],['sem12','Sem consulta médica há 12 meses'],['sem36','Sem consulta médica há 36 meses'],['naoutil','Não utilizadores dos CSP (ficha)'],
+  ['hiper','Muitas consultas médicas (12 meses)'],['urg','Urgência frequente (4 ou mais em 12 meses)'],['cronsem','Doença crónica sem consulta médica há 12 meses'],
+  ['idoso','75 e mais anos sem contacto há 12 meses'],['agendada','Com consulta médica agendada'],['domic','Com domicílios nos últimos 12 meses']];
+function utilHiper(){ const n=+ui.uHiper; return n>0? n : 12; }
+function passaUtil(p,f){ const b=p.bi; if(!f||f==='todos') return true;
+  if(f==='sem12') return !(b.med12>0); if(f==='sem36') return !(b.med36>0); if(f==='naoutil') return b.naoUtil===true;
+  if(f==='hiper') return (b.med12||0)>=utilHiper(); if(f==='urg') return (b.urg12||0)>=4; if(f==='cronsem') return nCron(p)>0 && !(b.med12>0);
+  if(f==='idoso'){ const a=ageYears(p.dob); return a!=null&&a>=75 && (b.diasSemCont==null||b.diasSemCont>365); }
+  if(f==='agendada') return b.medAg===true; if(f==='domic') return ((b.medDom12||0)+(b.enfDom12||0))>0; return true; }
+function utilLinhas(){ return filterList(S.patients).filter(p=>p.bi && passaProg(p,ui.uProg) && passaFaixa(p,ui.uFaixa) && passaUtil(p,ui.uFil)).map(p=>({p})); }
+const membrosLista = p => p.agregado ? S.patients.filter(x=>x.agregado===p.agregado).length : null;
+function utilAnalise(L){
+  const P=L.map(l=>l.p), n=P.length, b=p=>p.bi;
+  const util=(l)=>({n:l.length, um:l.filter(p=>b(p).med12>0).length, enf:l.filter(p=>b(p).enf12>0).length, mMed:media(l.map(p=>b(p).med12||0)), mEnf:media(l.map(p=>b(p).enf12||0)),
+    mMed36:media(l.map(p=>b(p).med36||0)), urg:l.filter(p=>(b(p).urg12||0)>0).length, mUrg:media(l.map(p=>b(p).urg12||0)), nao:l.filter(p=>b(p).naoUtil===true).length});
+  const A={n, g:util(P)};
+  A.fam=new Set(P.filter(p=>b(p).famNaoUtil===true&&p.agregado).map(p=>p.agregado)).size;
+  A.minutosMed=media(P.filter(p=>b(p).med12>0&&b(p).med12min).map(p=>b(p).med12min/b(p).med12));
+  A.dom=somaDe(P,p=>(b(p).medDom12||0)+(b(p).enfDom12||0)); A.domUt=P.filter(p=>((b(p).medDom12||0)+(b(p).enfDom12||0))>0).length;
+  A.np=somaDe(P,p=>b(p).medNP12||0); A.medTot=somaDe(P,p=>b(p).med12||0); A.enfTot=somaDe(P,p=>b(p).enf12||0);
+  A.agendada=P.filter(p=>b(p).medAg===true).length; A.urg4=P.filter(p=>(b(p).urg12||0)>=4).length; A.hiper=P.filter(p=>(b(p).med12||0)>=utilHiper()).length;
+  A.sns24=P.filter(p=>(b(p).sns24_12||0)>0).length; A.semSist=P.filter(p=>b(p).naoUtilSist===true).length;
+  A.porFaixa=REL_FAIXAS.map(([x,y,lb])=>Object.assign({lb}, util(P.filter(p=>faixaDe(p)===lb))));
+  A.porProg=Object.keys(PROGS).map(k=>Object.assign({lb:PROGS[k].lb}, util(P.filter(p=>p.prog[k])))).concat([Object.assign({lb:'Sem programa'}, util(P.filter(p=>nProgs(p)===0)))]);
+  A.porCron=[0,1,2,3].map(c=>Object.assign({lb:c<3?String(c):'3 ou mais'}, util(P.filter(p=> c<3? nCron(p)===c : nCron(p)>=3))));
+  const B=[['0',0,0],['1–2',1,2],['3–5',3,5],['6–11',6,11],['12 ou mais',12,1e9]];
+  A.distMed=B.map(([lb,a,c])=>({lb, n:P.filter(p=>{ const m=b(p).med12||0; return m>=a&&m<=c; }).length}));
+  A.distEnf=B.map(([lb,a,c])=>({lb, n:P.filter(p=>{ const m=b(p).enf12||0; return m>=a&&m<=c; }).length}));
+  A.ult=[['Nos últimos 12 meses',0,365],['Há 12 a 36 meses',366,1095],['Há mais de 36 meses',1096,1e9]].map(([lb,a,c])=>({lb, n:P.filter(p=>{ const u=b(p).ultMed; if(!u) return false; const d=daysBetween(u,todayISO()); return d>=a&&d<=c; }).length}))
+    .concat([{lb:'Sem consulta médica registada', n:P.filter(p=>!b(p).ultMed).length}]);
+  return A;
+}
+function utilTabelaGrupos(arr, lb){
+  return relTabela([lb,'Utentes','Com consulta médica (12 meses)','% utilização','Consultas médicas por utente (12 meses)','Consultas de enfermagem por utente','Com urgência (12 meses)'],
+    arr.map(g=>[esc(g.lb), g.n, g.um, fmtPct(pct(g.um,g.n))+relBarra(pct(g.um,g.n),100), fmt1(g.mMed), fmt1(g.mEnf), g.urg]), [1,2,3,4,5,6]);
+}
+function viewUtil(){
+  let h=`<h1>Utilização</h1>`;
+  if(!temBi()) return h+`<p class="sub">Consultas médicas e de enfermagem, última consulta e agregado.</p>`+semBi();
+  const modo=ui.uModo==='analise'?'analise':'lista', L=utilLinhas(), dref=biDataRef();
+  h+=`<p class="sub">Ficha de ${fmtPT(dref)} · ${L.length} utentes nesta seleção</p>
+   <div class="toolbar"><div class="seg"><button data-umodo="lista" class="${modo==='lista'?'on':''}">Lista</button><button data-umodo="analise" class="${modo==='analise'?'on':''}">Análises</button></div>
+     ${selectHtml('data-ufil', ui.uFil||'todos', UTIL_FILTROS)}
+     ${ui.uFil==='hiper'?`<label class="meta" style="display:flex;gap:6px;align-items:center">pelo menos <input type="number" min="1" max="99" data-uhiper value="${utilHiper()}" style="width:64px"> consultas</label>`:''}
+     ${selectHtml('data-uprog', ui.uProg||'todos', FILTRO_PROG())}${selectHtml('data-ufaixa', ui.uFaixa||'todas', faixaOps())}
+     <div class="grow"></div><button class="btn" data-act="printutil">Imprimir relatório</button><button class="btn pri" data-act="xlsutil">Exportar Excel</button></div>`;
+  const A=utilAnalise(L), g=A.g;
+  h+=`<div class="rel"><div class="cards">${tile('Utilização médica (12 meses)', fmtPct(pct(g.um,g.n)), `${g.um} de ${g.n} com pelo menos uma consulta`)}
+    ${tile('Consultas médicas por utente', fmt1(g.mMed), `12 meses · 36 meses: ${fmt1(g.mMed36)}`)}${tile('Consultas de enfermagem por utente', fmt1(g.mEnf), `${g.enf} utentes com consulta (${fmtPct(pct(g.enf,g.n))})`)}
+    ${tile('Não utilizadores dos CSP', g.nao, `${fmtPct(pct(g.nao,g.n))} · ${A.fam} famílias não utilizadoras`)}${tile('Urgência (12 meses)', g.urg, `utentes com episódios · ${A.urg4} com 4 ou mais`)}</div></div>`;
+  if(modo==='lista'){
+    const cols=[
+      {id:'nome', lb:'Utente', v:l=>l.p.nome, h:l=>utenteCel(l.p)},
+      {id:'idade', lb:'Idade', num:true, v:l=>ageMonths(l.p.dob), h:l=>`<span class="age">${fmtAge(l.p.dob)}</span>`},
+      {id:'med12', lb:'Médicas 12M', num:true, v:l=>l.p.bi.med12, h:l=>fmtN(l.p.bi.med12)},
+      {id:'med36', lb:'Médicas 36M', num:true, v:l=>l.p.bi.med36, h:l=>fmtN(l.p.bi.med36)},
+      {id:'enf12', lb:'Enfermagem 12M', num:true, v:l=>l.p.bi.enf12, h:l=>fmtN(l.p.bi.enf12)},
+      {id:'enf36', lb:'Enfermagem 36M', num:true, v:l=>l.p.bi.enf36, h:l=>fmtN(l.p.bi.enf36)},
+      {id:'ultMed', lb:'Última consulta médica', v:l=>l.p.bi.ultMed||null, h:l=>`<span class="meta">${l.p.bi.ultMed?fmtPT(l.p.bi.ultMed):'—'}</span>`},
+      {id:'ultEnf', lb:'Última consulta de enfermagem', v:l=>l.p.bi.ultEnf||null, h:l=>`<span class="meta">${l.p.bi.ultEnf?fmtPT(l.p.bi.ultEnf):'—'}</span>`},
+      {id:'dias', lb:'Dias sem contacto', num:true, v:l=>l.p.bi.diasSemCont, h:l=>fmtN(l.p.bi.diasSemCont)},
+      {id:'urg', lb:'Urgências 12M', num:true, v:l=>l.p.bi.urg12, h:l=>fmtN(l.p.bi.urg12)},
+      {id:'agr', lb:'Pessoas no agregado', num:true, v:l=>l.p.bi.nElemFam, h:l=>`${fmtN(l.p.bi.nElemFam)}${l.p.agregado&&membrosLista(l.p)>1?` <span class="meta">(${membrosLista(l.p)} na lista)</span>`:''}`}];
+    const T=tabelaOrd('util', cols, L, {def:{col:'med12',dir:-1}});
+    ui._utilOrd=T.ordenadas;
+    return h+(L.length? T.html : `<div class="empty"><b>Ninguém nesta seleção</b>Muda o filtro, o programa ou a idade.</div>`);
+  }
+  h+=`<div class="rel"><h2>Resumo</h2>`+relTabela(['Indicador','Valor'], [
+      ['Consultas médicas nos últimos 12 meses', fmtN(A.medTot)+` <span class="meta">(${fmtN(A.np)} não presenciais)</span>`], ['Consultas de enfermagem nos últimos 12 meses', fmtN(A.enfTot)],
+      ['Duração média de uma consulta médica', A.minutosMed==null?'—':fmt1(A.minutosMed)+' min'], ['Domicílios (médicos e de enfermagem, 12 meses)', `${fmtN(A.dom)} em ${A.domUt} utentes`],
+      ['Com consulta médica agendada', `${A.agendada} (${fmtPct(pct(A.agendada,A.n))})`], [`Com ${utilHiper()} ou mais consultas médicas em 12 meses`, `${A.hiper} (${fmtPct(pct(A.hiper,A.n))})`],
+      ['Contactaram o SNS 24 (12 meses)', `${A.sns24} (${fmtPct(pct(A.sns24,A.n))})`], ['Sem contacto com o sistema de saúde (ficha)', `${A.semSist} (${fmtPct(pct(A.semSist,A.n))})`]], [1])+
+    `<h2>Última consulta médica</h2>`+relTabela(['Última consulta médica','Utentes','%'], A.ult.map(x=>[x.lb, x.n, fmtPct(pct(x.n,A.n))+relBarra(pct(x.n,A.n),100)]), [1,2])+
+    `<h2>Número de consultas nos últimos 12 meses</h2>`+relTabela(['Consultas','Médicas: utentes','%','Enfermagem: utentes','%'], A.distMed.map((x,i)=>[x.lb, x.n, fmtPct(pct(x.n,A.n))+relBarra(pct(x.n,A.n),100), A.distEnf[i].n, fmtPct(pct(A.distEnf[i].n,A.n))]), [1,2,3,4])+
+    `<h2>Por grupo etário</h2>`+utilTabelaGrupos(A.porFaixa,'Grupo etário')+
+    `<h2>Por programa</h2>`+utilTabelaGrupos(A.porProg,'Programa')+
+    `<h2>Por número de doenças crónicas</h2>`+utilTabelaGrupos(A.porCron,'Doenças crónicas')+`</div>`;
+  return h;
+}
+function utilExcel(){
+  if(!temBi()) return toast('Sem dados da ficha de utentes');
+  const L=utilLinhas(), ord=ui.uModo!=='analise'&&ui._utilOrd&&ui._utilOrd.length===L.length? ui._utilOrd : L;
+  const lin=ord.map(({p})=>{ const b=p.bi; return {Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||'', Programas:progsTxt(p),
+    'Consultas médicas 12M':b.med12, 'Consultas médicas 36M':b.med36, 'Consultas médicas 60M':b.med60, 'Médicas não presenciais 12M':b.medNP12, 'Domicílios médicos 12M':b.medDom12,
+    'Consultas de enfermagem 12M':b.enf12, 'Consultas de enfermagem 36M':b.enf36, 'Domicílios de enfermagem 12M':b.enfDom12, 'Outros profissionais 12M':b.out12, 'Contactos CSP 12M':b.cont12,
+    'Última consulta médica':b.ultMed?fmtPT(b.ultMed):'', 'Última consulta de enfermagem':b.ultEnf?fmtPT(b.ultEnf):'', 'Dias sem contacto CSP':b.diasSemCont,
+    'Consulta médica agendada':simNao(b.medAg), 'Não utilizador CSP':simNao(b.naoUtil), 'Urgências 12M':b.urg12, 'Consultas hospitalares 12M':b.consHosp12,
+    'Código do agregado':p.agregado||'', 'Pessoas no agregado':b.nElemFam, 'Do agregado nesta lista':membrosLista(p)}; });
+  const A=utilAnalise(L);
+  const g=arr=>arr.map(x=>({Grupo:x.lb, Utentes:x.n, 'Com consulta médica 12M':x.um, '% utilização':num2(pct(x.um,x.n)), 'Consultas médicas por utente':num2(x.mMed), 'Consultas de enfermagem por utente':num2(x.mEnf), 'Com urgência 12M':x.urg}));
+  ficheiroXls(`vigilancia-utilizacao-${ui.uFil||'todos'}-${todayISO()}.xlsx`, [['Utentes', folha(lin)], ['Por grupo etário', folha(g(A.porFaixa))], ['Por programa', folha(g(A.porProg))],
+    ['Por doenças crónicas', folha(g(A.porCron))], ['Consultas 12M', folha(A.distMed.map((x,i)=>({Consultas:x.lb, 'Médicas (utentes)':x.n, 'Enfermagem (utentes)':A.distEnf[i].n})))],
+    ['Sobre', folha([{'Ficha de':fmtPT(biDataRef()), Filtro:(UTIL_FILTROS.find(x=>x[0]===(ui.uFil||'todos'))||[])[1], Utentes:L.length, 'Exportado em':new Date().toLocaleString('pt-PT')}])]]);
+}
+function utilPrint(){
+  if(!temBi()) return toast('Sem dados da ficha de utentes');
+  const L=utilLinhas(), A=utilAnalise(L);
+  const g=x=>[x.lb, x.n, x.um, fmtPct(pct(x.um,x.n)), fmt1(x.mMed), fmt1(x.mEnf), x.urg];
+  const cab=['Grupo','Utentes','Com consulta médica','% utilização','Médicas por utente','Enfermagem por utente','Com urgência'];
+  imprimirHtml('Utilização dos cuidados', `Ficha de ${fmtPT(biDataRef())} · ${A.n} utentes · ${(UTIL_FILTROS.find(x=>x[0]===(ui.uFil||'todos'))||[])[1]} · impresso em ${new Date().toLocaleString('pt-PT')}`,
+    tabPrint(['Indicador','Valor'], [['Utilização médica (12 meses)', fmtPct(pct(A.g.um,A.n))], ['Consultas médicas por utente (12 meses)', fmt1(A.g.mMed)], ['Consultas de enfermagem por utente (12 meses)', fmt1(A.g.mEnf)],
+      ['Não utilizadores dos CSP', `${A.g.nao} (${fmtPct(pct(A.g.nao,A.n))})`], ['Famílias não utilizadoras', String(A.fam)], ['Com urgência (12 meses)', String(A.g.urg)], ['Com 4 ou mais urgências', String(A.urg4)],
+      ['Domicílios (12 meses)', `${A.dom} em ${A.domUt} utentes`]])+
+    '<h2>Última consulta médica</h2>'+tabPrint(['Última consulta médica','Utentes','%'], A.ult.map(x=>[x.lb, x.n, fmtPct(pct(x.n,A.n))]))+
+    '<h2>Por grupo etário</h2>'+tabPrint(cab, A.porFaixa.map(g))+'<h2>Por programa</h2>'+tabPrint(cab, A.porProg.map(g))+'<h2>Por número de doenças crónicas</h2>'+tabPrint(cab, A.porCron.map(g))+
+    '<p class="sub">Só números agregados, sem nomes nem números de utente.</p>');
+}
+
+/* ---------------- 6. População e agregados ---------------- */
+function agregados(lista){
+  const m=new Map(); (lista||S.patients).forEach(p=>{ if(!p.agregado) return; if(!m.has(p.agregado)) m.set(p.agregado,[]); m.get(p.agregado).push(p); });
+  return [...m.entries()].map(([cod,ps])=>{ const idades=ps.map(p=>ageYears(p.dob)).filter(x=>x!=null);
+    const nR=Math.max(0,...ps.map(p=>(p.bi&&p.bi.nElemFam)||0)) || null;
+    const fr={}; ps.forEach(p=>{ const f=p.bi&&p.bi.freg; if(f) fr[f]=(fr[f]||0)+1; });
+    const freg=Object.keys(fr).sort((a,b)=>fr[b]-fr[a])[0]||'';
+    return {cod, ps:ps.slice().sort((a,b)=>(ageYears(b.dob)||0)-(ageYears(a.dob)||0)), n:ps.length, nR, idades, freg,
+      min:idades.length?Math.min(...idades):null, max:idades.length?Math.max(...idades):null,
+      soIdosos: idades.length===ps.length && idades.every(a=>a>=65) && (nR==null||nR===ps.length),
+      criancas: idades.some(a=>a<6), naoUtil: ps.some(p=>p.bi&&p.bi.famNaoUtil===true)}; });
+}
+function popDados(lista){
+  const P=lista||S.patients, comB=P.filter(p=>p.bi), N=P.length;
+  const D={N, nBi:comB.length};
+  const contar=(f)=>{ const m=new Map(); comB.forEach(p=>{ const k=f(p); if(k==null||k==='') return; if(!m.has(k)) m.set(k,[]); m.get(k).push(p); }); return m; };
+  const res=(lb,ps,extra)=>Object.assign({lb, n:ps.length, p:pct(ps.length,comB.length), F:ps.filter(p=>p.sexo==='F').length, M:ps.filter(p=>p.sexo==='M').length,
+    idade:media(ps.map(p=>ageYears(p.dob)).filter(x=>x!=null)), men18:ps.filter(p=>{ const a=ageYears(p.dob); return a!=null&&a<18; }).length,
+    i65:ps.filter(p=>{ const a=ageYears(p.dob); return a!=null&&a>=65; }).length, sos65:ps.filter(p=>{ const a=ageYears(p.dob); return a!=null&&a>=65&&p.bi.nElemFam===1; }).length,
+    estr:ps.filter(p=>p.bi.nac&&p.bi.nac!=='PT').length, agr:new Set(ps.filter(p=>p.agregado).map(p=>p.agregado)).size}, extra||{});
+  D.freg=[...contar(p=>p.bi.freg||null).entries()].map(([c,ps])=>{ const f=fregInfo(c)||{}; return res(fregNome(c), ps, {cod:c, conc:f.conc||'', dist:f.dist||'', dens:ps.find(p=>p.bi.densPop!=null)?ps.find(p=>p.bi.densPop!=null).bi.densPop:null}); }).sort((a,b)=>b.n-a.n);
+  D.conc=[...contar(p=>{ const f=fregInfo(p.bi.freg); return f? f.cod.slice(0,4) : null; }).entries()].map(([c,ps])=>{ const C=caop(); return res((C.m[c]||{}).nome||('Concelho '+c), ps, {cod:c, dist:C.d[c.slice(0,2)]||''}); }).sort((a,b)=>b.n-a.n);
+  D.nac=[...contar(p=>p.bi.nac||null).entries()].map(([c,ps])=>res(paisNome(c), ps, {cod:c})).sort((a,b)=>b.n-a.n);
+  D.semFreg=comB.filter(p=>!p.bi.freg).length; D.semNac=comB.filter(p=>!p.bi.nac).length;
+  D.estr=comB.filter(p=>p.bi.nac&&p.bi.nac!=='PT').length; D.resFora=comB.filter(p=>p.bi.paisRes&&p.bi.paisRes!=='PT').length;
+  const AG=agregados(P); D.ag=AG; D.nAg=AG.length;
+  D.agMedia=media(AG.map(a=>a.nR||a.n)); D.agLista=media(AG.map(a=>a.n));
+  const dimR=[1,2,3,4,5,6]; D.dim=dimR.map(d=>{ const l=AG.filter(a=>{ const x=a.nR||a.n; return d<6? x===d : x>=6; }); return {lb:d<6?String(d):'6 ou mais', ag:l.length, pes:l.reduce((s,a)=>s+a.n,0)}; });
+  D.unip=AG.filter(a=>(a.nR||a.n)===1).length;
+  const sos=P.filter(p=>p.bi&&p.bi.nElemFam===1); const a65=p=>{ const a=ageYears(p.dob); return a!=null&&a>=65; }, a75=p=>{ const a=ageYears(p.dob); return a!=null&&a>=75; };
+  D.sos65=sos.filter(a65).length; D.sos75=sos.filter(a75).length; D.i65=comB.filter(a65).length; D.i75=comB.filter(a75).length;
+  D.soIdosos=AG.filter(a=>a.soIdosos&&a.n>=2).length; D.comCriancas=AG.filter(a=>a.criancas).length; D.agNaoUtil=AG.filter(a=>a.naoUtil).length;
+  D.semAgr=P.filter(p=>!p.agregado).length;
+  const b=k=>comB.filter(p=>p.bi[k]===true).length;
+  D.benef=[['Insuficiência económica',b('insufEcon')],['Isenção de taxas moderadoras',b('isencao')],['Regime especial de comparticipação de medicamentos (RECM)',b('recm')],['Subsistema de saúde',b('subsistema')]];
+  D.up=somaDe(comB,p=>p.bi.up); D.upN=comB.filter(p=>p.bi.up!=null).length;
+  D.semEnf=comB.filter(p=>String(p.bi.enfFam)==='-1').length;
+  return D;
+}
+const AGR_FILTROS=[['todos','Todos os agregados'],['unip','Unipessoais'],['sos65','Pessoa com 65 e mais anos que vive só'],['soidosos','Só pessoas com 65 e mais anos'],['criancas','Com crianças com menos de 6 anos'],['grandes','Com 5 ou mais pessoas'],['naoutil','Família não utilizadora dos CSP'],['incompleto','Com pessoas fora desta lista']];
+function passaAgr(a,f){ if(!f||f==='todos') return true; const x=a.nR||a.n;
+  if(f==='unip') return x===1; if(f==='sos65') return x===1 && a.min!=null && a.min>=65; if(f==='soidosos') return a.soIdosos && a.n>=2;
+  if(f==='criancas') return a.criancas; if(f==='grandes') return x>=5; if(f==='naoutil') return a.naoUtil; if(f==='incompleto') return a.nR!=null && a.nR>a.n; return true; }
+function viewPop(){
+  let h=`<h1>População e agregados</h1>`;
+  const temAgr=S.patients.some(p=>p.agregado);
+  if(!temBi() && !temAgr) return h+`<p class="sub">Nacionalidade, residência (concelho e freguesia) e agregados familiares.</p>`+semBi();
+  const modo=['resumo','freguesias','nacionalidades','agregados'].includes(ui.pModo)? ui.pModo : 'resumo';
+  const D=popDados(filterList(S.patients).filter(p=>passaFaixa(p,ui.pFaixa)));
+  const segB=(v,l)=>`<button data-pmodo="${v}" class="${modo===v?'on':''}">${l}</button>`;
+  h+=`<p class="sub">${D.N} utentes${D.nBi?` · ficha de ${fmtPT(biDataRef())}`:''}${CAOP_FONTE?` · freguesias: ${CAOP_FONTE}`:''}</p>
+   <div class="toolbar"><div class="seg">${segB('resumo','Resumo')}${segB('freguesias','Residência')}${segB('nacionalidades','Nacionalidade')}${segB('agregados','Agregados')}</div>
+     ${selectHtml('data-pfaixa', ui.pFaixa||'todas', faixaOps())}
+     ${modo==='agregados'?selectHtml('data-pagr', ui.pAgr||'todos', AGR_FILTROS):''}
+     <div class="grow"></div><button class="btn" data-act="printpop">Imprimir relatório</button><button class="btn pri" data-act="xlspop">Exportar Excel</button></div>`;
+  if(modo==='resumo'){
+    h+=`<div class="rel"><div class="cards">${tile('Agregados nesta lista', D.nAg, `${fmt1(D.agLista)} pessoas por agregado nesta lista · ${fmt1(D.agMedia)} no total (RNU)`)}
+      ${tile('Agregados unipessoais', D.unip, fmtPct(pct(D.unip,D.nAg))+' dos agregados')}
+      ${tile('65 e mais anos a viver sós', D.sos65, `${fmtPct(pct(D.sos65,D.i65))} das pessoas com 65 e mais · 75 e mais: ${D.sos75}`)}
+      ${tile('Nacionalidade estrangeira', D.estr, `${fmtPct(pct(D.estr,D.nBi))} · ${D.nac.length} nacionalidades`)}
+      ${tile('Freguesias de residência', D.freg.length, `${D.conc.length} concelho(s)`)}
+      ${D.upN?tile('Unidades ponderadas', fmtN(Math.round(D.up)), 'soma das UP da ficha (dimensão ponderada da lista)'):''}</div>`;
+    h+=`<h2>Freguesias com mais utentes</h2>`+popTabFreg(D.freg.slice(0,10), D)+
+      `<h2>Nacionalidades</h2>`+popTabNac(D.nac.slice(0,10))+
+      `<h2>Dimensão dos agregados</h2><p class="rel-explica">Pessoas no agregado segundo a ficha (RNU), incluindo as que não estão nesta lista. Agregado identificado pelo código «Prc. Famil.».</p>`+
+      relTabela(['Pessoas no agregado','Agregados','% dos agregados','Utentes desta lista'], D.dim.map(d=>[d.lb, d.ag, fmtPct(pct(d.ag,D.nAg))+relBarra(pct(d.ag,D.nAg),100), d.pes]), [1,2,3])+
+      relTabela(['Agregados','Número'], [['Só com pessoas de 65 e mais anos (2 ou mais pessoas)', D.soIdosos], ['Com crianças com menos de 6 anos', D.comCriancas], ['Família não utilizadora dos CSP', D.agNaoUtil], ['Utentes sem código de agregado', D.semAgr]], [1])+
+      (D.nBi?`<h2>Benefícios, isenções e equipa</h2>`+relTabela(['','Utentes','%'], D.benef.map(([lb,n])=>[lb, n, fmtPct(pct(n,D.nBi))+relBarra(pct(n,D.nBi),100)]).concat([['Sem enfermeiro de família atribuído', D.semEnf, fmtPct(pct(D.semEnf,D.nBi))], ['Residência fora de Portugal', D.resFora, fmtPct(pct(D.resFora,D.nBi))]]), [1,2]):'')+`</div>`;
+    return h;
+  }
+  if(modo==='freguesias') return h+`<div class="rel"><h2>Por freguesia</h2>`+popTabFreg(D.freg, D)+`<h2>Por concelho</h2>`+
+    relTabela(['Concelho','Distrito/ilha','Utentes','%','Agregados','Idade média','Menos de 18','65 e mais'], D.conc.map(c=>[esc(c.lb), esc(c.dist), c.n, fmtPct(c.p)+relBarra(c.p,100), c.agr, fmt1(c.idade), c.men18, c.i65]), [2,3,4,5,6,7])+
+    (D.semFreg?`<p class="rel-explica">${D.semFreg} utentes sem freguesia na ficha.</p>`:'')+`<p class="rel-explica">Nomes e códigos das freguesias: ${esc(CAOP_FONTE||'—')}.</p></div>`;
+  if(modo==='nacionalidades') return h+`<div class="rel"><h2>Por nacionalidade</h2>`+popTabNac(D.nac)+(D.semNac?`<p class="rel-explica">${D.semNac} utentes sem nacionalidade na ficha.</p>`:'')+`</div>`;
+  /* agregados */
+  const AG=D.ag.filter(a=>passaAgr(a,ui.pAgr));
+  const cols=[
+    {id:'cod', lb:'Código do agregado', v:a=>a.cod, h:a=>`<span class="meta">${esc(a.cod)}</span>`},
+    {id:'nR', lb:'Pessoas (RNU)', num:true, v:a=>a.nR, h:a=>fmtN(a.nR)},
+    {id:'n', lb:'Nesta lista', num:true, v:a=>a.n, h:a=>String(a.n)},
+    {id:'membros', lb:'Pessoas desta lista', v:a=>a.ps[0]&&a.ps[0].nome, h:a=>a.ps.map(p=>`<button type="button" class="lk" data-abrir="${p.id}">${esc(p.nome)}</button> <span class="meta">${fmtAge(p.dob)}</span>`).join('<br>')},
+    {id:'idades', lb:'Idades', v:a=>a.max, h:a=>`<span class="meta">${a.min==null?'—':a.min===a.max?a.min+' anos':a.min+'–'+a.max+' anos'}</span>`},
+    {id:'freg', lb:'Freguesia', v:a=>a.freg?fregNome(a.freg):null, h:a=>esc(a.freg?fregNome(a.freg):'—')}];
+  const T=tabelaOrd('agr', cols, AG, {def:{col:'nR',dir:-1}, semAbrir:true, limite:500});
+  ui._agrOrd=T.ordenadas;
+  return h+`<p class="rel-explica">${AG.length} agregados. Carrega num nome para abrir a ficha.</p>`+(AG.length? T.html : `<div class="empty"><b>Nenhum agregado nesta seleção</b>Muda o filtro.</div>`);
+}
+function popTabFreg(arr, D){
+  return relTabela(['Freguesia','Concelho','Código','Utentes','%','Agregados','Idade média','Menos de 18','65 e mais','65 e mais sós','Estrangeiros','Densidade (hab./km²)'],
+    arr.map(f=>[esc(f.lb), esc(f.conc), `<span class="meta">${esc(f.cod)}</span>`, f.n, fmtPct(f.p)+relBarra(f.p,100), f.agr, fmt1(f.idade), f.men18, f.i65, f.sos65, f.estr, f.dens==null?'—':fmtN(Math.round(f.dens))]), [3,4,5,6,7,8,9,10,11]);
+}
+function popTabNac(arr){
+  return relTabela(['Nacionalidade','Código','Utentes','%','Mulheres','Homens','Idade média','Menos de 18','65 e mais','Agregados'],
+    arr.map(n=>[esc(n.lb), `<span class="meta">${esc(n.cod)}</span>`, n.n, fmtPct(n.p)+relBarra(n.p,100), n.F, n.M, fmt1(n.idade), n.men18, n.i65, n.agr]), [2,3,4,5,6,7,8,9]);
+}
+function popExcel(){
+  const lista=filterList(S.patients).filter(p=>passaFaixa(p,ui.pFaixa)), D=popDados(lista);
+  if(!D.nBi && !D.nAg) return toast('Sem dados de residência nem de agregados');
+  const res=(x,lb,extra)=>Object.assign({[lb]:x.lb}, extra||{}, {Utentes:x.n, '%':num2(x.p), Mulheres:x.F, Homens:x.M, 'Idade média':num2(x.idade), 'Menos de 18':x.men18, '65 e mais':x.i65, '65 e mais a viver sós':x.sos65, Estrangeiros:x.estr, Agregados:x.agr});
+  const AG=D.ag.filter(a=>passaAgr(a,ui.pAgr));
+  const ag=AG.map(a=>({'Código do agregado':a.cod, 'Pessoas no agregado (RNU)':a.nR, 'Nesta lista':a.n, 'Pessoas desta lista':a.ps.map(p=>`${p.nome} (${fmtAge(p.dob)})`).join('; '),
+    'Idade mínima':a.min, 'Idade máxima':a.max, Freguesia:a.freg?fregNome(a.freg):'', Telefones:[...new Set(a.ps.map(p=>p.telefone).filter(Boolean))].join('; ')}));
+  const ut=lista.map(p=>{ const f=p.bi&&fregInfo(p.bi.freg); return {Nome:p.nome, ...contactosXls(p), 'Data de nascimento':fmtPT(p.dob), Idade:fmtAge(p.dob), Sexo:p.sexo||'',
+    Nacionalidade:p.bi&&p.bi.nac?paisNome(p.bi.nac):'', 'Código da freguesia':f?f.cod:'', Freguesia:f?(f.freg||''):'', Concelho:f?(f.conc||''):'', Distrito:f?(f.dist||''):'',
+    'Código postal':p.bi?p.bi.cp||'':'', 'Código do agregado':p.agregado||'', 'Pessoas no agregado':p.bi?p.bi.nElemFam:'', 'Do agregado nesta lista':membrosLista(p)||'',
+    'Insuficiência económica':p.bi?simNao(p.bi.insufEcon):'', 'Isenção de taxas':p.bi?simNao(p.bi.isencao):'', RECM:p.bi?simNao(p.bi.recm):''}; });
+  ficheiroXls(`vigilancia-populacao-${todayISO()}.xlsx`, [['Freguesias', folha(D.freg.map(x=>res(x,'Freguesia',{Concelho:x.conc, Distrito:x.dist, Código:x.cod, 'Densidade (hab./km²)':x.dens})))],
+    ['Concelhos', folha(D.conc.map(x=>res(x,'Concelho',{Distrito:x.dist, Código:x.cod})))], ['Nacionalidades', folha(D.nac.map(x=>res(x,'Nacionalidade',{Código:x.cod})))],
+    ['Dimensão dos agregados', folha(D.dim.map(d=>({'Pessoas no agregado':d.lb, Agregados:d.ag, '% dos agregados':num2(pct(d.ag,D.nAg)), 'Utentes desta lista':d.pes})))],
+    ['Agregados', folha(ag)], ['Utentes', folha(ut)],
+    ['Sobre', folha([{Utentes:D.N, Agregados:D.nAg, 'Freguesias (fonte)':CAOP_FONTE||'', 'Exportado em':new Date().toLocaleString('pt-PT')}])]]);
+}
+function popPrint(){
+  const D=popDados(filterList(S.patients).filter(p=>passaFaixa(p,ui.pFaixa)));
+  const f=x=>[x.lb, x.conc||x.dist||'', x.n, fmtPct(x.p), x.agr, fmt1(x.idade), x.men18, x.i65, x.sos65];
+  imprimirHtml('População e agregados', `${D.N} utentes${D.nBi?' · ficha de '+fmtPT(biDataRef()):''} · impresso em ${new Date().toLocaleString('pt-PT')}`,
+    tabPrint(['Indicador','Valor'], [['Agregados nesta lista', String(D.nAg)], ['Pessoas por agregado (nesta lista · RNU)', `${fmt1(D.agLista)} · ${fmt1(D.agMedia)}`], ['Agregados unipessoais', `${D.unip} (${fmtPct(pct(D.unip,D.nAg))})`],
+      ['65 e mais anos a viver sós', `${D.sos65} (${fmtPct(pct(D.sos65,D.i65))})`], ['75 e mais anos a viver sós', String(D.sos75)], ['Agregados só com pessoas de 65 e mais anos', String(D.soIdosos)],
+      ['Agregados com crianças com menos de 6 anos', String(D.comCriancas)], ['Nacionalidade estrangeira', `${D.estr} (${fmtPct(pct(D.estr,D.nBi))})`], ['Nacionalidades', String(D.nac.length)],
+      ['Freguesias', String(D.freg.length)], ['Concelhos', String(D.conc.length)]].concat(D.benef.map(([lb,n])=>[lb, `${n} (${fmtPct(pct(n,D.nBi))})`])))+
+    '<h2>Por freguesia</h2>'+tabPrint(['Freguesia','Concelho','Utentes','%','Agregados','Idade média','<18','65+','65+ sós'], D.freg.map(f))+
+    '<h2>Por concelho</h2>'+tabPrint(['Concelho','Distrito','Utentes','%','Agregados','Idade média','<18','65+','65+ sós'], D.conc.map(f))+
+    '<h2>Por nacionalidade</h2>'+tabPrint(['Nacionalidade','Código','Utentes','%','Agregados','Idade média','<18','65+','65+ sós'], D.nac.map(x=>[x.lb, x.cod, x.n, fmtPct(x.p), x.agr, fmt1(x.idade), x.men18, x.i65, x.sos65]))+
+    '<h2>Dimensão dos agregados</h2>'+tabPrint(['Pessoas no agregado','Agregados','%','Utentes desta lista'], D.dim.map(d=>[d.lb, d.ag, fmtPct(pct(d.ag,D.nAg)), d.pes]))+
+    `<p class="sub">Só números agregados, sem nomes nem números de utente. Freguesias: ${CAOP_FONTE||'—'}.</p>`);
+}
+
+/* ---------------- 7. ficha do utente: agregado, residência, utilização e custos ---------------- */
+function fichaV7(p){
+  const b=p.bi, f=b&&fregInfo(b.freg);
+  const outros=p.agregado? S.patients.filter(x=>x.agregado===p.agregado && x.id!==p.id).sort((a,c)=>(ageYears(c.dob)||0)-(ageYears(a.dob)||0)) : [];
+  let h=`<div class="block"><h4>Agregado familiar e residência</h4>
+    <div class="field"><label>Código do agregado</label><input data-f="agregado" value="${esc(p.agregado)}" placeholder="Prc. Famil." style="width:140px">
+      <span class="meta">${b&&b.nElemFam!=null?`${b.nElemFam} pessoa(s) no agregado (RNU)`:''}${p.agregado?` · ${outros.length+1} nesta lista`:''}</span></div>
+    ${p.agregado? `<div class="field" style="align-items:flex-start"><label>No mesmo agregado</label><div>${outros.length? outros.map(x=>`<button type="button" class="lk" data-abrir="${x.id}">${esc(x.nome)}</button> <span class="meta">${fmtAge(x.dob)}${x.sexo?' · '+x.sexo:''}</span>`).join('<br>') : '<span class="meta">Ninguém mais desta lista</span>'}</div></div>`:''}`;
+  if(b){
+    h+=`<div class="field"><label>Nacionalidade</label><span>${esc(paisNome(b.nac)||'—')}${b.paisRes&&b.paisRes!=='PT'?` <span class="meta">· reside em ${esc(paisNome(b.paisRes))}</span>`:''}</span></div>
+    <div class="field"><label>Freguesia</label><span>${f? `${esc(fregNome(f.cod))} <span class="meta">· ${esc([f.conc,f.dist].filter(Boolean).join(' · '))} · ${esc(f.cod)}</span>` : '—'}</span></div>
+    ${b.morada||b.cp?`<div class="field"><label>Morada</label><span>${esc([b.morada,b.cp].filter(Boolean).join(' · '))}</span></div>`:''}`;
+  }
+  h+=`</div>`;
+  if(!b) return h;
+  const lin=(lb,v)=>`<tr><td class="meta">${lb}</td><td>${v}</td></tr>`;
+  const d=x=>x?fmtPT(x):'—';
+  h+=`<div class="block"><h4>Utilização e custos <span class="meta" style="font-weight:400">· ficha de ${fmtPT(b.data)}</span></h4>
+    <div style="padding:8px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 24px">
+    <table class="tb-simples"><tbody>
+      ${lin('Consultas médicas (12 · 36 meses)', `${fmtN(b.med12)} · ${fmtN(b.med36)}`)}${lin('Consultas de enfermagem (12 · 36 meses)', `${fmtN(b.enf12)} · ${fmtN(b.enf36)}`)}
+      ${lin('Outros profissionais (12 meses)', fmtN(b.out12))}${lin('Domicílios (médicos · enfermagem, 12 meses)', `${fmtN(b.medDom12)} · ${fmtN(b.enfDom12)}`)}
+      ${lin('Última consulta médica', d(b.ultMed))}${lin('Última consulta de enfermagem', d(b.ultEnf))}${lin('Dias sem contacto com os CSP', fmtN(b.diasSemCont))}
+      ${lin('Consulta agendada (médica · enfermagem)', `${simNao(b.medAg)} · ${simNao(b.enfAg)}`)}
+    </tbody></table>
+    <table class="tb-simples"><tbody>
+      ${lin('Urgências (12 meses)', `${fmtN(b.urg12)}${b.ultUrg?` <span class="meta">· última ${d(b.ultUrg)}</span>`:''}`)}${lin('Consultas hospitalares (12 meses)', fmtN(b.consHosp12))}
+      ${lin('Internamento (12 meses)', `${fmtN(b.intern12dias)} dias · ${fmtEur(b.intern12)}`)}
+      ${lin('Medicação (PVP, 12 meses)', fmtEur(b.medic12))}${lin('MCDT convencionados (12 meses)', fmtEur(b.mcdt12))}${lin('MCDT hospitalares (12 meses)', fmtEur(b.mcdtHosp12))}
+      ${lin('Benefícios', [b.insufEcon?'insuficiência económica':'', b.isencao?'isenção de taxas':'', b.recm?'RECM':'', b.subsistema?'subsistema':''].filter(Boolean).join(' · ')||'—')}
+      ${String(b.enfFam)==='-1'?lin('Enfermeiro de família','<span style="color:var(--late)">sem atribuição</span>'):''}
+    </tbody></table></div>
+    <div class="hint">Da ficha de utentes do BI-CSP importada (Utentes → Importar lista de Excel). Cada importação substitui estes valores.</div></div>`;
+  return h;
+}
+
+/* ---------------- 8. relatório da lista: secções novas ---------------- */
+function relV7Html(){
+  let h='';
+  if(temBi()||S.patients.some(p=>p.agregado)){
+    const D=popDados();
+    h+=`<h2>Residência, nacionalidade e agregados</h2><div class="cards">${tile('Agregados', D.nAg, `${fmt1(D.agMedia)} pessoas por agregado (RNU)`)}${tile('65 e mais anos a viver sós', D.sos65, fmtPct(pct(D.sos65,D.i65))+' das pessoas com 65 e mais')}
+      ${tile('Nacionalidade estrangeira', D.estr, `${fmtPct(pct(D.estr,D.nBi))} · ${D.nac.length} nacionalidades`)}${tile('Freguesias', D.freg.length, `${D.conc.length} concelho(s)`)}</div>`+
+      popTabFreg(D.freg.slice(0,10), D)+popTabNac(D.nac.slice(0,8))+
+      relTabela(['Pessoas no agregado','Agregados','% dos agregados'], D.dim.map(d=>[d.lb, d.ag, fmtPct(pct(d.ag,D.nAg))]), [1,2])+
+      `<p class="rel-explica">Mais pormenor em Gestão → População e agregados.</p>`;
+  }
+  if(temBi()){
+    const A=utilAnalise(S.patients.filter(p=>p.bi).map(p=>({p})));
+    h+=`<h2>Utilização dos cuidados (12 meses)</h2><div class="cards">${tile('Utilização médica', fmtPct(pct(A.g.um,A.n)), `${A.g.um} de ${A.n}`)}${tile('Consultas médicas por utente', fmt1(A.g.mMed), 'enfermagem: '+fmt1(A.g.mEnf))}
+      ${tile('Não utilizadores dos CSP', A.g.nao, fmtPct(pct(A.g.nao,A.n)))}${tile('Com urgência', A.g.urg, `${A.urg4} com 4 ou mais`)}</div>`+utilTabelaGrupos(A.porFaixa,'Grupo etário');
+    const L=custoLinhasTodas('12m',false);
+    if(L.length){ const C=custoAnalise(L,false,false);
+      h+=`<h2>Custos dos últimos 12 meses</h2><div class="cards">${tile('Total', fmtEur(C.soma), `medicação ${fmtEur(C.tot.med)} · MCDT ${fmtEur(C.tot.mcdt)}`)}${tile('Por utente', fmtEur(C.media), 'mediana '+fmtEur(C.mediana))}${tile('Os 10% que mais custam', fmtPct(C.conc[2].p), 'do custo total')}</div>`+
+        relTabela(['Programa','Utentes','Custo total','% do total','Média por utente'], C.porProg.map(g=>[esc(g.lb), g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4])+
+        `<p class="rel-explica">Mais análises em Gestão → Custos.</p>`; }
+  }
+  return h;
+}
+function relV7Pdf(titulo, nota, tabela){
+  if(temBi()||S.patients.some(p=>p.agregado)){
+    const D=popDados();
+    titulo('Residência, nacionalidade e agregados');
+    tabela(['Indicador','Valor'], [['Agregados', String(D.nAg)], ['Pessoas por agregado (RNU)', fmt1(D.agMedia)], ['Agregados unipessoais', `${D.unip} (${fmtPct(pct(D.unip,D.nAg))})`],
+      ['65 e mais anos a viver sós', `${D.sos65} (${fmtPct(pct(D.sos65,D.i65))})`], ['Nacionalidade estrangeira', `${D.estr} (${fmtPct(pct(D.estr,D.nBi))})`], ['Freguesias · concelhos', `${D.freg.length} · ${D.conc.length}`]], [1], {0:90});
+    if(D.freg.length) tabela(['Freguesia','Concelho','Utentes','%','Agregados','Idade média','65 e mais','65 e mais sós'], D.freg.slice(0,15).map(f=>[f.lb, f.conc, f.n, fmtPct(f.p), f.agr, fmt1(f.idade), f.i65, f.sos65]), [2,3,4,5,6,7]);
+    if(D.nac.length) tabela(['Nacionalidade','Utentes','%','Idade média','Menos de 18'], D.nac.slice(0,10).map(n=>[n.lb, n.n, fmtPct(n.p), fmt1(n.idade), n.men18]), [1,2,3,4]);
+    tabela(['Pessoas no agregado','Agregados','% dos agregados'], D.dim.map(d=>[d.lb, d.ag, fmtPct(pct(d.ag,D.nAg))]), [1,2]);
+    if(CAOP_FONTE) nota('Freguesias: '+CAOP_FONTE+'.');
+  }
+  if(temBi()){
+    const A=utilAnalise(S.patients.filter(p=>p.bi).map(p=>({p})));
+    titulo('Utilização dos cuidados (12 meses)');
+    tabela(['Grupo etário','Utentes','Com consulta médica','% utilização','Médicas por utente','Enfermagem por utente','Com urgência'], A.porFaixa.concat([Object.assign({lb:'Lista'},A.g)]).map(g=>[g.lb, g.n, g.um, fmtPct(pct(g.um,g.n)), fmt1(g.mMed), fmt1(g.mEnf), g.urg]), [1,2,3,4,5,6]);
+    const L=custoLinhasTodas('12m',false);
+    if(L.length){ const C=custoAnalise(L,false,false);
+      titulo('Custos dos últimos 12 meses');
+      nota(`Medicação (PVP) ${fmtEur(C.tot.med)} · MCDT convencionados ${fmtEur(C.tot.mcdt)} · total ${fmtEur(C.soma)} · média por utente ${fmtEur(C.media)} · os 10% que mais custam: ${fmtPct(C.conc[2].p)} do total.`);
+      tabela(['Programa','Utentes','Custo total','% do total','Média por utente'], C.porProg.map(g=>[g.lb, g.n, fmtEur(g.soma), fmtPct(g.p), fmtEur(g.media)]), [1,2,3,4]); }
+  }
+}
+
+/* ---------------- 9. demonstração: ficha do BI fictícia ---------------- */
+function demoBiGerar(lista, hoje){
+  const R=demoRng(20261125), sim=pr=>R()<pr, um=a=>a[Math.floor(R()*a.length)], entre=(a,b)=>a+Math.floor(R()*(b-a+1));
+  const FREG=[['111512',3],['111513',4],['111514',5],['111515',4],['111516',5],['111517',4],['111133',1],['110608',1]];
+  const pesoF=FREG.reduce((s,f)=>s+f[1],0), fr=()=>{ let x=R()*pesoF; for(const [c,w] of FREG){ x-=w; if(x<=0) return c; } return FREG[0][0]; };
+  const NAC=[['PT',82],['BR',6],['CV',4],['AO',2],['GW',2],['ST',1],['UA',1],['IN',1],['NP',1]];
+  const pesoN=NAC.reduce((s,f)=>s+f[1],0), nac=()=>{ let x=R()*pesoN; for(const [c,w] of NAC){ x-=w; if(x<=0) return c; } return 'PT'; };
+  const DENS={'111512':7200,'111513':12800,'111514':10900,'111515':9600,'111516':5300,'111517':6400,'111133':2100,'110608':8900};
+  const CP={'111512':'2610','111513':'2700','111514':'2650','111515':'2700','111516':'2700','111517':'2700','111133':'2745','110608':'1500'};
+  const RUAS=['Rua das Flores','Avenida da Liberdade','Rua do Comércio','Travessa da Escola','Rua da Fonte','Praceta do Sol','Rua Nova','Largo da Igreja'];
+  /* agregados: grupos de 1 a 5 pessoas da lista, por ordem; algumas pessoas do agregado não estão nesta lista */
+  const apelido=p=>p.nome.split(' ').pop();
+  const pool=lista.slice().sort((a,b)=>apelido(a).localeCompare(apelido(b),'pt') || a.nome.localeCompare(b.nome,'pt')); let cod=500100;
+  while(pool.length){ const tam=Math.min(pool.length, um([1,1,1,2,2,2,2,3,3,4,5])); const membros=pool.splice(0, tam);
+    const fora=sim(.25)? entre(1,2) : 0, n=membros.length+fora, freg=fr(), na=nac(), morada=um(RUAS)+', '+entre(1,180), cp=CP[freg]+'-'+String(entre(1,999)).padStart(3,'0');
+    const famNao=sim(.05); cod+=entre(3,41);
+    membros.forEach(p=>{ const a=ageYears(p.dob)||0, cr=nCron(p), idoso=a>=65;
+      const base=(a<2?6:a<6?3:a<18?1.2:1.5)+cr*1.8+(idoso?1.5:0), naoUt=famNao||sim(a>=18&&a<65&&!cr?.18:.04);
+      const med12=naoUt?0:Math.max(0,Math.round(base+(R()-.4)*3)), enf12=naoUt?0:Math.max(0,Math.round((a<2?7:cr?2.5:.8)+(R()-.4)*3));
+      const med36=med12+Math.max(0,Math.round(base*2*R())), enf36=enf12+Math.max(0,Math.round(enf12*1.5*R()));
+      const ultMed=med12? addDays(hoje,-entre(3,360)) : med36? addDays(hoje,-entre(370,1090)) : (sim(.5)? addDays(hoje,-entre(1100,2500)) : '');
+      const ultEnf=enf12? addDays(hoje,-entre(3,360)) : enf36? addDays(hoje,-entre(370,1090)) : '';
+      const ultCont=[ultMed,ultEnf].filter(Boolean).sort().pop()||'';
+      const g=p.sdm.gastos[String(YEAR-1)]||{}, f=.85+R()*.3;
+      const urg12=sim(idoso?.35:.2)? (sim(.12)? entre(4,7) : entre(1,3)) : 0, intern=sim(idoso?.08:.02);
+      p.agregado=String(cod);
+      p.bi={data:hoje, nElemFam:n, up:a<7?1.5:a<65?1:a<75?2:2.5, nac:na==='PT'||sim(.7)?na:'PT', paisRes:'PT', morada, cp, freg, densPop:DENS[freg],
+        insufEcon:sim(.12), isencao:sim(a<18||a>=65?.5:.2), recm:idoso&&sim(.3), osecp:false, subsistema:sim(.08), medFam:'66933', enfFam:sim(.07)?'-1':'71'+entre(100,199), uf:'3110800', tipoUF:'USF',
+        inscrCspM:Math.min(a*12+entre(0,11), entre(12,400)), inscrMfM:entre(1,180),
+        med12, med12min:med12*entre(15,22), med36, med60:med36+entre(0,4), medNP12:Math.round(med12*.25*R()), medDom12:idoso&&cr>=2&&sim(.2)?entre(1,3):0, medPres12:med12, medVig12:Math.round(med12*.5), medUF12:med12, medAg:sim(.25),
+        enf12, enf12min:enf12*entre(12,25), enf36, enf60:enf36+entre(0,3), enfNP12:0, enfDom12:idoso&&sim(.15)?entre(1,6):0, enfPres12:enf12, enfVig12:Math.round(enf12*.6), enfUF12:enf12, enfAg:sim(.15),
+        out12:sim(.15)?entre(1,4):0, out36:sim(.25)?entre(1,6):0, cont12:med12+enf12+entre(0,3), ultMed, ultEnf, ultCont, diasSemCont:ultCont?daysBetween(ultCont,hoje):null,
+        naoUtil:naoUt, famNaoUtil:famNao, urg12, ultUrg:urg12?addDays(hoje,-entre(5,360)):'', consHosp12:cr&&sim(.4)?entre(1,5):0, intern12dias:intern?entre(2,14):0, intern12:intern?Math.round(entre(1800,9000)*100)/100:0,
+        mcdtHosp12:sim(.2)?Math.round(entre(20,600)*R()*100)/100:0, medic12:Math.round((g.med||0)*f*100)/100, mcdt12:Math.round((g.mcdt||0)*f*100)/100,
+        vacinas12:sim(.4)?entre(1,3):0, sns24_12:sim(.2)?entre(1,3):0, naoUtilSist:naoUt&&sim(.4)};
+      if(ultMed && (!p.sdm.ultConsulta || ultMed>p.sdm.ultConsulta)) p.sdm.ultConsulta=ultMed;
+    });
+  }
+}
+
+/* ---------------- 10. ligações ---------------- */
+function wireV7(){
+  const on=(sel,ev,fn)=>document.querySelectorAll(sel).forEach(el=>el[ev]=()=>fn(el));
+  on('#view [data-ord]','onclick',b=>{ const [t,c]=b.dataset.ord.split(':'); ui.ord=ui.ord||{}; const o=ui.ord[t];
+    ui.ord[t]= o&&o.col===c ? {col:c, dir:-o.dir} : {col:c, dir:(['t','med','mcdt','mcdtH','int','med12','med36','enf12','enf36','urg','dias','nR','n','cron'].includes(c)?-1:1)};
+    render(); const n=document.querySelector(`#view [data-ord="${t}:${c}"]`); if(n) n.focus(); });
+  on('#view [data-cmodo]','onclick',b=>{ ui.cModo=b.dataset.cmodo; render(); });
+  on('#view [data-cper]','onchange',s=>{ ui.cPer=s.value; render(); });
+  on('#view [data-cprog]','onchange',s=>{ ui.cProg=s.value; render(); });
+  on('#view [data-cfaixa]','onchange',s=>{ ui.cFaixa=s.value; render(); });
+  on('#view [data-chosp]','onchange',c=>{ ui.cHosp=c.checked; render(); });
+  on('#view [data-cver]','onclick',b=>{ ui.cProg=b.dataset.cver; ui.cModo='lista'; render(); });
+  on('#view [data-umodo]','onclick',b=>{ ui.uModo=b.dataset.umodo; render(); });
+  on('#view [data-ufil]','onchange',s=>{ ui.uFil=s.value; render(); });
+  on('#view [data-uprog]','onchange',s=>{ ui.uProg=s.value; render(); });
+  on('#view [data-ufaixa]','onchange',s=>{ ui.uFaixa=s.value; render(); });
+  on('#view [data-uhiper]','onchange',i=>{ ui.uHiper=+i.value||12; render(); });
+  on('#view [data-pmodo]','onclick',b=>{ ui.pModo=b.dataset.pmodo; render(); });
+  on('#view [data-pfaixa]','onchange',s=>{ ui.pFaixa=s.value; render(); });
+  on('#view [data-pagr]','onchange',s=>{ ui.pAgr=s.value; render(); });
+  on('#view [data-abrir]','onclick',b=>openPatient(b.dataset.abrir,'ficha'));
+}
+function wireFichaV7(){
+  document.querySelectorAll('#dBody [data-abrir]').forEach(b=>b.onclick=()=>openPatient(b.dataset.abrir,'ficha'));
 }
 
 /* ---------------- arranque ---------------- */
