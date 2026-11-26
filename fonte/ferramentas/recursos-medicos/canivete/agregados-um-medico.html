@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agregados com mais de um médico</title>
+
+<!-- Ficha da ferramenta: lida pelo script de construção do site. -->
+<script type="application/json" id="mgf-ficha">
+{
+  "id": "agregados-um-medico",
+  "titulo": "Agregados com mais de um médico",
+  "descricao": "Cruza as listas de utentes dos médicos de família da unidade (um Excel por médico, com o código do agregado familiar) e encontra os agregados com pessoas em médicos diferentes. Sugere quem transferir para cada agregado ficar com um só médico (o que já tem mais pessoas do agregado), deixa-te decidir os empates e descarrega em Excel a lista de utentes a transferir.",
+  "resumo": "Põe cada agregado com um só médico de família",
+  "area": "recursos-medicos",
+  "grupo": "canivete",
+  "icone": "familia",
+  "autor": "Miguel Henriques",
+  "versao": "1.0",
+  "revisto": "2026-11-26",
+  "layout": "normal",
+  "ordem": 6,
+  "corpo": "coluna",
+  "aviso_clinico": false,
+  "bibliotecas": [
+    "xlsx.full.min.js"
+  ],
+  "palavras": [
+    "agregado familiar",
+    "família",
+    "médico de família",
+    "transferência de utentes",
+    "lista de utentes",
+    "Prc. Famil.",
+    "processo familiar",
+    "BI-CSP",
+    "Excel",
+    "inscrição",
+    "ficheiro de utentes"
+  ],
+  "bibliografia": [
+    "Ferramenta de organização: não usa fontes clínicas. Biblioteca incluída: SheetJS 0.18.5 (licença Apache 2.0).",
+    "Regulamento (UE) 2016/679 do Parlamento Europeu e do Conselho, de 27 de abril de 2016 (Regulamento Geral sobre a Proteção de Dados)."
+  ]
+}
+</script>
+
+<!-- Só para pré-visualizar este ficheiro. O site e a versão descarregável já trazem estes estilos e o MGF.js. -->
+<link rel="stylesheet" href="../../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../../assets/css/ferramenta.css">
+<script src="../../../../assets/js/ferramenta.js"></script>
+<script src="../../../../assets/vendor/xlsx.full.min.js"></script>
+
+<style data-mgf="ferramenta">
+#ferramenta .ag-intro { font-size: 17px; line-height: 1.5; color: var(--cor-texto-2); margin: -10px 0 14px; max-width: 760px; }
+#ferramenta .ag-passo { margin: 30px 0 0; }
+#ferramenta .ag-passo-titulo { display: flex; align-items: center; gap: 12px; font-family: var(--letra-titulo); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 6px; }
+#ferramenta .ag-num { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--cor-tinta); color: var(--cor-branco); font-family: var(--letra-texto); font-size: 16px; font-weight: 700; }
+#ferramenta .ag-passo-sub { color: var(--cor-texto-2); font-size: 16px; margin: 0 0 14px 44px; max-width: 760px; }
+#ferramenta .ag-zona { border: 2px dashed var(--cor-linha); border-radius: var(--raio); padding: 18px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: background .15s, border-color .15s; }
+#ferramenta .ag-zona.sobre { background: var(--cor-menta-clara); border-color: var(--cor-verde); }
+#ferramenta .ag-zona p { margin: 0; font-size: 15px; color: var(--cor-texto-3); }
+#ferramenta .ag-zona .mgf-botoes { margin: 0; justify-content: center; }
+#ferramenta .ag-colar textarea { width: 100%; min-height: 120px; box-sizing: border-box; font-family: var(--letra-texto); font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--cor-campo); border-radius: 12px; resize: vertical; }
+#ferramenta .ag-listas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+#ferramenta .ag-lista { margin: 0; }
+#ferramenta .ag-lista .mgf-cartao-corpo { gap: 10px; }
+#ferramenta .ag-ficheiro { display: flex; align-items: center; gap: 8px; font-weight: 700; word-break: break-word; }
+#ferramenta .ag-ficheiro svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--cor-verde); }
+#ferramenta .ag-meta { font-size: 15px; color: var(--cor-texto-2); }
+#ferramenta .mgf-campo select, #ferramenta .mgf-campo input { width: 100%; }
+#ferramenta .ag-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 10px; }
+#ferramenta .ag-cods { display: flex; flex-direction: column; gap: 8px; }
+#ferramenta .ag-colunas > summary { cursor: pointer; font-size: 15px; font-weight: 700; color: var(--cor-texto-2); }
+#ferramenta .ag-check { display: flex; align-items: flex-start; gap: 10px; font-size: 16px; line-height: 1.4; cursor: pointer; }
+#ferramenta .ag-check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--cor-verde); flex: 0 0 auto; }
+#ferramenta .ag-botoes-pequenos { display: flex; flex-wrap: wrap; gap: 8px; }
+#ferramenta .ag-pequeno { min-height: 38px; padding: 6px 12px; font-size: 14px; }
+#ferramenta .ag-avisos { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+#ferramenta .ag-avisos .mgf-interp { font-size: 15px; }
+#ferramenta .ag-regra { max-width: 520px; margin: 18px 0 0; }
+#ferramenta .ag-filtro { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(200px, 1.4fr); gap: 10px; align-items: end; margin: 18px 0 10px; }
+#ferramenta .ag-contagem { font-size: 15px; color: var(--cor-texto-3); margin: 0 0 8px; }
+#ferramenta .ag-grupo { border: 1px solid var(--cor-linha-suave); border-left: 5px solid var(--clin-normal-borda); border-radius: var(--raio-p); background: var(--cor-branco); margin: 0 0 8px; }
+#ferramenta .ag-grupo[data-estado="decidir"] { border-left-color: var(--clin-atencao-borda); }
+#ferramenta .ag-grupo[data-estado="nao"] { border-left-color: var(--cor-linha); }
+#ferramenta .ag-grupo > summary { cursor: pointer; padding: 12px 14px; font-size: 16px; line-height: 1.45; list-style-position: inside; }
+#ferramenta .ag-grupo > summary b { margin-right: 4px; }
+#ferramenta .ag-fim { color: var(--cor-texto-2); }
+#ferramenta .ag-grupo[data-estado="decidir"] .ag-fim { color: var(--clin-atencao); font-weight: 700; }
+#ferramenta .ag-grupo-corpo { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.5; }
+#ferramenta .ag-grupo-corpo p { margin: 0; }
+#ferramenta .ag-grupo-corpo .mgf-campo { max-width: 420px; }
+#ferramenta .ag-grupo .mgf-tabela { font-size: 14px; }
+#ferramenta .ag-grupo .mgf-tabela td input { width: 18px; height: 18px; accent-color: var(--cor-verde); margin: 0; }
+#ferramenta .ag-fica { color: var(--cor-texto-3); }
+#ferramenta .ag-tabela { overflow: auto; max-height: 520px; border: 1px solid var(--cor-linha-suave); border-radius: var(--raio-p); background: var(--cor-branco); }
+#ferramenta .ag-tabela table { border-collapse: collapse; font-size: 14px; width: 100%; }
+#ferramenta .ag-tabela th { position: sticky; top: 0; background: var(--cor-papel); font-weight: 700; text-align: left; padding: 7px 10px; border-bottom: 1.5px solid var(--cor-linha); white-space: nowrap; }
+#ferramenta .ag-tabela td { padding: 6px 10px; border-bottom: 1px solid var(--cor-linha-suave); vertical-align: top; }
+#ferramenta .ag-tabela td.ag-n, #ferramenta .ag-tabela th.ag-n { text-align: right; }
+#ferramenta .ag-mais { font-size: 14px; color: var(--cor-texto-3); }
+#ferramenta .ag-mensagem { font-size: 15px; }
+#ferramenta .ag-mensagem:empty { display: none; }
+#ferramenta .mgf-botao:disabled { opacity: .45; cursor: default; transform: none; }
+@media (max-width: 640px) {
+  #ferramenta .ag-passo-sub { margin-left: 0; }
+  #ferramenta .ag-filtro { grid-template-columns: 1fr; }
+}
+@media print {
+  #ferramenta #ag-passo1, #ferramenta .ag-intro, #ferramenta .ag-inicio, #ferramenta .ag-filtro, #ferramenta .ag-regra, #ferramenta .ag-exportar, #ferramenta [data-acao="mais"] { display: none !important; }
+  #ferramenta .ag-tabela { max-height: none; overflow: visible; }
+}
+</style>
+</head>
+<body>
+<main class="mgf-ferramenta" id="ferramenta">
+<h2 class="mgf-pergunta">Que agregados têm pessoas em médicos diferentes?</h2>
+<p class="ag-intro">Carrega a lista de utentes de cada médico de família da unidade, com o código do agregado familiar (no BI-CSP, a coluna «Prc. Famil.»). A ferramenta encontra os agregados repartidos por mais de um médico e sugere quem transferir para cada agregado ficar com um só médico: o que já tem mais pessoas do agregado.</p>
+<p class="mgf-nota"><strong>Nota.</strong> Os ficheiros são lidos só neste computador: nada é enviado nem guardado, e ao fechar a página tudo desaparece. A lista de transferências tem dados de utentes: guarda-a num local seguro e apaga-a quando já não precisares.</p>
+<div class="mgf-botoes ag-inicio">
+  <button type="button" class="mgf-botao" data-acao="exemplo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 14h9"/></svg><span>Experimentar com listas de exemplo</span></button>
+  <button type="button" class="mgf-botao" data-acao="limpar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>Começar de novo</span></button>
+</div>
+<p class="ag-mensagem mgf-interp" data-nivel="info" id="ag-mensagem-topo" role="status" aria-live="polite" style="margin-top:12px"></p>
+
+<section class="ag-passo" id="ag-passo1" aria-labelledby="ag-t1">
+  <h3 class="ag-passo-titulo" id="ag-t1"><span class="ag-num">1</span>As listas dos médicos</h3>
+  <p class="ag-passo-sub">Um ficheiro por médico (por exemplo, a exportação do BI-CSP de cada médico). O nome do médico vem do nome do ficheiro: corrige-o se for preciso. Também serve um só ficheiro de toda a unidade, se tiver a coluna do médico de família. Excel (.xlsx, .xls, .ods), CSV ou células coladas do Excel.</p>
+  <div class="ag-zona" id="ag-zona">
+    <div class="mgf-botoes">
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="escolher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V9"/><path d="M7 14l5-5 5 5"/><path d="M5 4h14"/></svg><span>Escolher ficheiros</span></button>
+      <button type="button" class="mgf-botao" data-acao="colar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9z"/></svg><span>Colar do Excel</span></button>
+    </div>
+    <p>ou arrasta os ficheiros para aqui (podes escolher vários de uma vez)</p>
+  </div>
+  <div class="ag-colar" id="ag-colar" hidden>
+    <label class="mgf-campo">Cola aqui as células copiadas do Excel (com a linha dos títulos)<textarea id="ag-colar-texto" spellcheck="false"></textarea></label>
+    <div class="ag-botoes-pequenos" style="margin-top:8px">
+      <button type="button" class="mgf-botao mgf-botao-principal ag-pequeno" data-acao="usar-colado">Usar estas células</button>
+      <button type="button" class="mgf-botao ag-pequeno" data-acao="cancelar-colar">Cancelar</button>
+    </div>
+  </div>
+  <div class="ag-listas" id="ag-listas"></div>
+</section>
+
+<section class="ag-passo" id="ag-passo2" aria-labelledby="ag-t2" hidden>
+  <h3 class="ag-passo-titulo" id="ag-t2"><span class="ag-num">2</span>Agregados com mais de um médico</h3>
+  <p class="ag-passo-sub">Para cada agregado, a sugestão é passar as pessoas para o médico que já tem mais pessoas desse agregado. Podes escolher outro médico, deixar o agregado como está ou desmarcar uma pessoa que não deve mudar.</p>
+  <div class="mgf-resumo" id="ag-resumo"></div>
+  <div class="ag-avisos" id="ag-avisos"></div>
+  <label class="mgf-campo ag-regra">Quando há empate (o mesmo número de pessoas em dois médicos)
+    <select id="ag-regra">
+      <option value="escolher">Deixar para eu escolher</option>
+      <option value="menor">Sugerir o médico com a lista mais pequena</option>
+      <option value="velho">Sugerir o médico do utente mais velho do agregado</option>
+    </select>
+  </label>
+  <div class="ag-filtro">
+    <label class="mgf-campo">Mostrar
+      <select id="ag-ver">
+        <option value="todos">Todos os agregados com mais de um médico</option>
+        <option value="decidir">Só os empates por decidir</option>
+        <option value="passam">Só os que têm transferências</option>
+        <option value="nao">Só os que ficam como estão</option>
+      </select>
+    </label>
+    <label class="mgf-campo">Procurar (agregado, nome ou nº de utente)<input type="search" id="ag-busca" autocomplete="off"></label>
+  </div>
+  <p class="ag-contagem" id="ag-contagem"></p>
+  <div id="ag-grupos"></div>
+</section>
+
+<section class="ag-passo" id="ag-passo3" aria-labelledby="ag-t3" hidden>
+  <h3 class="ag-passo-titulo" id="ag-t3"><span class="ag-num">3</span>Como ficam as listas</h3>
+  <div class="ag-tabela" id="ag-medicos"></div>
+</section>
+
+<section class="ag-passo" id="ag-passo4" aria-labelledby="ag-t4" hidden>
+  <h3 class="ag-passo-titulo" id="ag-t4"><span class="ag-num">4</span>Utentes a transferir</h3>
+  <div class="ag-tabela" id="ag-transf"></div>
+  <p class="ag-mais" id="ag-transf-mais"></p>
+  <div class="ag-exportar">
+    <div class="mgf-botoes" style="margin-top:12px">
+      <button type="button" class="mgf-botao mgf-botao-principal" data-acao="excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span>Descarregar Excel</span></button>
+      <button type="button" class="mgf-botao" data-acao="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span>Descarregar CSV</span></button>
+      <button type="button" class="mgf-botao" data-acao="copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>Copiar a tabela</span></button>
+    </div>
+    <p class="ag-mais" style="margin-top:8px">O Excel tem os utentes a transferir (com telefone e email, se as listas os tiverem) e, em folhas à parte, todos os agregados com mais de um médico, as contas por médico, os empates por decidir, os avisos e um resumo.</p>
+  </div>
+  <p class="ag-mensagem" id="ag-mensagem" role="status" aria-live="polite"></p>
+</section>
+</main>
+
+<script data-mgf="ferramenta">
+(function () {
+"use strict";
+var raiz = document.getElementById("ferramenta");
+var $ = function (s) { return raiz.querySelector(s); };
+var MAX_LISTAS = 40, PASSO = 40, MAX_TABELA = 300;
+
+/* ---------- estado ---------- */
+var E = {
+  listas: [],       // {nome, medico, folhas, folha, auto, linhaTitulos, semTitulos, cab, linhas, col, separar}
+  nomesCod: {},     // código do médico de família -> nome escrito
+  regra: "escolher",
+  escolha: {},      // agregado -> médico escolhido | "nao"
+  ficar: {},        // utente -> true quando não deve ser transferido
+  abertos: {},      // agregado -> true quando o bloco está aberto
+  abrirCol: {},     // lista -> true quando «Colunas e folha» está aberto
+  ver: "todos", busca: "", mostrar: PASSO,
+  R: null
+};
+
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function pad(n) { return String(n).padStart(2, "0"); }
+function letra(i) { var s = ""; i++; while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+function eData(v) { return v !== null && typeof v === "object" && !!v.iso; }
+/* valor de uma célula: texto, número ou data {iso, hm} */
+function txt(v) {
+  if (v == null) return "";
+  if (eData(v)) { var p = v.iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0] + (v.hm ? " " + v.hm : ""); }
+  if (typeof v === "number") return isFinite(v) ? String(+v.toPrecision(12)).replace(".", ",") : "";
+  return String(v);
+}
+function vazio(v) { return txt(v).trim() === ""; }
+function semAcentos(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+var PARTICULAS = { de: 1, da: 1, "do": 1, das: 1, dos: 1, e: 1, d: 1 };
+function normNome(v) { return semAcentos(txt(v)).toLowerCase().replace(/[^a-z\s]/g, " ").split(/\s+/).filter(function (t) { return t && !PARTICULAS[t]; }).join(" "); }
+function normNum(v) { var s = typeof v === "number" ? String(Math.round(v)) : txt(v); return s.replace(/\D/g, "").replace(/^0+/, ""); }
+function normTexto(v) { return semAcentos(txt(v)).toLowerCase().replace(/\s+/g, " ").trim(); }
+function isoValida(y, m, d) {
+  if (!(y >= 1900 && y <= 2100 && m >= 1 && m <= 12 && d >= 1)) return "";
+  var dim = [31, (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
+  return d <= dim ? y + "-" + pad(m) + "-" + pad(d) : "";
+}
+var MESES = { jan: 1, fev: 2, feb: 2, mar: 3, abr: 4, apr: 4, mai: 5, may: 5, jun: 6, jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12 };
+function ano2(a) { var y = new Date().getFullYear(); return 2000 + a <= y ? 2000 + a : 1900 + a; }
+/* datas escritas de muitas maneiras: 05/07/2012, 2012-07-05, 05072012, 050712, 5 de julho de 2012 */
+function lerData(s) {
+  s = String(s || "").trim().replace(/(?:T|\s+)\d{1,2}:\d{2}(?::\d{2})?.*$/, "");
+  var m = s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/); if (m) return isoValida(+m[1], +m[2], +m[3]);
+  m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2}|\d{4})$/); if (m) return isoValida(m[3].length === 2 ? ano2(+m[3]) : +m[3], +m[2], +m[1]);
+  var d = s.replace(/\s+/g, "");
+  if (/^\d{7}$/.test(d)) d = "0" + d;
+  if (/^\d{8}$/.test(d)) return isoValida(+d.slice(0, 4), +d.slice(4, 6), +d.slice(6, 8)) || isoValida(+d.slice(4, 8), +d.slice(2, 4), +d.slice(0, 2));
+  if (/^\d{6}$/.test(d)) return isoValida(ano2(+d.slice(4, 6)), +d.slice(2, 4), +d.slice(0, 2));
+  var t = semAcentos(s).toLowerCase();
+  m = t.match(/^(\d{1,2})\s*(?:de\s+|[-\/.]\s*)?([a-z]{3,})\.?\s*(?:de\s+|[-\/.,]\s*)?(\d{4}|\d{2})$/);
+  if (m && MESES[m[2].slice(0, 3)]) return isoValida(m[3].length === 2 ? ano2(+m[3]) : +m[3], MESES[m[2].slice(0, 3)], +m[1]);
+  return "";
+}
+function normData(v) {
+  if (eData(v)) return v.iso;
+  if (typeof v === "number" && v > 0 && v < 80000) { var d = XLSX.SSF.parse_date_code(v); return d ? isoValida(d.y, d.m, d.d) : ""; }
+  return lerData(txt(v));
+}
+function plural(n, um, varios) { return fmtN(n) + " " + (n === 1 ? um : varios); }
+function fmtN(n) { return n.toLocaleString("pt-PT"); }
+
+/* ---------- ler ficheiros ---------- */
+function decodificar(buf) {
+  try { return new TextDecoder("utf-8", { fatal: true }).decode(buf).replace(/^﻿/, ""); }
+  catch (e) { return new TextDecoder("windows-1252").decode(buf); }
+}
+/* CSV ou texto colado: separador ; , ou tabulação (o que aparecer mais na primeira linha), aspas como no Excel */
+function lerTextoTabela(texto) {
+  texto = texto.replace(/\r\n?/g, "\n");
+  var primeira = texto.split("\n").find(function (l) { return l.trim(); }) || "";
+  var sep = ["\t", ";", ","].map(function (s) { return [s, primeira.split(s).length]; }).sort(function (a, b) { return b[1] - a[1]; })[0];
+  sep = sep[1] > 1 ? sep[0] : "\t";
+  var linhas = [], linha = [], campo = "", aspas = false;
+  for (var i = 0; i < texto.length; i++) {
+    var c = texto[i];
+    if (aspas) {
+      if (c === '"') { if (texto[i + 1] === '"') { campo += '"'; i++; } else aspas = false; }
+      else campo += c;
+    } else if (c === '"' && campo === "") aspas = true;
+    else if (c === sep) { linha.push(campo.trim()); campo = ""; }
+    else if (c === "\n") { linha.push(campo.trim()); linhas.push(linha); linha = []; campo = ""; }
+    else campo += c;
+  }
+  if (campo !== "" || linha.length) { linha.push(campo.trim()); linhas.push(linha); }
+  return linhas;
+}
+function valorCelula(c) {
+  if (!c || c.v == null) return "";
+  if (c.t === "n") {
+    if (c.z && XLSX.SSF.is_date(c.z)) {
+      /* datas gravadas com fuso horário antigo ficam a 1 minuto da meia-noite: arredondar */
+      var sv = Math.abs(c.v - Math.round(c.v)) < 0.0015 ? Math.round(c.v) : c.v;
+      var d = XLSX.SSF.parse_date_code(sv);
+      if (d && d.y > 1900) return { iso: d.y + "-" + pad(d.m) + "-" + pad(d.d), hm: (d.H || d.M) ? pad(d.H) + ":" + pad(d.M) : "" };
+    }
+    return c.v;
+  }
+  if (c.t === "d") { var x = c.v instanceof Date ? c.v : new Date(c.v); if (!isNaN(x)) return { iso: x.getFullYear() + "-" + pad(x.getMonth() + 1) + "-" + pad(x.getDate()), hm: "" }; }
+  if (c.t === "b") return c.v ? "Sim" : "Não";
+  if (c.t === "e") return "";
+  return String(c.v).replace(/ /g, " ").trim();
+}
+function matrizDaFolha(ws) {
+  var maxR = -1, maxC = -1, minR = Infinity, minC = Infinity, cel = [];
+  Object.keys(ws).forEach(function (k) {
+    if (k.charAt(0) === "!") return;
+    var a = XLSX.utils.decode_cell(k); if (ws[k].v == null || ws[k].v === "") return;
+    cel.push([a.r, a.c, ws[k]]);
+    if (a.r > maxR) maxR = a.r; if (a.c > maxC) maxC = a.c; if (a.r < minR) minR = a.r; if (a.c < minC) minC = a.c;
+  });
+  if (!cel.length) return [];
+  maxC = Math.min(maxC, minC + 300);
+  var m = [];
+  for (var r = 0; r <= maxR - minR; r++) { var l = new Array(maxC - minC + 1); for (var j = 0; j < l.length; j++) l[j] = ""; m.push(l); }
+  cel.forEach(function (x) { if (x[1] <= maxC) m[x[0] - minR][x[1] - minC] = valorCelula(x[2]); });
+  return m;
+}
+function lerFicheiro(f) {
+  return f.arrayBuffer().then(function (buf) {
+    var ext = (f.name.split(".").pop() || "").toLowerCase();
+    if (ext === "csv" || ext === "txt" || ext === "tsv") return { nome: f.name, folhas: [{ nome: "Folha 1", matriz: lerTextoTabela(decodificar(buf)) }] };
+    var wb = XLSX.read(new Uint8Array(buf), { type: "array", cellNF: true, cellText: false, cellDates: false });
+    return { nome: f.name, folhas: wb.SheetNames.map(function (n) { return { nome: n, matriz: matrizDaFolha(wb.Sheets[n]) }; }) };
+  });
+}
+
+/* ---------- títulos, colunas e palpites ---------- */
+var PALAVRAS_TITULO = /utente|sns|nome|n\.?\s*[º°o]|mail|contacto|telefone|telem|data|idade|sexo|genero|morada|numero|processo|codigo|famil|agregado|medico|elem/i;
+function pareceTitulo(l, seguinte) {
+  var cheias = l.filter(function (v) { return !vazio(v); });
+  if (!cheias.length) return false;
+  var textos = cheias.every(function (v) { return typeof v === "string" && /[a-zA-ZÀ-ÿ]/.test(v) && v.indexOf("@") < 0 && v.length <= 60; });
+  if (!textos) return false;
+  if (cheias.some(function (v) { return PALAVRAS_TITULO.test(semAcentos(v)); })) return true;
+  if (!seguinte) return false;
+  return l.some(function (v, c) { var s = seguinte[c]; return !vazio(v) && !vazio(s) && (typeof s !== "string" || /^\d[\d\s.\/-]*$/.test(s) || s.indexOf("@") >= 0); });
+}
+function detetarTitulos(m) {
+  var cont = m.slice(0, 60).map(function (l) { return l.filter(function (v) { return !vazio(v); }).length; });
+  var max = Math.max.apply(null, [0].concat(cont));
+  var limite = max <= 1 ? 1 : Math.max(2, Math.ceil(max * 0.6));
+  for (var i = 0; i < Math.min(m.length, 30); i++) {
+    if (cont[i] < limite) continue;
+    var j = i + 1; while (j < m.length && cont[j] === 0) j++;
+    return pareceTitulo(m[i], m[j]) ? i : -1;
+  }
+  return -1;
+}
+function prepararLista(L) {
+  var m = (L.folhas[L.folha] || { matriz: [] }).matriz;
+  var h = L.semTitulos ? -1 : (L.linhaTitulos != null ? L.linhaTitulos : L.auto);
+  var largura = 0;
+  m.forEach(function (l) { var k = l.length; while (k > 0 && vazio(l[k - 1])) k--; if (k > largura) largura = k; });
+  var corpo = (h >= 0 ? m.slice(h + 1) : m).filter(function (l) { return l.some(function (v) { return !vazio(v); }); });
+  var usar = [];
+  for (var c = 0; c < largura; c++) {
+    var t = h >= 0 ? txt(m[h][c]).replace(/\s+/g, " ").trim() : "";
+    if (t || corpo.some(function (l) { return !vazio(l[c]); })) usar.push([c, t]);
+  }
+  var vistos = {};
+  L.cab = usar.map(function (u) {
+    var n = u[1] || "Coluna " + letra(u[0]), k = n, j = 2;
+    while (vistos[k.toLowerCase()]) k = n + " (" + (j++) + ")";
+    vistos[k.toLowerCase()] = 1; return k;
+  });
+  L.linhas = corpo.map(function (l) { return usar.map(function (u) { var v = l[u[0]]; return v == null ? "" : v; }); });
+  L.col = adivinhar(L);
+  L.separar = codigos(L).length > 1;
+}
+function proporcao(L, c, teste) {
+  var n = 0, ok = 0;
+  for (var r = 0; r < L.linhas.length && n < 300; r++) { var v = L.linhas[r][c]; if (vazio(v)) continue; n++; if (teste(v)) ok++; }
+  return n ? ok / n : 0;
+}
+var eNumUtente = function (v) { var d = normNum(v); return d.length >= 7 && d.length <= 10 && !/[a-z@]/i.test(txt(v)); };
+var eNome = function (v) { return typeof v === "string" && /^[A-Za-zÀ-ÿ'’.\-]+(\s+[A-Za-zÀ-ÿ'’.\-]+)+$/.test(v.trim()) && v.indexOf("@") < 0; };
+var eTelefone = function (v) { var d = normNum(v); return d.length === 9 && /^[29]/.test(d); };
+function adivinhar(L) {
+  var cab = L.cab.map(function (h) { return semAcentos(h).toLowerCase(); });
+  function procura(rx, nao, teste) {
+    for (var c = 0; c < cab.length; c++) if (rx.test(cab[c]) && !(nao && nao.test(cab[c])) && (!teste || proporcao(L, c, teste) >= 0.5)) return c;
+    return -1;
+  }
+  function porConteudo(teste, nao) {
+    var melhor = -1, p = 0.7;
+    for (var c = 0; c < cab.length; c++) { if (nao && nao.test(cab[c])) continue; var x = proporcao(L, c, teste); if (x >= p) { p = x; melhor = c; } }
+    return melhor;
+  }
+  var NAO_PESSOA = /medic|profission|enferm|unidade|\bpai\b|\bmae\b|ficheiro|famil|agregado/;
+  var g = {};
+  g.ag = procura(/prc\.?\s*famil|proc(esso)?\.?\s*(de\s*)?famil|agregado|^n\.?\s*[º°o]?\s*(de\s*)?famil|cod(igo)?\.?\s*(do\s*|de\s*)?(agregado|famil)|^familia$|ficha\s*famil/, /elem|medic|enferm|pessoas|membros|tamanho|morada|nome/);
+  g.num = procura(/(n\.?\s*[º°o]?\s*(de\s*)?utente|\bsns\b|\bnus\b|numero\s*(de\s*)?utente|num\.?\s*utente|utente\s*n|n[º°]\s*benef)/, null, eNumUtente);
+  if (g.num < 0) g.num = porConteudo(eNumUtente, /famil|agregado|proc|telef|telem|contacto|movel|medic|enferm|nif|contribuinte/);
+  g.nome = procura(/nome|^utente$/, NAO_PESSOA, eNome);
+  if (g.nome < 0) g.nome = porConteudo(eNome, /medic|profission|enferm|unidade|\bpai\b|\bmae\b|ficheiro|famil|mail|morada|rua|localidade|observ|freguesia|concelho|nacional/);
+  g.data = procura(/nasc|\bdn\b|d\.\s*n\./);
+  g.elem = procura(/elem|n\.?\s*[º°o]?\s*(de\s*)?pessoas|membros|tamanho\s*(do\s*)?agregado/);
+  g.email = procura(/mail/);
+  g.mf = procura(/medico\s*(de\s*)?famil|^medico$|^mf$|medico\s*assistente|cod(igo)?\.?\s*(do\s*)?medico/, /enferm/);
+  g.telAuto = [];
+  cab.forEach(function (h, c) { if (/telem|telef|\btlm\b|\btel\b|movel/.test(h) && !/medic|enferm|unidade/.test(h)) g.telAuto.push(c); });
+  if (!g.telAuto.length) { var t = porConteudo(eTelefone, /utente|sns|famil|agregado|proc|medic|enferm/); if (t >= 0 && t !== g.num) g.telAuto.push(t); }
+  g.tel = -2;   /* -2: todas as colunas de telefone encontradas; -1: nenhuma; n: só a coluna n */
+  return g;
+}
+function colunasTelefone(L) { var c = L.col; return c.tel === -2 ? c.telAuto : c.tel >= 0 ? [c.tel] : []; }
+function codigoMedico(v) { var s = typeof v === "number" ? String(Math.round(v)) : txt(v).trim(); return s === "-1" || s === "0" ? "" : s; }
+function codigos(L) {
+  if (!L.col || L.col.mf < 0) return [];
+  var n = {}, ordem = [];
+  L.linhas.forEach(function (l) { var k = codigoMedico(l[L.col.mf]); if (!k) return; if (!n[k]) { n[k] = 0; ordem.push(k); } n[k]++; });
+  return ordem.map(function (k) { return { cod: k, n: n[k] }; });
+}
+function nomeDoFicheiro(n) { return String(n).replace(/\.[a-z0-9]{2,5}$/i, "").replace(/_+/g, " ").replace(/\s+/g, " ").trim() || "Médico"; }
+function nomeLivre(base) {
+  var usados = {}; E.listas.forEach(function (L) { usados[normTexto(L.medico)] = 1; });
+  var k = base, j = 2; while (usados[normTexto(k)]) k = base + " (" + (j++) + ")";
+  return k;
+}
+function normAg(v) {
+  var s = typeof v === "number" ? String(Math.round(v)) : txt(v).trim();
+  if (/^[\d\s.]+$/.test(s)) s = s.replace(/\D/g, "").replace(/^0+/, "");
+  else s = normTexto(s);
+  return s === "-1" ? "" : s;
+}
+function inteiro(v) { var n = parseInt(txt(v).replace(/[^\d]/g, ""), 10); return isFinite(n) ? n : 0; }
+function idade(iso) {
+  if (!iso) return "";
+  var p = iso.split("-"), h = new Date(), a = h.getFullYear() - +p[0];
+  if (h.getMonth() + 1 < +p[1] || (h.getMonth() + 1 === +p[1] && h.getDate() < +p[2])) a--;
+  return a >= 0 && a < 130 ? a : "";
+}
+function telefones(l, cols) {
+  var vistos = {}, v = [];
+  cols.forEach(function (c) { var x = l[c], t = typeof x === "number" ? String(Math.round(x)) : txt(x).trim(); if (t && t !== "0" && !vistos[t]) { vistos[t] = 1; v.push(t); } });
+  return v.join(" / ");
+}
+function medicoDaLinha(L, l) {
+  if (L.separar && L.col.mf >= 0) { var k = codigoMedico(l[L.col.mf]); if (k) return E.nomesCod[k] || "Médico " + k; }
+  return L.medico;
+}
+function listaPronta(L) { return L && L.col && L.col.ag >= 0 && L.linhas.length > 0; }
+function ordemAg(a, b) { var na = /^\d+$/.test(a), nb = /^\d+$/.test(b); if (na && nb) return a.length - b.length || (a < b ? -1 : a > b ? 1 : 0); if (na !== nb) return na ? -1 : 1; return a.localeCompare(b, "pt"); }
+
+/* ---------- calcular ---------- */
+function calcular() {
+  var R = { U: [], medicos: {}, ordemMed: [], repetidos: [], semAg: [], semColuna: [], nUt: 0, nGrupos: 0, conflitos: [], incompletos: 0, listasOk: 0 };
+  var porNum = {};
+  E.listas.forEach(function (L, i) {
+    if (!listaPronta(L)) { if (L && L.linhas.length && L.col.ag < 0) R.semColuna.push(L); return; }
+    R.listasOk++;
+    var c = L.col, tc = colunasTelefone(L);
+    L.linhas.forEach(function (l, r) {
+      var rot = medicoDaLinha(L, l), k = normTexto(rot) || "medico";
+      var u = { id: i + "-" + r, i: i, r: r, med: k, ag: normAg(l[c.ag]), agTxt: txt(l[c.ag]).trim(),
+        num: c.num >= 0 ? normNum(l[c.num]) : "", numOrig: c.num >= 0 ? l[c.num] : "",
+        nome: c.nome >= 0 ? txt(l[c.nome]).replace(/\s+/g, " ").trim() : "", dn: c.data >= 0 ? normData(l[c.data]) : "",
+        elem: c.elem >= 0 ? inteiro(l[c.elem]) : 0, tel: telefones(l, tc), email: c.email >= 0 ? txt(l[c.email]).trim() : "" };
+      if (!u.nome && !u.num && !u.ag) return;
+      if (!R.medicos[k]) { R.medicos[k] = { k: k, nome: rot, antes: 0, saem: 0, entram: 0 }; R.ordemMed.push(k); }
+      if (u.num) { var p = porNum[u.num]; if (p) { R.repetidos.push({ u: u, primeiro: p }); return; } porNum[u.num] = u; }
+      R.medicos[k].antes++; R.nUt++;
+      if (!u.ag) { R.semAg.push(u); return; }
+      R.U.push(u);
+    });
+  });
+  var G = {}, ordemG = [];
+  R.U.forEach(function (u) {
+    var g = G[u.ag]; if (!g) { g = G[u.ag] = { ag: u.ag, agTxt: u.agTxt, m: [], elem: 0 }; ordemG.push(u.ag); }
+    g.m.push(u); if (u.elem > g.elem) g.elem = u.elem;
+  });
+  R.nGrupos = ordemG.length;
+  var pos = {}; R.ordemMed.forEach(function (k, j) { pos[k] = j; });
+  ordemG.sort(ordemAg).forEach(function (a) {
+    var g = G[a], cont = {};
+    g.m.forEach(function (u) { cont[u.med] = (cont[u.med] || 0) + 1; });
+    var meds = Object.keys(cont);
+    if (meds.length < 2) return;
+    meds.sort(function (x, y) { return cont[y] - cont[x] || pos[x] - pos[y]; });
+    g.cont = cont; g.meds = meds;
+    g.incompleto = g.elem > g.m.length; if (g.incompleto) R.incompletos++;
+    var max = cont[meds[0]], emp = meds.filter(function (m) { return cont[m] === max; });
+    g.empate = emp.length > 1;
+    g.sug = ""; g.motivoSug = "";
+    if (!g.empate) { g.sug = meds[0]; g.motivoSug = "já tem mais pessoas do agregado (" + max + " de " + g.m.length + ")"; }
+    else if (E.regra === "menor") {
+      g.sug = emp.slice().sort(function (x, y) { return R.medicos[x].antes - R.medicos[y].antes || pos[x] - pos[y]; })[0];
+      g.motivoSug = "empate; é o médico com a lista mais pequena (" + plural(R.medicos[g.sug].antes, "utente", "utentes") + ")";
+    } else if (E.regra === "velho") {
+      var velho = null;
+      g.m.forEach(function (u) { if (emp.indexOf(u.med) >= 0 && u.dn && (!velho || u.dn < velho.dn)) velho = u; });
+      if (velho) { g.sug = velho.med; g.motivoSug = "empate; é o médico do utente mais velho do agregado" + (velho.nome ? " (" + velho.nome + ")" : ""); }
+    }
+    var e = E.escolha[a];
+    if (e === "nao") { g.alvo = ""; g.estado = "nao"; g.motivo = "escolheste deixar como está"; }
+    else if (e && cont[e]) { g.alvo = e; g.estado = e === g.sug ? "sugerido" : "escolhido"; g.motivo = e === g.sug ? "sugestão: " + g.motivoSug : "escolhido por ti"; }
+    else if (g.sug) { g.alvo = g.sug; g.estado = "sugerido"; g.motivo = "sugestão: " + g.motivoSug; }
+    else { g.alvo = ""; g.estado = "decidir"; g.motivo = "empate por decidir"; }
+    g.passam = g.alvo ? g.m.filter(function (u) { return u.med !== g.alvo && !E.ficar[u.id]; }) : [];
+    g.m.sort(function (x, y) { return (x.med === g.alvo ? 0 : 1) - (y.med === g.alvo ? 0 : 1) || pos[x.med] - pos[y.med] || (x.dn || "9") .localeCompare(y.dn || "9"); });
+    g.passam.forEach(function (u) { R.medicos[u.med].saem++; R.medicos[g.alvo].entram++; });
+    R.conflitos.push(g);
+  });
+  R.nPassam = R.conflitos.reduce(function (s, g) { return s + g.passam.length; }, 0);
+  R.nDecidir = R.conflitos.filter(function (g) { return g.estado === "decidir"; }).length;
+  return R;
+}
+function nomeMed(k) { return E.R.medicos[k] ? E.R.medicos[k].nome : k; }
+function divisao(g) { return g.meds.map(function (k) { return nomeMed(k) + " " + g.cont[k]; }).join(", "); }
+function desfecho(g) {
+  if (g.estado === "nao") return "fica como está";
+  if (g.estado === "decidir") return "empate: escolhe o médico";
+  if (!g.passam.length) return "não passa ninguém";
+  return (g.passam.length === 1 ? "passa 1 pessoa" : "passam " + g.passam.length + " pessoas") + " para " + nomeMed(g.alvo);
+}
+function descricaoAg(g) {
+  return "Agregado com " + plural(g.m.length, "pessoa", "pessoas") + " nas listas: " + divisao(g);
+}
+
+/* ---------- desenhar ---------- */
+var IC = {
+  ficheiro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/><path d="M14 3v4h4M9 12l6 6M15 12l-6 6"/></svg>'
+};
+var CAMPOS = [["ag", "Código do agregado"], ["num", "Nº de utente"], ["nome", "Nome"], ["data", "Data de nascimento"], ["elem", "Nº de elementos do agregado"], ["tel", "Telefone"], ["email", "Email"], ["mf", "Médico de família (código)"]];
+function opcoesColunas(L, campo) {
+  var c = L.col, sel = c[campo], h = "";
+  if (campo === "tel") h += '<option value="-2"' + (sel === -2 ? " selected" : "") + ">" + (c.telAuto.length ? "Todas as de telefone (" + c.telAuto.map(function (k) { return L.cab[k]; }).join(", ") + ")" : "Todas as de telefone (não encontrei)") + "</option>";
+  h += '<option value="-1"' + (sel === -1 ? " selected" : "") + ">—</option>";
+  return h + L.cab.map(function (n, k) { return '<option value="' + k + '"' + (k === sel ? " selected" : "") + ">" + esc(n) + "</option>"; }).join("");
+}
+function cartaoLista(i) {
+  var L = E.listas[i], c = L.col, F = L.folhas[L.folha], nTit = L.semTitulos ? -1 : (L.linhaTitulos != null ? L.linhaTitulos : L.auto);
+  var cods = codigos(L);
+  var h = '<fieldset class="mgf-cartao ag-lista" data-lista="' + i + '"><legend class="mgf-so-leitor">Lista ' + (i + 1) + ": " + esc(L.nome) + '</legend><div class="mgf-cartao-titulo" aria-hidden="true">Lista ' + (i + 1) + '</div><div class="mgf-cartao-corpo">';
+  h += '<div class="ag-ficheiro">' + IC.ficheiro + "<span>" + esc(L.nome) + "</span></div>";
+  h += '<div class="ag-meta">' + plural(L.linhas.length, "linha", "linhas") + " · " + plural(L.cab.length, "coluna", "colunas") + "</div>";
+  if (L.separar && cods.length > 1) {
+    h += '<div class="ag-cods">' + cods.map(function (x) {
+      return '<label class="mgf-campo">Médico com o código ' + esc(x.cod) + " (" + plural(x.n, "utente", "utentes") + ')<input type="text" data-cod="' + esc(x.cod) + '" value="' + esc(E.nomesCod[x.cod] || "Médico " + x.cod) + '"></label>';
+    }).join("") + "</div>";
+  } else h += '<label class="mgf-campo">Médico de família desta lista<input type="text" data-medico="' + i + '" value="' + esc(L.medico) + '"></label>';
+  if (cods.length > 1) h += '<label class="ag-check"><input type="checkbox" data-separar="' + i + '"' + (L.separar ? " checked" : "") + "><span>Esta lista tem utentes de " + cods.length + " médicos (coluna «" + esc(L.cab[c.mf]) + "»): separar por médico</span></label>";
+  if (!L.linhas.length) h += '<div class="mgf-interp" data-nivel="atencao">Não encontrei linhas com dados nesta folha.</div>';
+  else if (c.ag < 0) h += '<div class="mgf-interp" data-nivel="atencao">Não encontrei a coluna do código do agregado (no BI-CSP, «Prc. Famil.»). Escolhe-a em «Colunas e folha».</div>';
+  else {
+    var achadas = ["ag", "nome", "num"].filter(function (k) { return c[k] >= 0; }).map(function (k) { return CAMPOS.find(function (x) { return x[0] === k; })[1] + ": «" + esc(L.cab[c[k]]) + "»"; });
+    h += '<div class="ag-meta">' + achadas.join(" · ") + "</div>";
+  }
+  h += '<details class="ag-colunas" data-abrir-col="' + i + '"' + (c.ag < 0 || E.abrirCol[i] ? " open" : "") + '><summary>Colunas e folha</summary><div class="ag-campos">';
+  if (L.folhas.length > 1) h += '<label class="mgf-campo">Folha<select data-folha="' + i + '">' + L.folhas.map(function (f, k) { return '<option value="' + k + '"' + (k === L.folha ? " selected" : "") + ">" + esc(f.nome) + "</option>"; }).join("") + "</select></label>";
+  var opT = '<option value="-1"' + (nTit < 0 ? " selected" : "") + ">Não tem títulos</option>";
+  for (var k = 0; k < Math.min(F.matriz.length, 30); k++) {
+    var amostra = F.matriz[k].filter(function (v) { return !vazio(v); }).slice(0, 3).map(txt).join(" · ");
+    if (amostra) opT += '<option value="' + k + '"' + (k === nTit ? " selected" : "") + ">Linha " + (k + 1) + ": " + esc(amostra.slice(0, 40)) + "</option>";
+  }
+  h += '<label class="mgf-campo">Linha dos títulos<select data-titulos="' + i + '">' + opT + "</select></label>";
+  CAMPOS.forEach(function (x) { h += '<label class="mgf-campo">' + x[1] + '<select data-col="' + i + '" data-campo="' + x[0] + '">' + opcoesColunas(L, x[0]) + "</select></label>"; });
+  h += "</div></details>";
+  h += '<div class="ag-botoes-pequenos"><button type="button" class="mgf-botao ag-pequeno" data-acao="retirar" data-lista="' + i + '">Retirar esta lista</button></div>';
+  return h + "</div></fieldset>";
+}
+function desenharListas() {
+  $("#ag-listas").innerHTML = E.listas.map(function (L, i) { return cartaoLista(i); }).join("");
+  $('[data-acao="limpar"]').hidden = !E.listas.length;
+}
+function desenharResultados() {
+  var R = E.R = calcular();
+  var pronto = R.listasOk > 0;
+  ["#ag-passo2", "#ag-passo3", "#ag-passo4"].forEach(function (s) { $(s).hidden = !pronto; });
+  if (!pronto) return;
+  desenharResumo(); desenharGrupos(); desenharMedicos(); desenharTransferencias();
+}
+function cartaoResumo(rot, valor, sub, nivel) {
+  return "<div" + (nivel ? ' data-nivel="' + nivel + '"' : "") + '><span class="mgf-resumo-rotulo">' + rot + '</span><span class="mgf-resumo-valor">' + valor + '</span><span class="mgf-resumo-sub">' + sub + "</span></div>";
+}
+function desenharResumo() {
+  var R = E.R, nMed = R.ordemMed.length;
+  $("#ag-resumo").innerHTML =
+    cartaoResumo("Utentes nas listas", fmtN(R.nUt), plural(nMed, "médico", "médicos") + " · " + plural(R.listasOk, "lista", "listas")) +
+    cartaoResumo("Agregados", fmtN(R.nGrupos), "com código nas listas") +
+    cartaoResumo("Com mais de um médico", fmtN(R.conflitos.length), R.conflitos.length === 1 ? "agregado" : "agregados", R.conflitos.length ? "atencao" : "normal") +
+    cartaoResumo("Utentes a transferir", fmtN(R.nPassam), "para cada agregado ficar com um médico") +
+    cartaoResumo("Empates por decidir", fmtN(R.nDecidir), R.nDecidir ? "escolhe o médico em baixo" : "nenhum", R.nDecidir ? "atencao" : "normal");
+  var av = [];
+  function aviso(nivel, t) { av.push('<p class="mgf-interp" data-nivel="' + nivel + '">' + t + "</p>"); }
+  if (nMed < 2) aviso("info", "Só há um médico nas listas carregadas (" + esc(R.ordemMed.length ? nomeMed(R.ordemMed[0]) : "") + "). Carrega as listas dos outros médicos, uma por médico, ou um ficheiro de toda a unidade com a coluna do médico de família.");
+  R.semColuna.forEach(function (L) { aviso("atencao", "A lista «" + esc(L.nome) + "» não tem a coluna do código do agregado e não entra nas contas. Escolhe a coluna no passo 1."); });
+  if (R.repetidos.length) {
+    var ex = R.repetidos.slice(0, 5).map(function (x) { return esc(x.u.nome || x.u.num) + " (" + esc(nomeMed(x.primeiro.med)) + (x.primeiro.med !== x.u.med ? " e " + esc(nomeMed(x.u.med)) : ", duas vezes") + ")"; }).join("; ");
+    aviso("atencao", "<strong>" + plural(R.repetidos.length, "utente aparece", "utentes aparecem") + " mais de uma vez</strong> (o mesmo nº de utente): contei só a primeira. " + ex + (R.repetidos.length > 5 ? "; …" : "") + ". Confirma se as listas são da mesma data.");
+  }
+  if (R.semAg.length) aviso("info", plural(R.semAg.length, "utente não tem", "utentes não têm") + " código de agregado e não entra" + (R.semAg.length === 1 ? "" : "m") + " nas contas (" + (R.semAg.length === 1 ? "está" : "estão") + " na folha «Avisos» do Excel).");
+  if (R.incompletos) aviso("info", plural(R.incompletos, "agregado com mais de um médico tem", "agregados com mais de um médico têm") + " mais elementos do que os que estão nas listas (coluna do nº de elementos). Os outros podem estar sem médico de família, noutra lista que não carregaste ou noutra unidade.");
+  if (nMed >= 2 && !R.conflitos.length) aviso("normal", "Nenhum agregado tem pessoas em médicos diferentes nas listas carregadas.");
+  $("#ag-avisos").innerHTML = av.join("");
+  $("#ag-regra").value = E.regra;
+}
+function passaFiltro(g) {
+  if (E.ver === "decidir" && g.estado !== "decidir") return false;
+  if (E.ver === "passam" && !g.passam.length) return false;
+  if (E.ver === "nao" && g.estado !== "nao") return false;
+  var b = normTexto(E.busca);
+  if (!b) return true;
+  var bn = b.replace(/\D/g, "");
+  if (normTexto(g.agTxt).indexOf(b) >= 0) return true;
+  return g.m.some(function (u) { return normTexto(u.nome).indexOf(b) >= 0 || (bn.length >= 3 && u.num.indexOf(bn.replace(/^0+/, "")) >= 0); });
+}
+function grupoHtml(g) {
+  var ag = esc(g.ag);
+  var h = '<details class="ag-grupo" data-ag="' + ag + '" data-estado="' + g.estado + '"' + (E.abertos[g.ag] ? " open" : "") + ">";
+  h += "<summary><b>Agregado " + esc(g.agTxt) + "</b> · " + plural(g.m.length, "pessoa", "pessoas") + (g.incompleto ? " (" + g.elem + " no agregado)" : "") + " · " + esc(divisao(g)) + ' <span class="ag-fim">→ ' + esc(desfecho(g)) + "</span></summary>";
+  h += '<div class="ag-grupo-corpo"><label class="mgf-campo">Fica com<select data-escolha="' + ag + '">';
+  if (g.estado === "decidir") h += '<option value="" selected>Escolhe o médico…</option>';
+  g.meds.forEach(function (k) { h += '<option value="' + esc(k) + '"' + (g.alvo === k ? " selected" : "") + ">" + esc(nomeMed(k)) + " (" + plural(g.cont[k], "pessoa", "pessoas") + ")</option>"; });
+  h += '<option value="nao"' + (g.estado === "nao" ? " selected" : "") + ">Deixar como está (não transferir ninguém)</option></select></label>";
+  var mot = g.estado === "decidir" ? "Empate: há o mesmo número de pessoas em " + g.meds.filter(function (k) { return g.cont[k] === g.cont[g.meds[0]]; }).map(nomeMed).map(esc).join(" e ") + ". Escolhe com quem fica o agregado." :
+    g.estado === "nao" ? "Fica como está." : (g.estado === "escolhido" ? "Escolhido por ti." + (g.sug ? " A sugestão era " + esc(nomeMed(g.sug)) + "." : "") : "Sugestão: " + esc(nomeMed(g.alvo)) + ", que " + esc(g.motivoSug) + ".");
+  h += "<p>" + mot + "</p>";
+  if (g.incompleto) h += '<p class="ag-fica">O agregado tem ' + g.elem + " elementos; " + (g.m.length === 1 ? "só 1 está" : "só " + g.m.length + " estão") + " nas listas carregadas.</p>";
+  h += '<div class="mgf-tabela-caixa"><table class="mgf-tabela"><thead><tr><th>Transferir</th><th>Nome</th><th>Nº de utente</th><th>Idade</th><th>Médico atual</th></tr></thead><tbody>';
+  g.m.forEach(function (u) {
+    var cel;
+    if (!g.alvo) cel = '<span class="ag-fica">—</span>';
+    else if (u.med === g.alvo) cel = '<span class="ag-fica">Fica</span>';
+    else cel = '<input type="checkbox" data-ficar="' + esc(u.id) + '" aria-label="Transferir ' + esc(u.nome || u.num) + " para " + esc(nomeMed(g.alvo)) + '"' + (E.ficar[u.id] ? "" : " checked") + ">";
+    h += "<tr><td>" + cel + "</td><td>" + esc(u.nome) + "</td><td>" + esc(u.num) + "</td><td>" + esc(idade(u.dn)) + "</td><td>" + esc(nomeMed(u.med)) + "</td></tr>";
+  });
+  return h + "</tbody></table></div></div></details>";
+}
+function desenharGrupos() {
+  var R = E.R, lista = R.conflitos.filter(passaFiltro);
+  $("#ag-ver").value = E.ver;
+  var filtrado = lista.length !== R.conflitos.length;
+  $("#ag-contagem").textContent = !R.conflitos.length ? "" : filtrado ? "A mostrar " + fmtN(lista.length) + " de " + plural(R.conflitos.length, "agregado", "agregados") + "." : plural(R.conflitos.length, "agregado", "agregados") + ". Abre cada um para ver as pessoas.";
+  var h = lista.slice(0, E.mostrar).map(grupoHtml).join("");
+  if (lista.length > E.mostrar) h += '<button type="button" class="mgf-botao ag-pequeno" data-acao="mais">Mostrar mais ' + Math.min(PASSO, lista.length - E.mostrar) + " (faltam " + fmtN(lista.length - E.mostrar) + ")</button>";
+  else if (filtrado && !lista.length) h += '<p class="ag-mais">Nenhum agregado com este filtro.</p>';
+  $("#ag-grupos").innerHTML = h;
+}
+function linhasMedicos() {
+  var R = E.R;
+  return R.ordemMed.map(function (k) { var m = R.medicos[k]; return [m.nome, m.antes, m.saem, m.entram, m.antes - m.saem + m.entram]; });
+}
+function desenharMedicos() {
+  var L = linhasMedicos(), tot = [0, 0, 0, 0];
+  var h = '<table><thead><tr><th>Médico de família</th><th class="ag-n">Utentes nas listas</th><th class="ag-n">Saem</th><th class="ag-n">Entram</th><th class="ag-n">Depois</th><th class="ag-n">Diferença</th></tr></thead><tbody>';
+  L.forEach(function (l) {
+    for (var j = 0; j < 4; j++) tot[j] += l[j + 1];
+    var d = l[4] - l[1];
+    h += "<tr><td>" + esc(l[0]) + '</td><td class="ag-n">' + fmtN(l[1]) + '</td><td class="ag-n">' + fmtN(l[2]) + '</td><td class="ag-n">' + fmtN(l[3]) + '</td><td class="ag-n">' + fmtN(l[4]) + '</td><td class="ag-n">' + (d > 0 ? "+" : d < 0 ? "−" : "") + fmtN(Math.abs(d)) + "</td></tr>";
+  });
+  h += '<tr><td><strong>Total</strong></td><td class="ag-n"><strong>' + fmtN(tot[0]) + '</strong></td><td class="ag-n"><strong>' + fmtN(tot[1]) + '</strong></td><td class="ag-n"><strong>' + fmtN(tot[2]) + '</strong></td><td class="ag-n"><strong>' + fmtN(tot[3]) + "</strong></td><td></td></tr>";
+  $("#ag-medicos").innerHTML = h + "</tbody></table>";
+}
+var CAB_TRANSF = ["Agregado", "Nome", "Nº de utente", "Data de nascimento", "Idade", "Telefone", "Email", "Médico atual", "Passa para", "Motivo"];
+function linhasTransferencias() {
+  var out = [];
+  E.R.conflitos.forEach(function (g) {
+    g.passam.forEach(function (u) {
+      out.push([g.agTxt, u.nome, u.numOrig === "" ? u.num : u.numOrig, u.dn ? { iso: u.dn, hm: "" } : "", idade(u.dn), u.tel, u.email, nomeMed(u.med), nomeMed(g.alvo),
+        descricaoAg(g) + (g.estado === "escolhido" ? "; médico escolhido por ti" : "; " + g.motivoSug)]);
+    });
+  });
+  return out;
+}
+function desenharTransferencias() {
+  var T = linhasTransferencias();
+  if (!T.length) {
+    $("#ag-transf").innerHTML = '<p class="ag-mais" style="padding:12px 14px;margin:0">Ainda não há utentes a transferir' + (E.R.nDecidir ? ": escolhe o médico nos empates por decidir." : ".") + "</p>";
+    $("#ag-transf-mais").textContent = "";
+  } else {
+    var cols = [0, 1, 2, 4, 7, 8];
+    var h = "<table><thead><tr>" + cols.map(function (c) { return "<th" + (c === 4 ? ' class="ag-n"' : "") + ">" + CAB_TRANSF[c] + "</th>"; }).join("") + "</tr></thead><tbody>";
+    h += T.slice(0, MAX_TABELA).map(function (l) { return "<tr>" + cols.map(function (c) { return "<td" + (c === 4 ? ' class="ag-n"' : "") + ">" + esc(c === 2 ? normNum(l[c]) : txt(l[c])) + "</td>"; }).join("") + "</tr>"; }).join("");
+    $("#ag-transf").innerHTML = h + "</tbody></table>";
+    $("#ag-transf-mais").textContent = plural(T.length, "utente a transferir", "utentes a transferir") + (T.length > MAX_TABELA ? " (aqui só os primeiros " + MAX_TABELA + "; o Excel tem todos)." : ".");
+  }
+  raiz.querySelectorAll('[data-acao="excel"], [data-acao="csv"], [data-acao="copiar"]').forEach(function (b) { b.disabled = !E.R.conflitos.length; });
+}
+function tudo() { desenharListas(); desenharResultados(); }
+
+/* ---------- carregar ---------- */
+function mensagem(t, topo) { $("#ag-mensagem").textContent = topo ? "" : t || ""; $("#ag-mensagem-topo").textContent = topo ? t || "" : ""; }
+function novaLista(dados) {
+  var folha = dados.folhas.findIndex(function (f) { return f.matriz.some(function (l) { return l.some(function (v) { return !vazio(v); }); }); });
+  if (folha < 0) return "O ficheiro «" + dados.nome + "» não tem dados.";
+  if (E.listas.length >= MAX_LISTAS) return "Já tens " + MAX_LISTAS + " listas: retira alguma antes de juntar «" + dados.nome + "».";
+  var L = { nome: dados.nome, medico: nomeLivre(dados.medico || nomeDoFicheiro(dados.nome)), folhas: dados.folhas, folha: folha, linhaTitulos: null, semTitulos: false };
+  L.auto = detetarTitulos(dados.folhas[folha].matriz);
+  prepararLista(L);
+  E.listas.push(L);
+  return "";
+}
+function carregarFicheiros(fs) {
+  fs = Array.prototype.slice.call(fs || []);
+  if (!fs.length) return Promise.resolve();
+  if (typeof XLSX === "undefined") { mensagem("O leitor de Excel não carregou. Recarrega a página.", true); return Promise.resolve(); }
+  var erros = [], n = 0;
+  return fs.reduce(function (p, f) {
+    return p.then(function () {
+      return lerFicheiro(f).then(function (d) { var e = novaLista(d); if (e) erros.push(e); else n++; }, function () {
+        erros.push("Não consegui ler «" + f.name + "». Se for um Excel antigo ou protegido com palavra-passe, abre-o no Excel e guarda-o como .xlsx.");
+      });
+    });
+  }, Promise.resolve()).then(function () {
+    tudo();
+    mensagem(erros.length ? erros.join(" ") : n ? plural(n, "lista carregada", "listas carregadas") + ". Confirma o nome do médico de cada uma." : "", true);
+  });
+}
+function escolher() {
+  var inp = document.createElement("input"); inp.type = "file"; inp.multiple = true; inp.accept = ".xlsx,.xls,.xlsm,.xlsb,.ods,.csv,.txt,.tsv";
+  inp.onchange = function () { carregarFicheiros(inp.files); };
+  inp.click();
+}
+(function ligarZona() {
+  var z = $("#ag-zona");
+  z.ondragover = function (e) { e.preventDefault(); z.classList.add("sobre"); };
+  z.ondragleave = function () { z.classList.remove("sobre"); };
+  z.ondrop = function (e) { e.preventDefault(); z.classList.remove("sobre"); carregarFicheiros(e.dataTransfer.files); };
+})();
+function reiniciarDecisoes() { E.escolha = {}; E.ficar = {}; E.abertos = {}; E.mostrar = PASSO; }
+
+/* ---------- exemplo (utentes fictícios) ---------- */
+function exemplo() {
+  var cab = ["Nº SNS", "Nome", "Dta. Nasc.", "Género", "Prc. Famil.", "Nº Elem. Fam.", "Telemóvel", "E-mail", "Médico Família"];
+  var P = {
+    A: [["Joaquim Exemplo Silva", 19500214, "M", 200101, 5], ["Maria Exemplo Silva", 19530930, "F", 200101, 5], ["Rita Exemplo Silva", 19850417, "F", 200101, 5],
+      ["Carlos Teste Dias", 19700521, "M", 200102, 4], ["Paula Teste Dias", 19720108, "F", 200102, 4], ["Rosa Fictícia Lopes", 19401103, "F", 200103, 3],
+      ["Vítor Amostra Reis", 19660712, "M", 200106, 3], ["Jorge Exemplo Nunes", 19810303, "M", 200107, 2], ["Sónia Exemplo Nunes", 19830625, "F", 200107, 2],
+      ["Alberto Modelo Cunha", 19470822, "M", 200110, 1]],
+    B: [["Tiago Exemplo Silva", 20120309, "M", 200101, 5], ["Inês Exemplo Silva", 20150711, "F", 200101, 5], ["Henrique Fictício Lopes", 19380126, "M", 200103, 3],
+      ["Luís Modelo Rocha", 19600415, "M", 200104, 2], ["Gabriela Teste Matos", 19750218, "F", 200105, 6], ["Hugo Teste Matos", 19740930, "M", 200105, 6],
+      ["Leonor Teste Matos", 20080505, "F", 200105, 6], ["Olga Amostra Pinto", 19590104, "F", 200108, 1], ["Rui Exemplo Faria", 19900612, "M", 200111, 2],
+      ["Clara Exemplo Faria", 19920820, "F", 200111, 2], ["Alberto Modelo Cunha", 19470822, "M", 200110, 1], ["Daniel Amostra Couto", 19880101, "M", "", ""]],
+    C: [["Diogo Teste Dias", 20010914, "M", 200102, 4], ["Marta Teste Dias", 20040227, "F", 200102, 4], ["Sara Fictícia Lopes", 19901015, "F", 200103, 3],
+      ["Ana Modelo Rocha", 19620319, "F", 200104, 2], ["Francisco Teste Matos", 20110812, "M", 200105, 6], ["Teresa Amostra Reis", 19681124, "F", 200106, 3],
+      ["Bruno Amostra Reis", 19990206, "M", 200106, 3], ["Fátima Exemplo Gomes", 19560516, "F", 200109, 3], ["Paulo Exemplo Gomes", 19550728, "M", 200109, 3],
+      ["Nuno Exemplo Gomes", 19870913, "M", 200109, 3], ["Lúcia Modelo Neves", 19771201, "F", 200112, 2], ["Pedro Modelo Neves", 20060410, "M", 200112, 2]]
+  };
+  var num = 100000100, codMed = { A: 10001, B: 10002, C: 10003 }, nums = {};
+  E.listas = []; E.nomesCod = {}; E.abrirCol = {}; reiniciarDecisoes(); E.regra = "escolher"; E.ver = "todos"; E.busca = ""; $("#ag-busca").value = "";
+  ["A", "B", "C"].forEach(function (m) {
+    var linhas = [cab];
+    if (m === "C") linhas = [["Lista de utentes inscritos — Médico C (exemplo fictício)"], [], cab];
+    P[m].forEach(function (p) {
+      var n = nums[p[0]] || (nums[p[0]] = ++num);
+      linhas.push([n, p[0], p[1], p[2], p[3], p[4], n % 3 ? "900000" + String(n).slice(-3) : "", n % 2 ? semAcentos(p[0]).toLowerCase().split(" ")[0] + "." + String(n).slice(-3) + "@example.com" : "", codMed[m]]);
+    });
+    novaLista({ nome: "Médico " + m + ".xlsx", folhas: [{ nome: "export", matriz: linhas }] });
+  });
+  tudo();
+  mensagem("Listas de exemplo carregadas: três médicos e utentes fictícios, com um agregado repartido por três médicos, empates, um utente repetido e um sem código de agregado, para veres como a ferramenta avisa.", true);
+}
+
+/* ---------- exportar ---------- */
+function nomeFolha(s, usados) {
+  var n = String(s).replace(/[\[\]:*?\/\\]/g, " ").slice(0, 31).trim() || "Folha", k = n, j = 2;
+  while (usados[k.toLowerCase()]) k = n.slice(0, 27) + " (" + (j++) + ")";
+  usados[k.toLowerCase()] = 1; return k;
+}
+/* datas como número de série do Excel (sem fusos horários), com formato dd/mm/aaaa */
+function serieExcel(v) { var p = v.iso.split("-"), s = (Date.UTC(+p[0], +p[1] - 1, +p[2]) - Date.UTC(1899, 11, 30)) / 864e5;
+  if (v.hm) { var h = v.hm.split(":"); s += (+h[0] * 60 + +h[1]) / 1440; } return s; }
+function folha(aoa) {
+  var datas = [];
+  var ws = XLSX.utils.aoa_to_sheet(aoa.map(function (l, r) { return l.map(function (v, c) { if (eData(v)) { datas.push([r, c, v.hm]); return serieExcel(v); } return v; }); }));
+  datas.forEach(function (d) { var cel = ws[XLSX.utils.encode_cell({ r: d[0], c: d[1] })]; if (cel) cel.z = d[2] ? "dd/mm/yyyy hh:mm" : "dd/mm/yyyy"; });
+  ws["!cols"] = (aoa[0] || []).map(function (_, c) { var w = 8; aoa.slice(0, 200).forEach(function (l) { w = Math.max(w, Math.min(50, txt(l[c]).length + 2)); }); return { wch: w }; });
+  return ws;
+}
+function hoje() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function csvCampo(v) { var t = txt(v); return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }
+function decisao(g) {
+  return g.estado === "nao" ? "Fica como está (escolhido por ti)" : g.estado === "decidir" ? "Empate por decidir" : g.estado === "escolhido" ? "Médico escolhido por ti" : "Sugestão automática: " + g.motivoSug;
+}
+function linhasAgregados(filtro) {
+  var out = [];
+  E.R.conflitos.forEach(function (g) {
+    if (filtro && !filtro(g)) return;
+    g.m.forEach(function (u) {
+      var t = !g.alvo ? "—" : u.med === g.alvo ? "Fica" : E.ficar[u.id] ? "Não (desmarcado)" : "Sim";
+      out.push([g.agTxt, g.m.length, g.elem || "", u.nome, u.numOrig === "" ? u.num : u.numOrig, u.dn ? { iso: u.dn, hm: "" } : "", idade(u.dn), u.tel, u.email, nomeMed(u.med), g.alvo ? nomeMed(g.alvo) : "", t, decisao(g)]);
+    });
+  });
+  return out;
+}
+var CAB_AG = ["Agregado", "Pessoas nas listas", "Elementos do agregado", "Nome", "Nº de utente", "Data de nascimento", "Idade", "Telefone", "Email", "Médico atual", "Fica com", "Transferir", "Decisão"];
+function exportarExcel() {
+  if (typeof XLSX === "undefined") { mensagem("O leitor de Excel não carregou. Recarrega a página."); return; }
+  var R = E.R, wb = XLSX.utils.book_new(), usados = {};
+  XLSX.utils.book_append_sheet(wb, folha([CAB_TRANSF].concat(linhasTransferencias())), nomeFolha("Transferências", usados));
+  XLSX.utils.book_append_sheet(wb, folha([CAB_AG].concat(linhasAgregados())), nomeFolha("Agregados", usados));
+  XLSX.utils.book_append_sheet(wb, folha([["Médico de família", "Utentes nas listas", "Saem", "Entram", "Depois das transferências"]].concat(linhasMedicos())), nomeFolha("Por médico", usados));
+  if (R.nDecidir) XLSX.utils.book_append_sheet(wb, folha([CAB_AG].concat(linhasAgregados(function (g) { return g.estado === "decidir"; }))), nomeFolha("Por decidir", usados));
+  var av = [];
+  R.repetidos.forEach(function (x) { av.push(["Utente em mais de uma lista (contado só na primeira)", x.u.nome, x.u.numOrig === "" ? x.u.num : x.u.numOrig, x.u.agTxt, nomeMed(x.primeiro.med) + (x.primeiro.med !== x.u.med ? " e " + nomeMed(x.u.med) : "")]); });
+  R.semAg.forEach(function (u) { av.push(["Sem código de agregado (não entra nas contas)", u.nome, u.numOrig === "" ? u.num : u.numOrig, "", nomeMed(u.med)]); });
+  R.conflitos.forEach(function (g) { if (g.incompleto) av.push(["Agregado com mais elementos do que os que estão nas listas", "", "", g.agTxt, g.elem + " elementos; " + g.m.length + " nas listas"]); });
+  if (av.length) XLSX.utils.book_append_sheet(wb, folha([["Aviso", "Nome", "Nº de utente", "Agregado", "Médico / pormenor"]].concat(av)), nomeFolha("Avisos", usados));
+  var regra = { escolher: "deixar para escolher", menor: "sugerir o médico com a lista mais pequena", velho: "sugerir o médico do utente mais velho do agregado" }[E.regra];
+  var resumo = [["Feito em " + hoje().split("-").reverse().join("/") + " com a ferramenta Agregados com mais de um médico (MGF no Plural)"], [], ["Listas"]];
+  E.listas.forEach(function (L) { resumo.push(["  " + L.nome, (L.separar && codigos(L).length > 1 ? "vários médicos (coluna «" + L.cab[L.col.mf] + "»)" : L.medico) + " · " + plural(L.linhas.length, "linha", "linhas") + (listaPronta(L) ? "" : " · sem coluna do agregado: não entrou nas contas")]); });
+  resumo.push([]);
+  resumo.push(["Utentes nas listas", R.nUt]);
+  resumo.push(["Agregados", R.nGrupos]);
+  resumo.push(["Agregados com mais de um médico", R.conflitos.length]);
+  resumo.push(["Utentes a transferir", R.nPassam]);
+  resumo.push(["Empates por decidir", R.nDecidir]);
+  resumo.push(["Agregados que ficam como estão (escolha tua)", R.conflitos.filter(function (g) { return g.estado === "nao"; }).length]);
+  resumo.push(["Regra para os empates", regra]);
+  resumo.push(["Regra geral", "o agregado fica com o médico que já tem mais pessoas do agregado"]);
+  resumo.push([]); resumo.push(["Este ficheiro tem dados de utentes: guarda-o num local seguro e apaga-o quando já não precisares."]);
+  XLSX.utils.book_append_sheet(wb, folha(resumo), nomeFolha("Resumo", usados));
+  var nome = "agregados-transferencias-" + hoje() + ".xlsx";
+  XLSX.writeFile(wb, nome);
+  mensagem("Excel descarregado: " + nome + ".");
+}
+function exportarCsv() {
+  var texto = "﻿" + [CAB_TRANSF].concat(linhasTransferencias()).map(function (l) { return l.map(csvCampo).join(";"); }).join("\r\n");
+  var b = new Blob([texto], { type: "text/csv;charset=utf-8" }), u = URL.createObjectURL(b), a = document.createElement("a");
+  a.href = u; a.download = "agregados-transferencias-" + hoje() + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(u); }, 2000);
+  mensagem("CSV descarregado (separado por «;», abre no Excel em português).");
+}
+function copiarTabela(botao) {
+  var T = linhasTransferencias();
+  var texto = [CAB_TRANSF].concat(T).map(function (l) { return l.map(function (v) { return txt(v).replace(/[\t\n\r]+/g, " "); }).join("\t"); }).join("\n");
+  MGF.copiar(texto, botao);
+  mensagem("Tabela copiada (" + plural(T.length, "utente", "utentes") + "): cola-a no Excel ou no Word.");
+}
+
+/* ---------- eventos ---------- */
+function refocar(sel) { var el = raiz.querySelector(sel); if (el) el.focus(); }
+var segundoClique = null;
+raiz.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-acao]");
+  if (!b || !raiz.contains(b)) return;
+  var a = b.dataset.acao;
+  if (a === "exemplo") exemplo();
+  else if (a === "limpar") {
+    if (segundoClique !== b) { segundoClique = b; b.lastChild.textContent = "Carrega outra vez para apagar tudo"; setTimeout(function () { if (segundoClique === b) { segundoClique = null; b.lastChild.textContent = "Começar de novo"; } }, 4000); return; }
+    segundoClique = null; b.lastChild.textContent = "Começar de novo";
+    E.listas = []; E.nomesCod = {}; E.abrirCol = {}; reiniciarDecisoes(); E.ver = "todos"; E.busca = ""; $("#ag-busca").value = ""; mensagem(""); tudo();
+  }
+  else if (a === "escolher") escolher();
+  else if (a === "colar") { $("#ag-zona").hidden = true; $("#ag-colar").hidden = false; $("#ag-colar-texto").focus(); }
+  else if (a === "cancelar-colar") { $("#ag-zona").hidden = false; $("#ag-colar").hidden = true; }
+  else if (a === "usar-colado") {
+    var texto = $("#ag-colar-texto").value;
+    if (!texto.trim()) { mensagem("Cola primeiro as células (no Excel: seleciona, Ctrl+C; aqui: Ctrl+V).", true); return; }
+    var n = E.listas.filter(function (L) { return /^Células coladas/.test(L.nome); }).length + 1;
+    var erro = novaLista({ nome: "Células coladas" + (n > 1 ? " " + n : ""), medico: "Médico " + (E.listas.length + 1), folhas: [{ nome: "Coladas", matriz: lerTextoTabela(texto) }] });
+    if (erro) { mensagem(erro, true); return; }
+    $("#ag-colar-texto").value = ""; $("#ag-zona").hidden = false; $("#ag-colar").hidden = true;
+    tudo(); mensagem("Células coladas: confirma o nome do médico desta lista.", true);
+  }
+  else if (a === "retirar") { var i = +b.dataset.lista; E.listas.splice(i, 1); E.abrirCol = {}; tudo(); mensagem(""); }
+  else if (a === "mais") { E.mostrar += PASSO; desenharGrupos(); }
+  else if (a === "excel") exportarExcel();
+  else if (a === "csv") exportarCsv();
+  else if (a === "copiar") copiarTabela(b);
+});
+raiz.addEventListener("change", function (e) {
+  var t = e.target, d = t.dataset;
+  if (d.folha != null) { var L = E.listas[+d.folha]; L.folha = +t.value; L.linhaTitulos = null; L.semTitulos = false; L.auto = detetarTitulos(L.folhas[L.folha].matriz); prepararLista(L); E.abrirCol[+d.folha] = true; tudo(); refocar('[data-folha="' + d.folha + '"]'); }
+  else if (d.titulos != null) { var L2 = E.listas[+d.titulos]; var v = +t.value; L2.semTitulos = v < 0; L2.linhaTitulos = v < 0 ? null : v; prepararLista(L2); E.abrirCol[+d.titulos] = true; tudo(); refocar('[data-titulos="' + d.titulos + '"]'); }
+  else if (d.col != null) {
+    var L3 = E.listas[+d.col]; L3.col[d.campo] = +t.value;
+    if (d.campo === "mf") L3.separar = codigos(L3).length > 1;
+    E.abrirCol[+d.col] = true; tudo(); refocar('[data-col="' + d.col + '"][data-campo="' + d.campo + '"]');
+  }
+  else if (d.separar != null) { E.listas[+d.separar].separar = t.checked; tudo(); refocar('[data-separar="' + d.separar + '"]'); }
+  else if (t.id === "ag-regra") { E.regra = t.value; desenharResultados(); }
+  else if (t.id === "ag-ver") { E.ver = t.value; E.mostrar = PASSO; desenharGrupos(); }
+  else if (d.escolha != null) {
+    var ag = d.escolha; E.escolha[ag] = t.value || undefined; if (!t.value) delete E.escolha[ag];
+    E.abertos[ag] = true; desenharResultados(); refocar('[data-escolha="' + CSS.escape(ag) + '"]');
+  }
+  else if (d.ficar != null) {
+    if (t.checked) delete E.ficar[d.ficar]; else E.ficar[d.ficar] = true;
+    desenharResultados(); refocar('[data-ficar="' + CSS.escape(d.ficar) + '"]');
+  }
+});
+raiz.addEventListener("toggle", function (e) {
+  var t = e.target;
+  if (t.classList && t.classList.contains("ag-grupo")) { if (t.open) E.abertos[t.dataset.ag] = true; else delete E.abertos[t.dataset.ag]; }
+  else if (t.dataset && t.dataset.abrirCol != null) { if (t.open) E.abrirCol[+t.dataset.abrirCol] = true; else delete E.abrirCol[+t.dataset.abrirCol]; }
+}, true);
+var espera = null;
+raiz.addEventListener("input", function (e) {
+  var t = e.target, d = t.dataset;
+  if (d.medico != null) { E.listas[+d.medico].medico = t.value.trim() || nomeDoFicheiro(E.listas[+d.medico].nome); clearTimeout(espera); espera = setTimeout(desenharResultados, 300); }
+  else if (d.cod != null) { if (t.value.trim()) E.nomesCod[d.cod] = t.value.trim(); else delete E.nomesCod[d.cod]; clearTimeout(espera); espera = setTimeout(desenharResultados, 300); }
+  else if (t.id === "ag-busca") { E.busca = t.value; clearTimeout(espera); espera = setTimeout(function () { E.mostrar = PASSO; desenharGrupos(); }, 200); }
+});
+
+tudo();
+})();
+</script>
+</body>
+</html>

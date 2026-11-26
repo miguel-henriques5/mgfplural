@@ -737,6 +737,31 @@ window.MGF_CATALOGO = [
   ]
  },
  {
+  "id": "agregados-um-medico",
+  "titulo": "Agregados com mais de um médico",
+  "descricao": "Cruza as listas de utentes dos médicos de família da unidade (um Excel por médico, com o código do agregado familiar) e encontra os agregados com pessoas em médicos diferentes. Sugere quem transferir para cada agregado ficar com um só médico (o que já tem mais pessoas do agregado), deixa-te decidir os empates e descarrega em Excel a lista de utentes a transferir.",
+  "area": "Recursos médicos",
+  "grupo": "Canivete",
+  "icone": "familia",
+  "url": "ferramentas/recursos-medicos/canivete/agregados-um-medico.html",
+  "layout": "normal",
+  "autor": "Miguel Henriques",
+  "externo": false,
+  "palavras": [
+   "agregado familiar",
+   "família",
+   "médico de família",
+   "transferência de utentes",
+   "lista de utentes",
+   "Prc. Famil.",
+   "processo familiar",
+   "BI-CSP",
+   "Excel",
+   "inscrição",
+   "ficheiro de utentes"
+  ]
+ },
+ {
   "id": "nota-soap",
   "titulo": "Nota SOAP",
   "descricao": "Registo da consulta em S-O-A-P para colar no SClínico: sinais vitais com IMC, sugestões ICPC-2, modelos de consulta, registos guardados neste computador, tarefas e notas do dia.",
